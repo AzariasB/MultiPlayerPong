@@ -34,7 +34,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 
-Button::Button(ClientApp &app, const std::string& text) :
+Button::Button(ClientApp &app, const std::string &text) :
 Widget(app),
 m_text(text, app.getResourcesManager().getFont()),
 clickedEvent(app.getGame().getEventManager().nextEventCode())

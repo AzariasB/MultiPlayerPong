@@ -34,6 +34,7 @@
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
 #include "../EventManager.hpp"
 #include "Widget.hpp"

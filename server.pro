@@ -9,11 +9,11 @@ CONFIG          += c++14
 QMAKE_CXXFLAGS  += -std=c++14
 
 win32:LIBS += -LC:\SFML\lib -lsfml-network-s-d -lsfml-system-s-d -lws2_32 -lwinmm
+win32:DEFINES += "SFML_STATIC"
+win32:INCLUDEPATH += C:\SFML\include
 else:LIBS += -lsfml-network -lsfml-system
 
-DEFINES += "SERVER" "SFML_STATIC"
-
-win32:INCLUDEPATH += C:\SFML\include
+DEFINES += "SERVER"
 
 
 #Change config depending on the build configuration
