@@ -40,14 +40,26 @@ KeyBinding::KeyBinding()
 
 sf::Event KeyBinding::toGameEvent(const sf::Event &ev) const
 {
-    if(!(ev.type == sf::Event::KeyPressed || ev.type == sf::Event::KeyReleased  ))return ev;
+    if(!(ev.type == sf::Event::KeyPressed || ev.type == sf::Event::KeyReleased || ev.type == sf::Event::JoystickMoved ))return ev;
+
+    if(ev.type == sf::Event::JoystickMoved){
+        sf::Event nwEv;
+        nwEv.type = sf::Event::KeyPressed;
+        float y = sf::Joystick::getAxisPosition(ev.joystickMove.joystickId, sf::Joystick::Axis::Y);
+        if(std::abs(y) > 5){
+            nwEv.key.code = y > 0 ? sf::Keyboard::Down : sf::Keyboard::Up;
+        }else{
+            nwEv.type = sf::Event::KeyReleased;
+        }
+        return nwEv;
+    }
 
     sf::Event copy = ev;
     for(auto const &it : m_keyActions){
-	if(it.second.actualKey == copy.key.code){
-	    copy.key.code = it.second.defaultKey;
-	    break;
-	}
+        if(it.second.actualKey == copy.key.code){
+            copy.key.code = it.second.defaultKey;
+            break;
+        }
     }
     return copy;
 }
@@ -61,8 +73,8 @@ std::string KeyBinding::toString(KEY_ACTION action)
 
 void KeyBinding::resetBindings()
 {
-	for(auto &it : m_keyActions)
-		it.second.actualKey = it.second.defaultKey;
+    for(auto &it : m_keyActions)
+        it.second.actualKey = it.second.defaultKey;
 }
 
 const std::string &KeyBinding::toString(sf::Keyboard::Key k) const
@@ -72,7 +84,7 @@ const std::string &KeyBinding::toString(sf::Keyboard::Key k) const
 
 void KeyBinding::initKeyAction()
 {
-    #define SAVE_ACTION(act, title, defKey) m_keyActions.emplace(std::piecewise_construct,std::forward_as_tuple(act),std::forward_as_tuple(title, defKey))
+#define SAVE_ACTION(act, title, defKey) m_keyActions.emplace(std::piecewise_construct,std::forward_as_tuple(act),std::forward_as_tuple(title, defKey))
 
     SAVE_ACTION(GO_UP, "Go Up", sf::Keyboard::Up);
     SAVE_ACTION(GO_DOWN, "Go Down", sf::Keyboard::Down);

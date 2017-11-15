@@ -31,6 +31,7 @@
 
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/Packet.hpp>
+#include <QDebug>
 
 #include "ClientApp.hpp"
 #include "PlayState.hpp"
