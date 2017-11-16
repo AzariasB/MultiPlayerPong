@@ -25,7 +25,7 @@
 /* 
  * File:   Button.cpp
  * Author: azarias
- * 
+ *
  * Created on 21 octobre 2017, 16:49
  */
 
@@ -35,48 +35,70 @@
 #include <iostream>
 
 Button::Button(ClientApp &app, const std::string &text) :
-Widget(app),
-m_text(text, app.getResourcesManager().getFont()),
-clickedEvent(app.getGame().getEventManager().nextEventCode())
+    Widget(app),
+    m_text(text, app.getResourcesManager().getFont()),
+    clickedEvent(app.getGame().getEventManager().nextEventCode()),
+    selectdEvent(app.getGame().getEventManager().nextEventCode())
 {
 }
 
 Button::Button(ClientApp &app, const std::string &text, float xPos, float yPos):
-Widget(app),
-m_text(text, app.getResourcesManager().getFont()),
-clickedEvent(app.getGame().getEventManager().nextEventCode())
+    Widget(app),
+    m_text(text, app.getResourcesManager().getFont()),
+    clickedEvent(app.getGame().getEventManager().nextEventCode()),
+    selectdEvent(app.getGame().getEventManager().nextEventCode())
 {
-	setPosition(sf::Vector2f(xPos, yPos));
+    setPosition(sf::Vector2f(xPos, yPos));
 }
 
 void Button::setPosition(const sf::Vector2f& position)
 {
-	m_text.setPosition(position);
+    m_text.setPosition(position);
 }
 
 void Button::handleEvent(const sf::Event& ev)
 {
-	if (ev.type == sf::Event::MouseMoved) {
-		sf::Vector2f realMovePos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
-		m_hilighted = m_text.getGlobalBounds().contains(realMovePos);
-		m_text.setFillColor(m_hilighted ? sf::Color::Red : sf::Color::White);
-	} else if (ev.type == sf::Event::MouseButtonPressed) {
-		sf::Vector2f realClickPos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
-		bool isClicked = ev.mouseButton.button == sf::Mouse::Left && m_text.getGlobalBounds().contains(realClickPos);
-		if (isClicked) {
-			app().getGame().getEventManager().trigger(clickedEvent);
-		}
-	}
+    bool isClicked = false;
+    if (ev.type == sf::Event::MouseMoved) {
+        sf::Vector2f realMovePos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
+
+        if(m_text.getGlobalBounds().contains(realMovePos))
+            app().getGame().getEventManager().trigger(selectdEvent);
+    } else if (ev.type == sf::Event::MouseButtonPressed) {
+        sf::Vector2f realClickPos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
+        isClicked = ev.mouseButton.button == sf::Mouse::Left && m_text.getGlobalBounds().contains(realClickPos);
+    } else if(isSelectionEvent(ev)){
+        isClicked = true;
+    }
+    if (isClicked)
+        app().getGame().getEventManager().trigger(clickedEvent);
+}
+
+bool Button::isSelectionEvent(const sf::Event &ev) const
+{
+    return (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return ||
+                ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(m_text, states);
+    target.draw(m_text, states);
 }
 
 void Button::setText(const std::string &text)
 {
-	m_text.setString(text);
+    m_text.setString(text);
+}
+
+void Button::setSelected(bool selected)
+{
+    m_hilighted = selected;
+    updateText();
+}
+
+void Button::updateText()
+{
+    m_text.setFillColor(m_hilighted ? sf::Color::Red : sf::Color::White);
 }
 
 Button::~Button()

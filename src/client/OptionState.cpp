@@ -34,8 +34,7 @@
 
 OptionState::OptionState(ClientApp &app):
 State(app),
-m_menu(app),
-m_keyOptions(app,0,100)
+m_menu(app)
 {
 	EventManager &evM = app.getGame().getEventManager();
 
@@ -45,15 +44,17 @@ m_keyOptions(app,0,100)
 	int startY = 50;
 	Button &muteButton = *m_menu.addButton("Toggle sound", 0, startY);
 
-
 	m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(ARENA_WIDTH - 50, 0), getCurrentSoundRect()).get();
 	m_soundSprite->setPosition(m_soundSprite->getPosition().x, startY);
 	m_soundSprite->scale(4,4);
-
 	evM.declareListener(muteButton.clickedEvent, &OptionState::toggleSound, this);
 
-	const Button &backButton = *m_menu.addButton("Menu", 0, ARENA_HEIGHT - 50);
-	evM.declareListener(backButton.clickedEvent, &StateMachine::setCurrentState, &app.getStateMachine(), (int)STATE_TYPE::MENU);
+
+    sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
+    evM.declareListener(keyBindingClicked , &StateMachine::setCurrentState, &app.getStateMachine(), (int)STATE_TYPE::KEY_BINDINGS);
+
+    sf::Uint64 backClicked = m_menu.addButton("Menu", 0, ARENA_HEIGHT - 50)->clickedEvent;
+    evM.declareListener(backClicked, &StateMachine::setCurrentState, &app.getStateMachine(), (int)STATE_TYPE::MENU);
 }
 
 void OptionState::toggleSound()
@@ -77,7 +78,6 @@ OptionState::~OptionState()
 void OptionState::draw(Renderer &renderer) const
 {
 	renderer.render(m_menu);
-	renderer.render(m_keyOptions);
 }
 
 void OptionState::update(const sf::Time &elapsed)
@@ -90,7 +90,6 @@ void OptionState::handleEvent(const sf::Event &ev)
 	if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
 		getApp().getStateMachine().setCurrentState((int)STATE_TYPE::MENU);
 	}else{
-		m_keyOptions.handleEvent(ev);
 		m_menu.handleEvent(ev);
 	}
 }

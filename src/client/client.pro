@@ -16,7 +16,7 @@ SOURCES +=\
     $$PWD/OptionState.cpp \
     $$PWD/Menu.cpp \
     $$PWD/KeyBinding.cpp \
-    $$PWD/KeyOptions.cpp
+    $$PWD/KeyBindingState.cpp
 HEADERS +=\
     $$PWD/Button.hpp \
     $$PWD/ClientApp.hpp \
@@ -37,4 +37,4 @@ HEADERS +=\
     $$PWD/OptionState.hpp \
     $$PWD/Menu.hpp \
     $$PWD/KeyBinding.hpp \
-    $$PWD/KeyOptions.hpp
+    $$PWD/KeyBindingState.hpp

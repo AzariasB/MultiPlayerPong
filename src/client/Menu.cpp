@@ -30,9 +30,10 @@
  */
 #include "Menu.hpp"
 #include "ClientApp.hpp"
+#include "../Game.hpp"
 
 Menu::Menu(ClientApp &app):
-	Widget(app)
+    Widget(app)
 {
 
 }
@@ -43,45 +44,79 @@ Menu::~Menu()
 }
 
 std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, int yPos)
-{
-	m_buttons.emplace_back(std::make_unique<Button>(app(), content, xPos, yPos));
-	return m_buttons.back();
+{    
+    m_buttons.emplace_back(std::make_unique<Button>(app(), content, xPos, yPos));
+    std::unique_ptr<Button> &inserted = m_buttons.back();
+
+    int idx = m_buttons.size() -1;
+     app().getGame().getEventManager().declareListener(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
+
+    if(m_buttons.size() == 1) inserted->setSelected(true);
+    return inserted;
 }
 
 
 std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, int xpOs, int yPos)
 {
-	m_labels.emplace_back(std::make_unique<sf::Text>(content, app().getResourcesManager().getFont()));
-	m_labels.back()->setPosition(xpOs, yPos);
-	return m_labels.back();
+    m_labels.emplace_back(std::make_unique<sf::Text>(content, app().getResourcesManager().getFont()));
+    m_labels.back()->setPosition(xpOs, yPos);
+    return m_labels.back();
 }
 
 std::unique_ptr<sf::Sprite> &Menu::addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect)
 {
-	const sf::Texture &texture = app().getResourcesManager().getTexture(textureName);
-	m_sprites.emplace_back(std::unique_ptr<sf::Sprite>(new sf::Sprite(texture, textureRect)));
-	m_sprites.back()->setPosition(pos);
-	return m_sprites.back();
+    const sf::Texture &texture = app().getResourcesManager().getTexture(textureName);
+    m_sprites.emplace_back(std::unique_ptr<sf::Sprite>(new sf::Sprite(texture, textureRect)));
+    m_sprites.back()->setPosition(pos);
+    return m_sprites.back();
 }
 
 void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-	for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
-		target.draw(**it, states);
-	}
+    for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
+        target.draw(**it, states);
+    }
 
-	for(auto it = m_labels.begin(); it != m_labels.end(); ++it){
-		target.draw(**it, states);
-	}
+    for(auto it = m_labels.begin(); it != m_labels.end(); ++it){
+        target.draw(**it, states);
+    }
 
-	for(auto it = m_sprites.begin(); it != m_sprites.end(); ++it){
-		target.draw(**it, states);
-	}
+    for(auto it = m_sprites.begin(); it != m_sprites.end(); ++it){
+        target.draw(**it, states);
+    }
 }
 
 void Menu::handleEvent(const sf::Event &ev)
 {
-	for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
-		(*it)->handleEvent(ev);
-	}
+    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down)){
+        changeSelection(ev.key.code == sf::Keyboard::Up ? -1 : 1);
+    }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
+        changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
+    }else{
+        for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
+            (*it)->handleEvent(ev);
+        }
+    }
+}
+
+void Menu::setSeletedIndex(int nwIndex)
+{
+    m_buttons[m_selectedButton]->setSelected(false);
+    m_selectedButton = nwIndex;
+    m_buttons[m_selectedButton]->setSelected(true);
+}
+
+void Menu::changeSelection(int dir)
+{
+    int oldSelected = m_selectedButton;
+    if(dir == -1){
+        if(m_selectedButton == 0)return;
+        m_selectedButton--;
+    }else{
+        if(m_selectedButton == m_buttons.size() -1)return;
+        m_selectedButton++;
+    }
+
+    m_buttons[oldSelected]->setSelected(false);
+    m_buttons[m_selectedButton]->setSelected(true);
 }

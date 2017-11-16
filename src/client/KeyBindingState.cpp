@@ -28,71 +28,71 @@
  *
  * Created on 3/11/2017
  */
-#include "KeyOptions.hpp"
+#include "KeyBindingState.hpp"
 #include "ClientApp.hpp"
 #include <iostream>
 
-KeyOptions::KeyOptions(ClientApp &app, int startX, int startY):
-	Menu(app),
-	m_messageDialog(Dialog::message(app, "","Press a key"))
+KeyBindingState::KeyBindingState(ClientApp &app):
+    State(app),
+    m_messageDialog(Dialog::message(app, "","Press a key")),
+    m_menu(app)
 {
+    int startX = 0;
+    int startY = 0;
+
+    EventManager &evM = app.getGame().getEventManager();
+    startY += m_menu.addLabel("Key bindings",startX, startY)->getGlobalBounds().height + 10;
+
+
 	for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
 		std::string btnTitle = app.getKeyBindings().toString(ka);
-		Button *b = addButton( btnTitle ,startX, startY).get();
+        Button *b = m_menu.addButton( btnTitle ,startX, startY).get();
 		startY += b->getHeight();
 		m_actions.emplace_back(std::make_unique<ActionsButton>(b, ka));
-		app.getGame().getEventManager().declareListener(
+        evM.declareListener(
 					b->clickedEvent,
-					&KeyOptions::buttonClicked,
+					&KeyBindingState::buttonClicked,
 					this,
 					m_actions.back().get()
 					);
 	}
 
-	Button &resetB = *addButton("Reset", startX, startY);
-	app.getGame().getEventManager().declareListener(
-				resetB.clickedEvent,
-				&KeyOptions::resetKeys,
-				this
-				);
+    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY)->clickedEvent;
+    evM.declareListener(resetClicked, &KeyBindingState::resetKeys, this);
+
+
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, ARENA_HEIGHT - 50)->clickedEvent;
+    evM.declareListener(backClicked, &StateMachine::setCurrentState, &getApp().getStateMachine(), (int)STATE_TYPE::OPTIONS);
 
 	m_messageDialog->setOkButtonTitle("Cancel");
-	app.getGame().getEventManager().declareListener(
-				m_messageDialog->cancelEvent,
-				&KeyOptions::cancelDialog,
-				this
-				);
-	app.getGame().getEventManager().declareListener(
-				m_messageDialog->okEvent,
-				&KeyOptions::cancelDialog,
-				this
-				);
+    evM.declareListener(m_messageDialog->cancelEvent, &KeyBindingState::cancelDialog, this);
+    evM.declareListener(m_messageDialog->okEvent, &KeyBindingState::cancelDialog, this);
 }
 
-KeyOptions::~KeyOptions()
+KeyBindingState::~KeyBindingState()
 {
 	delete m_messageDialog;
 }
 
-void KeyOptions::resetKeys()
+void KeyBindingState::resetKeys()
 {
-	app().getKeyBindings().resetBindings();
+    getApp().getKeyBindings().resetBindings();
 	for(auto &it : m_actions)
-		it->button->setText(app().getKeyBindings().toString(it->action));
+        it->button->setText(getApp().getKeyBindings().toString(it->action));
 }
 
-void KeyOptions::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void KeyBindingState::draw(Renderer &renderer) const
 {
-	Menu::draw(target, states);
-	target.draw(*m_messageDialog);
+    renderer.render(m_menu);
+    renderer.render(*m_messageDialog);
 }
 
-void KeyOptions::handleEvent(const sf::Event &ev)
+void KeyBindingState::handleEvent(const sf::Event &ev)
 {
 	if(m_messageDialog->isVisible()){
 		if(ev.type == sf::Event::KeyPressed && m_waitingAction){
-			app().getKeyBindings().setKeyAction(m_waitingAction->action, ev.key.code);
-			std::string nwBtnTitle = app().getKeyBindings().toString(m_waitingAction->action);
+            getApp().getKeyBindings().setKeyAction(m_waitingAction->action, ev.key.code);
+            std::string nwBtnTitle = getApp().getKeyBindings().toString(m_waitingAction->action);
 			m_waitingAction->button->setText(nwBtnTitle);
 			m_waitingAction = 0;
 			m_messageDialog->hide();
@@ -100,18 +100,33 @@ void KeyOptions::handleEvent(const sf::Event &ev)
 			m_messageDialog->handleEvent(ev);
 		}
 	}else{
-		Menu::handleEvent(ev);
+        m_menu.handleEvent(ev);
 	}
 }
 
-void KeyOptions::cancelDialog()
+void KeyBindingState::onEnter(BaseStateData *data)
+{
+
+}
+
+void KeyBindingState::onLeave()
+{
+
+}
+
+void KeyBindingState::update(const sf::Time &elapsed)
+{
+
+}
+
+void KeyBindingState::cancelDialog()
 {
 	m_waitingAction = 0;
 	m_messageDialog->hide();
 }
 
 
-void KeyOptions::buttonClicked(ActionsButton *ab)
+void KeyBindingState::buttonClicked(ActionsButton *ab)
 {
 	m_waitingAction = ab;
 	m_messageDialog->show();

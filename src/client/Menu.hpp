@@ -96,6 +96,18 @@ public:
 	std::unique_ptr<sf::Sprite> &addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect);
 
 private:
+    /**
+     * @brief changeSelection updates the selected button
+     * @param dir
+     */
+    void changeSelection(int dir);
+
+    /**
+     * @brief setSeletedIndex changes the selected button index
+     * @param nwIndex
+     */
+    void setSeletedIndex(int nwIndex);
+
 	/**
 	 * @brief m_labels all the labels of the menu
 	 */
@@ -105,6 +117,8 @@ private:
 	 * @brief m_buttons all the buttons of the menu
 	 */
 	std::vector<std::unique_ptr<Button>> m_buttons;
+
+    int m_selectedButton = 0;
 
 	/**
 	 * @brief m_sprites all the sprites of the menu

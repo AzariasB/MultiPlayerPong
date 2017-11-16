@@ -109,15 +109,29 @@ public:
 		return m_text.getGlobalBounds().height + 10;
 	}
 
+    bool isSelected() const
+    {
+        return m_hilighted;
+    }
+
 	/**
 	 * @brief changes the text of the button, the dimensions will also change
 	 * @param text the new text to set
 	 */
 	void setText(const std::string &text);
 
+    /**
+     * @brief setSelected changes the selected state of the button
+     * @param selected
+     */
+    void setSelected(bool selected);
+
     virtual ~Button();
 
 private:
+    void updateText();
+
+    bool isSelectionEvent(const sf::Event &ev) const;
 	/**
 	 * @brief m_hilighted wether the button is currently higlighted
 	 */
@@ -135,6 +149,7 @@ private:
 
 public:
 	const sf::Uint64 clickedEvent;
+    const sf::Uint64 selectdEvent;
 };
 
 #endif /* BUTTON_H */

@@ -34,13 +34,14 @@
 #include "Menu.hpp"
 #include "KeyBinding.hpp"
 #include "Dialog.hpp"
+#include "State.hpp"
 
 /**
  * @brief The KeyOptions class Menu showing
  * all the key binding, and offering the possibility
  * to reset the key bindings to their defaults
  */
-class KeyOptions : public Menu
+class KeyBindingState : public State
 {
 public:
 	/**
@@ -49,9 +50,9 @@ public:
 	 * @param startX the starting X point of the menu
 	 * @param startY the starting Y point of the menu
 	 */
-	KeyOptions(ClientApp &app, int startX, int startY);
+    KeyBindingState(ClientApp &app);
 
-	virtual ~KeyOptions();
+    virtual ~KeyBindingState();
 
 	/**
 	 * @brief handleEvent inherited function
@@ -64,7 +65,20 @@ public:
 	 * @param target
 	 * @param states
 	 */
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void draw(Renderer &renderer) const override;
+
+    /**
+     * @brief onEnter inherited function
+     * @param data
+     */
+    void onEnter(BaseStateData *data) override;
+
+    /**
+     * @brief onLeave inherited function
+     */
+    void onLeave() override;
+
+    void update(const sf::Time &elapsed) override;
 
 private:
 	/**
@@ -119,6 +133,11 @@ private:
 	 * to show the "press key" message when needed
 	 */
 	Dialog *m_messageDialog = 0;
+
+    /**
+     * @brief m_menu the menu showing all the keys
+     */
+    Menu m_menu;
 
 	/**
 	 * @brief m_actions all the button with their associated actions

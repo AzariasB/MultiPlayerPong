@@ -34,7 +34,7 @@
 #include "State.hpp"
 #include "Menu.hpp"
 #include "Dialog.hpp"
-#include "KeyOptions.hpp"
+#include "KeyBindingState.hpp"
 
 
 /**
@@ -105,11 +105,6 @@ private:
 	 * @brief m_menu the menu with all the options
 	 */
 	Menu m_menu;
-
-	/**
-	 * @brief m_keyOptions the menu for the key bindings
-	 */
-	KeyOptions m_keyOptions;
 
 	/**
 	 * @brief m_withSoundRect rect for the icon "with sound"

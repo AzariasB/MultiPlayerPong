@@ -56,6 +56,7 @@ m_keyBinding()
 	stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
 	stateMachine.addState<MenuState>(STATE_TYPE::MENU);
 	stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
+    stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
 }
 
 ClientApp::~ClientApp()

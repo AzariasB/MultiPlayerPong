@@ -30,6 +30,7 @@ enum STATE_TYPE {
 	MENU,//First state
 	PLAY,
 	OPTIONS,
+    KEY_BINDINGS,
 	WAITING,
 	FINISHED
 };
