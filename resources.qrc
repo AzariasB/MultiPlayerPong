@@ -4,4 +4,10 @@
         <file alias="icons.png">res/icons.png</file>
         <file alias="ka1.ttf">res/ka1.ttf</file>
     </qresource>
+    <qresource prefix="/animations">
+        <file alias="ball_extend">res/ball_extend.png</file>
+        <file alias="ball_retract">res/ball_retract.png</file>
+        <file alias="paddle_extend">res/paddle_extend.png</file>
+        <file alias="paddle_retract">res/paddle_retract.png</file>
+    </qresource>
 </RCC>

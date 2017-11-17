@@ -111,7 +111,6 @@ private :
 	 * @brief m_messageDialog the message dialog
 	 */
 	Dialog *m_messageDialog;
-
 };
 
 #endif /* MENUSTATE_H */

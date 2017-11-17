@@ -25,7 +25,7 @@
 /* 
  * File:   ClientApp.cpp
  * Author: azarias
- * 
+ *
  * Created on 9 octobre 2017, 18:06
  */
 
@@ -41,21 +41,28 @@
 #include "OptionState.hpp"
 
 ClientApp::ClientApp() :
-window(sf::VideoMode(ARENA_WIDTH, ARENA_HEIGHT), "Pong", sf::Style::Default),
-renderer(window),
-game(),
-stateMachine(*this),
-m_sEngine(rManager),
-m_keyBinding()
+    window(sf::VideoMode(ARENA_WIDTH, ARENA_HEIGHT), "Pong", sf::Style::Default),
+    renderer(window),
+    game(),
+    stateMachine(*this),
+    m_sEngine(rManager),
+    m_keyBinding()
 {
-	rManager.registerTexture(":/icons.png", "icons");
-	m_sEngine.saveSound(SoundEngine::BOUNCE, ":/bounce.wav");
-	window.setKeyRepeatEnabled(false);
-	stateMachine.addState<WaitingState>(STATE_TYPE::WAITING);
-	stateMachine.addState<PlayState>(STATE_TYPE::PLAY);
-	stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
-	stateMachine.addState<MenuState>(STATE_TYPE::MENU);
-	stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
+    //Textures
+    rManager.registerTexture(":/icons.png", "icons");
+    rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
+    rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
+    rManager.registerTexture(":/animations/ball_extend","ball_extend");
+    rManager.registerTexture(":/animations/ball_retract","ball_retract");
+
+
+    m_sEngine.saveSound(SoundEngine::BOUNCE, ":/bounce.wav");
+    window.setKeyRepeatEnabled(false);
+    stateMachine.addState<WaitingState>(STATE_TYPE::WAITING);
+    stateMachine.addState<PlayState>(STATE_TYPE::PLAY);
+    stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
+    stateMachine.addState<MenuState>(STATE_TYPE::MENU);
+    stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
     stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
 }
 
@@ -65,162 +72,162 @@ ClientApp::~ClientApp()
 
 void ClientApp::handleEvent(const sf::Event& event)
 {
-	if (event.type == sf::Event::Closed) {
-		window.close();
-		std::cout << "Closing window\n";
-	} else if(event.type == sf::Event::Resized){
-		resizeEvent(event);
-	} else {
-		stateMachine.getCurrentState().handleEvent(event);
-	}
+    if (event.type == sf::Event::Closed) {
+        window.close();
+        std::cout << "Closing window\n";
+    } else if(event.type == sf::Event::Resized){
+        resizeEvent(event);
+    } else {
+        stateMachine.getCurrentState().handleEvent(event);
+    }
 }
 
 void ClientApp::resizeEvent(const sf::Event &event)
 {
-	float width = event.size.width;
-	float height = event.size.height;
-	sf::Vector2u minSize(width, height);
-	if(width < ARENA_WIDTH)
-		minSize.x = ARENA_WIDTH;
-	if(height < ARENA_HEIGHT)
-		minSize.y = ARENA_HEIGHT;
+    float width = event.size.width;
+    float height = event.size.height;
+    sf::Vector2u minSize(width, height);
+    if(width < ARENA_WIDTH)
+        minSize.x = ARENA_WIDTH;
+    if(height < ARENA_HEIGHT)
+        minSize.y = ARENA_HEIGHT;
 
-	window.setSize(minSize);
+    window.setSize(minSize);
 
 
-	float nwX = (width - ARENA_WIDTH) /2.f;
-	float nwY = (height - ARENA_HEIGHT)/2.f;
+    float nwX = (width - ARENA_WIDTH) /2.f;
+    float nwY = (height - ARENA_HEIGHT)/2.f;
 
-	float nwXRatio = nwX / width;
-	float nwYRatio = nwY / height;
-	sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 , 1 );
+    float nwXRatio = nwX / width;
+    float nwYRatio = nwY / height;
+    sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 , 1 );
 
-	sf::View view(sf::FloatRect(0,0, width, height));
-	view.setViewport(visibleArea);
-	window.setView(view);
+    sf::View view(sf::FloatRect(0,0, width, height));
+    view.setViewport(visibleArea);
+    window.setView(view);
 }
 
 void ClientApp::run(int argc, char** argv)
 {
-	stateMachine.setCurrentState(STATE_TYPE::MENU);
-	sf::Clock clock;
-	while (window.isOpen()) {
-		sf::Event ev;
-		while (window.pollEvent(ev))
-			handleEvent(ev);
+    stateMachine.setCurrentState(STATE_TYPE::MENU);
+    sf::Clock clock;
+    while (window.isOpen()) {
+        sf::Event ev;
+        while (window.pollEvent(ev))
+            handleEvent(ev);
 
-		window.clear(sf::Color::Black);
+        window.clear(sf::Color::Black);
 
-		sf::Time elapsed = clock.restart();
-		renderer.update(elapsed);
-		stateMachine.getCurrentState().update(elapsed);
-		stateMachine.getCurrentState().draw(renderer);
+        sf::Time elapsed = clock.restart();
+        renderer.update(elapsed);
+        stateMachine.getCurrentState().update(elapsed);
+        stateMachine.getCurrentState().draw(renderer);
 
-		window.display();
-	}
-	socket.disconnect();
-	stateMachine.getCurrentState().onLeave(); //Close last threads
+        window.display();
+    }
+    socket.disconnect();
+    stateMachine.getCurrentState().onLeave(); //Close last threads
 }
 
 void ClientApp::quit()
 {
-	window.close();
+    window.close();
 }
 
 const Player& ClientApp::getPlayer() const
 {
-	if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
-	return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
+    if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
+    return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
 }
 
 Player& ClientApp::getPlayer()
 {
-	if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
-	return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
+    if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
+    return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
 }
 
 bool ClientApp::isWinner() const
 {
-	return hasPNumber() && getPlayer().isWinner();
+    return hasPNumber() && getPlayer().isWinner();
 }
 
 void ClientApp::setPNumber(int pNumber)
 {
-	m_number = pNumber;
+    m_number = pNumber;
 }
 
 bool ClientApp::hasPNumber() const
 {
-	return m_number == 1 || m_number == 2;
+    return m_number == 1 || m_number == 2;
 }
 
 Renderer& ClientApp::getRenderer()
 {
-	return renderer;
+    return renderer;
 }
 
 const Game& ClientApp::getGame() const
 {
-	return game;
+    return game;
 }
 
 Game& ClientApp::getGame()
 {
-	return game;
+    return game;
 }
 
 sf::TcpSocket& ClientApp::getSocket()
 {
-	return socket;
+    return socket;
 }
 
 StateMachine& ClientApp::getStateMachine()
 {
-	return stateMachine;
+    return stateMachine;
 }
 
 SoundEngine& ClientApp::getSoundEngine()
 {
-	return m_sEngine;
+    return m_sEngine;
 }
 
 const SoundEngine& ClientApp::getSoundEngine() const
 {
-	return m_sEngine;
+    return m_sEngine;
 }
 
 ParticleGenerator &ClientApp::getParticleGenerator()
 {
-	return m_particleGenerator;
+    return m_particleGenerator;
 }
 
 sf::RenderWindow &ClientApp::getWindow()
 {
-	return window;
+    return window;
 }
 
 KeyBinding &ClientApp::getKeyBindings()
 {
-	return m_keyBinding;
+    return m_keyBinding;
 }
 
 const ParticleGenerator &ClientApp::getParticleGenerator() const
 {
-	return m_particleGenerator;
+    return m_particleGenerator;
 }
 
 const sf::RenderWindow &ClientApp::getWindow() const
 {
-	return window;
+    return window;
 }
 
 const ResourcesManager& ClientApp::getResourcesManager()
 {
-	return rManager;
+    return rManager;
 }
 
 const KeyBinding &ClientApp::getKeyBindings() const
 {
-	return m_keyBinding;
+    return m_keyBinding;
 }
 

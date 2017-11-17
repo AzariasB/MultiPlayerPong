@@ -43,7 +43,7 @@ MenuState::MenuState(ClientApp& client) :
 	State(client),
 	m_menu(client),
 	m_inputDialog(Dialog::input(client,"IP adress")),
-	m_messageDialog(Dialog::message(client, "", "") )
+    m_messageDialog(Dialog::message(client, "", "") )
 {
 	EventManager &evM = client.getGame().getEventManager();
 	const Button &playButton = *m_menu.addButton("Play", 0,0);
