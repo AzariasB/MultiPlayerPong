@@ -47,8 +47,7 @@ public:
 	 * @brief Widget constructor
 	 * @param app a reference to the client's application
 	 */
-	Widget(ClientApp &app) :
-	m_app(app)
+    Widget()
 	{
 
 	}
@@ -70,23 +69,6 @@ public:
 	{
 
 	}
-
-protected:
-
-	/**
-	 * @brief app reference to the client's app
-	 * @return reference to the client's app
-	 */
-	ClientApp &app()
-	{
-		return m_app;
-	}
-
-private:
-	/**
-	 * @brief m_app reference to the client's app
-	 */
-	ClientApp &m_app;
 };
 
 #endif /* WIDGET_H */

@@ -49,7 +49,7 @@ public:
 	 * @brief PlayState constructor
 	 * @param client a reference to the client's app
 	 */
-	PlayState(ClientApp &client);
+    PlayState();
 
 	/**
 	 * @brief draw inherited function

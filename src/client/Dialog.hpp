@@ -46,20 +46,18 @@ class Dialog : public Widget
 public:
 	/**
 	 * @brief message a pointer to a dialog showing the given message, with the given title
-	 * @param app reference to the client app
 	 * @param message the message to display in the middle of the dialog
 	 * @param title the title of the dialog
 	 * @return a pointer to the dialog
 	 */
-	static Dialog *message(ClientApp &app, const std::string &message, const std::string &title);
+    static Dialog *message(const std::string &message, const std::string &title);
 
 	/**
 	 * @brief input a pointer to a dialog with a text input
-	 * @param app a reference to the client app
 	 * @param title the title of the input
 	 * @return a pointer to the dialog
 	 */
-	static Dialog *input(ClientApp &app, const std::string &title);
+    static Dialog *input(const std::string &title);
 
 	/**
 	 * @brief draw draws the dialog and all its sub-components
@@ -140,12 +138,11 @@ private:
 
 	/**
 	 * @brief Dialog private dialog constructor, the user must call either input or message to get a pointer to a dialog
-	 * @param app a reference to the client's application
 	 * @param title the title of the dialog
 	 * @param message the message (if the dialog is a message dialog)
 	 * @param type the type of the dialog
 	 */
-	Dialog(ClientApp &app, const std::string &title, const std::string &message = "", DIALOG_TYPE type = DIALOG_TYPE::MESSAGE);
+    Dialog(const std::string &title, const std::string &message = "", DIALOG_TYPE type = DIALOG_TYPE::MESSAGE);
 
 	/**
 	 * @brief m_okButton the button to the bottom-left of the dialog ("confirm" by default)

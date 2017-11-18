@@ -29,34 +29,33 @@
  * Created on 23/10/2017
  */
 #include "Dialog.hpp"
-#include "ClientApp.hpp"
+#include "Provider.hpp"
 #include <SFML/Graphics/RectangleShape.hpp>
 
-Dialog *Dialog::input(ClientApp &app, const std::string &title)
+Dialog *Dialog::input(const std::string &title)
 {
-    return new Dialog(app, title, "", DIALOG_TYPE::INPUT);
+    return new Dialog(title, "", DIALOG_TYPE::INPUT);
 }
 
-Dialog* Dialog::message(ClientApp &app, const std::string &message, const std::string &title)
+Dialog* Dialog::message(const std::string &message, const std::string &title)
 {
-    return new Dialog(app, title, message, DIALOG_TYPE::MESSAGE);
+    return new Dialog(title, message, DIALOG_TYPE::MESSAGE);
 }
 
-Dialog::Dialog(ClientApp &app, const std::string &title, const std::string &message, DIALOG_TYPE type):
-    Widget(app),
-    m_okButton(app, "Confirm"),
-    m_cancelButton(app,"Cancel"),
-    m_xButton(app, "X"),
-    m_input(app),
-    m_title(sf::String(title), app.getResourcesManager().getFont()),
-    m_message("", app.getResourcesManager().getFont()),
-	okEvent(app.getGame().getEventManager().nextEventCode()),
-	cancelEvent(app.getGame().getEventManager().nextEventCode()),
-    m_type(type)
+Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE type):
+    m_okButton("Confirm"),
+    m_cancelButton("Cancel"),
+    m_xButton("X"),
+    m_input(),
+    m_title(sf::String(title), pr::resourceManager().getFont()),
+    m_message("",pr::resourceManager().getFont()),
+    m_type(type),
+    okEvent(pr::nextEventCode()),
+    cancelEvent(pr::nextEventCode())
 {
-    app.getGame().getEventManager().declareListener(m_okButton.clickedEvent, &Dialog::okButtonClicked, this);
-    app.getGame().getEventManager().declareListener(m_cancelButton.clickedEvent, &Dialog::cancelButtonClicked, this);
-    app.getGame().getEventManager().declareListener(m_xButton.clickedEvent, &Dialog::cancelButtonClicked, this);
+    pr::connect(m_okButton.clickedEvent, &Dialog::okButtonClicked, this);
+    pr::connect(m_cancelButton.clickedEvent, &Dialog::cancelButtonClicked, this);
+    pr::connect(m_xButton.clickedEvent, &Dialog::cancelButtonClicked, this);
 
     m_title.setPosition(originX + 1,originY +1);
     m_input.setText(message);
@@ -67,7 +66,7 @@ Dialog::Dialog(ClientApp &app, const std::string &title, const std::string &mess
     m_message.setPosition(sf::Vector2f(
                               originX,
                               originY + DIALOG_HEIGHT/2
-    ));
+                              ));
 
     m_okButton.setPosition(sf::Vector2f(
                                originX,
@@ -87,12 +86,12 @@ Dialog::Dialog(ClientApp &app, const std::string &title, const std::string &mess
 
 void Dialog::cancelButtonClicked()
 {
-	app().getGame().getEventManager().trigger(cancelEvent);
+    pr::trigger(cancelEvent);
 }
 
 void Dialog::okButtonClicked()
 {
-	app().getGame().getEventManager().trigger(okEvent);
+    pr::trigger(okEvent);
 }
 
 const std::string &Dialog::getResult() const
@@ -112,10 +111,10 @@ void Dialog::draw(sf::RenderTarget &target, sf::RenderStates states) const
     target.draw(rect, states);
     target.draw(m_title, states);
     if(m_type == DIALOG_TYPE::INPUT){
-	target.draw(m_input, states);
-	target.draw(m_cancelButton, states);
+        target.draw(m_input, states);
+        target.draw(m_cancelButton, states);
     }else{
-	target.draw(m_message, states);
+        target.draw(m_message, states);
     }
     target.draw(m_okButton, states);
     target.draw(m_xButton, states);
@@ -125,16 +124,16 @@ void Dialog::handleEvent(const sf::Event &ev)
 {
     if(!m_isVisible)return;
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-	app().getGame().getEventManager().trigger(cancelEvent);
+        pr::trigger(cancelEvent);
     }else if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return){
-	app().getGame().getEventManager().trigger(okEvent);
+        pr::trigger(okEvent);
     }else{
-	m_okButton.handleEvent(ev);
-	if(m_type == DIALOG_TYPE::INPUT){
-	    m_cancelButton.handleEvent(ev);
-	    m_input.handleEvent(ev);
-	}
-	m_xButton.handleEvent(ev);
+        m_okButton.handleEvent(ev);
+        if(m_type == DIALOG_TYPE::INPUT){
+            m_cancelButton.handleEvent(ev);
+            m_input.handleEvent(ev);
+        }
+        m_xButton.handleEvent(ev);
     }
 }
 
@@ -150,7 +149,7 @@ void Dialog::setTitle(const std::string &str)
 
 void Dialog::setOkButtonTitle(const std::string &str)
 {
-	m_okButton.setText(str);
+    m_okButton.setText(str);
 }
 
 void Dialog::show()

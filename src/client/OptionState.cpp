@@ -28,16 +28,14 @@
  *
  * Created on 1/11/2017
  */
-#include "OptionState.hpp"
-#include "ClientApp.hpp"
 #include <QtCore>
+#include "OptionState.hpp"
+#include "Provider.hpp"
+#include "ClientApp.hpp"
 
-OptionState::OptionState(ClientApp &app):
-State(app),
-m_menu(app)
+OptionState::OptionState():
+m_menu()
 {
-	EventManager &evM = app.getGame().getEventManager();
-
 	sf::Text &label =  *m_menu.addLabel("Options",ARENA_WIDTH/2, 0);
 	label.setPosition(label.getPosition().x - label.getGlobalBounds().width / 2.f, label.getPosition().y);
 
@@ -47,27 +45,27 @@ m_menu(app)
 	m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(ARENA_WIDTH - 50, 0), getCurrentSoundRect()).get();
 	m_soundSprite->setPosition(m_soundSprite->getPosition().x, startY);
 	m_soundSprite->scale(4,4);
-	evM.declareListener(muteButton.clickedEvent, &OptionState::toggleSound, this);
+    pr::connect(muteButton.clickedEvent, &OptionState::toggleSound, this);
 
 
     sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
-    evM.declareListener(keyBindingClicked , &StateMachine::setCurrentState, &app.getStateMachine(), (int)STATE_TYPE::KEY_BINDINGS);
+    pr::connect(keyBindingClicked , &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::KEY_BINDINGS);
 
     sf::Uint64 backClicked = m_menu.addButton("Menu", 0, ARENA_HEIGHT - 50)->clickedEvent;
-    evM.declareListener(backClicked, &StateMachine::setCurrentState, &app.getStateMachine(), (int)STATE_TYPE::MENU);
+    pr::connect(backClicked, &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::MENU);
 }
 
 void OptionState::toggleSound()
 {
 
-	getApp().getSoundEngine().isMuted() ? getApp().getSoundEngine().unmute() :
-										  getApp().getSoundEngine().mute();
+    pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
+                                          pr::soundEngine().mute();
 	m_soundSprite->setTextureRect(getCurrentSoundRect());
 }
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const
 {
-	return getApp().getSoundEngine().isMuted() ? m_withoutSoundRect : m_withSoundRect;
+    return pr::soundEngine().isMuted() ? m_withoutSoundRect : m_withSoundRect;
 }
 
 OptionState::~OptionState()
@@ -88,7 +86,7 @@ void OptionState::update(const sf::Time &elapsed)
 void OptionState::handleEvent(const sf::Event &ev)
 {
 	if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-		getApp().getStateMachine().setCurrentState((int)STATE_TYPE::MENU);
+        pr::stateMachine().setCurrentState((int)STATE_TYPE::MENU);
 	}else{
 		m_menu.handleEvent(ev);
 	}

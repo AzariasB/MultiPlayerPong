@@ -49,7 +49,7 @@ public:
 	 * @brief OptionState Constructor
 	 * @param app reference to the app
 	 */
-	OptionState(ClientApp &app);
+    OptionState();
 
 	/**
 	 * @brief update inherited function

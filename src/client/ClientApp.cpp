@@ -40,11 +40,18 @@
 #include "MenuState.hpp"
 #include "OptionState.hpp"
 
+
+ClientApp &ClientApp::getInstance()
+{
+    static ClientApp instance;
+    return instance;
+}
+
 ClientApp::ClientApp() :
     window(sf::VideoMode(ARENA_WIDTH, ARENA_HEIGHT), "Pong", sf::Style::Default),
     renderer(window),
     game(),
-    stateMachine(*this),
+    stateMachine(),
     m_sEngine(rManager),
     m_keyBinding()
 {
@@ -58,6 +65,14 @@ ClientApp::ClientApp() :
 
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/bounce.wav");
     window.setKeyRepeatEnabled(false);
+}
+
+ClientApp::~ClientApp()
+{
+}
+
+void ClientApp::initStates()
+{
     stateMachine.addState<WaitingState>(STATE_TYPE::WAITING);
     stateMachine.addState<PlayState>(STATE_TYPE::PLAY);
     stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
@@ -66,15 +81,10 @@ ClientApp::ClientApp() :
     stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
 }
 
-ClientApp::~ClientApp()
-{
-}
-
 void ClientApp::handleEvent(const sf::Event& event)
 {
     if (event.type == sf::Event::Closed) {
         window.close();
-        std::cout << "Closing window\n";
     } else if(event.type == sf::Event::Resized){
         resizeEvent(event);
     } else {

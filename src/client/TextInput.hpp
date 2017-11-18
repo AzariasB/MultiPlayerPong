@@ -47,7 +47,7 @@ public:
 	 * @brief TextInput constructor
 	 * @param app a reference to the client's app
 	 */
-	TextInput(ClientApp &app);
+    TextInput();
 
 	/**
 	 * @brief draw inherited function

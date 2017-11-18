@@ -31,8 +31,7 @@
 
 #include "StateMachine.hpp"
 
-StateMachine::StateMachine(ClientApp& app) :
-m_app(app)
+StateMachine::StateMachine()
 {
 
 }

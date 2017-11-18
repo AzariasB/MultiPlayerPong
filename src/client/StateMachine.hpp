@@ -46,9 +46,8 @@ class StateMachine : public sf::NonCopyable {
 public:
 	/**
 	 * @brief StateMachine constructor
-	 * @param app a reference to the client's app
 	 */
-	StateMachine(ClientApp &app);
+    StateMachine();
 
 	/**
 	 * @brief addState adds the state given as template parameter to the list of states (creates a new state object)
@@ -58,8 +57,8 @@ public:
 	void addState(int stateLabel)
 	{
 		static_assert(std::is_base_of<State, T>::value, "T must extend State");
-		states[stateLabel] = std::make_unique<T>(m_app);
-	}
+        states[stateLabel] = std::make_unique<T>();
+    }
 
 	/**
 	 * @brief setCurrentState changes the current state, calls onLeave and onEnter for the current state and the new state
@@ -115,10 +114,6 @@ private:
 	 */
 	int currentStateIndex = -1;
 
-	/**
-	 * @brief m_app reference to the client's application
-	 */
-	ClientApp &m_app;
 };
 
 #endif /* STATEMACHINE_H */

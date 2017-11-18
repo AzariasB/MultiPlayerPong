@@ -50,7 +50,7 @@ public:
 	 * @param startX the starting X point of the menu
 	 * @param startY the starting Y point of the menu
 	 */
-    KeyBindingState(ClientApp &app);
+    KeyBindingState();
 
     virtual ~KeyBindingState();
 

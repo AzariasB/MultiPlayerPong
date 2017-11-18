@@ -25,73 +25,72 @@
 /* 
  * File:   EndState.cpp
  * Author: azarias
- * 
+ *
  * Created on 16 octobre 2017, 22:50
  */
 
 #include "EndState.hpp"
+#include "Provider.hpp"
 #include "ClientApp.hpp"
 
-EndState::EndState(ClientApp& app) :
-State(app),
-m_messageDialog(Dialog::message(app, "",""))
+EndState::EndState() :
+    m_messageDialog(Dialog::message( "",""))
 {
-	m_messageDialog->setOkButtonTitle("Menu");
+    m_messageDialog->setOkButtonTitle("Menu");
 
-	app.getGame().getEventManager().declareListener(
-	                        m_messageDialog->okEvent,
-				&EndState::backButtonPressed,
-				this
-	);
+    pr::connect(
+                m_messageDialog->okEvent,
+                &EndState::backButtonPressed,
+                this
+                );
 
-	app.getGame().getEventManager().declareListener(
-	                        m_messageDialog->cancelEvent,
-				&EndState::backButtonPressed,
-				this
-	);
+    pr::connect(
+                m_messageDialog->cancelEvent,
+                &EndState::backButtonPressed,
+                this
+                );
 
-	m_messageDialog->show();
+    m_messageDialog->show();
 }
 
 EndState::~EndState()
 {
-	delete m_messageDialog;
+    delete m_messageDialog;
 }
 
 
 void EndState::backButtonPressed()
 {
-	getApp().getGame().reset();
-	getApp().getStateMachine().setCurrentState(STATE_TYPE::MENU);
+    pr::game().reset();
+    pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
 }
 
 void EndState::draw(Renderer& renderer) const
 {
-	renderer.render(*m_messageDialog);
+    renderer.render(*m_messageDialog);
 }
 
 
 void EndState::handleEvent(const sf::Event& ev)
 {
-	//When escape pressed, go to menu
-	if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-		getApp().getStateMachine().setCurrentState(STATE_TYPE::MENU);
-	}else{
-		m_messageDialog->handleEvent(ev);
-	}
-
+    //When escape pressed, go to menu
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
+        pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
+    }else{
+        m_messageDialog->handleEvent(ev);
+    }
 }
 
 void EndState::onEnter(BaseStateData *data)
 {
-	m_messageDialog->setMessage("Your score :" + std::to_string(getApp().getPlayer().getScore()));
-	m_messageDialog->setTitle(getApp().isWinner() ? "You won ! " : "You lost");
+    m_messageDialog->setMessage("Your score :" + std::to_string(pr::player().getScore()));
+    m_messageDialog->setTitle(ClientApp::getInstance().isWinner() ? "You won ! " : "You lost");
 }
 
 void EndState::onLeave()
 {
-	//Disconnect the sockets and "null" them
-	getApp().getSocket().disconnect();
+    //Disconnect the sockets and "null" them
+    pr::socket().disconnect();
 }
 
 void EndState::update(const sf::Time &elapsed)

@@ -49,7 +49,7 @@ public:
 	 * @brief MenuState constructor
 	 * @param client reference to the app
 	 */
-	MenuState(ClientApp &client);
+    MenuState();
 
 	/**
 	 * @brief draw inherited function

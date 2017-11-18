@@ -32,14 +32,12 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-
 #include "TextInput.hpp"
-#include "ClientApp.hpp"
+#include "Provider.hpp"
 
-TextInput::TextInput(ClientApp& app) :
-Widget(app),
-m_text("", app.getResourcesManager().getFont()),
-m_pipe("|", app.getResourcesManager().getFont()),
+TextInput::TextInput() :
+m_text("", pr::resourceManager().getFont()),
+m_pipe("|", pr::resourceManager().getFont()),
 m_typed("")
 {
 

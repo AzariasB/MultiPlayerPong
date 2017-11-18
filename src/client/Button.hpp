@@ -52,7 +52,7 @@ public:
 	 * @param app reference to the Client application
 	 * @param text the text to display inside the button
 	 */
-    Button(ClientApp &app, const std::string &text = "");
+    Button(const std::string &text = "");
 
 	/**
 	 * @brief Button constructor
@@ -61,7 +61,7 @@ public:
 	 * @param xpos x position of the button
 	 * @param yPos y position of the button
 	 */
-	Button(ClientApp &app, const std::string &text, float xPos, float yPos);
+    Button(const std::string &text, float xPos, float yPos);
 
 	/**
 	 * @brief draw Function to draw the button

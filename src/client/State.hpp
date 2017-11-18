@@ -98,8 +98,7 @@ public:
 	 * @brief State constructor
 	 * @param client a reference to the client application
 	 */
-	State(ClientApp &client) :
-		client(client)
+    State()
 	{
 
 	}
@@ -140,31 +139,6 @@ public:
 	{
 	}
 
-	/**
-	 * @brief getApp reference to the client's ap
-	 * @return  const reference to the client's app
-	 */
-	const ClientApp &getApp() const
-	{
-		return client;
-	}
-
-protected:
-
-	/**
-	 * @brief getApp non-const reference, for the sub-classes
-	 * @return a reference to the client application
-	 */
-	ClientApp &getApp()
-	{
-		return client;
-	}
-
-private:
-	/**
-	 * @brief client reference to the client's app
-	 */
-	ClientApp &client;
 };
 
 #endif /* STATE_H */

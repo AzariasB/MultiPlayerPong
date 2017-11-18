@@ -52,7 +52,8 @@ int main(int argc, char** argv)
 {
 
 #ifdef CLIENT
-	ClientApp app;
+    ClientApp &app = ClientApp::getInstance();
+    app.initStates();
 #elif SERVER
 	ServerApp app;
 #else

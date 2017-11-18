@@ -30,9 +30,10 @@
  */
 
 
-#include "WaitingState.hpp"
-#include "ClientApp.hpp"
 #include <SFML/System/Thread.hpp>
+#include "ClientApp.hpp"
+#include "WaitingState.hpp"
+#include "Provider.hpp"
 
 WaitingState::~WaitingState()
 {
@@ -40,24 +41,15 @@ WaitingState::~WaitingState()
 }
 
 
-WaitingState::WaitingState(ClientApp& client) :
-	State(client),
+WaitingState::WaitingState() :
+    State(),
 	listeningThread(&WaitingState::listenSocket, this),
-	m_messageDialog(Dialog::message(client, "","Connecting..."))
+    m_messageDialog(Dialog::message("","Connecting..."))
 {
 	m_messageDialog->setOkButtonTitle("Cancel");
 
-	client.getGame().getEventManager().declareListener(
-	                        m_messageDialog->okEvent,
-				&WaitingState::cancelClicked,
-				this
-	);
-
-	client.getGame().getEventManager().declareListener(
-	                        m_messageDialog->cancelEvent,
-				&WaitingState::cancelClicked,
-				this
-	);
+    pr::connect(m_messageDialog->okEvent, &WaitingState::cancelClicked, this);
+    pr::connect(m_messageDialog->cancelEvent, &WaitingState::cancelClicked, this);
 
 	m_messageDialog->show();
 }
@@ -77,8 +69,8 @@ void WaitingState::handleEvent(const sf::Event& ev)
 void WaitingState::cancelClicked()
 {
 	listeningThread.terminate();
-	getApp().getSocket().disconnect();
-	getApp().getStateMachine().setCurrentState(STATE_TYPE::MENU);
+    pr::socket().disconnect();
+    pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
 }
 
 void WaitingState::update(const sf::Time &elapsed)
@@ -88,7 +80,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	canBeginMutex.lock();
 	startGame = canBegin;
 	if (receivedNumber == 1 || receivedNumber == 2) {
-		getApp().setPNumber(receivedNumber);
+        ClientApp::getInstance().setPNumber(receivedNumber);
 		receivedNumber = -1;
 	}
 	canBeginMutex.unlock();
@@ -101,7 +93,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	m_messageDialog->setTitle(text.toAnsiString());
 
 	if (startGame)
-		getApp().getStateMachine().setCurrentState(STATE_TYPE::PLAY);
+        pr::stateMachine().setCurrentState(STATE_TYPE::PLAY);
 
 }
 
@@ -113,7 +105,7 @@ void WaitingState::onEnter(BaseStateData *data)
 	StateData<std::string> *ipData = 0;
 	if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
 
-	sf::Socket::Status status = getApp().getSocket().connect(sf::IpAddress(ipData->data()), 5300);
+    sf::Socket::Status status = pr::socket().connect(sf::IpAddress(ipData->data()), 5300);
 	if (status != sf::Socket::Done) {
 		m_messageDialog->setTitle("Failed to connect");
 		//
@@ -131,7 +123,7 @@ void WaitingState::onLeave()
 void WaitingState::listenSocket()
 {
 	sf::Packet firstPacket;
-	sf::Socket::Status rcvStatus = getApp().getSocket().receive(firstPacket);
+    sf::Socket::Status rcvStatus = pr::socket().receive(firstPacket);
 	if (rcvStatus != sf::Socket::Done) {
 		std::cerr << "Failed to receive first packet (Socket status = " << rcvStatus << ")\n";
 		exit(-1);
@@ -148,7 +140,7 @@ void WaitingState::listenSocket()
 	canBeginMutex.unlock();
 
 
-	if (getApp().getSocket().receive(firstPacket) != sf::Socket::Done) {
+    if (pr::socket().receive(firstPacket) != sf::Socket::Done) {
 		cStateMutex.lock();
 		c_state = CONNECTION_STATE::DISCONNECTED;
 		cStateMutex.unlock();

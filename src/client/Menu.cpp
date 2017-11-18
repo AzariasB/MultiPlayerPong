@@ -29,11 +29,10 @@
  * Created on 1/11/2017
  */
 #include "Menu.hpp"
-#include "ClientApp.hpp"
+#include "Provider.hpp"
 #include "../Game.hpp"
 
-Menu::Menu(ClientApp &app):
-    Widget(app)
+Menu::Menu()
 {
 
 }
@@ -45,11 +44,11 @@ Menu::~Menu()
 
 std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, int yPos)
 {    
-    m_buttons.emplace_back(std::make_unique<Button>(app(), content, xPos, yPos));
+    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
     std::unique_ptr<Button> &inserted = m_buttons.back();
 
     int idx = m_buttons.size() -1;
-     app().getGame().getEventManager().declareListener(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
+    pr::connect(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
 
     if(m_buttons.size() == 1) inserted->setSelected(true);
     return inserted;
@@ -58,14 +57,14 @@ std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, i
 
 std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, int xpOs, int yPos)
 {
-    m_labels.emplace_back(std::make_unique<sf::Text>(content, app().getResourcesManager().getFont()));
+    m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont()));
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();
 }
 
 std::unique_ptr<sf::Sprite> &Menu::addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect)
 {
-    const sf::Texture &texture = app().getResourcesManager().getTexture(textureName);
+    const sf::Texture &texture = pr::resourceManager().getTexture(textureName);
     m_sprites.emplace_back(std::unique_ptr<sf::Sprite>(new sf::Sprite(texture, textureRect)));
     m_sprites.back()->setPosition(pos);
     return m_sprites.back();

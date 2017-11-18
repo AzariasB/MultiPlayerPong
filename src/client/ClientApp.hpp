@@ -43,10 +43,8 @@ enum STATE_TYPE {
  */
 class ClientApp : public Application {
 public:
-	/**
-	 * @brief ClientApp default constructor, no data to input
-	 */
-	ClientApp();
+
+    static ClientApp &getInstance();
 
 	/**
 	 * @brief run starts the main loop, until the window closes
@@ -54,6 +52,13 @@ public:
 	 * @param argv the arguments
 	 */
 	void run(int argc, char** argv) override;
+
+    /**
+     * @brief initStates adds all the states
+     * Cannot be called in the constructor, since the state
+     * needs the ClientApp to be fully constructed
+     */
+    void initStates();
 
 	/**
 	 * @brief getGame the game object
@@ -160,7 +165,16 @@ public:
 	void quit();
 
 	virtual ~ClientApp();
+
+    ClientApp(const ClientApp &) = delete;
+    void operator=(const ClientApp &) = delete;
+
 private:
+    /**
+     * @brief ClientApp default constructor, no data to input
+     */
+    ClientApp();
+
 	/**
 	 * @brief hasPNumber if the current number of the app is 1 or 2
 	 * @return wether the client number is a valid client number
@@ -238,6 +252,7 @@ private:
 	 * the key bindings
 	 */
 	KeyBinding m_keyBinding;
+
 };
 
 #endif /* CLIENTAPP_H */

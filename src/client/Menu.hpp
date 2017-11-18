@@ -49,7 +49,7 @@ public:
 	 * @brief Menu constructor
 	 * @param app reference to the application
 	 */
-	Menu(ClientApp &app);
+    Menu();
 
 	virtual ~Menu();
 

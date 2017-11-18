@@ -48,7 +48,7 @@ public:
 	 * @brief EndState constructor
 	 * @param app reference to the application
 	 */
-	EndState(ClientApp &app);
+    EndState();
 
 	/**
 	 * @brief draw inherited function

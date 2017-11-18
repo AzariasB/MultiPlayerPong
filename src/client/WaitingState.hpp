@@ -55,7 +55,7 @@ public:
 	 * @brief WaitingState constructor
 	 * @param client reference to the client's app
 	 */
-	WaitingState(ClientApp &client);
+    WaitingState();
 
 	/**
 	 * @brief draw inherited function

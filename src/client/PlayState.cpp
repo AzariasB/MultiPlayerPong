@@ -25,33 +25,32 @@
 /* 
  * File:   PlayState.cpp
  * Author: azarias
- * 
+ *
  * Created on 16 octobre 2017, 17:49
  */
 
 #include "PlayState.hpp"
+#include "Provider.hpp"
 #include "ClientApp.hpp"
 
-PlayState::PlayState(ClientApp& client) :
-State(client),
-listeningThread(&PlayState::listenSocket, this),
-m_p1ScoreText("0", client.getResourcesManager().getFont()),
-m_p2ScoreText("0", client.getResourcesManager().getFont()),
-m_countdownText("3", client.getResourcesManager().getFont())
+PlayState::PlayState() :
+    listeningThread(&PlayState::listenSocket, this),
+    m_p1ScoreText("0", pr::resourceManager().getFont()),
+    m_p2ScoreText("0", pr::resourceManager().getFont()),
+    m_countdownText("3", pr::resourceManager().getFont())
 {
-	getApp().getGame().getEventManager()
-		.declareListener(
-	                        getApp().getGame().bounceEvent,
-				&PlayState::bounced,
-				this
-			); //Subscribe to bounce event
+    pr::connect(
+                pr::game().bounceEvent,
+                &PlayState::bounced,
+                this
+                ); //Subscribe to bounce event
 
-	m_p1ScoreText.setPosition(ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
-	m_p2ScoreText.setPosition((ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
-	m_countdownText.setPosition(
-				ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
-				ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
-	);
+    m_p1ScoreText.setPosition(ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
+    m_p2ScoreText.setPosition((ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
+    m_countdownText.setPosition(
+                ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
+                ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
+                );
 }
 
 PlayState::~PlayState()
@@ -60,82 +59,73 @@ PlayState::~PlayState()
 
 void PlayState::bounced(int pNum, sf::Vector2f position)
 {
-	getApp().getSoundEngine().playSound(SoundEngine::BOUNCE);
-	getApp().getParticleGenerator().explode(position);//get position
-	getApp().getRenderer().shake();
+    Q_UNUSED(pNum);
+    pr::soundEngine().playSound(SoundEngine::BOUNCE);
+    pr::particleGenerator().explode(position);//get position
+    pr::renderer().shake();
 }
 
 void PlayState::draw(Renderer& renderer) const
 {
-	if(getApp().getGame().isCountingDown()){
-		renderer.render(m_countdownText);
-	}
+    if(pr::game().isCountingDown()){
+        renderer.render(m_countdownText);
+    }
 
-	renderer.renderBall(getApp().getGame().getBall());
-	renderer.renderPaddle(getApp().getGame().getPlayer1().getPaddle());
-	renderer.renderPaddle(getApp().getGame().getPlayer2().getPaddle());
+    renderer.renderBall(pr::game().getBall());
+    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
+    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
 
-	renderer.render(m_p1ScoreText);
-	renderer.render(m_p2ScoreText);
+    renderer.render(m_p1ScoreText);
+    renderer.render(m_p2ScoreText);
 
-	renderer.render(getApp().getParticleGenerator());
+    renderer.render(pr::particleGenerator());
 }
 
 void PlayState::handleEvent(const sf::Event& ev)
 {
-	sf::Event realEv = getApp().getKeyBindings().toGameEvent(ev);
+    sf::Event realEv = pr::keyBinding().toGameEvent(ev);
 
-	getApp().getGame().handleEvent(realEv, getApp().getPlayer());
-	if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
-		sf::Packet p;
-		p << realEv.type << realEv.key.code;
-		getApp().getSocket().send(p);
-	}
+    pr::game().handleEvent(realEv, pr::player());
+    if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
+        sf::Packet p;
+        p << realEv.type << realEv.key.code;
+        pr::socket().send(p);
+    }
 }
 
 void PlayState::update(const sf::Time &elapsed)
 {
-	if (getApp().getGame().playerWon())
-		getApp().getStateMachine().setCurrentState(STATE_TYPE::FINISHED);
-	else
-		getApp().getGame().update(elapsed);
+    if (pr::game().playerWon())
+        pr::stateMachine().setCurrentState(STATE_TYPE::FINISHED);
+    else
+        pr::game().update(elapsed);
 
-	getApp().getParticleGenerator().update(elapsed);
-	m_p1ScoreText.setString(
-		sf::String(
-		std::to_string(getApp().getGame().getPlayer1().getScore())
-		)
-		);
-	m_p2ScoreText.setString(
-		sf::String(
-		std::to_string(getApp().getGame().getPlayer2().getScore())
-		)
-		);
-	m_countdownText.setString(
-				std::to_string(1 + (int)getApp().getGame().getCountdownTime().asSeconds())
-				);
+    pr::particleGenerator().update(elapsed);
+    m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
+    m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
+    m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
 
 }
 
 void PlayState::onEnter(BaseStateData *data)
 {
-	listeningThread.launch();
+    listeningThread.launch();
 }
 
 void PlayState::onLeave()
 {
-	listeningThread.terminate();
+    listeningThread.terminate();
 }
 
 void PlayState::listenSocket()
 {
-	while (1) {
-		sf::Packet p;
-		sf::Socket::Status rcvStatus = getApp().getSocket().receive(p);
-		if (rcvStatus == sf::Socket::Done) {
-			p >> getApp().getGame();
-		} else if (rcvStatus == sf::Socket::Disconnected) {
-			//Send message to main thread
-		}
-	}
+    while (1) {
+        sf::Packet p;
+        sf::Socket::Status rcvStatus = pr::socket().receive(p);
+        if (rcvStatus == sf::Socket::Done) {
+            p >> pr::game();
+        } else if (rcvStatus == sf::Socket::Disconnected) {
+            //Send message to main thread
+        }
+    }
 }

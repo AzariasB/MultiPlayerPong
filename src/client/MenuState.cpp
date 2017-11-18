@@ -30,6 +30,7 @@
  */
 
 #include "MenuState.hpp"
+#include "Provider.hpp"
 #include "ClientApp.hpp"
 #include <regex>
 
@@ -39,24 +40,22 @@ MenuState::~MenuState()
 	delete m_messageDialog;
 }
 
-MenuState::MenuState(ClientApp& client) :
-	State(client),
-	m_menu(client),
-	m_inputDialog(Dialog::input(client,"IP adress")),
-    m_messageDialog(Dialog::message(client, "", "") )
+MenuState::MenuState() :
+    m_menu(),
+    m_inputDialog(Dialog::input("IP adress")),
+    m_messageDialog(Dialog::message("", "") )
 {
-	EventManager &evM = client.getGame().getEventManager();
 	const Button &playButton = *m_menu.addButton("Play", 0,0);
 	const Button &optionButton = *m_menu.addButton("Options", 0, playButton.getHeight());
 	const Button &quitButton = *m_menu.addButton("Quit", 0, playButton.getHeight() + optionButton.getHeight());
 
-	evM.declareListener(playButton.clickedEvent, &Dialog::show, m_inputDialog);
-	evM.declareListener(optionButton.clickedEvent, &StateMachine::setCurrentState, &getApp().getStateMachine(), (int)STATE_TYPE::OPTIONS);
-	evM.declareListener(quitButton.clickedEvent, &ClientApp::quit, &getApp());
-	evM.declareListener(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
-	evM.declareListener(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
-	evM.declareListener(m_messageDialog->okEvent, &Dialog::hide, m_messageDialog);
-	evM.declareListener(m_messageDialog->cancelEvent, &Dialog::hide, m_messageDialog);
+    pr::connect(playButton.clickedEvent, &Dialog::show, m_inputDialog);
+    pr::connect(optionButton.clickedEvent, &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::OPTIONS);
+    pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
+    pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
+    pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
+    pr::connect(m_messageDialog->okEvent, &Dialog::hide, m_messageDialog);
+    pr::connect(m_messageDialog->cancelEvent, &Dialog::hide, m_messageDialog);
 }
 
 
@@ -66,7 +65,7 @@ void MenuState::dialogConfirmed()
 		m_inputDialog->hide();
 		//change of state and indicate the server's ip
 		std::string res = m_inputDialog->getResult();
-		getApp().getStateMachine().setCurrentState(STATE_TYPE::WAITING, res);
+        pr::stateMachine().setCurrentState(STATE_TYPE::WAITING, res);
 	}else{
 		//Message
 		m_messageDialog->setTitle("Invalid IP");

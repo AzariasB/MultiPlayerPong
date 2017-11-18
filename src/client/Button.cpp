@@ -29,24 +29,22 @@
  * Created on 21 octobre 2017, 16:49
  */
 
-#include "Button.hpp"
-#include "ClientApp.hpp"
 #include <SFML/Window.hpp>
 #include <iostream>
+#include "Button.hpp"
+#include "Provider.hpp"
 
-Button::Button(ClientApp &app, const std::string &text) :
-    Widget(app),
-    m_text(text, app.getResourcesManager().getFont()),
-    clickedEvent(app.getGame().getEventManager().nextEventCode()),
-    selectdEvent(app.getGame().getEventManager().nextEventCode())
+Button::Button(const std::string &text) :
+    m_text(text,pr::resourceManager().getFont()),
+    clickedEvent(pr::nextEventCode()),
+    selectdEvent(pr::nextEventCode())
 {
 }
 
-Button::Button(ClientApp &app, const std::string &text, float xPos, float yPos):
-    Widget(app),
-    m_text(text, app.getResourcesManager().getFont()),
-    clickedEvent(app.getGame().getEventManager().nextEventCode()),
-    selectdEvent(app.getGame().getEventManager().nextEventCode())
+Button::Button(const std::string &text, float xPos, float yPos):
+    m_text(text, pr::resourceManager().getFont()),
+    clickedEvent(pr::nextEventCode()),
+    selectdEvent(pr::nextEventCode())
 {
     setPosition(sf::Vector2f(xPos, yPos));
 }
@@ -60,18 +58,18 @@ void Button::handleEvent(const sf::Event& ev)
 {
     bool isClicked = false;
     if (ev.type == sf::Event::MouseMoved) {
-        sf::Vector2f realMovePos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
+        sf::Vector2f realMovePos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
 
         if(m_text.getGlobalBounds().contains(realMovePos))
-            app().getGame().getEventManager().trigger(selectdEvent);
+            pr::trigger(selectdEvent);
     } else if (ev.type == sf::Event::MouseButtonPressed) {
-        sf::Vector2f realClickPos = app().getWindow().mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
+        sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
         isClicked = ev.mouseButton.button == sf::Mouse::Left && m_text.getGlobalBounds().contains(realClickPos);
     } else if(isSelectionEvent(ev)){
         isClicked = true;
     }
     if (isClicked)
-        app().getGame().getEventManager().trigger(clickedEvent);
+        pr::trigger(clickedEvent);
 }
 
 bool Button::isSelectionEvent(const sf::Event &ev) const
