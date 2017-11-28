@@ -95,6 +95,12 @@ public:
 		return socket2.get();
 	}
 
+    /**
+     * @brief tryAddPowerup if there is a chance, adds a power up
+     * @return wether a powerup was added to the game
+     */
+    bool tryAddPowerup(const sf::Time &elapsed);
+
 	/**
 	 * @brief isFinished
 	 * @return wether the lobby's game finished (thus it can be destroyed)
@@ -179,6 +185,11 @@ private:
 	 * @brief socketMutex mutex to lock any modifications of the sockets
 	 */
 	sf::Mutex socketMutex;
+
+    /**
+     * @brief m_timeSinceLastPowerUp time since last powerup poped up
+     */
+    sf::Time m_nextPowerup;
 
 	/**
 	 * @brief stateMutex mutex to lock when getting/setting the state's value

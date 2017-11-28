@@ -10,6 +10,17 @@
 #define MATH_H
 
 /**
+ * @brief rand rand value between the given bounds
+ * @param min the min possible value
+ * @param max the max possible value
+ * @return a pseudo-random value between the given bounds
+ */
+inline int rrand(int min, int max)
+{
+    return (rand() % (max -min + 1)) + min;
+}
+
+/**
  * @brief clampf floating clamp, returns value if value is between min and max, min if the value is less than min
  * max if value is more than max
  * @param min the min value

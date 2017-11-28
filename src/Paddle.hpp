@@ -122,6 +122,13 @@ public:
 		return direction;
 	}
 
+    /**
+     * @brief getHitBox the hitbox of the paddle
+     * with the correct height if any boost were given
+     * @return
+     */
+    sf::FloatRect getHitBox() const;
+
 	/**
 	 * @brief operator << serializes the paddle to the given sf::Packet
 	 * @param packet the packet in which to serialze the paddle
@@ -145,6 +152,9 @@ private:
 	 * @brief game reference to the game object
 	 */
 	const Game &game;
+
+
+    int m_widthBoost = 0;
 
 	/**
 	 * @brief position the paddle's position

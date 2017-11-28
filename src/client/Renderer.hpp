@@ -36,6 +36,7 @@
 #include <SFML/System.hpp>
 #include "../Ball.hpp"
 #include "../Paddle.hpp"
+#include "../Powerup.hpp"
 
 /**
  * @brief The Renderer class used to render every objects of the game
@@ -62,6 +63,12 @@ public:
 	 * @param paddle a const reference to the paddle to render
 	 */
 	void renderPaddle(const Paddle &paddle);
+
+    /**
+     * @brief renderPowerup renders one powerup
+     * @param powerup const reference to the powerup to render
+     */
+    void renderPowerup(const Powerup &powerup);
 
 	/**
 	 * @brief shake triggers a slight screen shaking for one second

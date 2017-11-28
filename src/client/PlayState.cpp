@@ -29,6 +29,8 @@
  * Created on 16 octobre 2017, 17:49
  */
 
+#include <QDebug>
+
 #include "PlayState.hpp"
 #include "Provider.hpp"
 #include "ClientApp.hpp"
@@ -77,6 +79,12 @@ void PlayState::draw(Renderer& renderer) const
 
     renderer.render(m_p1ScoreText);
     renderer.render(m_p2ScoreText);
+
+    const std::unordered_map<sf::Uint64, Powerup> &powerups = pr::game().getPowerups();
+    qDebug() << "Rendering " << powerups.size() << " powerups";
+    for(auto it = powerups.begin(); it != powerups.end(); ++it){
+        renderer.renderPowerup(it->second);
+    }
 
     renderer.render(pr::particleGenerator());
 }

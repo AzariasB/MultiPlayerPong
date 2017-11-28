@@ -72,6 +72,16 @@ void Renderer::renderBall(const Ball& ball)
 	render(circle);
 }
 
+void Renderer::renderPowerup(const Powerup &powerup)
+{
+
+    sf::RectangleShape rect(sf::Vector2f(POWERUP_SIDE, POWERUP_SIDE));
+    rect.setPosition(powerup.getHitbox().left,powerup.getHitbox().top);
+
+    rect.setFillColor(sf::Color::Green);//Green rectangle for now, animations later
+    render(rect);
+}
+
 void Renderer::renderPaddle(const Paddle& paddle)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));

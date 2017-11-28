@@ -99,15 +99,19 @@ float Paddle::getBounceAngle(float yPos)
 	return clampf(-0.8, 0.8, distFromCenter / (PADDLE_HEIGHT / 2));
 }
 
+sf::FloatRect Paddle::getHitBox() const
+{
+    return sf::FloatRect(position.x, position.y, PADDLE_WIDTH, PADDLE_HEIGHT + m_widthBoost);
+}
 
 sf::Packet &operator<<(sf::Packet &packet, const Paddle &paddle)
 {
-	return packet << paddle.position << paddle.direction;
+    return packet << paddle.position << paddle.direction << paddle.m_widthBoost;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Paddle &paddle)
 {
-	return packet >> paddle.position >> paddle.direction;
+    return packet >> paddle.position >> paddle.direction >> paddle.m_widthBoost;
 }
 
 void Paddle::setPosition(const sf::Vector2f& nwPosition)

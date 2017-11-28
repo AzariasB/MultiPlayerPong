@@ -34,8 +34,132 @@
 
 #include <SFML/Network/Packet.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <complex>
 #include <iosfwd>
+#include <unordered_map>
+
+
+template<typename K, typename V, typename ...Args>
+void deserialize(sf::Packet &packet, std::unordered_map<K,V> &mmap, Args&... argp)
+{
+    sf::Uint32 size;
+    packet >> size;
+    for(sf::Uint32 i = 0; i < size; ++i){
+        K k;
+        packet >> k;
+        if(!mmap.count(k)){
+            mmap.emplace(std::piecewise_construct,
+                         std::forward_as_tuple(k),
+                         std::forward_as_tuple(argp...)
+                        );
+        }
+
+        packet >> mmap.find(k)->second;
+    }
+}
+
+template<typename K, typename V>
+sf::Packet &operator>>(sf::Packet &packet, std::unordered_map<K,V> mmap)
+{
+    deserialize(packet, mmap);
+    return packet;
+}
+
+template<typename K, typename V>
+sf::Packet &operator<<(sf::Packet &packet, const std::unordered_map<K,V> mmap)
+{
+    sf::Uint32 mapSize = static_cast<sf::Uint32>(mmap.size());
+    packet << mapSize;
+    for(auto it = mmap.begin(); it != mmap.end(); ++it){
+        packet << it->first;
+        packet << it->second;
+    }
+    return packet;
+
+}
+
+/**
+ * @brief deseralizeVector deseralizes a vector, but construct the elements
+ * of the vectors with the given arguments
+ * @param packet the packet to use to get the vector's data
+ * @param vec the vector in which to deseralize
+ * @param argp the argument neede to construct t
+ */
+template<typename T, typename...Args>
+void deseralizeVector(sf::Packet &packet, std::vector<T> &vec, Args&... argp)
+{
+    sf::Uint32 vecSize;
+    packet >> vecSize;
+    vec.reserve(vecSize);
+    for(int i = 0; i < vecSize; ++i){
+        vec.emplace_back(argp...);
+        packet >> vec.back();
+    }
+}
+
+
+/**
+ * @brief operator << serializes the given vector to a packet
+ * @param packet the packet in which to serialize
+ * @param vec the vector to deseralize
+ * @return the packet containing the derliazed vector
+ */
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const std::vector<T> &vec)
+{
+    packet << static_cast<sf::Uint32>(vec.size());
+    for(auto it = vec.cbegin(); it != vec.cend(); ++it)
+    {
+        packet << *it;
+    }
+    return packet;
+}
+
+/**
+ * @brief operator >> deserializes a vector, can only be used
+ * when the constructor does not need any arguments
+ * @param packet the packet to use to deserliaze
+ * @param vec the vector in which to deserialize
+ * @return the packet
+ */
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, std::vector<T> &vec)
+{
+    sf::Uint32 vecSize;
+    packet >> vecSize;
+    vec.reserve(vecSize);
+    for(sf::Uint32 i = 0; i < vecSize; ++i){
+        T temp;
+        packet >> temp;
+        vec.push_back(temp);
+    }
+    return packet;
+}
+
+/**
+ * @brief operator << serializes any type of rect
+ * @param packet the packet in which to seralize
+ * @param rect the rectangle to serialize
+ * @return
+ */
+template<typename T>
+sf::Packet &operator<<(sf::Packet &packet, const sf::Rect<T> &rect)
+{
+    return packet << rect.left << rect.top << rect.width << rect.height;
+}
+
+/**
+ * @brief operator >> deszeralizes any type of rect
+ * @param packet the packet to use
+ * @param rect the target
+ * @return
+ */
+template<typename T>
+sf::Packet &operator>>(sf::Packet &packet, sf::Rect<T> &rect)
+{
+    return packet >> rect.left >> rect.top >> rect.width >> rect.height;
+}
 
 /**
  * @brief operator << serializes any type of vector

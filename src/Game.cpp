@@ -25,7 +25,7 @@
 /* 
  * File:   Game.cpp
  * Author: azarias
- * 
+ *
  * Created on 11 octobre 2017, 10:09
  */
 
@@ -33,11 +33,11 @@
 #include "Application.hpp"
 
 Game::Game() :
-mainBall(*this),
-p1(*this, 1),
-p2(*this, 2),
-m_countDownTime(sf::seconds(3)),
-m_state(GAMESTATE::COUNTDOWN)
+    mainBall(*this),
+    p1(*this, 1),
+    p2(*this, 2),
+    m_countDownTime(sf::seconds(3)),
+    m_state(GAMESTATE::COUNTDOWN)
 {
 }
 
@@ -47,127 +47,154 @@ Game::~Game()
 
 void Game::handleEvent(const sf::Event& ev, Player &player)
 {
-	mutex.lock();
-	if (ev.type == sf::Event::KeyPressed) {
-		if (ev.key.code == sf::Keyboard::Up) {
-			player.getPaddle().goUp();
-		} else if (ev.key.code == sf::Keyboard::Down) {
-			player.getPaddle().goDown();
-		}
-	} else if (ev.type == sf::Event::KeyReleased) {
-		player.getPaddle().stop();
-	}
-	mutex.unlock();
+    mutex.lock();
+    if (ev.type == sf::Event::KeyPressed) {
+        if (ev.key.code == sf::Keyboard::Up) {
+            player.getPaddle().goUp();
+        } else if (ev.key.code == sf::Keyboard::Down) {
+            player.getPaddle().goDown();
+        }
+    } else if (ev.type == sf::Event::KeyReleased) {
+        player.getPaddle().stop();
+    }
+    mutex.unlock();
 }
 
 void Game::update(const sf::Time &elapsed)
 {
-	mutex.lock();
-	p1.getPaddle().update(elapsed);
-	p2.getPaddle().update(elapsed);
-	if(m_state == GAMESTATE::COUNTDOWN){
-		updateCountdown(elapsed);
-	}else if(m_state == GAMESTATE::PLAYING){
-		updatePlaying(elapsed);
-	}
-	mutex.unlock();
+    mutex.lock();
+    p1.getPaddle().update(elapsed);
+    p2.getPaddle().update(elapsed);
+    if(m_state == GAMESTATE::COUNTDOWN){
+        updateCountdown(elapsed);
+    }else if(m_state == GAMESTATE::PLAYING){
+        updatePlaying(elapsed);
+    }
+    mutex.unlock();
 }
 
 void Game::updateCountdown(const sf::Time &elapsed)
 {
-	m_countDownTime -= elapsed;
-	if(m_countDownTime <= sf::Time::Zero){
-		m_evManager.trigger(countdownEndedEvent);
-	}
+    mutex.lock();
+    m_countDownTime -= elapsed;
+    if(m_countDownTime <= sf::Time::Zero){
+        m_evManager.trigger(countdownEndedEvent);
+    }
+    mutex.unlock();
 }
 
 void Game::updatePlaying(const sf::Time &elapsed)
 {
-	mainBall.update(elapsed);
+    mutex.lock();
+    mainBall.update(elapsed);
 
-	if (p1.getPaddle().intersectsWith(mainBall)) {
-		float bounceDir = p1.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-		mainBall.xBounce(bounceDir);
-		m_evManager.trigger(bounceEvent, 1, sf::Vector2f(p1.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ) );
-	} else if (p2.getPaddle().intersectsWith(mainBall)) {
-		float bounceDir = p2.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-		mainBall.xBounce(bounceDir);
-		m_evManager.trigger(bounceEvent, 2, sf::Vector2f(p2.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ));
-	}
+    if (p1.getPaddle().intersectsWith(mainBall)) {
+        float bounceDir = p1.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
+        mainBall.xBounce(bounceDir);
+        m_evManager.trigger(bounceEvent, 1, sf::Vector2f(p1.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ) );
+    } else if (p2.getPaddle().intersectsWith(mainBall)) {
+        float bounceDir = p2.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
+        mainBall.xBounce(bounceDir);
+        m_evManager.trigger(bounceEvent, 2, sf::Vector2f(p2.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ));
+    }
 
-	if (mainBall.getPosition().x < -BALL_RADIUS) {
-		m_evManager.trigger(lostEvent, 1);//Player 1 lost
-	} else if (mainBall.getPosition().x > 750) {
-		m_evManager.trigger(lostEvent, 2);
-	}
+    if (mainBall.getPosition().x < -BALL_RADIUS) {
+        m_evManager.trigger(lostEvent, 1);//Player 1 lost
+    } else if (mainBall.getPosition().x > 750) {
+        m_evManager.trigger(lostEvent, 2);
+    }
+
+    for(auto it = m_powerups.begin(); it != m_powerups.end();){
+        it->second.update(elapsed);
+        if(it->second.isOut()){
+            it = m_powerups.erase(it);
+        }else{
+            ++it;
+        }
+    }
+    mutex.unlock();
+}
+
+const Powerup &Game::addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction)
+{
+    mutex.lock();
+    sf::Uint64 key = Powerup::nextId();
+    m_powerups.emplace(std::piecewise_construct,
+                       std::forward_as_tuple(key),
+                       std::forward_as_tuple(*this, type, startPos, direction)
+                );
+    mutex.unlock();
+    return m_powerups.find(key)->second;
 }
 
 void Game::reset()
 {
-	mutex.lock();
-	mainBall.reset();
-	p1.reset();
-	p2.reset();
-	m_state = GAMESTATE::COUNTDOWN;
-	m_countDownTime = sf::seconds(3);
-	mutex.unlock();
+    mutex.lock();
+    mainBall.reset();
+    p1.reset();
+    p2.reset();
+    m_state = GAMESTATE::COUNTDOWN;
+    m_countDownTime = sf::seconds(3);
+    m_powerups.clear();
+    mutex.unlock();
 }
 
 sf::Packet &operator<<(sf::Packet &packet, Game &game)
 {
-	game.mutex.lock();
-	packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds();
-	game.mutex.unlock();
-	return packet;
+    game.mutex.lock();
+    packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds() << game.m_powerups;
+    game.mutex.unlock();
+    return packet;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Game &game)
 {
-	sf::Int8 gameState;
-	sf::Int64 microSeconds;
-	game.mutex.lock();
-	packet >> game.mainBall >> game.p1 >> game.p2 >> gameState >> microSeconds;
-	game.m_state = static_cast<GAMESTATE>(gameState);
-	game.m_countDownTime = sf::microseconds(microSeconds);
-	game.mutex.unlock();
-	return packet;
+    sf::Int8 gameState;
+    sf::Int64 microSeconds;
+    game.mutex.lock();
+    packet >> game.mainBall >> game.p1 >> game.p2 >> gameState >> microSeconds;
+    deserialize(packet, game.m_powerups, game);
+    game.m_state = static_cast<GAMESTATE>(gameState);
+    game.m_countDownTime = sf::microseconds(microSeconds);
+    game.mutex.unlock();
+    return packet;
 }
 
 void Game::setPaddle2Position(const sf::Vector2f &p2PaddlePos)
 {
-	mutex.lock();
-	p2.getPaddle().setPosition(p2PaddlePos);
-	mutex.unlock();
+    mutex.lock();
+    p2.getPaddle().setPosition(p2PaddlePos);
+    mutex.unlock();
 }
 
 void Game::setPaddle1Position(const sf::Vector2f& p1Pos)
 {
-	mutex.lock();
-	p1.getPaddle().setPosition(p1Pos);
-	mutex.unlock();
+    mutex.lock();
+    p1.getPaddle().setPosition(p1Pos);
+    mutex.unlock();
 }
 
 void Game::setGameState(GAMESTATE gameState)
 {
-	mutex.lock();
-	m_state = gameState;
-	mutex.unlock();
+    mutex.lock();
+    m_state = gameState;
+    mutex.unlock();
 }
 
 int Game::getNumWinner() const
 {
-	mutex.lock();
-	int res = p1.isWinner() ? p1.getNum() : p2.isWinner() ? p2.getNum() : -1;
-	mutex.unlock();
-	return res;
+    mutex.lock();
+    int res = p1.isWinner() ? p1.getNum() : p2.isWinner() ? p2.getNum() : -1;
+    mutex.unlock();
+    return res;
 }
 
 bool Game::playerWon() const
 {
-	mutex.lock();
-	bool won = p1.isWinner() || p2.isWinner();
-	mutex.unlock();
-	return won;
+    mutex.lock();
+    bool won = p1.isWinner() || p2.isWinner();
+    mutex.unlock();
+    return won;
 }
 
 bool Game::isCountingDown() const
@@ -180,47 +207,47 @@ bool Game::isCountingDown() const
 
 const Ball& Game::getBall() const
 {
-	const Ball *b;
-	mutex.lock();
-	b = &mainBall;
-	mutex.unlock();
-	return *b;
+    const Ball *b;
+    mutex.lock();
+    b = &mainBall;
+    mutex.unlock();
+    return *b;
 }
 
 const Player& Game::getPlayer1() const
 {
-	const Player *p;
-	mutex.lock();
-	p = &p1;
-	mutex.unlock();
-	return *p;
+    const Player *p;
+    mutex.lock();
+    p = &p1;
+    mutex.unlock();
+    return *p;
 }
 
 Player& Game::getPlayer1()
 {
-	Player *p;
-	mutex.lock();
-	p = &p1;
-	mutex.unlock();
-	return *p;
+    Player *p;
+    mutex.lock();
+    p = &p1;
+    mutex.unlock();
+    return *p;
 }
 
 Player& Game::getPlayer2()
 {
-	Player *p;
-	mutex.lock();
-	p = &p2;
-	mutex.unlock();
-	return *p;
+    Player *p;
+    mutex.lock();
+    p = &p2;
+    mutex.unlock();
+    return *p;
 }
 
 const Player& Game::getPlayer2() const
 {
-	const Player *p;
-	mutex.lock();
-	p = &p2;
-	mutex.unlock();
-	return *p;
+    const Player *p;
+    mutex.lock();
+    p = &p2;
+    mutex.unlock();
+    return *p;
 }
 
 sf::Time Game::getCountdownTime() const
@@ -233,8 +260,16 @@ sf::Time Game::getCountdownTime() const
 
 EventManager& Game::getEventManager()
 {
-	mutex.lock();
-	EventManager &evM = m_evManager;
-	mutex.unlock();
-	return evM;
+    mutex.lock();
+    EventManager &evM = m_evManager;
+    mutex.unlock();
+    return evM;
+}
+
+const std::unordered_map<sf::Uint64, Powerup> &Game::getPowerups() const
+{
+    mutex.lock();
+    const std::unordered_map<sf::Uint64, Powerup> &vec = m_powerups;
+    mutex.unlock();
+    return vec;
 }

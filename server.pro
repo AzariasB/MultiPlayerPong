@@ -40,7 +40,8 @@ SOURCES +=\
     src/Paddle.cpp \
     src/EventManager.cpp \
     src/Game.cpp \
-    src/Player.cpp
+    src/Player.cpp \
+    src/Powerup.cpp
 
 HEADERS +=\
     src/Application.hpp \
@@ -51,4 +52,5 @@ HEADERS +=\
     src/Math.hpp \
     src/Player.hpp \
     src/VectorsUtils.hpp \
-    src/Config.hpp
+    src/Config.hpp \
+    src/Powerup.hpp

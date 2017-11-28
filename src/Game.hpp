@@ -38,6 +38,7 @@
 #include "Paddle.hpp"
 #include "Player.hpp"
 #include "EventManager.hpp"
+#include "Powerup.hpp"
 
 /**
  * @brief The GAMESTATE enum current state of the game
@@ -135,6 +136,12 @@ public:
 	 */
 	void reset();
 
+    /**
+     * @brief addPowerUp creates a powerup
+     * @param type
+     */
+    const Powerup &addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction);
+
 	/**
 	 * @brief operator << serialize the game to a sf::Packet
 	 * @param packet the packet in which to serialize the game object
@@ -169,7 +176,17 @@ public:
 	 */
 	bool isCountingDown() const;
 
+    /**
+     * @brief getCountdownTime the countdown timer
+     * @return
+     */
 	sf::Time getCountdownTime() const;
+
+    /**
+     * @brief getPowerups ref to the powerups
+     * @return
+     */
+    const std::unordered_map<sf::Uint64, Powerup> &getPowerups() const;
 
 private:
 	/**
@@ -213,6 +230,11 @@ private:
 	 * @brief m_state current state of the game
 	 */
 	GAMESTATE m_state;
+
+    /**
+     * @brief m_powerups all the game's powerups
+     */
+    std::unordered_map<sf::Uint64, Powerup> m_powerups;
 
 	/**
 	 * @brief mutex the mutex used to make this class thread safe

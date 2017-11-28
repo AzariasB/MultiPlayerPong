@@ -33,6 +33,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <SFML/Window/Event.hpp>
+#include <time.h>
 
 ServerApp::ServerApp()
 {
@@ -44,6 +45,7 @@ ServerApp::~ServerApp()
 
 void ServerApp::run(int argc, char** argv)
 {
+    srand(time(NULL));
 	sf::TcpListener listener;
 
 	sf::Socket::Status status = listener.listen(5300);

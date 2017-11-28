@@ -39,6 +39,7 @@
 #define BALL_RADIUS  50
 #define DIALOG_WIDTH 700
 #define DIALOG_HEIGHT 200
+#define POWERUP_SIDE 50
 
 //speeds
 #define PADDLE_SPEED 2
