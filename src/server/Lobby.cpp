@@ -111,6 +111,7 @@ void Lobby::start()
             packet << game;
             socket1->send(packet); //Update the players
             socket2->send(packet);
+            game.clearNewPowerUps();
             totalTime = sf::Time(); // Reset total time
         }
         //sf::sleep(sf::milliseconds(1));

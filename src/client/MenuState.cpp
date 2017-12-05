@@ -82,13 +82,13 @@ void MenuState::draw(Renderer& renderer) const
 
 void MenuState::handleEvent(const sf::Event& ev)
 {
-	if(m_messageDialog->isVisible()){
-		m_messageDialog->handleEvent(ev);
-	}else if(m_inputDialog->isVisible()){
-		m_inputDialog->handleEvent(ev);
-	}else{
-		m_menu.handleEvent(ev);
-	}
+    if(m_messageDialog->isVisible()){
+        m_messageDialog->handleEvent(ev);
+    }else if(m_inputDialog->isVisible()){
+        m_inputDialog->handleEvent(ev);
+    }else{
+        m_menu.handleEvent(ev);
+    }
 }
 
 void MenuState::update(const sf::Time &elapsed)

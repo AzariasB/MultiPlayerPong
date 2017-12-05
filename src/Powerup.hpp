@@ -55,6 +55,8 @@ public:
 
     Powerup(Game &game, POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction);
 
+    virtual ~Powerup();
+
     void update(const sf::Time &elapsed);
 
     POWERUP_TYPE getType() const
@@ -112,6 +114,7 @@ private:
 public:
     const sf::Uint64 hitPaddle;
     const sf::Uint64 effectFinished;
+    const sf::Uint64 powerupDestroyed;
     //event "destroyed" by ball
 };
 

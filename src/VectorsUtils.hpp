@@ -46,16 +46,9 @@ void deserialize(sf::Packet &packet, std::unordered_map<K,V> &mmap, Args&... arg
     sf::Uint32 size;
     packet >> size;
     for(sf::Uint32 i = 0; i < size; ++i){
-        K k;
-        packet >> k;
-        if(!mmap.count(k)){
-            mmap.emplace(std::piecewise_construct,
-                         std::forward_as_tuple(k),
-                         std::forward_as_tuple(argp...)
-                        );
-        }
-
-        packet >> mmap.find(k)->second;
+        V v(argp...);
+        packet >> v;
+        mmap.insert({v.getId(), v});
     }
 }
 
@@ -170,7 +163,7 @@ sf::Packet &operator>>(sf::Packet &packet, sf::Rect<T> &rect)
 template <typename T>
 sf::Packet &operator<<(sf::Packet &packet, const sf::Vector2<T> &v)
 {
-	return packet << v.x << v.y;
+    return packet << v.x << v.y;
 }
 
 /**
@@ -182,7 +175,7 @@ sf::Packet &operator<<(sf::Packet &packet, const sf::Vector2<T> &v)
 template <typename T>
 sf::Packet &operator>>(sf::Packet &packet, sf::Vector2<T> &v)
 {
-	return packet >> v.x >> v.y;
+    return packet >> v.x >> v.y;
 }
 
 /**
@@ -194,7 +187,7 @@ sf::Packet &operator>>(sf::Packet &packet, sf::Vector2<T> &v)
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const sf::Vector2<T> &v)
 {
-	return os << "(x:" << v.x << ",y:" << v.y << ")";
+    return os << "(x:" << v.x << ",y:" << v.y << ")";
 }
 
 /**
@@ -204,14 +197,14 @@ std::ostream &operator<<(std::ostream &os, const sf::Vector2<T> &v)
  * @return the normalized version of the vector
  */
 template <
-typename T,
-typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
->
+        typename T,
+        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
+        >
 sf::Vector2<T> normalized(const sf::Vector2<T> &v)
 {
-	std::complex<T> c = sqrt(v.x * v.x + v.y * v.y);
-	if (c == static_cast<T> (0))return v;
-	return sf::Vector2<T>(v.x / c.imag(), v.y / c.imag());
+    std::complex<T> c = sqrt(v.x * v.x + v.y * v.y);
+    if (c == static_cast<T> (0))return v;
+    return sf::Vector2<T>(v.x / c.imag(), v.y / c.imag());
 }
 
 #endif /* VECTORSUTILS_H */

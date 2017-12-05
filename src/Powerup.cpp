@@ -42,7 +42,8 @@ Powerup::Powerup(Game &game):
     m_game(game),
     m_id(m_nextId++),
     hitPaddle(game.getEventManager().nextEventCode()),
-    effectFinished(game.getEventManager().nextEventCode())
+    effectFinished(game.getEventManager().nextEventCode()),
+    powerupDestroyed(game.getEventManager().nextEventCode())
 {
 
 }
@@ -54,9 +55,15 @@ Powerup::Powerup(Game &game, Powerup::POWERUP_TYPE type, const sf::Vector2f &sta
     m_hitBox(startPos.x, startPos.y, POWERUP_SIDE, POWERUP_SIDE),
     m_direction(direction),
     hitPaddle(game.getEventManager().nextEventCode()),
-    effectFinished(game.getEventManager().nextEventCode())
+    effectFinished(game.getEventManager().nextEventCode()),
+    powerupDestroyed(game.getEventManager().nextEventCode())
 {
 
+}
+
+Powerup::~Powerup()
+{
+    m_game.getEventManager().trigger(powerupDestroyed, m_id);
 }
 
 void Powerup::startTimer()

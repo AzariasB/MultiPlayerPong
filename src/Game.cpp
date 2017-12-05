@@ -119,13 +119,35 @@ const Powerup &Game::addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &
 {
     mutex.lock();
     sf::Uint64 key = Powerup::nextId();
-    m_powerups.emplace(std::piecewise_construct,
+    auto pair = m_powerups.emplace(std::piecewise_construct,
                        std::forward_as_tuple(key),
                        std::forward_as_tuple(*this, type, startPos, direction)
                 );
+#ifdef SERVER
+    if(pair.second){
+        mw_nwPowerups.emplace_back(&pair.first->second);
+        m_evManager.declareListener(pair.first->second.hitPaddle, &Game::powerupHitPaddle, this, pair.first->first);
+    }
+#endif
+    const Powerup &powerUp = m_powerups.find(key)->second;
     mutex.unlock();
-    return m_powerups.find(key)->second;
+    return powerUp;
 }
+
+void Game::clearNewPowerUps()
+{
+    mutex.lock();
+    mw_nwPowerups.clear();;
+    mutex.unlock();
+}
+
+#ifdef SERVER
+void Game::powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum)
+{
+    std::cout << "PowerUp " << powerUpId << " hit paddle " << paddleNum << "\n";
+}
+
+#endif
 
 void Game::reset()
 {
@@ -136,13 +158,18 @@ void Game::reset()
     m_state = GAMESTATE::COUNTDOWN;
     m_countDownTime = sf::seconds(3);
     m_powerups.clear();
+    mw_nwPowerups.clear();
     mutex.unlock();
 }
 
 sf::Packet &operator<<(sf::Packet &packet, Game &game)
 {
     game.mutex.lock();
-    packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds() << game.m_powerups;
+    packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds();
+    packet <<(sf::Uint32) game.mw_nwPowerups.size();
+    for(size_t i = 0; i < game.mw_nwPowerups.size(); ++i){
+        packet << *game.mw_nwPowerups[i];
+    }
     game.mutex.unlock();
     return packet;
 }

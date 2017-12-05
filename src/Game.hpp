@@ -188,6 +188,21 @@ public:
      */
     const std::unordered_map<sf::Uint64, Powerup> &getPowerups() const;
 
+    /**
+     * @brief clearNewPowerUps clears the list of newly added powerups
+     */
+    void clearNewPowerUps();
+
+#ifdef SERVER
+    /**
+     * @brief powerupHitPaddle whenever a powerup hits a paddle
+     * @param powerUpId the id of the power hitting
+     * @param paddleNum the number of the paddled hitted
+     */
+    void powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum);
+
+#endif
+
 private:
 	/**
 	 * @brief updateCountdown updates the game when in countdown mode
@@ -235,6 +250,12 @@ private:
      * @brief m_powerups all the game's powerups
      */
     std::unordered_map<sf::Uint64, Powerup> m_powerups;
+
+    /**
+     * @brief mw_nwPowerups list of all the powerups created
+     * before sending them to the client
+     */
+    std::vector<Powerup*> mw_nwPowerups;
 
 	/**
 	 * @brief mutex the mutex used to make this class thread safe

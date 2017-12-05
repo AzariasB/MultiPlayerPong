@@ -37,6 +37,7 @@
 #include "../Ball.hpp"
 #include "../Paddle.hpp"
 #include "../Powerup.hpp"
+#include "Animation.hpp"
 
 /**
  * @brief The Renderer class used to render every objects of the game
@@ -107,6 +108,33 @@ public:
 
 	virtual ~Renderer();
 private:
+
+    /**
+     * @brief addPowerUpAnimation adds the animations for the given powerup to the map
+     * @param powerup the new powerup
+     */
+    Animation &addPowerUpAnimation(const Powerup &powerup);
+
+    /**
+     * @brief powerupTexture returns the texture for the type of powerup
+     * @param powerup
+     * @return
+     */
+    const sf::Texture &powerupTexture(const Powerup::POWERUP_TYPE &powerupType) const;
+
+    /**
+     * @brief powerupSprites return the sprites dimensions depending on the powerup type
+     * @param powerupType the powerup to use to find the dimensions
+     * @return
+     */
+    sf::Vector2i powerupSprites(const Powerup::POWERUP_TYPE &powerupType) const;
+
+    /**
+     * @brief destroyAnimation when a powerup is destroyed, destroys the animtaion linked to it
+     * @param animationId the id of the animation to delete
+     */
+    void destroyAnimation(sf::Uint64 animationId);
+
 	/**
 	 * @brief target the target to use to draw stuff on it
 	 */
@@ -122,6 +150,11 @@ private:
 	 * otherwise, the screen is shaking
 	 */
 	sf::Time m_shakeTimeout;
+
+    /**
+     * @brief m_powerupAnimations the animations of all the powerups
+     */
+    std::unordered_map<sf::Uint64, Animation> m_powerupAnimations;
 };
 
 #endif /* RENDERER_HPP */
