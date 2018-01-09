@@ -69,6 +69,23 @@ void Paddle::stop()
 	direction.y = 0;
 }
 
+void Paddle::extend()
+{
+    m_widthBoost = PADDLE_WIDTH_POWERUP;
+}
+
+void Paddle::retract()
+{
+    m_widthBoost = -PADDLE_WIDTH_POWERUP;
+}
+
+void Paddle::resetPowerupEffect(Powerup::POWERUP_TYPE type)
+{
+    if(type == Powerup::PADDLE_EXTEND || type == Powerup::PADDLE_RETRACT){
+        m_widthBoost = 0;
+    }
+}
+
 void Paddle::update(const sf::Time &elapsed)
 {
 	position = position + direction * (elapsed.asSeconds() * (PADDLE_SPEED * 100));

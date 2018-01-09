@@ -41,6 +41,7 @@
 #include "Config.hpp"
 #include "Math.hpp"
 #include "VectorsUtils.hpp"
+#include "Powerup.hpp"
 
 class Game;
 
@@ -65,7 +66,25 @@ public:
 	 */
 	void update(const sf::Time &elapsed);
 
+    /**
+     * @brief reset resets the informations about the ball
+     */
 	void reset();
+
+    /**
+     * @brief extend when the powerup 'extend' is caught
+     */
+    void extend();
+
+    /**
+     * @brief retract when the powerup 'retract' is caught
+     */
+    void retract();
+
+    /**
+     * @brief resetPowerup resets the given poweruptype
+     */
+    void resetPowerup(Powerup::POWERUP_TYPE type);
 
 	/**
 	 * @brief xBounce bounces to the opposite X direction, normalize the vector direction
@@ -120,6 +139,8 @@ private:
 	 * @brief direction direction of the ball
 	 */
 	sf::Vector2f direction;
+
+    sf::Int32 m_radiusBoost;
 };
 
 

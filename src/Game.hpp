@@ -193,7 +193,6 @@ public:
      */
     void clearNewPowerUps();
 
-#ifdef SERVER
     /**
      * @brief powerupHitPaddle whenever a powerup hits a paddle
      * @param powerUpId the id of the power hitting
@@ -201,7 +200,13 @@ public:
      */
     void powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum);
 
-#endif
+    /**
+     * @brief powerupEffectFinished whenever the effect of a powerup ended
+     * @param powerupId the id of the powerup
+     * @param paddleNum the paddle that originally hit the the powerup
+     */
+    void powerupEffectFinished(std::pair<sf::Uint64, int> data);
+
 
 private:
 	/**

@@ -32,6 +32,8 @@
 #include "Provider.hpp"
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <qdebug.h>
+
 Dialog *Dialog::input(const std::string &title)
 {
     return new Dialog(title, "", DIALOG_TYPE::INPUT);

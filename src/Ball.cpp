@@ -51,18 +51,35 @@ void Ball::update(const sf::Time &elapsed)
 
 }
 
+void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
+{
+    if(type == Powerup::BALL_EXTEND || type == Powerup::BALL_RETRACT){
+        m_radiusBoost = 0;
+    }
+}
+
 void Ball::reset()
 {
 	position = BALL_START_POS;
 	direction = BALL_START_DIR;
 }
 
+void Ball::extend()
+{
+    m_radiusBoost = BALL_RADIUS_POWERUP;
+}
+
+void Ball::retract()
+{
+    m_radiusBoost = -BALL_RADIUS_POWERUP;
+}
+
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)
 {
-	return packet << ball.position << ball.direction;
+    return packet << ball.position << ball.direction << ball.m_radiusBoost;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Ball &ball)
 {
-	return packet >> ball.position >> ball.direction;
+    return packet >> ball.position >> ball.direction >> ball.m_radiusBoost;
 }

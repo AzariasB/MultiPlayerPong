@@ -79,6 +79,8 @@ void Renderer::renderBall(const Ball& ball)
 
 void Renderer::renderPowerup(const Powerup &powerup)
 {
+    if(powerup.isHidden())return;
+
     if(m_powerupAnimations.count(powerup.getId()) == 0){
         addPowerUpAnimation(powerup);
     }

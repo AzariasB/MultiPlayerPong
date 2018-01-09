@@ -42,8 +42,6 @@
 #include "server/ServerApp.hpp"
 #endif
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 800
 
 /*
  * 
@@ -57,7 +55,7 @@ int main(int argc, char** argv)
 #elif SERVER
 	ServerApp app;
 #else
-#error "Found neither of configuration 'client' or 'server'"
+#error "Found neither 'client' nor 'server' configuration"
 #endif
 	app.run(argc, argv);
 	return 0;

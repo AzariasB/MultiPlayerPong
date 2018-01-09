@@ -105,8 +105,11 @@ void Game::updatePlaying(const sf::Time &elapsed)
     }
 
     for(auto it = m_powerups.begin(); it != m_powerups.end();){
-        it->second.update(elapsed);
-        if(it->second.isOut()){
+        Powerup &powerup = it->second;
+        if(powerup.isHidden())
+            continue;
+        powerup.update(elapsed);
+        if(powerup.isOut() && !powerup.timerStarted()){
             it = m_powerups.erase(it);
         }else{
             ++it;
@@ -141,13 +144,59 @@ void Game::clearNewPowerUps()
     mutex.unlock();
 }
 
-#ifdef SERVER
+
 void Game::powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum)
 {
-    std::cout << "PowerUp " << powerUpId << " hit paddle " << paddleNum << "\n";
+    auto it = m_powerups.find(powerUpId);
+    if(it == m_powerups.end())return;
+
+    Powerup &   powerup = (*it).second;
+    Player &affected = paddleNum == 1 ? p1 : p2;
+    switch(powerup.getType()){
+    case Powerup::BALL_EXTEND:
+        mainBall.extend();
+        break;
+    case Powerup::BALL_RETRACT:
+        mainBall.retract();
+        break;
+    case Powerup::PADDLE_EXTEND:
+        affected.getPaddle().extend();
+        break;
+    case Powerup::PADDLE_RETRACT:
+        affected.getPaddle().retract();
+        break;
+    }
+    powerup.startTimer();
+    auto pair = std::make_pair(powerUpId, paddleNum);
+    getEventManager().declareListener(powerup.effectFinished, &Game::powerupEffectFinished, this, pair);
+    //stop rendering the powerup (but keep it in memory ...)
 }
 
-#endif
+void Game::powerupEffectFinished(std::pair<sf::Uint64, int> data)
+{
+    sf::Uint64 powerupId = data.first;
+    int paddleNum = data.second;
+
+    auto it = m_powerups.find(powerupId);
+    if(it == m_powerups.end())return;
+
+    Powerup &powerup = (*it).second;
+    switch(powerup.getType()){
+    case Powerup::BALL_EXTEND:
+    case Powerup::BALL_RETRACT:
+        mainBall.resetPowerup(powerup.getType());
+        break;
+    case Powerup::PADDLE_EXTEND:
+    case Powerup::PADDLE_RETRACT:
+        Player &affected = paddleNum == 1 ? p1 : p2;
+        affected.getPaddle().resetPowerupEffect(powerup.getType());
+        break;
+    }
+
+    m_powerups.erase(powerupId);
+}
+
+
 
 void Game::reset()
 {

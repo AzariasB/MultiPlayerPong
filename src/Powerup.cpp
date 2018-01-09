@@ -71,6 +71,26 @@ void Powerup::startTimer()
     m_effectTime = sf::seconds(3);
 }
 
+void Powerup::hide()
+{
+    m_isHidden = true;
+}
+
+void Powerup::show()
+{
+    m_isHidden = false;
+}
+
+bool Powerup::isHidden() const
+{
+    return m_isHidden;
+}
+
+bool Powerup::timerStarted() const
+{
+    return m_effectTime != sf::Time::Zero;
+}
+
 void Powerup::update(const sf::Time &elapsed)
 {
     if(m_effectTime > sf::Time::Zero){

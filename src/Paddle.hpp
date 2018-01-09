@@ -71,6 +71,21 @@ public:
 	 */
 	void stop();
 
+    /**
+     * @brief extend when the "extend" boost was taken
+     */
+    void extend();
+
+    /**
+     * @brief retract when the "retract" boost was taken
+     */
+    void retract();
+
+    /**
+     * @brief resetPowerupEffect removes the effect of a given powerup type
+     */
+    void resetPowerupEffect(Powerup::POWERUP_TYPE type);
+
 	/**
 	 * @brief update update the paddle states
 	 * @param dtS the time since the last update
@@ -154,7 +169,7 @@ private:
 	const Game &game;
 
 
-    int m_widthBoost = 0;
+    sf::Int32 m_widthBoost = 0;
 
 	/**
 	 * @brief position the paddle's position

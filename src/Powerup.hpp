@@ -71,6 +71,14 @@ public:
 
     void startTimer();
 
+    void hide();
+
+    void show();
+
+    bool isHidden() const;
+
+    bool timerStarted() const;
+
     bool isOut() const;
 
     sf::Uint64 getId() const
@@ -109,7 +117,9 @@ private:
 
     sf::Vector2f m_direction;
 
-    sf::Time m_effectTime;
+    sf::Time m_effectTime = sf::Time::Zero;
+
+    bool m_isHidden = false;
 
 public:
     const sf::Uint64 hitPaddle;

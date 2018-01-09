@@ -186,10 +186,10 @@ struct EventMemberFuncWithArg : EventFunc<Args...> {
 	 * @param obj the object containing the method
 	 * @param arg the argument to use when calling the methdo
 	 */
-	EventMemberFuncWithArg(void(T::*func)(A, Args...), T*obj, A arg) :
+    EventMemberFuncWithArg(void(T::*func)(A, Args...), T*obj, A arg) :
 	m_func(func),
 	m_obj(obj),
-	m_arg(arg)
+    m_arg(arg)
 	{
 
 	}
@@ -206,8 +206,8 @@ struct EventMemberFuncWithArg : EventFunc<Args...> {
 
 
 	void(T::*m_func)(A, Args...);
-	T*m_obj;
-	A m_arg;
+    T*m_obj;
+    A m_arg;
 };
 
 /**

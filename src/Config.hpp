@@ -49,4 +49,8 @@
 #define BALL_START_POS sf::Vector2f(350,0)
 #define BALL_START_DIR sf::Vector2f(1,-1)
 
+//Powerups
+#define PADDLE_WIDTH_POWERUP 10
+#define BALL_RADIUS_POWERUP 10
+
 #endif // CONFIG_H
