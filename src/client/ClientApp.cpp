@@ -39,6 +39,7 @@
 #include "EndState.hpp"
 #include "MenuState.hpp"
 #include "OptionState.hpp"
+#include "TransitionState.hpp"
 
 
 ClientApp &ClientApp::getInstance()
@@ -79,6 +80,7 @@ void ClientApp::initStates()
     stateMachine.addState<MenuState>(STATE_TYPE::MENU);
     stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
     stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
+    stateMachine.addState<TransitionState>(STATE_TYPE::TRANSITION);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)

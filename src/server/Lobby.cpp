@@ -102,9 +102,10 @@ void Lobby::start()
         totalTime += elapsed;
 
         running = !game.playerWon();
-        if(tryAddPowerup(elapsed)){
-            std::cout << "Adding a powerup\n";
-        }
+//        if(tryAddPowerup(elapsed)){
+//            std::cout << "Adding a powerup\n";
+//        }
+
         game.update(elapsed);
         if (totalTime.asMilliseconds() > 10) {
             sf::Packet packet;

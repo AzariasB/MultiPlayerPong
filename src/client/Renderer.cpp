@@ -146,6 +146,16 @@ void Renderer::renderPaddle(const Paddle& paddle)
     render(rectangle);
 }
 
+void Renderer::setView(const sf::View &view)
+{
+    target.setView(view);
+}
+
+void Renderer::resetView()
+{
+    target.setView(target.getDefaultView());
+}
+
 
 void Renderer::render(const sf::Drawable& drawable)
 {

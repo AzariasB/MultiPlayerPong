@@ -92,6 +92,14 @@ public:
 		return *states[currentStateIndex];
 	}
 
+    State &getStateAt(int index)
+    {
+        if(states.find(index) == states.end())
+            throw std::out_of_range("Index not found");
+
+        return *states[index];
+    }
+
 	/**
 	 * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
 	 * @return the index of the current state (-1 if no states was set)

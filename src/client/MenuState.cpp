@@ -32,6 +32,7 @@
 #include "MenuState.hpp"
 #include "Provider.hpp"
 #include "ClientApp.hpp"
+#include "TransitionState.hpp"
 #include <regex>
 
 MenuState::~MenuState()
@@ -50,7 +51,7 @@ MenuState::MenuState() :
 	const Button &quitButton = *m_menu.addButton("Quit", 0, playButton.getHeight() + optionButton.getHeight());
 
     pr::connect(playButton.clickedEvent, &Dialog::show, m_inputDialog);
-    pr::connect(optionButton.clickedEvent, &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::OPTIONS);
+    pr::connect(optionButton.clickedEvent, &MenuState::gotoOptionState, this);
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
     pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
     pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
@@ -58,6 +59,13 @@ MenuState::MenuState() :
     pr::connect(m_messageDialog->cancelEvent, &Dialog::hide, m_messageDialog);
 }
 
+void MenuState::gotoOptionState()
+{
+    TransitionData data;
+    data.enteringStateLabel = STATE_TYPE::OPTIONS;
+    data.exitingStatelabel = STATE_TYPE::MENU;
+    pr::stateMachine().setCurrentState(STATE_TYPE::TRANSITION, &data);
+}
 
 void MenuState::dialogConfirmed()
 {

@@ -18,7 +18,8 @@ SOURCES +=\
     $$PWD/KeyBinding.cpp \
     $$PWD/KeyBindingState.cpp \
     $$PWD/Animation.cpp \
-    $$PWD/Provider.cpp
+    $$PWD/Provider.cpp \
+    $$PWD/TransitionState.cpp
 HEADERS +=\
     $$PWD/Button.hpp \
     $$PWD/ClientApp.hpp \
@@ -41,4 +42,5 @@ HEADERS +=\
     $$PWD/KeyBinding.hpp \
     $$PWD/KeyBindingState.hpp \
     $$PWD/Animation.hpp \
-    $$PWD/Provider.hpp
+    $$PWD/Provider.hpp \
+    $$PWD/TransitionState.hpp

@@ -97,6 +97,13 @@ private :
 	 */
 	bool isValidIp(const std::string &enteredIp) const;
 
+    /**
+     * @brief gotoOptionState
+     * creates the transition to go to
+     * the option state
+     */
+    void gotoOptionState();
+
 	/**
 	 * @brief m_menu Menu holding all the differents buttons
 	 */

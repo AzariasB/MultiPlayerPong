@@ -88,6 +88,17 @@ public:
 	 */
 	void render(const sf::Drawable &drawable);
 
+    /**
+     * @brief setView changes the view of the renderer
+     * @param view the new view
+     */
+    void setView(const sf::View &view);
+
+    /**
+     * @brief resetView sets the view back to the default one
+     */
+    void resetView();
+
 	/**
 	 * @brief getRenderTarget a reference to the renderTarget
 	 * @return a reference to the renderTarget
