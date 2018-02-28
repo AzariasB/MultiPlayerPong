@@ -22,47 +22,29 @@
  * THE SOFTWARE.
  */
 
-#ifndef TRANSITIONSTATE_HPP
-#define TRANSITIONSTATE_HPP
+/*
+ * File:   State.h
+ * Author: azarias
+ *
+ * Created on 16 octobre 2017, 17:20
+ */
 
 #include "State.hpp"
-#include <tweeny/tween.h>
-#include <queue>
+#include "Provider.hpp"
+#include "ClientApp.hpp"
 
 
-/**
- * @brief The TransitionState class
- * state used when a transition is happening
- * between two states, in order to create
- * an animation
- */
-class TransitionState : public State
+void State::goToState(std::pair<int, TransitionData::DIRECTION> dir)
 {
-public:
-    TransitionState();
+    goToState(dir.first, dir.second);
+}
 
-    void draw(Renderer &renderer) const override;
 
-    void update(const sf::Time &elapsed) override;
-
-    void onEnter(BaseStateData *data) override;
-
-    void onLeave() override;
-
-    void handleEvent(const sf::Event &ev) override;
-private:
-    int mExitingStateLabel = -1,
-        mEnteringStateLabel = -1;
-
-    TransitionData::DIRECTION mDirection;
-
-    tweeny::tween<int> mTweening;
-
-    std::unique_ptr<BaseStateData> mEnteringData = {};
-
-    sf::Int32 mCurrentProgress;
-
-    static const sf::Int32 mTransitionDuration;
-};
-
-#endif // TRANSITIONSTATE_HPP
+void State::goToState(int statelabel, TransitionData::DIRECTION dir)
+{
+    TransitionData td;
+    td.enteringStateLabel = statelabel;
+    td.exitingStateLabel = pr::stateMachine().getCurrentStateIndex();
+    td.direction = dir;
+    pr::stateMachine().setCurrentState(STATE_TYPE::TRANSITION, &td);
+}

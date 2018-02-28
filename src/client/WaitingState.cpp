@@ -70,7 +70,7 @@ void WaitingState::cancelClicked()
 {
 	listeningThread.terminate();
     pr::socket().disconnect();
-    pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
+    goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
 }
 
 void WaitingState::update(const sf::Time &elapsed)
@@ -93,7 +93,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	m_messageDialog->setTitle(text.toAnsiString());
 
 	if (startGame)
-        pr::stateMachine().setCurrentState(STATE_TYPE::PLAY);
+        goToState((int)STATE_TYPE::PLAY, TransitionData::GO_LEFT);
 
 }
 
@@ -108,7 +108,6 @@ void WaitingState::onEnter(BaseStateData *data)
     sf::Socket::Status status = pr::socket().connect(sf::IpAddress(ipData->data()), 5300);
 	if (status != sf::Socket::Done) {
 		m_messageDialog->setTitle("Failed to connect");
-		//
 	} else {
 		std::cout << "Successfully connected to server\n";
 		listeningThread.launch();

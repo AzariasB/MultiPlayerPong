@@ -62,7 +62,7 @@ EndState::~EndState()
 void EndState::backButtonPressed()
 {
     pr::game().reset();
-    pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
+    goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
 }
 
 void EndState::draw(Renderer& renderer) const

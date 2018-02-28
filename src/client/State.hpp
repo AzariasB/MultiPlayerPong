@@ -73,10 +73,7 @@ struct StateData : public BaseStateData{
 		return m_data;
 	}
 
-	virtual ~StateData()
-	{
-
-	}
+    virtual ~StateData() {}
 private:
 	/**
 	 * @brief m_data data held by this object
@@ -84,6 +81,19 @@ private:
 	T m_data;
 };
 
+
+struct TransitionData {
+    int enteringStateLabel, exitingStateLabel;
+
+    std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
+
+    enum DIRECTION {
+        GO_UP,
+        GO_LEFT,
+        GO_DOWN,
+        GO_RIGHT
+    } direction;
+};
 
 /**
  * @brief The State class is a virtual class
@@ -102,6 +112,15 @@ public:
 	{
 
 	}
+
+    void goToState(std::pair<int , TransitionData::DIRECTION> dir);
+
+    /**
+     * @brief goToState expanded version of the previous method
+     * @param statelabel
+     * @param dir
+     */
+    void goToState(int statelabel, TransitionData::DIRECTION dir);
 
 	/**
 	 * @brief update updates the State, is called on a regular basis, must be used to update the intern state of the state.

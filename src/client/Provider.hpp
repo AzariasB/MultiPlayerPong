@@ -70,21 +70,21 @@ namespace pr {
 
 
     template<typename T, typename ...Args>
-    void connect(sf::Uint64 evCode, void (T::*func)(Args...), T*obj)
+    void connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
     {
         eventManager().declareListener(evCode, func, obj);
     }
 
-    template<typename T, typename A, typename ...Args>
-    void connect(sf::Uint64 evCode, void (T::*func)(A,Args...), T *obj, A arg)
+    template<typename T, typename ...Args>
+    void connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
     {
-        eventManager().declareListener(evCode, func, obj, arg);
+        eventManager().declareListener(evCode, func, obj, args...);
     }
 
     template<typename ...Args>
-    void connect(sf::Uint64 evCode, void (*func)(Args...))
+    void connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
     {
-        eventManager().declareListener(evCode, func);
+        eventManager().declareListener(evCode, func, args...);
     }
 
     template<typename ...Args>

@@ -25,25 +25,23 @@
 #include "TransitionState.hpp"
 #include "Provider.hpp"
 #include "../Config.hpp"
+#include <tweeny/tweeny.h>
 
 
-const sf::Time TransitionState::mStartingTime = sf::seconds(0.5f);
+const sf::Int32 TransitionState::mTransitionDuration = 100;
 
 
 TransitionState::TransitionState()
 {
-
 }
 
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    float remainingTime = ((mStartingTime - mTransitionTime)/mStartingTime.asSeconds()).asSeconds();
-    float lessX = ARENA_WIDTH * remainingTime;
+    int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
+    float exitingXCenter = ARENA_WIDTH/2.f + horiztontalMult * mTweening.peek();
 
-    float exitingXCenter = ARENA_WIDTH/2.f + lessX;
-
-    float enteringXCenter = (-ARENA_WIDTH + ARENA_WIDTH/2.f) + lessX;
+    float enteringXCenter = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  mTweening.peek();
 
     sf::Vector2f exitingCenter(exitingXCenter, ARENA_HEIGHT/2.f);
     sf::Vector2f enteringCenter(enteringXCenter, ARENA_HEIGHT/2.f);
@@ -64,10 +62,16 @@ void TransitionState::draw(Renderer &renderer) const
 
 void TransitionState::update(const sf::Time &elapsed)
 {
-    mTransitionTime -= elapsed;
-    if(mTransitionTime <= sf::Time::Zero){
-        pr::stateMachine().setCurrentState(mEnteringStateLabel);
+    mTweening.step(elapsed.asMilliseconds());
+    if(mTweening.progress() == 1.f){
+        if(mEnteringData){
+            pr::stateMachine().setCurrentState(mEnteringStateLabel, *mEnteringData);
+        }else{
+            pr::stateMachine().setCurrentState(mEnteringStateLabel);
+        }
     }
+
+
 }
 
 void TransitionState::onEnter(BaseStateData *data)
@@ -75,17 +79,39 @@ void TransitionState::onEnter(BaseStateData *data)
     StateData<TransitionData*> *stData  = 0;
     if(!(stData = dynamic_cast<StateData<TransitionData*>*>(data)))return;
 
-    mTransitionTime = mStartingTime;
+    TransitionData &transition = *stData->data();
+    TransitionData::DIRECTION dir = transition.direction;
+
+    std::pair<int,int> tweening = {0,0};
+
+    if(dir == TransitionData::GO_RIGHT || dir == TransitionData::GO_LEFT){
+        tweening.first = 0;
+        tweening.second = ARENA_WIDTH;
+    }else if(dir == TransitionData::GO_DOWN || dir == TransitionData::GO_UP){
+        tweening.first = 0;
+        tweening.second = ARENA_HEIGHT;
+    }
+
+    mTweening = tweeny::from(tweening.first)
+                    .to(tweening.second)
+                    .during(mTransitionDuration)
+                    .via(tweeny::easing::backInOut);
+
     mEnteringStateLabel = stData->data()->enteringStateLabel;
-    mExitingStateLabel = stData->data()->exitingStatelabel;
+    mExitingStateLabel = stData->data()->exitingStateLabel;
+    mEnteringData.swap(stData->data()->enteringData);
+    mDirection = dir;
 }
 
 void TransitionState::onLeave()
 {
-
+    mEnteringStateLabel = -1;
+    mExitingStateLabel = -1;
+    mEnteringData = {};
 }
 
 void TransitionState::handleEvent(const sf::Event &ev)
 {
-
+    if(mEnteringStateLabel != -1)
+        pr::stateMachine().getStateAt(mEnteringStateLabel).handleEvent(ev);
 }

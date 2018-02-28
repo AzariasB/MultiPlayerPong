@@ -51,7 +51,7 @@ MenuState::MenuState() :
 	const Button &quitButton = *m_menu.addButton("Quit", 0, playButton.getHeight() + optionButton.getHeight());
 
     pr::connect(playButton.clickedEvent, &Dialog::show, m_inputDialog);
-    pr::connect(optionButton.clickedEvent, &MenuState::gotoOptionState, this);
+    pr::connect(optionButton.clickedEvent, &State::goToState, static_cast<State*>(this), std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
     pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
     pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
@@ -63,7 +63,8 @@ void MenuState::gotoOptionState()
 {
     TransitionData data;
     data.enteringStateLabel = STATE_TYPE::OPTIONS;
-    data.exitingStatelabel = STATE_TYPE::MENU;
+    data.enteringStateLabel = STATE_TYPE::MENU;
+    data.direction = TransitionData::GO_LEFT;
     pr::stateMachine().setCurrentState(STATE_TYPE::TRANSITION, &data);
 }
 

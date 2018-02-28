@@ -49,10 +49,10 @@ m_menu()
 
 
     sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
-    pr::connect(keyBindingClicked , &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::KEY_BINDINGS);
+    pr::connect(keyBindingClicked , &State::goToState , static_cast<State*>(this),  std::make_pair((int) STATE_TYPE::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
     sf::Uint64 backClicked = m_menu.addButton("Menu", 0, ARENA_HEIGHT - 50)->clickedEvent;
-    pr::connect(backClicked, &StateMachine::setCurrentState, &pr::stateMachine(), (int)STATE_TYPE::MENU);
+    pr::connect(backClicked, &State::goToState, static_cast<State*>(this) , std::make_pair((int)STATE_TYPE::MENU, TransitionData::GO_LEFT) );
 }
 
 void OptionState::toggleSound()

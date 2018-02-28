@@ -74,13 +74,26 @@ public:
 	template<typename T>
 	void setCurrentState(int stateLabel, const T &data)
 	{
-	    if (currentStateIndex > -1)
-		states[currentStateIndex]->onLeave();
+        if (currentStateIndex > -1) states[currentStateIndex]->onLeave();
 	    currentStateIndex = stateLabel;
 
 	    StateData<T> dat(data);
 	    states[currentStateIndex]->onEnter(&dat);
 	}
+
+    /**
+     * @brief setCurrentState overriden function, when
+     * a state data is directly given in parameter, no need
+     * to create one
+     * @param stateLabel
+     * @param data
+     */
+    void setCurrentState(int stateLabel, BaseStateData &data)
+    {
+        if(currentStateIndex > -1) states[currentStateIndex]->onLeave();
+        currentStateIndex = stateLabel;
+        states[currentStateIndex]->onEnter(&data);
+    }
 
 	/**
 	 * @brief getCurrentState a reference to the current state
