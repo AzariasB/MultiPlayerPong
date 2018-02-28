@@ -54,6 +54,11 @@ private:
     int mExitingStateLabel = -1,
         mEnteringStateLabel = -1;
 
+    sf::Vector2f mEnteringCenter;
+    sf::Vector2f mExitingCenter;
+
+    void updateCenters();
+
     TransitionData::DIRECTION mDirection;
 
     tweeny::tween<int> mTweening;

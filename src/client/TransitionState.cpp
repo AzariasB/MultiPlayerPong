@@ -38,18 +38,10 @@ TransitionState::TransitionState()
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
-    float exitingXCenter = ARENA_WIDTH/2.f + horiztontalMult * mTweening.peek();
-
-    float enteringXCenter = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  mTweening.peek();
-
-    sf::Vector2f exitingCenter(exitingXCenter, ARENA_HEIGHT/2.f);
-    sf::Vector2f enteringCenter(enteringXCenter, ARENA_HEIGHT/2.f);
-
     sf::Vector2f size(ARENA_WIDTH, ARENA_HEIGHT);
 
-    sf::View exitingView(exitingCenter, size);
-    sf::View enteringView(enteringCenter, size);
+    sf::View exitingView(mExitingCenter, size);
+    sf::View enteringView(mEnteringCenter, size);
 
     renderer.setView(exitingView);
     pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
@@ -69,8 +61,29 @@ void TransitionState::update(const sf::Time &elapsed)
         }else{
             pr::stateMachine().setCurrentState(mEnteringStateLabel);
         }
+    }else{
+       updateCenters();
     }
 
+}
+
+void TransitionState::updateCenters()
+{
+    if(mDirection == TransitionData::GO_UP || mDirection == TransitionData::GO_DOWN){
+        mEnteringCenter.x = ARENA_WIDTH/2.f;
+        mExitingCenter.x = ARENA_WIDTH/2.f;
+
+        int vertMult = mDirection == TransitionData::GO_UP ? -1 : 1;
+        mExitingCenter.y = ARENA_HEIGHT/2.f + vertMult * mTweening.peek();
+        mEnteringCenter.y = ( (-vertMult) * ARENA_HEIGHT + ARENA_HEIGHT/2.f ) + vertMult * mTweening.peek();
+    }else{
+        mEnteringCenter.y = ARENA_HEIGHT/2.f;
+        mExitingCenter.y = ARENA_HEIGHT/2.f;
+
+        int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
+        mExitingCenter.x = ARENA_WIDTH/2.f + horiztontalMult * mTweening.peek();
+        mEnteringCenter.x = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  mTweening.peek();
+    }
 
 }
 
@@ -85,10 +98,8 @@ void TransitionState::onEnter(BaseStateData *data)
     std::pair<int,int> tweening = {0,0};
 
     if(dir == TransitionData::GO_RIGHT || dir == TransitionData::GO_LEFT){
-        tweening.first = 0;
         tweening.second = ARENA_WIDTH;
     }else if(dir == TransitionData::GO_DOWN || dir == TransitionData::GO_UP){
-        tweening.first = 0;
         tweening.second = ARENA_HEIGHT;
     }
 
@@ -101,6 +112,7 @@ void TransitionState::onEnter(BaseStateData *data)
     mExitingStateLabel = stData->data()->exitingStateLabel;
     mEnteringData.swap(stData->data()->enteringData);
     mDirection = dir;
+    updateCenters();
 }
 
 void TransitionState::onLeave()
