@@ -69,20 +69,21 @@ void TransitionState::update(const sf::Time &elapsed)
 
 void TransitionState::updateCenters()
 {
+    float tVal = mTweening.get();
     if(mDirection == TransitionData::GO_UP || mDirection == TransitionData::GO_DOWN){
         mEnteringCenter.x = ARENA_WIDTH/2.f;
         mExitingCenter.x = ARENA_WIDTH/2.f;
 
         int vertMult = mDirection == TransitionData::GO_UP ? -1 : 1;
-        mExitingCenter.y = ARENA_HEIGHT/2.f + vertMult * mTweening.peek();
-        mEnteringCenter.y = ( (-vertMult) * ARENA_HEIGHT + ARENA_HEIGHT/2.f ) + vertMult * mTweening.peek();
+        mExitingCenter.y = ARENA_HEIGHT/2.f + vertMult * tVal;
+        mEnteringCenter.y = ( (-vertMult) * ARENA_HEIGHT + ARENA_HEIGHT/2.f ) + vertMult * tVal;
     }else{
         mEnteringCenter.y = ARENA_HEIGHT/2.f;
         mExitingCenter.y = ARENA_HEIGHT/2.f;
 
         int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
-        mExitingCenter.x = ARENA_WIDTH/2.f + horiztontalMult * mTweening.peek();
-        mEnteringCenter.x = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  mTweening.peek();
+        mExitingCenter.x = ARENA_WIDTH/2.f + horiztontalMult * tVal;
+        mEnteringCenter.x = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  tVal;
     }
 
 }
@@ -95,7 +96,7 @@ void TransitionState::onEnter(BaseStateData *data)
     TransitionData &transition = *stData->data();
     TransitionData::DIRECTION dir = transition.direction;
 
-    std::pair<int,int> tweening = {0,0};
+    std::pair<float,float> tweening = {0,0};
 
     if(dir == TransitionData::GO_RIGHT || dir == TransitionData::GO_LEFT){
         tweening.second = ARENA_WIDTH;
@@ -103,10 +104,7 @@ void TransitionState::onEnter(BaseStateData *data)
         tweening.second = ARENA_HEIGHT;
     }
 
-    mTweening = tweeny::from(tweening.first)
-                    .to(tweening.second)
-                    .during(mTransitionDuration)
-                    .via(tweeny::easing::backInOut);
+    mTweening = twin::makeTwin(tweening.first, tweening.second, mTransitionDuration, twin::easing::backInOut);
 
     mEnteringStateLabel = stData->data()->enteringStateLabel;
     mExitingStateLabel = stData->data()->exitingStateLabel;

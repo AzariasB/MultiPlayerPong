@@ -26,7 +26,7 @@
 #define TRANSITIONSTATE_HPP
 
 #include "State.hpp"
-#include <tweeny/tween.h>
+#include "src/lib/twin.hpp"
 #include <queue>
 
 
@@ -61,7 +61,7 @@ private:
 
     TransitionData::DIRECTION mDirection;
 
-    tweeny::tween<int> mTweening;
+    twin::Twin<float, sf::Int32> mTweening;
 
     std::unique_ptr<BaseStateData> mEnteringData = {};
 
