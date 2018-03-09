@@ -352,7 +352,7 @@ namespace{
       * @brief Deaccelerate ending values with an "elastic" equation.
       */
     template<typename T>
-    static T elastitcOut(float position, T start, T end) {
+    static T elasticOut(float position, T start, T end) {
         if (position <= 0.00001f) return start;
         if (position >= 0.999f) return end;
         float p = .3f;
@@ -608,7 +608,7 @@ enum easing{
             case backOut:return backOutImpl<T>;
             case backInOut:return backInOutImpl<T>;
             case elastIn:return elasticIn<T>;
-            case elastOut:return elastitcOut<T>;
+            case elastOut:return elasticOut<T>;
             case elastInOut:return elasticInOut<T>;
             case bounceIn:return bounceInImpl<T>;
             case bounceOut:return bounceOutImpl<T>;

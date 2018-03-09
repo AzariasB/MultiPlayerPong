@@ -37,6 +37,8 @@
 #include <SFML/Graphics.hpp>
 #include <complex>
 #include <SFML/Network/Packet.hpp>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Collision/Shapes/b2CircleShape.h>
 
 #include "Config.hpp"
 #include "Math.hpp"
@@ -59,12 +61,12 @@ public:
 	 */
 	Ball(const Game &game);
 
-	/**
-	 * @brief update updates the ball position, given its current position
-	 * and direction
-	 * @param dtS the time since the last update
-	 */
-	void update(const sf::Time &elapsed);
+
+    /**
+     * @brief update update the inner state of the ball
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed);
 
     /**
      * @brief reset resets the informations about the ball
@@ -86,26 +88,14 @@ public:
      */
     void resetPowerup(Powerup::POWERUP_TYPE type);
 
-	/**
-	 * @brief xBounce bounces to the opposite X direction, normalize the vector direction
-	 * @param bounceDir the new direction where to bounce
-	 */
-	void xBounce(float bounceDir)
-	{
-		direction.x = -direction.x;
-		direction.y = bounceDir;
-		direction = normalize(direction);
-		position += direction;
-	}
-
-	/**
-	 * @brief getPosition the current position
-	 * @return the current position of the ball
-	 */
-	const sf::Vector2f &getPosition() const
-	{
-		return position;
-	}
+    /**
+     * @brief getPosition the current position
+     * @return the current position of the ball
+     */
+    const sf::Vector2f &getPosition() const
+    {
+        return b2VecToSfVect(mBody->GetPosition());
+    }
 
 	/**
 	 * @brief operator << seraializes the ball into a sf::Packet
@@ -130,15 +120,11 @@ private:
 	 */
 	const Game &game;
 
-	/**
-	 * @brief position position of the ball
-	 */
-	sf::Vector2f position;
-
-	/**
-	 * @brief direction direction of the ball
-	 */
-	sf::Vector2f direction;
+    /**
+     * @brief mBody box2d body
+     */
+    b2Body *mBody;
+    b2CircleShape mShape;
 
     sf::Int32 m_radiusBoost;
 };

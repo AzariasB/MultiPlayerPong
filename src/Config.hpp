@@ -46,11 +46,14 @@
 #define BALL_SPEED 2
 
 //Starting conf
-#define BALL_START_POS sf::Vector2f(350,0)
-#define BALL_START_DIR sf::Vector2f(1,-1)
+#define BALL_START_POS sf::Vector2f(ARENA_WIDTH/2 - BALL_RADIUS, ARENA_HEIGHT/2 - BALL_RADIUS)
+#define BALL_START_DIR sf::Vector2f(1,1)
 
 //Powerups
 #define PADDLE_WIDTH_POWERUP 10
 #define BALL_RADIUS_POWERUP 10
+
+#define VELOCITY_ITERATIONS 8
+#define POSITION_ITERATIONS 3
 
 #endif // CONFIG_H

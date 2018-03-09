@@ -36,6 +36,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Network/Packet.hpp>
 
+#include <Box2D/Dynamics/b2Body.h>
+
 #include "Ball.hpp"
 #include "VectorsUtils.hpp"
 #include "Config.hpp"
@@ -93,56 +95,18 @@ public:
 	void update(const sf::Time &elapsed);
 
 	/**
-	 * @brief setPosition changes the position of the paddle
-	 * @param nwPosition the new position of the paddle
-	 */
-	void setPosition(const sf::Vector2f &nwPosition);
-
-	/**
-	 * @brief intersectsWith checks if the paddle is currently intersecting with the game's ball
-	 * @param ball the ball to check for collision
-	 * @return wether the paddle is colliding with the ball
-	 */
-	bool intersectsWith(const Ball &ball);
-
-	/**
 	 * @brief reset resets the inner state of the paddle
 	 */
 	void reset();
 
 	/**
-	 * @brief getBounceAngle the ball's bouncing angle is quite special :
-	 * it depends on where it hits the paddle, so depending on the position where
-	 * the ball hits the paddle, the bouncing angle will not be the same
-	 * @param yPos the yPosition of the ball
-	 * @return the new angle of the ball
-	 */
-	float getBounceAngle(float yPos);
-
-	/**
 	 * @brief getPosition
 	 * @return const reference to the paddle's position
 	 */
-	const sf::Vector2f &getPosition() const
+    sf::Vector2f getPosition() const
 	{
-		return position;
+        return b2VecToSfVect(mBody->GetPosition());
 	}
-
-	/**
-	 * @brief getDirection
-	 * @return const reference to the paddle's direction
-	 */
-	const sf::Vector2f &getDirection() const
-	{
-		return direction;
-	}
-
-    /**
-     * @brief getHitBox the hitbox of the paddle
-     * with the correct height if any boost were given
-     * @return
-     */
-    sf::FloatRect getHitBox() const;
 
 	/**
 	 * @brief operator << serializes the paddle to the given sf::Packet
@@ -168,25 +132,18 @@ private:
 	 */
 	const Game &game;
 
+    b2Vec2 mVelocity;
+    /**
+     * @brief mBody box2d body
+     */
+    b2Body *mBody;
 
     sf::Int32 m_widthBoost = 0;
-
-	/**
-	 * @brief position the paddle's position
-	 */
-	sf::Vector2f position;
-
-	/**
-	 * @brief direction the paddle's direction
-	 */
-	sf::Vector2f direction;
 
 	/**
 	 * @brief isAI wether the paddles is owned by an AI
 	 */
 	bool isAI;
-
-	const sf::Vector2f m_initPosition;
 };
 
 

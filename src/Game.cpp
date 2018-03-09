@@ -33,6 +33,7 @@
 #include "Application.hpp"
 
 Game::Game() :
+    mPhysicWorld(mGravity),
     mainBall(*this),
     p1(*this, 1),
     p2(*this, 2),
@@ -86,17 +87,36 @@ void Game::updateCountdown(const sf::Time &elapsed)
 void Game::updatePlaying(const sf::Time &elapsed)
 {
     mutex.lock();
+
+    static const double step = 1.0 / 70.0;
+    static double accumulator = 0.f;
+
+    float dt = elapsed.asSeconds();
+    if(dt > 0.25)
+        dt = 0.25;
+
+    accumulator += dt;
+
+    while(accumulator >= step){
+        mPhysicWorld.Step(step, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        accumulator -= step;
+    }
+
     mainBall.update(elapsed);
 
+    //handled by box2d
+    /*
     if (p1.getPaddle().intersectsWith(mainBall)) {
+
         float bounceDir = p1.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-        mainBall.xBounce(bounceDir);
+        //mainBall.xBounce(bounceDir);
         m_evManager.trigger(bounceEvent, 1, sf::Vector2f(p1.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ) );
     } else if (p2.getPaddle().intersectsWith(mainBall)) {
         float bounceDir = p2.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-        mainBall.xBounce(bounceDir);
+        //mainBall.xBounce(bounceDir);
         m_evManager.trigger(bounceEvent, 2, sf::Vector2f(p2.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ));
     }
+    */
 
     if (mainBall.getPosition().x < -BALL_RADIUS) {
         m_evManager.trigger(lostEvent, 1);//Player 1 lost
@@ -236,20 +256,6 @@ sf::Packet &operator>>(sf::Packet &packet, Game &game)
     return packet;
 }
 
-void Game::setPaddle2Position(const sf::Vector2f &p2PaddlePos)
-{
-    mutex.lock();
-    p2.getPaddle().setPosition(p2PaddlePos);
-    mutex.unlock();
-}
-
-void Game::setPaddle1Position(const sf::Vector2f& p1Pos)
-{
-    mutex.lock();
-    p1.getPaddle().setPosition(p1Pos);
-    mutex.unlock();
-}
-
 void Game::setGameState(GAMESTATE gameState)
 {
     mutex.lock();
@@ -332,6 +338,11 @@ sf::Time Game::getCountdownTime() const
     sf::Time timeCopy = m_countDownTime;
     mutex.unlock();
     return timeCopy;
+}
+
+b2World &Game::world() const
+{
+    return mPhysicWorld;
 }
 
 EventManager& Game::getEventManager()

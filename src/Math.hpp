@@ -9,6 +9,9 @@
 #ifndef MATH_H
 #define MATH_H
 
+//Meters to pixel ratio
+#define M_TO_P 120.f
+
 /**
  * @brief rand rand value between the given bounds
  * @param min the min possible value
@@ -67,6 +70,17 @@ inline sf::Vector2f normalize(const sf::Vector2f &orig)
 		return sf::Vector2f(orig.x / length, orig.y / length);
 	else
 		return orig;
+}
+
+
+inline float pixToMeters(int pixels)
+{
+    return pixels/M_TO_P;
+}
+
+inline int metersToPix(float meters)
+{
+    return static_cast<int>(meters*M_TO_P);
 }
 
 #endif /* MATH_H */

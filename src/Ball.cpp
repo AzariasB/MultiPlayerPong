@@ -30,25 +30,36 @@
  */
 #include <iostream>
 #include "Ball.hpp"
+#include "Game.hpp"
 
 Ball::Ball(const Game& game) :
-game(game),
-position(BALL_START_POS),
-direction(BALL_START_DIR)
+game(game)
 {
+    b2BodyDef mBodyDef;
+    mBodyDef.position = sfVecTob2Vec(BALL_START_POS);
+    mBodyDef.linearVelocity = sfVecTob2Vec(BALL_START_DIR, false);
+    mBodyDef.type = b2_dynamicBody;
+    mBody = game.world().CreateBody(&mBodyDef);
+    mShape.m_p.Set(0,0);
+
+    b2FixtureDef def;
+    def.shape = &mShape;
+    def.restitution = 1.f;
+
+    mShape.m_radius = pixToMeters(BALL_RADIUS);
+    mBody->CreateFixture(&def);
 }
 
 Ball::~Ball()
 {
+    game.world().DestroyBody(mBody);
+    mBody = 0;
 }
 
 void Ball::update(const sf::Time &elapsed)
 {
-	position = position + direction * (elapsed.asSeconds() * (100 * BALL_SPEED));
-	if (position.y <= 0 || position.y >= ARENA_HEIGHT - BALL_RADIUS * 2) {
-		direction.y = -direction.y;
-	}
-
+    B2_NOT_USED(elapsed);
+    //no updates for now
 }
 
 void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
@@ -60,8 +71,10 @@ void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
 
 void Ball::reset()
 {
-	position = BALL_START_POS;
-	direction = BALL_START_DIR;
+    b2Vec2 pos(BALL_START_POS.x, BALL_START_POS.y);
+    mBody->SetTransform(pos, mBody->GetAngle());
+    b2Vec2 dir(BALL_START_DIR.x, BALL_START_DIR.y);
+    mBody->SetLinearVelocity(dir);
 }
 
 void Ball::extend()
@@ -76,10 +89,16 @@ void Ball::retract()
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)
 {
-    return packet << ball.position << ball.direction << ball.m_radiusBoost;
+    return packet << ball.mBody->GetPosition() << ball.mBody->GetLinearVelocity() << ball.m_radiusBoost;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Ball &ball)
 {
-    return packet >> ball.position >> ball.direction >> ball.m_radiusBoost;
+    b2Vec2 position;
+    b2Vec2 linearVelocity;
+
+    packet >> position >> linearVelocity >> ball.m_radiusBoost;
+    ball.mBody->SetLinearVelocity(linearVelocity);
+    ball.mBody->SetTransform(position, ball.mBody->GetAngle());
+    return packet;
 }

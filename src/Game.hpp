@@ -33,6 +33,7 @@
 #define GAME_H
 
 #include <SFML/Network/Packet.hpp>
+#include <Box2D/Box2D.h>
 
 #include "Config.hpp"
 #include "Paddle.hpp"
@@ -113,19 +114,6 @@ public:
 	const Player &getPlayer2() const;
 
 	/**
-	 * @brief setPaddle2Position changes the player1 paddle's position
-	 * @param p2PaddlePos the new position of the paddle
-	 */
-	void setPaddle2Position(const sf::Vector2f &p2PaddlePos);
-
-	/**
-	 * @brief setPaddle1Position changes the player2 paddle's position
-	 * @param p1Pos
-	 */
-	void setPaddle1Position(const sf::Vector2f &p1Pos);
-
-
-	/**
 	 * @brief setGameState changes the current game state
 	 * @param gameState the new game state
 	 */
@@ -182,6 +170,13 @@ public:
      */
 	sf::Time getCountdownTime() const;
 
+
+    /**
+     * @brief world non-const reference to the box2dWorld
+     * @return
+     */
+    b2World &world() const;
+
     /**
      * @brief getPowerups ref to the powerups
      * @return
@@ -220,6 +215,18 @@ private:
 	 * @param elapsed time elapsed since last update
 	 */
 	void updatePlaying(const sf::Time &elapsed);
+
+    /**
+     * @brief gravity world gravity
+     */
+    b2Vec2 mGravity = b2Vec2(0.f,0.f);
+
+
+    /**
+     * @brief mPhysicWorld the box2d world
+     */
+    mutable b2World mPhysicWorld;
+
 
 	/**
 	 * @brief mainBall the ball object for the game

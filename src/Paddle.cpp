@@ -34,39 +34,55 @@
 
 #include "Ball.hpp"
 #include "Paddle.hpp"
+#include "Game.hpp"
 
 Paddle::Paddle(const Game &game, sf::Vector2f startPos) :
 game(game),
-isAI(isAI),
-position(startPos),
-m_initPosition(startPos),
-direction(0, 0)
+isAI(isAI)
 {
+    b2BodyDef bodyDef;
+    bodyDef.position = sfVecTob2Vec(startPos);
+    bodyDef.type = b2_kinematicBody;
+    mBody = game.world().CreateBody(&bodyDef);
+
+
+    b2PolygonShape mShape;
+    mShape.SetAsBox(pixToMeters(PADDLE_WIDTH), pixToMeters(PADDLE_HEIGHT));
+
+    b2FixtureDef fDef;
+    fDef.restitution = 1.f;
+    fDef.shape = &mShape;
+    mBody->CreateFixture(&fDef);
 }
 
 void Paddle::reset()
 {
-	position = m_initPosition;
-	direction = sf::Vector2f(0,0);
+    /* position = m_initPosition;
+    direction = sf::Vector2f(0,0); */
 }
 
 Paddle::~Paddle()
 {
+    game.world().DestroyBody(mBody);
+    mBody = 0;
 }
 
 void Paddle::goDown()
 {
-	direction.y = 1;
+    mVelocity.y = 1.f;
+    mBody->SetLinearVelocity(mVelocity);
 }
 
 void Paddle::goUp()
 {
-	direction.y = -1;
+    mVelocity.y = -1.f;
+    mBody->SetLinearVelocity(mVelocity);
 }
 
 void Paddle::stop()
 {
-	direction.y = 0;
+    mVelocity.y = 0;
+    mBody->SetLinearVelocity(mVelocity);
 }
 
 void Paddle::extend()
@@ -88,50 +104,22 @@ void Paddle::resetPowerupEffect(Powerup::POWERUP_TYPE type)
 
 void Paddle::update(const sf::Time &elapsed)
 {
-	position = position + direction * (elapsed.asSeconds() * (PADDLE_SPEED * 100));
-	position.y = clampf(0, ARENA_HEIGHT - PADDLE_HEIGHT, position.y);
+    //no need for update for now
 }
 
 
-bool Paddle::intersectsWith(const Ball& ball)
-{
-	sf::Vector2f distToCircle;
-	distToCircle.x = abs(ball.getPosition().x + BALL_RADIUS - (position.x + PADDLE_WIDTH / 2));
-	distToCircle.y = abs(ball.getPosition().y + BALL_RADIUS - (position.y + PADDLE_HEIGHT / 2));
-
-
-	if (distToCircle.x > (PADDLE_WIDTH / 2 + BALL_RADIUS) || distToCircle.y > (PADDLE_HEIGHT / 2 + BALL_RADIUS))return false;
-
-	if (distToCircle.x <= PADDLE_WIDTH / 2 || distToCircle.y <= PADDLE_HEIGHT / 2) return true;
-
-	float cornderSqDist = powf(distToCircle.x - PADDLE_WIDTH / 2, 2) +
-		powf(distToCircle.y - PADDLE_HEIGHT / 2, 2);
-
-	return cornderSqDist < powf(BALL_RADIUS, 2);
-}
-
-float Paddle::getBounceAngle(float yPos)
-{
-	float distFromCenter = yPos - (position.y + (PADDLE_HEIGHT / 2));
-	return clampf(-0.8, 0.8, distFromCenter / (PADDLE_HEIGHT / 2));
-}
-
-sf::FloatRect Paddle::getHitBox() const
-{
-    return sf::FloatRect(position.x, position.y, PADDLE_WIDTH, PADDLE_HEIGHT + m_widthBoost);
-}
 
 sf::Packet &operator<<(sf::Packet &packet, const Paddle &paddle)
 {
-    return packet << paddle.position << paddle.direction << paddle.m_widthBoost;
+    return packet << paddle.mBody->GetPosition() << paddle.mBody->GetLinearVelocity() << paddle.m_widthBoost;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Paddle &paddle)
 {
-    return packet >> paddle.position >> paddle.direction >> paddle.m_widthBoost;
-}
-
-void Paddle::setPosition(const sf::Vector2f& nwPosition)
-{
-	position = nwPosition;
+    b2Vec2 position;
+    b2Vec2 velocity;
+    packet >> position >>  velocity >> paddle.m_widthBoost;
+    paddle.mBody->SetTransform(position, paddle.mBody->GetAngle());
+    paddle.mBody->SetLinearVelocity(velocity);
+    return packet;
 }

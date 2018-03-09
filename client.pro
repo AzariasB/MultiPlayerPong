@@ -13,7 +13,7 @@ win32:DEFINES += "SFML_STATIC"
 win32:LIBS += -LC:\SFML\lib  -lsfml-audio-s-d -lsfml-network-s-d -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d \
             -lws2_32 -lwinmm -ljpeg -lfreetype -lopengl32 -lgdi32 -lvorbisfile -lvorbisenc -lvorbis -lflac -lopenal32 -logg
 unix:INCLUDEPATH += /usr/local/include
-unix:LIBS +=  -L/usr/local/lib -lsfml-audio -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
+unix:LIBS +=  -L/usr/local/lib -lsfml-audio -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 DEFINES += "CLIENT"
 

@@ -8,10 +8,10 @@ QT              -= gui core
 CONFIG          += c++14
 QMAKE_CXXFLAGS  += -std=c++14
 
-win32:LIBS += -LC:\SFML\lib -lsfml-network-s-d -lsfml-system-s-d -lws2_32 -lwinmm
+win32:LIBS += -LC:\SFML\lib -LC:\Box2D\lib -lBox2D -lsfml-network-s-d -lsfml-system-s-d -lws2_32 -lwinmm
 win32:DEFINES += "SFML_STATIC"
 win32:INCLUDEPATH += C:\SFML\include
-else:LIBS += -lsfml-network -lsfml-system
+else:LIBS += -lsfml-network -lsfml-system -lBox2D
 
 DEFINES += "SERVER"
 

@@ -38,6 +38,9 @@
 #include <complex>
 #include <iosfwd>
 #include <unordered_map>
+#include <Box2D/Common/b2Math.h>
+
+#include "Math.hpp"
 
 
 template<typename K, typename V, typename ...Args>
@@ -91,6 +94,27 @@ void deseralizeVector(sf::Packet &packet, std::vector<T> &vec, Args&... argp)
     }
 }
 
+
+/**
+ * @brief operator << serializes a box2d vector
+ * @param vec the vector to deserialize
+ * @return
+ */
+inline sf::Packet &operator<<(sf::Packet& packet, const  b2Vec2 &vec)
+{
+    return packet << vec.x << vec.y;
+}
+
+/**
+ * @brief operator >> deserializes a vector
+ * @param p the packet
+ * @param vec the vector
+ * @return
+ */
+inline sf::Packet &operator>>(sf::Packet &packet, b2Vec2 &vec)
+{
+    return packet >> vec.x >> vec.y;
+}
 
 /**
  * @brief operator << serializes the given vector to a packet
@@ -205,6 +229,27 @@ sf::Vector2<T> normalized(const sf::Vector2<T> &v)
     std::complex<T> c = sqrt(v.x * v.x + v.y * v.y);
     if (c == static_cast<T> (0))return v;
     return sf::Vector2<T>(v.x / c.imag(), v.y / c.imag());
+}
+
+/**
+ * @brief b2VecToSfVect interface between
+ * box2d vector and sfml vector
+ * @param vec
+ * @return
+ */
+inline sf::Vector2f b2VecToSfVect(const b2Vec2 &vec, bool convertToPixels = true)
+{
+    if(convertToPixels)
+        return sf::Vector2f(metersToPix(vec.x), metersToPix(vec.y));
+
+    return sf::Vector2f(vec.x, vec.y);
+}
+
+inline b2Vec2 sfVecTob2Vec(const sf::Vector2f &vec, bool convertToMeters = true)
+{
+    if(convertToMeters)
+        return b2Vec2(pixToMeters(vec.x), pixToMeters(vec.y));
+    return b2Vec2(vec.x, vec.y);
 }
 
 #endif /* VECTORSUTILS_H */

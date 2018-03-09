@@ -93,6 +93,7 @@ bool Powerup::timerStarted() const
 
 void Powerup::update(const sf::Time &elapsed)
 {
+    /*//will be handled by box2d
     if(m_effectTime > sf::Time::Zero){
         m_effectTime -= elapsed;
         if(m_effectTime <= sf::Time::Zero)
@@ -107,6 +108,7 @@ void Powerup::update(const sf::Time &elapsed)
         m_hitBox.left += progression.x;
     }
 
+
     m_hitBox.left += progression.x;
     m_hitBox.top += progression.y;
     if(m_hitBox.intersects(m_game.getPlayer1().getPaddle().getHitBox())){
@@ -114,6 +116,8 @@ void Powerup::update(const sf::Time &elapsed)
     }else if(m_hitBox.intersects(m_game.getPlayer2().getPaddle().getHitBox())){
         m_game.getEventManager().trigger(hitPaddle, 2);
     }
+    */
+
 }
 
 bool Powerup::isOut() const
