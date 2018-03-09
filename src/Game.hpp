@@ -40,6 +40,7 @@
 #include "Player.hpp"
 #include "EventManager.hpp"
 #include "Powerup.hpp"
+#include "Wall.hpp"
 
 /**
  * @brief The GAMESTATE enum current state of the game
@@ -99,7 +100,20 @@ public:
 	 * @brief getPlayer2 reference to the second player
 	 * @return reference to the second player
 	 */
-	Player &getPlayer2();
+    Player &getPlayer2();
+
+    /**
+     * @brief mUpperWall gets the upper wall of the arena
+     * @return
+     */
+    const Wall &upperWall() const;
+
+    /**
+     * @brief mLowerWall gets the lower wall of the arena
+     * @return
+     */
+    const Wall &lowerWall() const;
+
 
 	/**
 	 * @brief getEventManager reference to the event manager
@@ -247,6 +261,16 @@ private:
 	 * @brief p2 the second player
 	 */
 	Player p2;
+
+    /**
+     * @brief upperWall upper wall of the arena
+     */
+    Wall mUpperWall;
+
+    /**
+     * @brief lowerWall lower wall of the arena
+     */
+    Wall mLowerWall;
 
 	/**
 	 * @brief m_countDownTime time before we can start the game

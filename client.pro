@@ -42,7 +42,8 @@ SOURCES +=\
     src/EventManager.cpp \
     src/Game.cpp \
     src/Player.cpp \
-    src/Powerup.cpp
+    src/Powerup.cpp \
+    src/Wall.cpp
 
 HEADERS +=\
     src/Application.hpp \
@@ -55,7 +56,8 @@ HEADERS +=\
     src/VectorsUtils.hpp \
     src/Config.hpp \
     src/Powerup.hpp \
-    src/lib/twin.hpp
+    src/lib/twin.hpp \
+    src/Wall.hpp
 
 DISTFILES +=\
     ka1.ttf \

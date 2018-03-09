@@ -32,13 +32,7 @@
 #ifndef BALL_H
 #define BALL_H
 
-
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <complex>
-#include <SFML/Network/Packet.hpp>
-#include <Box2D/Dynamics/b2Body.h>
-#include <Box2D/Collision/Shapes/b2CircleShape.h>
+#include <SFML/Config.hpp>
 
 #include "Config.hpp"
 #include "Math.hpp"
@@ -46,6 +40,10 @@
 #include "Powerup.hpp"
 
 class Game;
+class b2Body;
+namespace sf {
+    class Packet;
+}
 
 /**
  * @brief The Ball class the ball is the game object moving
@@ -92,10 +90,7 @@ public:
      * @brief getPosition the current position
      * @return the current position of the ball
      */
-    const sf::Vector2f &getPosition() const
-    {
-        return b2VecToSfVect(mBody->GetPosition());
-    }
+    const sf::Vector2f &getPosition() const;
 
 	/**
 	 * @brief operator << seraializes the ball into a sf::Packet
@@ -124,7 +119,6 @@ private:
      * @brief mBody box2d body
      */
     b2Body *mBody;
-    b2CircleShape mShape;
 
     sf::Int32 m_radiusBoost;
 };

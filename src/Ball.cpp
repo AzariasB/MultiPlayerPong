@@ -28,7 +28,10 @@
  * 
  * Created on 8 octobre 2017, 18:48
  */
-#include <iostream>
+#include <SFML/Network/Packet.hpp>
+#include <Box2D/Dynamics/b2Body.h>
+#include <Box2D/Collision/Shapes/b2CircleShape.h>
+
 #include "Ball.hpp"
 #include "Game.hpp"
 
@@ -40,6 +43,7 @@ game(game)
     mBodyDef.linearVelocity = sfVecTob2Vec(BALL_START_DIR, false);
     mBodyDef.type = b2_dynamicBody;
     mBody = game.world().CreateBody(&mBodyDef);
+    b2CircleShape mShape;
     mShape.m_p.Set(0,0);
 
     b2FixtureDef def;
@@ -85,6 +89,11 @@ void Ball::extend()
 void Ball::retract()
 {
     m_radiusBoost = -BALL_RADIUS_POWERUP;
+}
+
+const sf::Vector2f &Ball::getPosition() const
+{
+    return b2VecToSfVect(mBody->GetPosition());
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)

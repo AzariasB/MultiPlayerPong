@@ -7,6 +7,7 @@ Dependencies
 - SFML (2.4.2)
 - Qmake
 - QtCore
+- Box2D
 
 Compiling
 ---

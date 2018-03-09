@@ -41,7 +41,8 @@ SOURCES +=\
     src/EventManager.cpp \
     src/Game.cpp \
     src/Player.cpp \
-    src/Powerup.cpp
+    src/Powerup.cpp \
+    src/Wall.cpp
 
 HEADERS +=\
     src/Application.hpp \
@@ -53,4 +54,5 @@ HEADERS +=\
     src/Player.hpp \
     src/VectorsUtils.hpp \
     src/Config.hpp \
-    src/Powerup.hpp
+    src/Powerup.hpp \
+    src/Wall.hpp

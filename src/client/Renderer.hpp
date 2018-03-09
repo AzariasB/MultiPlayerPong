@@ -34,11 +34,14 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System.hpp>
-#include "../Ball.hpp"
-#include "../Paddle.hpp"
-#include "../Powerup.hpp"
+#include <unordered_map>
 #include "Animation.hpp"
 
+#include "../Powerup.hpp"
+
+class Ball;
+class Paddle;
+class Wall;
 /**
  * @brief The Renderer class used to render every objects of the game
  * knows how to render the game's objects (ball, paddle)
@@ -64,6 +67,12 @@ public:
 	 * @param paddle a const reference to the paddle to render
 	 */
 	void renderPaddle(const Paddle &paddle);
+
+    /**
+     * @brief renderWall renders a wall
+     * @param wall
+     */
+    void renderWall(const Wall &wall);
 
     /**
      * @brief renderPowerup renders one powerup

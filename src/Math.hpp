@@ -9,6 +9,9 @@
 #ifndef MATH_H
 #define MATH_H
 
+#include <SFML/System/Vector2.hpp>
+#include <Box2D/Common/b2Math.h>
+
 //Meters to pixel ratio
 #define M_TO_P 120.f
 

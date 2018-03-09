@@ -31,6 +31,8 @@
 
 #include "Renderer.hpp"
 #include "../Config.hpp"
+#include "../Ball.hpp"
+#include "../Paddle.hpp"
 #include "Provider.hpp"
 #include <math.h>
 
@@ -145,6 +147,15 @@ void Renderer::renderPaddle(const Paddle& paddle)
 
     render(rectangle);
 }
+
+void Renderer::renderWall(const Wall &wall)
+{
+    sf::RectangleShape rect( sf::Vector2f(ARENA_WIDTH, PADDLE_WIDTH) );
+    rect.setFillColor(sf::Color::White);
+    rect.setPosition(wall.getPosition());
+    render(rect);
+}
+
 
 void Renderer::setView(const sf::View &view)
 {

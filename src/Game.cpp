@@ -37,6 +37,8 @@ Game::Game() :
     mainBall(*this),
     p1(*this, 1),
     p2(*this, 2),
+    mUpperWall(*this, sf::Vector2f(0,0)),
+    mLowerWall(*this, sf::Vector2f(0, ARENA_HEIGHT - PADDLE_WIDTH)),
     m_countDownTime(sf::seconds(3)),
     m_state(GAMESTATE::COUNTDOWN)
 {
@@ -321,6 +323,16 @@ Player& Game::getPlayer2()
     p = &p2;
     mutex.unlock();
     return *p;
+}
+
+const Wall &Game::upperWall() const
+{
+    return mUpperWall;
+}
+
+const Wall &Game::lowerWall() const
+{
+    return mLowerWall;
 }
 
 const Player& Game::getPlayer2() const

@@ -77,6 +77,8 @@ void PlayState::draw(Renderer& renderer) const
     renderer.renderBall(pr::game().getBall());
     renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
     renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
+    renderer.renderWall(pr::game().upperWall());
+    renderer.renderWall(pr::game().lowerWall());
 
     renderer.render(m_p1ScoreText);
     renderer.render(m_p2ScoreText);
