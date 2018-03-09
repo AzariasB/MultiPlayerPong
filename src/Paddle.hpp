@@ -105,7 +105,11 @@ public:
 	 */
     sf::Vector2f getPosition() const
 	{
-        return b2VecToSfVect(mBody->GetPosition());
+        sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
+        pos.x -= PADDLE_WIDTH/2.f;
+        pos.y -= PADDLE_HEIGHT/2.f;
+
+        return pos;
 	}
 
 	/**

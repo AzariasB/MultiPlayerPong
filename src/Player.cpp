@@ -34,7 +34,7 @@
 Player::Player(Game& game, int num) :
 m_game(game),
 m_num(num),
-m_paddle(game, num == 1 ? sf::Vector2f(0, 0) : sf::Vector2f(800 - PADDLE_WIDTH, 0))
+m_paddle(game, num == 1 ? sf::Vector2f(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : sf::Vector2f(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f - PADDLE_HEIGHT/2.f))
 {
 
 }

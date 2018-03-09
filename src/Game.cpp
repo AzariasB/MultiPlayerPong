@@ -29,6 +29,7 @@
  * Created on 11 octobre 2017, 10:09
  */
 
+#include <iostream>
 #include "Game.hpp"
 #include "Application.hpp"
 
@@ -37,8 +38,8 @@ Game::Game() :
     mainBall(*this),
     p1(*this, 1),
     p2(*this, 2),
-    mUpperWall(*this, sf::Vector2f(0,0)),
-    mLowerWall(*this, sf::Vector2f(0, ARENA_HEIGHT - PADDLE_WIDTH)),
+    mUpperWall(*this, sf::Vector2f(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
+    mLowerWall(*this, sf::Vector2f(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
     m_countDownTime(sf::seconds(3)),
     m_state(GAMESTATE::COUNTDOWN)
 {

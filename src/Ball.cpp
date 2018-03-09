@@ -28,6 +28,7 @@
  * 
  * Created on 8 octobre 2017, 18:48
  */
+
 #include <SFML/Network/Packet.hpp>
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Collision/Shapes/b2CircleShape.h>
@@ -40,17 +41,19 @@ game(game)
 {
     b2BodyDef mBodyDef;
     mBodyDef.position = sfVecTob2Vec(BALL_START_POS);
-    mBodyDef.linearVelocity = sfVecTob2Vec(BALL_START_DIR, false);
     mBodyDef.type = b2_dynamicBody;
     mBody = game.world().CreateBody(&mBodyDef);
+
+    mBody->ApplyLinearImpulse(sfVecTob2Vec(BALL_START_DIR, false), mBody->GetWorldCenter(), false);
+
     b2CircleShape mShape;
     mShape.m_p.Set(0,0);
+    mShape.m_radius = pixToMeters(BALL_RADIUS);
 
     b2FixtureDef def;
     def.shape = &mShape;
     def.restitution = 1.f;
-
-    mShape.m_radius = pixToMeters(BALL_RADIUS);
+    def.density = 0.f;
     mBody->CreateFixture(&def);
 }
 
@@ -75,10 +78,10 @@ void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
 
 void Ball::reset()
 {
-    b2Vec2 pos(BALL_START_POS.x, BALL_START_POS.y);
-    mBody->SetTransform(pos, mBody->GetAngle());
-    b2Vec2 dir(BALL_START_DIR.x, BALL_START_DIR.y);
-    mBody->SetLinearVelocity(dir);
+//    b2Vec2 pos(BALL_START_POS.x, BALL_START_POS.y);
+//    mBody->SetTransform(pos, mBody->GetAngle());
+//    b2Vec2 dir(BALL_START_DIR.x, BALL_START_DIR.y);
+//    mBody->SetLinearVelocity(dir);
 }
 
 void Ball::extend()
@@ -93,7 +96,10 @@ void Ball::retract()
 
 const sf::Vector2f &Ball::getPosition() const
 {
-    return b2VecToSfVect(mBody->GetPosition());
+    sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
+    pos.x -= BALL_RADIUS;
+    pos.y -= BALL_RADIUS;
+    return pos;
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)

@@ -44,7 +44,7 @@ Wall::Wall(const Game &g, const sf::Vector2f &startingPos)
     mBody = g.world().CreateBody(&def);
 
     b2PolygonShape boxShape;
-    boxShape.SetAsBox(ARENA_WIDTH, PADDLE_WIDTH);
+    boxShape.SetAsBox(pixToMeters(WALL_WITDH), pixToMeters(WALL_HEIGHT));
 
     b2FixtureDef fixture;
     fixture.restitution = 1.f;
@@ -54,6 +54,9 @@ Wall::Wall(const Game &g, const sf::Vector2f &startingPos)
 }
 
 sf::Vector2f Wall::getPosition() const
-{
-    return b2VecToSfVect(mBody->GetPosition());
+{   
+    sf::Vector2f vec = b2VecToSfVect(mBody->GetPosition());
+    vec.x -= WALL_WITDH/2.f;
+    vec.y -= WALL_HEIGHT/2.f;
+    return vec;
 }

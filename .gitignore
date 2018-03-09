@@ -5,3 +5,4 @@ bin
 .qmake.stash
 *.pro.user
 Makefile
+*.a

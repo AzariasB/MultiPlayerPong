@@ -31,6 +31,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define b2_velocityThreshold		0.0f
+
 //Dimensions
 #define ARENA_WIDTH 800
 #define ARENA_HEIGHT 600
@@ -41,13 +43,17 @@
 #define DIALOG_HEIGHT 200
 #define POWERUP_SIDE 50
 
+//walls
+#define WALL_WITDH ARENA_WIDTH
+#define WALL_HEIGHT PADDLE_WIDTH
+
 //speeds
 #define PADDLE_SPEED 2
 #define BALL_SPEED 2
 
 //Starting conf
 #define BALL_START_POS sf::Vector2f(ARENA_WIDTH/2 - BALL_RADIUS, ARENA_HEIGHT/2 - BALL_RADIUS)
-#define BALL_START_DIR sf::Vector2f(1,1)
+#define BALL_START_DIR sf::Vector2f(2.3,1)
 
 //Powerups
 #define PADDLE_WIDTH_POWERUP 10

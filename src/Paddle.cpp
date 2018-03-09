@@ -51,6 +51,8 @@ isAI(isAI)
 
     b2FixtureDef fDef;
     fDef.restitution = 1.f;
+    fDef.friction = 0.f;
+
     fDef.shape = &mShape;
     mBody->CreateFixture(&fDef);
 }

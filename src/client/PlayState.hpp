@@ -104,6 +104,10 @@ private:
 	 */
 	sf::Text m_p2ScoreText;
 
+    /**
+     * @brief m_countdownText text displayed for
+     * the countdown
+     */
 	sf::Text m_countdownText;
 
 	/**

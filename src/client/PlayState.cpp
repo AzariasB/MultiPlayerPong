@@ -29,7 +29,7 @@
  * Created on 16 octobre 2017, 17:49
  */
 
-#include <QDebug>
+#include <qglobal.h>
 #include <SFML/Network/IpAddress.hpp>
 
 #include "PlayState.hpp"
