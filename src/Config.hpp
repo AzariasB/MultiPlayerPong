@@ -31,27 +31,38 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-//Dimensions
-#define ARENA_WIDTH 800
-#define ARENA_HEIGHT 600
-#define PADDLE_WIDTH 10
-#define PADDLE_HEIGHT 120
-#define BALL_RADIUS  50
-#define DIALOG_WIDTH 700
-#define DIALOG_HEIGHT 200
+//Dimensions (all in meters)
+//Arena
+#define SF_ARENA_WIDTH 800
+#define SF_ARENA_HEIGHT 600
+
+#define ARENA_WIDTH 12.5
+#define ARENA_HEIGHT 9.375
+
+//Paddle
+#define PADDLE_WIDTH 0.1
+#define PADDLE_HEIGHT 0.5
+
+//ball
+#define BALL_RADIUS  0.1
+
+//dialog
+#define SF_DIALOG_WIDTH 700
+#define SF_DIALOG_HEIGHT 200
+
+//powerup
 #define POWERUP_SIDE 50
 
 //walls
 #define WALL_WITDH ARENA_WIDTH
 #define WALL_HEIGHT PADDLE_WIDTH
 
-//speeds
-#define PADDLE_SPEED 2
-#define BALL_SPEED 2
-
 //Starting conf
-#define BALL_START_POS sf::Vector2f(ARENA_WIDTH/2 - BALL_RADIUS, ARENA_HEIGHT/2 - BALL_RADIUS)
-#define BALL_START_DIR sf::Vector2f(2.3,1)
+#define BALL_START_X (ARENA_WIDTH/2.f)
+#define BALL_START_Y (ARENA_HEIGHT/2.f)
+
+#define BALL_DIR_X 2.3
+#define BALL_DIR_Y 1
 
 //Powerups
 #define PADDLE_WIDTH_POWERUP 10

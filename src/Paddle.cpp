@@ -31,27 +31,29 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <math.h>
+#include <limits>
 
 #include "Ball.hpp"
 #include "Paddle.hpp"
 #include "Game.hpp"
 
-Paddle::Paddle(const Game &game, sf::Vector2f startPos) :
+Paddle::Paddle(const Game &game, b2Vec2 startPos) :
 game(game),
 isAI(isAI)
 {
     b2BodyDef bodyDef;
-    bodyDef.position = sfVecTob2Vec(startPos);
-    bodyDef.type = b2_kinematicBody;
+    bodyDef.position = startPos;
+    bodyDef.type = b2_dynamicBody;
     mBody = game.world().CreateBody(&bodyDef);
-
+    mBody->SetFixedRotation(true);
 
     b2PolygonShape mShape;
-    mShape.SetAsBox(pixToMeters(PADDLE_WIDTH), pixToMeters(PADDLE_HEIGHT));
+    mShape.SetAsBox(PADDLE_WIDTH, PADDLE_HEIGHT);
 
     b2FixtureDef fDef;
-    fDef.restitution = 1.f;
+    fDef.restitution = 0.f;
     fDef.friction = 0.f;
+    fDef.density = std::numeric_limits<float>::max();
 
     fDef.shape = &mShape;
     mBody->CreateFixture(&fDef);

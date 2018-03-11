@@ -48,11 +48,11 @@ PlayState::PlayState() :
                 this
                 ); //Subscribe to bounce event
 
-    m_p1ScoreText.setPosition(ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
-    m_p2ScoreText.setPosition((ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
+    m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
+    m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
     m_countdownText.setPosition(
-                ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
-                ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
+                SF_ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
+                SF_ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
                 );
 }
 

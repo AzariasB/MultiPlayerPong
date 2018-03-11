@@ -35,19 +35,20 @@
 #include "Wall.hpp"
 #include "Game.hpp"
 
-Wall::Wall(const Game &g, const sf::Vector2f &startingPos)
+Wall::Wall(const Game &g, const b2Vec2 &startingPos)
 {
     b2BodyDef def;
-    def.position = sfVecTob2Vec(startingPos);
+    def.position = startingPos;
     def.type = b2_staticBody;
 
     mBody = g.world().CreateBody(&def);
 
     b2PolygonShape boxShape;
-    boxShape.SetAsBox(pixToMeters(WALL_WITDH), pixToMeters(WALL_HEIGHT));
+    boxShape.SetAsBox(WALL_WITDH, WALL_HEIGHT);
 
     b2FixtureDef fixture;
     fixture.restitution = 1.f;
+    fixture.friction = 0.f;
     fixture.shape = &boxShape;
 
     mBody->CreateFixture(&fixture);
@@ -56,7 +57,7 @@ Wall::Wall(const Game &g, const sf::Vector2f &startingPos)
 sf::Vector2f Wall::getPosition() const
 {   
     sf::Vector2f vec = b2VecToSfVect(mBody->GetPosition());
-    vec.x -= WALL_WITDH/2.f;
-    vec.y -= WALL_HEIGHT/2.f;
+    vec.x -= metersToPix(WALL_WITDH)/2.f;
+    vec.y -= metersToPix(WALL_HEIGHT)/2.f;
     return vec;
 }

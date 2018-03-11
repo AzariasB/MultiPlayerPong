@@ -61,24 +61,24 @@ Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE
     m_input.setText(message);
     m_input.setPosition(sf::Vector2f(
                             originX + 10,
-                            originY + DIALOG_HEIGHT/2
+                            originY + SF_DIALOG_HEIGHT/2
                             ));
     m_message.setPosition(sf::Vector2f(
                               originX,
-                              originY + DIALOG_HEIGHT/2
+                              originY + SF_DIALOG_HEIGHT/2
                               ));
 
     m_okButton.setPosition(sf::Vector2f(
                                originX,
-                               originY + DIALOG_HEIGHT - m_okButton.getHeight()
+                               originY + SF_DIALOG_HEIGHT - m_okButton.getHeight()
                                ));
     m_cancelButton.setPosition(sf::Vector2f(
-                                   originX + DIALOG_WIDTH - m_cancelButton.getWidth(),
-                                   originY + DIALOG_HEIGHT - m_cancelButton.getHeight()
+                                   originX + SF_DIALOG_WIDTH - m_cancelButton.getWidth(),
+                                   originY + SF_DIALOG_HEIGHT - m_cancelButton.getHeight()
                                    ));
 
     m_xButton.setPosition(sf::Vector2f(
-                              originX + DIALOG_WIDTH - m_xButton.getWidth(),
+                              originX + SF_DIALOG_WIDTH - m_xButton.getWidth(),
                               originY
                               ));
 
@@ -102,7 +102,7 @@ const std::string &Dialog::getResult() const
 void Dialog::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     if(!m_isVisible)return;
-    sf::RectangleShape rect(sf::Vector2f(DIALOG_WIDTH,DIALOG_HEIGHT));
+    sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,SF_DIALOG_HEIGHT));
     rect.setPosition(originX,originY);
     rect.setOutlineColor(sf::Color::White);
     rect.setFillColor(sf::Color::Black);

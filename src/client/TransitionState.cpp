@@ -36,7 +36,7 @@ TransitionState::TransitionState()
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    sf::Vector2f size(ARENA_WIDTH, ARENA_HEIGHT);
+    sf::Vector2f size(SF_ARENA_WIDTH, SF_ARENA_HEIGHT);
 
     sf::View exitingView(mExitingCenter, size);
     sf::View enteringView(mEnteringCenter, size);
@@ -69,19 +69,19 @@ void TransitionState::updateCenters()
 {
     float tVal = mTweening.get();
     if(mDirection == TransitionData::GO_UP || mDirection == TransitionData::GO_DOWN){
-        mEnteringCenter.x = ARENA_WIDTH/2.f;
-        mExitingCenter.x = ARENA_WIDTH/2.f;
+        mEnteringCenter.x = SF_ARENA_WIDTH/2.f;
+        mExitingCenter.x = SF_ARENA_WIDTH/2.f;
 
         int vertMult = mDirection == TransitionData::GO_UP ? -1 : 1;
-        mExitingCenter.y = ARENA_HEIGHT/2.f + vertMult * tVal;
-        mEnteringCenter.y = ( (-vertMult) * ARENA_HEIGHT + ARENA_HEIGHT/2.f ) + vertMult * tVal;
+        mExitingCenter.y = SF_ARENA_HEIGHT/2.f + vertMult * tVal;
+        mEnteringCenter.y = ( (-vertMult) * SF_ARENA_HEIGHT + SF_ARENA_HEIGHT/2.f ) + vertMult * tVal;
     }else{
-        mEnteringCenter.y = ARENA_HEIGHT/2.f;
-        mExitingCenter.y = ARENA_HEIGHT/2.f;
+        mEnteringCenter.y = SF_ARENA_HEIGHT/2.f;
+        mExitingCenter.y = SF_ARENA_HEIGHT/2.f;
 
         int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
-        mExitingCenter.x = ARENA_WIDTH/2.f + horiztontalMult * tVal;
-        mEnteringCenter.x = ( (-horiztontalMult) * ARENA_WIDTH + ARENA_WIDTH/2.f ) + horiztontalMult *  tVal;
+        mExitingCenter.x = SF_ARENA_WIDTH/2.f + horiztontalMult * tVal;
+        mEnteringCenter.x = ( (-horiztontalMult) * SF_ARENA_WIDTH + SF_ARENA_WIDTH/2.f ) + horiztontalMult *  tVal;
     }
 
 }
@@ -97,9 +97,9 @@ void TransitionState::onEnter(BaseStateData *data)
     std::pair<float,float> tweening = {0,0};
 
     if(dir == TransitionData::GO_RIGHT || dir == TransitionData::GO_LEFT){
-        tweening.second = ARENA_WIDTH;
+        tweening.second = SF_ARENA_WIDTH;
     }else if(dir == TransitionData::GO_DOWN || dir == TransitionData::GO_UP){
-        tweening.second = ARENA_HEIGHT;
+        tweening.second = SF_ARENA_HEIGHT;
     }
 
     mTweening = twin::makeTwin(tweening.first, tweening.second, mTransitionDuration, twin::easing::backInOut);

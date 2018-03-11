@@ -44,7 +44,7 @@ class b2Body;
 class Wall
 {
 public:
-    Wall(const Game &g, const sf::Vector2f &startingPos);
+    Wall(const Game &g, const b2Vec2 &startingPos);
 
     sf::Vector2f getPosition() const;
 

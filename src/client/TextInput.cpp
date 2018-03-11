@@ -46,7 +46,7 @@ m_typed("")
 void TextInput::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 
-	sf::RectangleShape rect(sf::Vector2f(DIALOG_WIDTH,50));
+	sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,50));
 	rect.setPosition(m_text.getPosition().x - 10, m_text.getPosition().y);
 	rect.setOutlineColor(sf::Color::White);
 	rect.setOutlineThickness(5);
@@ -73,7 +73,7 @@ void TextInput::handleEvent(const sf::Event& ev)
 			m_typed += (char) ev.text.unicode;
 		}
 		m_text.setString(m_typed);
-		if(m_text.getGlobalBounds().width + 40 > DIALOG_WIDTH){
+		if(m_text.getGlobalBounds().width + 40 > SF_DIALOG_WIDTH){
 			m_typed.pop_back();
 			m_text.setString(m_typed);
 		}

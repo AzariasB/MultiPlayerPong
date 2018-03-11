@@ -13,7 +13,7 @@
 #include <Box2D/Common/b2Math.h>
 
 //Meters to pixel ratio
-#define M_TO_P 120.f
+#define M_TO_P 64.f
 
 /**
  * @brief rand rand value between the given bounds

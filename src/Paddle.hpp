@@ -56,7 +56,7 @@ public:
 	 * @param game reference to the game
 	 * @param startPos starting position of the paddle
 	 */
-	Paddle(const Game &game, sf::Vector2f startPos = sf::Vector2f(0, 0));
+    Paddle(const Game &game, b2Vec2 startPos = b2Vec2(0, 0));
 
 	/**
 	 * @brief goUp changes the direction in order to go up
@@ -106,9 +106,8 @@ public:
     sf::Vector2f getPosition() const
 	{
         sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-        pos.x -= PADDLE_WIDTH/2.f;
-        pos.y -= PADDLE_HEIGHT/2.f;
-
+        pos.x -= metersToPix(PADDLE_WIDTH)/2.f;
+        pos.y -= metersToPix(PADDLE_HEIGHT)/2.f;
         return pos;
 	}
 

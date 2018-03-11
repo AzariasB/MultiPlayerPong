@@ -36,13 +36,13 @@
 OptionState::OptionState():
 m_menu()
 {
-	sf::Text &label =  *m_menu.addLabel("Options",ARENA_WIDTH/2, 0);
+    sf::Text &label =  *m_menu.addLabel("Options",SF_ARENA_WIDTH/2, 0);
 	label.setPosition(label.getPosition().x - label.getGlobalBounds().width / 2.f, label.getPosition().y);
 
 	int startY = 50;
 	Button &muteButton = *m_menu.addButton("Toggle sound", 0, startY);
 
-	m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(ARENA_WIDTH - 50, 0), getCurrentSoundRect()).get();
+    m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(SF_ARENA_WIDTH - 50, 0), getCurrentSoundRect()).get();
 	m_soundSprite->setPosition(m_soundSprite->getPosition().x, startY);
 	m_soundSprite->scale(4,4);
     pr::connect(muteButton.clickedEvent, &OptionState::toggleSound, this);
@@ -51,7 +51,7 @@ m_menu()
     sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
     pr::connect(keyBindingClicked , &State::goToState , static_cast<State*>(this),  std::make_pair((int) STATE_TYPE::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
-    sf::Uint64 backClicked = m_menu.addButton("Menu", 0, ARENA_HEIGHT - 50)->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Menu", 0, SF_ARENA_HEIGHT - 50)->clickedEvent;
     pr::connect(backClicked, &State::goToState, static_cast<State*>(this) , std::make_pair((int)STATE_TYPE::MENU, TransitionData::GO_LEFT) );
 }
 

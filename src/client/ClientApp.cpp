@@ -49,7 +49,7 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(sf::VideoMode(ARENA_WIDTH, ARENA_HEIGHT), "Pong", sf::Style::Default),
+    window(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT), "Pong", sf::Style::Default),
     renderer(window),
     game(),
     stateMachine(),
@@ -99,16 +99,16 @@ void ClientApp::resizeEvent(const sf::Event &event)
     float width = event.size.width;
     float height = event.size.height;
     sf::Vector2u minSize(width, height);
-    if(width < ARENA_WIDTH)
-        minSize.x = ARENA_WIDTH;
-    if(height < ARENA_HEIGHT)
-        minSize.y = ARENA_HEIGHT;
+    if(width < SF_ARENA_WIDTH)
+        minSize.x = SF_ARENA_WIDTH;
+    if(height < SF_ARENA_HEIGHT)
+        minSize.y = SF_ARENA_HEIGHT;
 
     window.setSize(minSize);
 
 
-    float nwX = (width - ARENA_WIDTH) /2.f;
-    float nwY = (height - ARENA_HEIGHT)/2.f;
+    float nwX = (width - SF_ARENA_WIDTH) /2.f;
+    float nwY = (height - SF_ARENA_HEIGHT)/2.f;
 
     float nwXRatio = nwX / width;
     float nwYRatio = nwY / height;

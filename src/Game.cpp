@@ -38,8 +38,8 @@ Game::Game() :
     mainBall(*this),
     p1(*this, 1),
     p2(*this, 2),
-    mUpperWall(*this, sf::Vector2f(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
-    mLowerWall(*this, sf::Vector2f(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
+    mUpperWall(*this, b2Vec2(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
+    mLowerWall(*this, b2Vec2(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
     m_countDownTime(sf::seconds(3)),
     m_state(GAMESTATE::COUNTDOWN)
 {
@@ -123,7 +123,7 @@ void Game::updatePlaying(const sf::Time &elapsed)
 
     if (mainBall.getPosition().x < -BALL_RADIUS) {
         m_evManager.trigger(lostEvent, 1);//Player 1 lost
-    } else if (mainBall.getPosition().x > 750) {
+    } else if (mainBall.getPosition().x > SF_ARENA_WIDTH) {
         m_evManager.trigger(lostEvent, 2);
     }
 

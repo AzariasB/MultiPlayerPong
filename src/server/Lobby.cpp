@@ -147,7 +147,7 @@ bool Lobby::tryAddPowerup(const sf::Time &elapsed)
     Powerup::POWERUP_TYPE pt = static_cast<Powerup::POWERUP_TYPE>(rrand(0,4));
     int dirLeft = rrand(-100, 100);
     int dirUp = rrand(-100, 100);
-    game.addPowerUp(pt,sf::Vector2f(ARENA_WIDTH/2, ARENA_HEIGHT/2), normalize(sf::Vector2f(dirLeft, dirUp)));
+    game.addPowerUp(pt,sf::Vector2f(SF_ARENA_WIDTH/2, SF_ARENA_HEIGHT/2), normalize(sf::Vector2f(dirLeft, dirUp)));
     return true;
 }
 

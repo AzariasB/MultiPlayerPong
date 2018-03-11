@@ -220,11 +220,9 @@ std::ostream &operator<<(std::ostream &os, const sf::Vector2<T> &v)
  * @param v a const reference of the vector to normalize
  * @return the normalized version of the vector
  */
-template <
-        typename T,
-        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type
-        >
-sf::Vector2<T> normalized(const sf::Vector2<T> &v)
+template <typename T>
+typename std::enable_if<std::is_integral<T>::value, sf::Vector2<T>>::type
+normalized(const sf::Vector2<T> &v)
 {
     std::complex<T> c = sqrt(v.x * v.x + v.y * v.y);
     if (c == static_cast<T> (0))return v;

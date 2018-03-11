@@ -182,12 +182,12 @@ private:
 	/**
 	 * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
 	 */
-	const int originX = (ARENA_WIDTH - DIALOG_WIDTH)/2;
+    const int originX = (SF_ARENA_WIDTH- SF_DIALOG_WIDTH)/2;
 
 	/**
 	 * @brief originY y origin of the dialog
 	 */
-	const int originY = (ARENA_HEIGHT - DIALOG_HEIGHT)/2;
+    const int originY = (SF_ARENA_HEIGHT - SF_DIALOG_HEIGHT)/2;
 
 	/**
 	 * @brief m_isVisible wether the dialog is visible

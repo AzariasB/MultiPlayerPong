@@ -40,20 +40,21 @@ Ball::Ball(const Game& game) :
 game(game)
 {
     b2BodyDef mBodyDef;
-    mBodyDef.position = sfVecTob2Vec(BALL_START_POS);
+    mBodyDef.position = b2Vec2(BALL_START_X, BALL_START_Y);
     mBodyDef.type = b2_dynamicBody;
     mBody = game.world().CreateBody(&mBodyDef);
 
-    mBody->ApplyLinearImpulse(sfVecTob2Vec(BALL_START_DIR, false), mBody->GetWorldCenter(), false);
+    mBody->ApplyLinearImpulse(b2Vec2(BALL_DIR_X, BALL_DIR_Y), mBody->GetWorldCenter(), false);
 
     b2CircleShape mShape;
     mShape.m_p.Set(0,0);
-    mShape.m_radius = pixToMeters(BALL_RADIUS);
+    mShape.m_radius = BALL_RADIUS;
 
     b2FixtureDef def;
     def.shape = &mShape;
     def.restitution = 1.f;
     def.density = 0.f;
+
     mBody->CreateFixture(&def);
 }
 
@@ -97,8 +98,8 @@ void Ball::retract()
 const sf::Vector2f &Ball::getPosition() const
 {
     sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-    pos.x -= BALL_RADIUS;
-    pos.y -= BALL_RADIUS;
+    pos.x -= metersToPix(BALL_RADIUS);
+    pos.y -= metersToPix(BALL_RADIUS);
     return pos;
 }
 
