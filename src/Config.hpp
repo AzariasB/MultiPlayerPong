@@ -31,8 +31,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define b2_velocityThreshold		0.0f
-
 //Dimensions
 #define ARENA_WIDTH 800
 #define ARENA_HEIGHT 600

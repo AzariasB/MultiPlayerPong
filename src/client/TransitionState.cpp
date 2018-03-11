@@ -25,8 +25,6 @@
 #include "TransitionState.hpp"
 #include "Provider.hpp"
 #include "../Config.hpp"
-#include <tweeny/tweeny.h>
-
 
 const sf::Int32 TransitionState::mTransitionDuration = 100;
 
