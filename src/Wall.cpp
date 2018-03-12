@@ -37,14 +37,14 @@
 #include "Game.hpp"
 
 Wall::Wall(const Game &g, const b2Vec2 &startingPos):
-    mGame(g)
+    PhysicObject(g, PO_TYPE::WALL)
 {
     b2BodyDef def;
     def.position = startingPos;
     def.type = b2_staticBody;
     def.fixedRotation = true;
-
-    mBody = g.world().CreateBody(&def);
+    mBody = mGame.world().CreateBody(&def);
+    mBody->SetUserData(this);
 
     b2PolygonShape boxShape;
     boxShape.SetAsBox(WALL_WITDH/2.f, WALL_HEIGHT/2.f);
@@ -57,7 +57,7 @@ Wall::Wall(const Game &g, const b2Vec2 &startingPos):
     mBody->CreateFixture(&fixture);
 }
 
-sf::Vector2f Wall::getPosition() const
+sf::Vector2f Wall::topLeftPosition() const
 {   
     sf::Vector2f vec = b2VecToSfVect(mBody->GetPosition());
     vec.x -= WALL_WITDH/2.f;
@@ -68,6 +68,4 @@ sf::Vector2f Wall::getPosition() const
 
 Wall::~Wall()
 {
-    mGame.world().DestroyBody(mBody);
-    mBody = 0;
 }

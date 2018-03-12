@@ -41,6 +41,7 @@
 #include "Ball.hpp"
 #include "VectorsUtils.hpp"
 #include "Config.hpp"
+#include "PhysicObject.hpp"
 
 class Game;
 
@@ -49,14 +50,14 @@ class Game;
  * by the player with the up/down arrows, this is used
  * to make the ball bounce, and avoid loosing the game
  */
-class Paddle {
+class Paddle : public PhysicObject {
 public:
 	/**
 	 * @brief Paddle constructor
 	 * @param game reference to the game
 	 * @param startPos starting position of the paddle
 	 */
-    Paddle(const Game &game, b2Vec2 startPos = b2Vec2(0, 0));
+    Paddle(const Game &game, std::size_t pNumber);
 
 	/**
 	 * @brief goUp changes the direction in order to go up
@@ -105,11 +106,17 @@ public:
      */
     void setIsAI(bool isAI);
 
+    /**
+     * @brief getNum the number of the player owning this paddle
+     * @return
+     */
+    std::size_t getNum() const;
+
 	/**
 	 * @brief getPosition
 	 * @return const reference to the paddle's position
 	 */
-    sf::Vector2f getPosition() const;
+    sf::Vector2f topLeftPosition() const override;
 
 	/**
 	 * @brief operator << serializes the paddle to the given sf::Packet
@@ -132,11 +139,6 @@ public:
 private:
     void setYVelocity(float32 yVelocity);
 
-	/**
-	 * @brief game reference to the game object
-	 */
-	const Game &game;
-
     /**
      * @brief mStartPos store the starting position
      * to use when reseting the paddle
@@ -144,12 +146,15 @@ private:
     const b2Vec2 mStartPos;
 
     b2Vec2 mVelocity;
-    /**
-     * @brief mBody box2d body
-     */
-    b2Body *mBody;
 
     sf::Int32 m_widthBoost = 0;
+
+    /**
+     * @brief mNum keep the number
+     * of the player in the paddle
+     * for when a contact happens
+     */
+    const std::size_t mNum;
 
     /**
      * @brief isAI wether this paddle is controlled by an AI

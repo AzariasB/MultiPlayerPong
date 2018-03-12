@@ -45,7 +45,9 @@ SOURCES +=\
     src/Game.cpp \
     src/Player.cpp \
     src/Powerup.cpp \
-    src/Wall.cpp
+    src/Wall.cpp \
+    src/ContactListener.cpp \
+    src/PhysicObject.cpp
 
 HEADERS +=\
     src/Application.hpp \
@@ -59,7 +61,9 @@ HEADERS +=\
     src/Config.hpp \
     src/Powerup.hpp \
     src/lib/twin.hpp \
-    src/Wall.hpp
+    src/Wall.hpp \
+    src/ContactListener.hpp \
+    src/PhysicObject.hpp
 
 DISTFILES +=\
     ka1.ttf \

@@ -23,34 +23,36 @@
  */
 
 /*
- * File:   PlaySoloState.hpp
+ * File:   ContactListener.hpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 12/3/2018
  */
+#ifndef CONTACTLISTENER_HPP
+#define CONTACTLISTENER_HPP
 
-#ifndef PLAYSOLOSTATE_HPP
-#define PLAYSOLOSTATE_HPP
+#include <Box2D/Dynamics/b2WorldCallbacks.h>
+#include <SFML/Config.hpp>
 
-#include "PlayState.hpp"
+class EventManager;
+class PhysicObject;
 
-class Player;
 
-
-class PlaySoloState : public PlayState
+class ContactListener : public b2ContactListener
 {
 public:
-    PlaySoloState();
+    ContactListener(EventManager &evManager);
 
-    void handleEvent(const sf::Event &ev) override;
-
-    virtual ~PlaySoloState();
+    void BeginContact(b2Contact *contact) override;
 
 private:
-    void handleLoss(int looser);
+    EventManager &m_evManager;
 
-    void hitPaddleEvent(std::size_t pNum, b2Vec2 position);
+    bool userDataIsBall(PhysicObject &objA, PhysicObject &objB) const;
 
+public:
+    const sf::Int64 ballHitWallEvent;
+    const sf::Int64 ballHitPaddleEvent;
 };
 
-#endif // PLAYSOLOSTATE_HPP
+#endif // CONTACTLISTENER_HPP

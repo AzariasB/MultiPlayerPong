@@ -41,12 +41,21 @@ Game::Game() :
     mUpperWall(*this, b2Vec2(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
     mLowerWall(*this, b2Vec2(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
     m_countDownTime(sf::seconds(3)),
-    m_state(GAMESTATE::COUNTDOWN)
+    m_state(GAMESTATE::COUNTDOWN),
+    mContactListener(m_evManager)
 {
+    mPhysicWorld.SetContactListener(&mContactListener);
+    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, &Game::paddleHit, this);
+    //nothing for the wall for now
 }
 
 Game::~Game()
 {
+}
+
+void Game::paddleHit(std::size_t pNum, b2Vec2 position)
+{
+    m_evManager.trigger(hitPaddleEvent, pNum, position);
 }
 
 void Game::handleEvent(const sf::Event& ev, Player &player)

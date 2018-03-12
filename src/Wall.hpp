@@ -33,28 +33,25 @@
 #define WALL_HPP
 
 #include <SFML/System/Vector2.hpp>
+#include "PhysicObject.hpp"
+
 class Game;
-class b2Body;
 
 /**
  * @brief The Wall class
  * a wall is a simple wall (a static body)
  * used to make the ball bounce
  */
-class Wall
+class Wall : public PhysicObject
 {
 public:
     Wall(const Game &g, const b2Vec2 &startingPos);
 
-    sf::Vector2f getPosition() const;
+    sf::Vector2f topLeftPosition() const override;
+
+
 
     virtual ~Wall();
-
-private:
-
-    const Game &mGame;
-
-    b2Body *mBody;
 };
 
 #endif // WALL_HPP

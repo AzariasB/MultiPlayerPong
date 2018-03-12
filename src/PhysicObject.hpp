@@ -23,34 +23,36 @@
  */
 
 /*
- * File:   PlaySoloState.hpp
+ * File:   PhysicObject.hpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 12/3/2018
  */
+#ifndef PHYSICOBJECT_HPP
+#define PHYSICOBJECT_HPP
 
-#ifndef PLAYSOLOSTATE_HPP
-#define PLAYSOLOSTATE_HPP
+#include <SFML/System/Vector2.hpp>
 
-#include "PlayState.hpp"
+class b2Body;
+class b2Vec2;
+class Game;
 
-class Player;
-
-
-class PlaySoloState : public PlayState
+class PhysicObject
 {
 public:
-    PlaySoloState();
+    const enum PO_TYPE{WALL, BALL, PADDLE} type;
 
-    void handleEvent(const sf::Event &ev) override;
+    PhysicObject(const Game& game, PO_TYPE poType);
 
-    virtual ~PlaySoloState();
+    const b2Vec2 &getPosition() const;
 
-private:
-    void handleLoss(int looser);
+    virtual sf::Vector2f topLeftPosition() const = 0;
 
-    void hitPaddleEvent(std::size_t pNum, b2Vec2 position);
+    virtual ~PhysicObject();
+protected:
+    const Game &mGame;
 
+    b2Body *mBody;
 };
 
-#endif // PLAYSOLOSTATE_HPP
+#endif // PHYSICOBJECT_HPP

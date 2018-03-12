@@ -31,10 +31,10 @@
 
 #include "Player.hpp"
 
-Player::Player(Game& game, int num) :
+Player::Player(Game& game, std::size_t num) :
 m_game(game),
 m_num(num),
-m_paddle(game, num == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
+m_paddle(game, num)
 {
 
 }

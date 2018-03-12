@@ -38,6 +38,7 @@ PlaySoloState::PlaySoloState():
     pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
     pr::game().getPlayer2().getPaddle().setIsAI(true);
     pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);
+    pr::connect(pr::game().hitPaddleEvent, &PlaySoloState::hitPaddleEvent, this);
 }
 
 void PlaySoloState::handleEvent(const sf::Event &ev)
@@ -50,6 +51,13 @@ void PlaySoloState::handleLoss(int looser)
     bool playerWon = looser == 2;
     pr::game().getPlayer1().setIsWinner(playerWon);
     pr::game().getPlayer2().setIsWinner(!playerWon);
+}
+
+void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
+{
+    B2_NOT_USED(position);
+    Player &p = pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
+    p.gainPoint();
 }
 
 PlaySoloState::~PlaySoloState()

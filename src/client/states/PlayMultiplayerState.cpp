@@ -41,7 +41,7 @@ PlayMultiplayerState::PlayMultiplayerState() :
     listeningThread(&PlayMultiplayerState::listenSocket, this)
 {
     pr::connect(
-                pr::game().bounceEvent,
+                pr::game().hitPaddleEvent,
                 &PlayMultiplayerState::bounced,
                 this
                 ); //Subscribe to bounce event

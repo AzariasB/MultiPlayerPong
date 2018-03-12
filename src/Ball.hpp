@@ -38,9 +38,9 @@
 #include "Math.hpp"
 #include "VectorsUtils.hpp"
 #include "Powerup.hpp"
+#include "PhysicObject.hpp"
 
 class Game;
-class b2Body;
 namespace sf {
     class Packet;
 }
@@ -51,7 +51,7 @@ namespace sf {
  * the two paddles. It has a circular shape. If the ball gets out
  * of the field, the player that missed it looses.
  */
-class Ball {
+class Ball : public PhysicObject {
 public:
 	/**
 	 * @brief Ball constructor
@@ -90,13 +90,7 @@ public:
      * @brief getPosition the current position (uper-left corner)
      * @return the current position of the ball
      */
-    sf::Vector2f getPosition() const;
-
-    /**
-     * @brief getBodyPosition the body position
-     * @return a const reference to the body position
-     */
-    const b2Vec2 &getBodyPosition() const;
+    sf::Vector2f topLeftPosition() const override;
 
 	/**
 	 * @brief operator << seraializes the ball into a sf::Packet
@@ -116,16 +110,6 @@ public:
 
 	virtual ~Ball();
 private:
-	/**
-	 * @brief a reference to the game object
-	 */
-	const Game &game;
-
-    /**
-     * @brief mBody box2d body
-     */
-    b2Body *mBody;
-
     sf::Int32 m_radiusBoost;
 };
 

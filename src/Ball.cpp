@@ -37,14 +37,15 @@
 #include "Game.hpp"
 
 Ball::Ball(const Game& game) :
-game(game)
+PhysicObject(game, PO_TYPE::BALL)
 {
     b2BodyDef mBodyDef;
     mBodyDef.position = b2Vec2(BALL_START_X, BALL_START_Y);
     mBodyDef.type = b2_dynamicBody;
-    mBody = game.world().CreateBody(&mBodyDef);
+    mBody = mGame.world().CreateBody(&mBodyDef);
 
     mBody->ApplyLinearImpulse(b2Vec2(BALL_DIR_X, BALL_DIR_Y), mBody->GetWorldCenter(), false);
+    mBody->SetUserData(this);
 
     b2CircleShape mShape;
     mShape.m_p.Set(0,0);
@@ -56,13 +57,11 @@ game(game)
     def.density = 0.f;
     def.friction = 0.f;
 
-    auto *f = mBody->CreateFixture(&def);
+    mBody->CreateFixture(&def);
 }
 
 Ball::~Ball()
 {
-    game.world().DestroyBody(mBody);
-    mBody = 0;
 }
 
 void Ball::update(const sf::Time &elapsed)
@@ -94,7 +93,7 @@ void Ball::retract()
     m_radiusBoost = -BALL_RADIUS_POWERUP;
 }
 
-sf::Vector2f Ball::getPosition() const
+sf::Vector2f Ball::topLeftPosition() const
 {
     sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
     pos.x -= BALL_RADIUS;
@@ -102,10 +101,6 @@ sf::Vector2f Ball::getPosition() const
     return pos;
 }
 
-const b2Vec2 &Ball::getBodyPosition() const
-{
-    return mBody->GetPosition();
-}
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)
 {

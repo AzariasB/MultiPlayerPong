@@ -61,7 +61,7 @@
 #define BALL_START_X (ARENA_WIDTH/2.f)
 #define BALL_START_Y (ARENA_HEIGHT/2.f)
 
-#define BALL_DIR_X 2.3
+#define BALL_DIR_X -3
 #define BALL_DIR_Y 1
 
 //Powerups

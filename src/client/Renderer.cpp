@@ -74,7 +74,7 @@ void Renderer::renderBall(const Ball& ball)
     sf::CircleShape circle(BALL_RADIUS);
 
     circle.setFillColor(sf::Color::Blue);
-    circle.setPosition(ball.getPosition());
+    circle.setPosition(ball.topLeftPosition());
     render(circle);
 }
 
@@ -147,7 +147,7 @@ void Renderer::renderPaddle(const Paddle& paddle)
 
     rectangle.setFillColor(sf::Color::Yellow);
 
-    rectangle.setPosition(paddle.getPosition());
+    rectangle.setPosition(paddle.topLeftPosition());
 
     render(rectangle);
 }
@@ -156,7 +156,7 @@ void Renderer::renderWall(const Wall &wall)
 {
     sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
     rect.setFillColor(sf::Color::White);
-    rect.setPosition(wall.getPosition());
+    rect.setPosition(wall.topLeftPosition());
     render(rect);
 }
 

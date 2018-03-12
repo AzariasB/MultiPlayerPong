@@ -50,7 +50,7 @@ public:
 	 * @param game reference to the game
 	 * @param num the player's number
 	 */
-	Player(Game &game, int num);
+    Player(Game &game, std::size_t num);
 
 	/**
 	 * @brief reset resets the inner state of the player

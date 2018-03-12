@@ -45,7 +45,9 @@ SOURCES +=\
     src/Game.cpp \
     src/Player.cpp \
     src/Powerup.cpp \
-    src/Wall.cpp
+    src/Wall.cpp \
+    src/PhysicObject.cpp \
+    src/ContactListener.cpp
 
 HEADERS +=\
     src/Application.hpp \
@@ -58,4 +60,6 @@ HEADERS +=\
     src/VectorsUtils.hpp \
     src/Config.hpp \
     src/Powerup.hpp \
-    src/Wall.hpp
+    src/Wall.hpp \
+    src/PhysicObject.hpp \
+    src/ContactListener.hpp

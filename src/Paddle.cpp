@@ -37,15 +37,17 @@
 #include "Paddle.hpp"
 #include "Game.hpp"
 
-Paddle::Paddle(const Game &game, b2Vec2 startPos) :
-game(game),
-mStartPos(startPos)
+Paddle::Paddle(const Game &game, std::size_t pNumber) :
+PhysicObject(game, PO_TYPE::PADDLE),
+mNum(pNumber),
+mStartPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
 {
     b2BodyDef bodyDef;
-    bodyDef.position = startPos;
+    bodyDef.position = mStartPos;
     bodyDef.type = b2_dynamicBody;
-    mBody = game.world().CreateBody(&bodyDef);
+    mBody = mGame.world().CreateBody(&bodyDef);
     mBody->SetFixedRotation(true);
+    mBody->SetUserData(this);
 
     b2PolygonShape mShape;
     mShape.SetAsBox(PADDLE_WIDTH/2.f, PADDLE_HEIGHT/2.f);
@@ -59,7 +61,7 @@ mStartPos(startPos)
     mBody->CreateFixture(&fDef);
 }
 
-sf::Vector2f Paddle::getPosition() const
+sf::Vector2f Paddle::topLeftPosition() const
 {
     sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
     pos.x -= PADDLE_WIDTH/2.f;
@@ -76,8 +78,6 @@ void Paddle::reset()
 
 Paddle::~Paddle()
 {
-    game.world().DestroyBody(mBody);
-    mBody = 0;
 }
 
 void Paddle::goDown()
@@ -111,6 +111,12 @@ void Paddle::setYVelocity(float32 yVelocity)
     mBody->SetLinearVelocity(mVelocity);
 }
 
+std::size_t Paddle::getNum() const
+{
+    return mNum;
+}
+
+
 void Paddle::setIsAI(bool isAI)
 {
     m_isAI = isAI;
@@ -128,7 +134,7 @@ void Paddle::update(const sf::Time &elapsed)
     B2_NOT_USED(elapsed);
     if(!m_isAI)return;
 
-    float ballYPosition = game.getBall().getBodyPosition().y;
+    float ballYPosition = mGame.getBall().getPosition().y;
 
     float mYPosition = mBody->GetPosition().y;
     if(mYPosition < ballYPosition){

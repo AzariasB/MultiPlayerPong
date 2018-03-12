@@ -50,7 +50,7 @@ Lobby::Lobby() :
     listeningThread(&Lobby::listenSockets, this),
     m_nextPowerup(sf::seconds(3))
 {
-    game.getEventManager().declareListener(game.bounceEvent, &Lobby::ballBounce, this);
+    game.getEventManager().declareListener(game.hitPaddleEvent, &Lobby::ballBounce, this);
     game.getEventManager().declareListener(game.lostEvent, &Lobby::handleLoss, this);
     game.getEventManager().declareListener(game.countdownEndedEvent, &Game::setGameState, &game, GAMESTATE::PLAYING);
 }

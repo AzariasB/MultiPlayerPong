@@ -23,34 +23,31 @@
  */
 
 /*
- * File:   PlaySoloState.hpp
+ * File:   PhysicObject.cpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 12/3/2018
  */
 
-#ifndef PLAYSOLOSTATE_HPP
-#define PLAYSOLOSTATE_HPP
+#include <Box2D/Common/b2Math.h>
 
-#include "PlayState.hpp"
+#include "PhysicObject.hpp"
+#include "Game.hpp"
 
-class Player;
-
-
-class PlaySoloState : public PlayState
+PhysicObject::PhysicObject(const Game &game, PO_TYPE poType):
+    type(poType),
+    mGame(game)
 {
-public:
-    PlaySoloState();
+}
 
-    void handleEvent(const sf::Event &ev) override;
 
-    virtual ~PlaySoloState();
+const b2Vec2 &PhysicObject::getPosition() const
+{
+    return mBody->GetPosition();
+}
 
-private:
-    void handleLoss(int looser);
-
-    void hitPaddleEvent(std::size_t pNum, b2Vec2 position);
-
-};
-
-#endif // PLAYSOLOSTATE_HPP
+PhysicObject::~PhysicObject()
+{
+    mGame.world().DestroyBody(mBody);
+    mBody = 0;
+}

@@ -41,6 +41,7 @@
 #include "EventManager.hpp"
 #include "Powerup.hpp"
 #include "Wall.hpp"
+#include "ContactListener.hpp"
 
 /**
  * @brief The GAMESTATE enum current state of the game
@@ -228,7 +229,9 @@ private:
 	 * @brief updatePlaying updates the game when in playing mode
 	 * @param elapsed time elapsed since last update
 	 */
-	void updatePlaying(const sf::Time &elapsed);
+    void updatePlaying(const sf::Time &elapsed);
+
+    void paddleHit(std::size_t pNum, b2Vec2 position);
 
     /**
      * @brief gravity world gravity
@@ -240,7 +243,6 @@ private:
      * @brief mPhysicWorld the box2d world
      */
     mutable b2World mPhysicWorld;
-
 
 	/**
 	 * @brief mainBall the ball object for the game
@@ -298,9 +300,16 @@ private:
 	 */
 	mutable sf::Mutex mutex;
 
+    /**
+     * @brief mContactListener
+     * listens at the contacts between
+     * the bodies in the world
+     */
+    ContactListener mContactListener;
+
 	//"signals"
 public:
-	const sf::Uint64 bounceEvent = m_evManager.nextEventCode();
+    const sf::Uint64 hitPaddleEvent = m_evManager.nextEventCode();
 	const sf::Uint64 lostEvent = m_evManager.nextEventCode();
 	const sf::Uint64 countdownEndedEvent = m_evManager.nextEventCode();
 };
