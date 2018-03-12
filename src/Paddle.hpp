@@ -137,6 +137,12 @@ private:
 	 */
 	const Game &game;
 
+    /**
+     * @brief mStartPos store the starting position
+     * to use when reseting the paddle
+     */
+    const b2Vec2 mStartPos;
+
     b2Vec2 mVelocity;
     /**
      * @brief mBody box2d body

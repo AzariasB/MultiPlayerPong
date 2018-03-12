@@ -57,8 +57,6 @@ game(game)
     def.friction = 0.f;
 
     auto *f = mBody->CreateFixture(&def);
-
-    std::cout << f->GetDensity() << "\n";
 }
 
 Ball::~Ball()
@@ -82,10 +80,8 @@ void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
 
 void Ball::reset()
 {
-//    b2Vec2 pos(BALL_START_POS.x, BALL_START_POS.y);
-//    mBody->SetTransform(pos, mBody->GetAngle());
-//    b2Vec2 dir(BALL_START_DIR.x, BALL_START_DIR.y);
-//    mBody->SetLinearVelocity(dir);
+    mBody->SetTransform(b2Vec2(BALL_START_X, BALL_START_Y),0);
+    mBody->SetLinearVelocity(b2Vec2(BALL_DIR_X, BALL_DIR_Y));
 }
 
 void Ball::extend()

@@ -38,7 +38,8 @@
 #include "Game.hpp"
 
 Paddle::Paddle(const Game &game, b2Vec2 startPos) :
-game(game)
+game(game),
+mStartPos(startPos)
 {
     b2BodyDef bodyDef;
     bodyDef.position = startPos;
@@ -68,8 +69,9 @@ sf::Vector2f Paddle::getPosition() const
 
 void Paddle::reset()
 {
-    /* position = m_initPosition;
-    direction = sf::Vector2f(0,0); */
+    mBody->SetTransform(mStartPos, mBody->GetAngle());
+    mBody->SetLinearVelocity(b2Vec2());
+    mVelocity.y = 0;
 }
 
 Paddle::~Paddle()
@@ -127,8 +129,6 @@ void Paddle::update(const sf::Time &elapsed)
     if(!m_isAI)return;
 
     float ballYPosition = game.getBall().getBodyPosition().y;
-
-    std::cout << mBody->GetLinearVelocity().y << "\n";
 
     float mYPosition = mBody->GetPosition().y;
     if(mYPosition < ballYPosition){
