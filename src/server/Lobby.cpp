@@ -151,7 +151,7 @@ bool Lobby::tryAddPowerup(const sf::Time &elapsed)
     return true;
 }
 
-void Lobby::ballBounce(int pNumber, sf::Vector2f &pos)
+void Lobby::ballBounce(std::size_t pNumber, b2Vec2 &pos)
 {
     if (pNumber == 1)
         game.getPlayer1().gainPoint();

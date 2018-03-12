@@ -112,7 +112,7 @@ public:
 	 * handles the ball bouncing
 	 * @param pNumber the player's number who's hitting the ball
 	 */
-	void ballBounce(int pNumber, sf::Vector2f &pos);
+    void ballBounce(std::size_t pNumber, b2Vec2 &pos);
 	
 	/**
 	 * @brief handleLoss call when the event "playerLost" is fired
