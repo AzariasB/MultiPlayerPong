@@ -34,7 +34,8 @@
 #include <QDebug>
 
 #include "ClientApp.hpp"
-#include "PlayState.hpp"
+#include "PlayMultiplayerState.hpp"
+#include "PlaySoloState.hpp"
 #include "WaitingState.hpp"
 #include "EndState.hpp"
 #include "MenuState.hpp"
@@ -75,12 +76,13 @@ ClientApp::~ClientApp()
 void ClientApp::initStates()
 {
     stateMachine.addState<WaitingState>(STATE_TYPE::WAITING);
-    stateMachine.addState<PlayState>(STATE_TYPE::PLAY);
+    stateMachine.addState<PlayMultiplayerState>(STATE_TYPE::PLAY_MULTIPLAYER);
     stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
     stateMachine.addState<MenuState>(STATE_TYPE::MENU);
     stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
     stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
     stateMachine.addState<TransitionState>(STATE_TYPE::TRANSITION);
+    stateMachine.addState<PlaySoloState>(STATE_TYPE::PLAY_SOLO);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)
@@ -121,6 +123,9 @@ void ClientApp::resizeEvent(const sf::Event &event)
 
 void ClientApp::run(int argc, char** argv)
 {
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
     stateMachine.setCurrentState(STATE_TYPE::MENU);
     sf::Clock clock;
     while (window.isOpen()) {

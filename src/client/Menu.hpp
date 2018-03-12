@@ -118,7 +118,7 @@ private:
 	 */
 	std::vector<std::unique_ptr<Button>> m_buttons;
 
-    int m_selectedButton = 0;
+    std::size_t m_selectedButton = 0;
 
 	/**
 	 * @brief m_sprites all the sprites of the menu

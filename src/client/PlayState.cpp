@@ -22,32 +22,23 @@
  * THE SOFTWARE.
  */
 
-/* 
+/*
  * File:   PlayState.cpp
  * Author: azarias
  *
- * Created on 16 octobre 2017, 17:49
+ * Created on 12/03/2018
  */
 
-#include <qglobal.h>
-#include <SFML/Network/IpAddress.hpp>
-
-#include "PlayState.hpp"
+#include "../Config.hpp"
 #include "Provider.hpp"
+ #include "PlayState.hpp"
 #include "ClientApp.hpp"
 
-PlayState::PlayState() :
-    listeningThread(&PlayState::listenSocket, this),
+PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
     m_p2ScoreText("0", pr::resourceManager().getFont()),
     m_countdownText("3", pr::resourceManager().getFont())
 {
-    pr::connect(
-                pr::game().bounceEvent,
-                &PlayState::bounced,
-                this
-                ); //Subscribe to bounce event
-
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
     m_countdownText.setPosition(
@@ -56,19 +47,20 @@ PlayState::PlayState() :
                 );
 }
 
-PlayState::~PlayState()
+void PlayState::update(const sf::Time &elapsed)
 {
+    if (pr::game().playerWon())
+        pr::stateMachine().setCurrentState(STATE_TYPE::FINISHED);
+    else
+        pr::game().update(elapsed);
+
+    pr::particleGenerator().update(elapsed);
+    m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
+    m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
+    m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
 }
 
-void PlayState::bounced(int pNum, sf::Vector2f position)
-{
-    Q_UNUSED(pNum);
-    pr::soundEngine().playSound(SoundEngine::BOUNCE);
-    pr::particleGenerator().explode(position);//get position
-    pr::renderer().shake();
-}
-
-void PlayState::draw(Renderer& renderer) const
+void PlayState::draw(Renderer &renderer) const
 {
     if(pr::game().isCountingDown()){
         renderer.render(m_countdownText);
@@ -91,55 +83,23 @@ void PlayState::draw(Renderer& renderer) const
     renderer.render(pr::particleGenerator());
 }
 
-void PlayState::handleEvent(const sf::Event& ev)
+PlayState::~PlayState()
 {
-    sf::Event realEv = pr::keyBinding().toGameEvent(ev);
 
-    pr::game().handleEvent(realEv, pr::player());
-    if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
-        sf::Packet p;
-        p << realEv.type << realEv.key.code;
-        pr::socket().send(p);
-    }
 }
 
-void PlayState::update(const sf::Time &elapsed)
+void PlayState::handleEvent(const sf::Event &ev)
 {
-    if (pr::game().playerWon())
-        pr::stateMachine().setCurrentState(STATE_TYPE::FINISHED);
-    else
-        pr::game().update(elapsed);
-
-    pr::particleGenerator().update(elapsed);
-    m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
-    m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
-    m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
-
+    sf::Event realEv = pr::keyBinding().toGameEvent(ev);
+    pr::game().handleEvent(realEv, player());
 }
 
 void PlayState::onEnter(BaseStateData *data)
 {
-    listeningThread.launch();
+    Q_UNUSED(data);
 }
 
 void PlayState::onLeave()
 {
-    listeningThread.terminate();
-}
 
-void PlayState::listenSocket()
-{
-    while (1) {
-        sf::Packet p;
-        if(pr::socket().getRemoteAddress() == sf::IpAddress::None){
-            std::cerr << "Socket is null \n";
-            return;
-        }
-        sf::Socket::Status rcvStatus = pr::socket().receive(p);
-        if (rcvStatus == sf::Socket::Done) {
-            p >> pr::game();
-        } else if (rcvStatus == sf::Socket::Disconnected) {
-            //Send message to main thread
-        }
-    }
 }

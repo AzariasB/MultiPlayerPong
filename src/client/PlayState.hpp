@@ -22,99 +22,63 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   PlayState.h
+/*
+ * File:   PlayState.hpp
  * Author: azarias
  *
- * Created on 16 octobre 2017, 17:49
+ * Created on 12/03/2018
  */
 
-#ifndef PLAYSTATE_H
-#define PLAYSTATE_H
+#ifndef PLAYSTATE_HPP
+#define PLAYSTATE_HPP
 
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Text.hpp>
 #include "State.hpp"
 
-/**
- * @brief The PlayState class state when the player is actually playing
- * the state has two threads : one that listens for the events and draws
- * stuff in the screen, and another thread to listen at the sockets, for
- * the server's input
- */
-class PlayState : public State {
-public:
+class Player;
 
-	/**
-	 * @brief PlayState constructor
-	 * @param client a reference to the client's app
-	 */
+class PlayState : public State
+{
+public:
     PlayState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    virtual void draw(Renderer &renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    virtual void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    virtual void handleEvent(const sf::Event &ev) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
+    virtual void onEnter(BaseStateData *data) override;
 
-	/**
-	 * @brief onLeave inherited function
-	 */
-	void onLeave() override;
+    virtual void onLeave() override;
 
-	/**
-	 * @brief listenSocket function run by the thread
-	 */
-	void listenSocket();
+    virtual ~PlayState();
 
-	void bounced(int pNum, sf::Vector2f position);
+protected:
 
-	virtual ~PlayState();
+    virtual Player &player() = 0;
+
 private:
 
-	/**
-	 * @brief listeningThread the threads that listens at
-	 * the sockets input from the server
-	 */
-	sf::Thread listeningThread;
-	/**
-	 * @brief m_p1ScoreText score of the player1
-	 */
-	sf::Text m_p1ScoreText;
-	/**
-	 * @brief m_p2ScoreText score of the player2
-	 */
-	sf::Text m_p2ScoreText;
+
+    /**
+     * @brief m_p1ScoreText score of the player1
+     */
+    sf::Text m_p1ScoreText;
+    /**
+     * @brief m_p2ScoreText score of the player2
+     */
+    sf::Text m_p2ScoreText;
 
     /**
      * @brief m_countdownText text displayed for
      * the countdown
      */
-	sf::Text m_countdownText;
+    sf::Text m_countdownText;
 
-	/**
-	 * @brief gameFinisehd wether the game ended
-	 */
-	bool gameFinisehd = false;
+    /**
+     * @brief gameFinisehd wether the game ended
+     */
+    bool gameFinisehd = false;
 };
 
-#endif /* PLAYSTATE_H */
-
+#endif // PLAYSTATE_HPP

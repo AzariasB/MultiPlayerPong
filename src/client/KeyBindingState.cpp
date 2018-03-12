@@ -105,7 +105,7 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
 
 void KeyBindingState::onEnter(BaseStateData *data)
 {
-
+    Q_UNUSED(data);
 }
 
 void KeyBindingState::onLeave()
@@ -115,7 +115,7 @@ void KeyBindingState::onLeave()
 
 void KeyBindingState::update(const sf::Time &elapsed)
 {
-
+    Q_UNUSED(elapsed)
 }
 
 void KeyBindingState::cancelDialog()

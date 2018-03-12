@@ -3,7 +3,7 @@ SOURCES +=\
     $$PWD/ClientApp.cpp \
     $$PWD/EndState.cpp \
     $$PWD/MenuState.cpp \
-    $$PWD/PlayState.cpp \
+    $$PWD/PlayMultiplayerState.cpp \
     $$PWD/Renderer.cpp \
     $$PWD/ResourcesManager.cpp \
     $$PWD/SoundEngine.cpp \
@@ -20,14 +20,16 @@ SOURCES +=\
     $$PWD/Animation.cpp \
     $$PWD/Provider.cpp \
     $$PWD/TransitionState.cpp \
-    $$PWD/State.cpp
+    $$PWD/State.cpp \
+    $$PWD/PlaySoloState.cpp \
+    $$PWD/PlayState.cpp
 
 HEADERS +=\
     $$PWD/Button.hpp \
     $$PWD/ClientApp.hpp \
     $$PWD/EndState.hpp \
     $$PWD/MenuState.hpp \
-    $$PWD/PlayState.hpp \
+    $$PWD/PlayMultiplayerState.hpp \
     $$PWD/Renderer.hpp \
     $$PWD/ResourcesManager.hpp \
     $$PWD/SoundEngine.hpp \
@@ -45,4 +47,6 @@ HEADERS +=\
     $$PWD/KeyBindingState.hpp \
     $$PWD/Animation.hpp \
     $$PWD/Provider.hpp \
-    $$PWD/TransitionState.hpp
+    $$PWD/TransitionState.hpp \
+    $$PWD/PlaySoloState.hpp \
+    $$PWD/PlayState.hpp

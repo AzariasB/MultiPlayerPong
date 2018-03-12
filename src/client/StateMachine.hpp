@@ -54,10 +54,10 @@ public:
 	 * @param stateLabel the id for the inserted state, will be used to retreive the state later
 	 */
 	template<typename T>
-	void addState(int stateLabel)
+    typename std::enable_if<std::is_base_of<State,T>::value, State&>::type
+    addState(int stateLabel)
 	{
-		static_assert(std::is_base_of<State, T>::value, "T must extend State");
-        states[stateLabel] = std::make_unique<T>();
+        return *(states[stateLabel] = std::make_unique<T>());
     }
 
 	/**

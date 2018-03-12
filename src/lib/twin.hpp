@@ -614,6 +614,7 @@ enum easing{
             case bounceOut:return bounceOutImpl<T>;
             case bounceInOut:return bounceInOutImpl<T>;
             }
+            return linearImpl<T>;
         }
 
         /**

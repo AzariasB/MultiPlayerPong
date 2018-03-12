@@ -46,11 +46,13 @@ MenuState::MenuState() :
     m_inputDialog(Dialog::input("IP adress")),
     m_messageDialog(Dialog::message("", "") )
 {
-	const Button &playButton = *m_menu.addButton("Play", 0,0);
-	const Button &optionButton = *m_menu.addButton("Options", 0, playButton.getHeight());
-	const Button &quitButton = *m_menu.addButton("Quit", 0, playButton.getHeight() + optionButton.getHeight());
+    const Button &soloButton = *m_menu.addButton("Solo",0,0);
+    const Button &multiPlayerButton = *m_menu.addButton("Multiplayer", 0, soloButton.getHeight());
+    const Button &optionButton = *m_menu.addButton("Options", 0, multiPlayerButton.getHeight() + soloButton.getHeight());
+    const Button &quitButton = *m_menu.addButton("Quit", 0, multiPlayerButton.getHeight() + optionButton.getHeight() + soloButton.getHeight());
 
-    pr::connect(playButton.clickedEvent, &Dialog::show, m_inputDialog);
+
+    pr::connect(multiPlayerButton.clickedEvent, &Dialog::show, m_inputDialog);
     pr::connect(optionButton.clickedEvent, &State::goToState, static_cast<State*>(this), std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
     pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
@@ -102,7 +104,7 @@ void MenuState::handleEvent(const sf::Event& ev)
 
 void MenuState::update(const sf::Time &elapsed)
 {
-	//Nothing to do for now
+    Q_UNUSED(elapsed);
 }
 
 bool MenuState::isValidIp(const std::string &enteredIp) const
@@ -112,7 +114,7 @@ bool MenuState::isValidIp(const std::string &enteredIp) const
 
 void MenuState::onEnter(BaseStateData *data)
 {
-
+    Q_UNUSED(data);
 }
 
 void MenuState::onLeave()

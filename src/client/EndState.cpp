@@ -83,6 +83,7 @@ void EndState::handleEvent(const sf::Event& ev)
 
 void EndState::onEnter(BaseStateData *data)
 {
+    Q_UNUSED(data);
     m_messageDialog->setMessage("Your score :" + std::to_string(pr::player().getScore()));
     m_messageDialog->setTitle(ClientApp::getInstance().isWinner() ? "You won ! " : "You lost");
 }
@@ -95,5 +96,5 @@ void EndState::onLeave()
 
 void EndState::update(const sf::Time &elapsed)
 {
-
+    Q_UNUSED(elapsed);
 }

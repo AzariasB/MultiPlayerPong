@@ -107,7 +107,7 @@ void Menu::setSeletedIndex(int nwIndex)
 
 void Menu::changeSelection(int dir)
 {
-    int oldSelected = m_selectedButton;
+    std::size_t oldSelected = m_selectedButton;
     if(dir == -1){
         if(m_selectedButton == 0)return;
         m_selectedButton--;

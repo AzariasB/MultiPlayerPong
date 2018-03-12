@@ -75,6 +75,8 @@ void WaitingState::cancelClicked()
 
 void WaitingState::update(const sf::Time &elapsed)
 {
+    Q_UNUSED(elapsed);
+
 	//Blinking point
 	bool startGame;
 	canBeginMutex.lock();
@@ -93,7 +95,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	m_messageDialog->setTitle(text.toAnsiString());
 
 	if (startGame)
-        goToState((int)STATE_TYPE::PLAY, TransitionData::GO_LEFT);
+        goToState((int)STATE_TYPE::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
 }
 

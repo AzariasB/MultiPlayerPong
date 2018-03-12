@@ -23,52 +23,38 @@
  */
 
 /*
- * File:   Config.h
+ * File:   PlaySoloState.hpp
  * Author: azarias
  *
- * Created on 24/10/2017
+ * Created on 12/03/2018
  */
-#ifndef CONFIG_H
-#define CONFIG_H
 
-//Dimensions (all in meters)
-//Arena
-#define SF_ARENA_WIDTH 800
-#define SF_ARENA_HEIGHT 600
+#ifndef PLAYSOLOSTATE_HPP
+#define PLAYSOLOSTATE_HPP
 
-#define ARENA_WIDTH 12.5
-#define ARENA_HEIGHT 9.375
+#include "PlayState.hpp"
 
-//Paddle
-#define PADDLE_WIDTH 0.1
-#define PADDLE_HEIGHT 1
+class Player;
 
-//ball
-#define BALL_RADIUS  0.2
 
-//dialog
-#define SF_DIALOG_WIDTH 700
-#define SF_DIALOG_HEIGHT 200
+class PlaySoloState : public PlayState
+{
+public:
+    PlaySoloState();
 
-//powerup
-#define POWERUP_SIDE 50
+    void update(const sf::Time &elapsed) override;
 
-//walls
-#define WALL_WITDH ARENA_WIDTH
-#define WALL_HEIGHT PADDLE_WIDTH
+    void handleEvent(const sf::Event &ev) override;
 
-//Starting conf
-#define BALL_START_X (ARENA_WIDTH/2.f)
-#define BALL_START_Y (ARENA_HEIGHT/2.f)
+    virtual ~PlaySoloState();
 
-#define BALL_DIR_X 2.3
-#define BALL_DIR_Y 1
+protected:
+    Player &player() override;
 
-//Powerups
-#define PADDLE_WIDTH_POWERUP 10
-#define BALL_RADIUS_POWERUP 10
+private:
 
-#define VELOCITY_ITERATIONS 8
-#define POSITION_ITERATIONS 3
 
-#endif // CONFIG_H
+
+};
+
+#endif // PLAYSOLOSTATE_HPP

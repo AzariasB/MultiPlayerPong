@@ -52,7 +52,8 @@
  */
 enum STATE_TYPE {
 	MENU,//First state
-	PLAY,
+    PLAY_MULTIPLAYER,
+    PLAY_SOLO,
 	OPTIONS,
     KEY_BINDINGS,
 	WAITING,
