@@ -35,13 +35,9 @@
 PlaySoloState::PlaySoloState():
     PlayState()
 {
-
-}
-
-void PlaySoloState::update(const sf::Time &elapsed)
-{
-    PlayState::update(elapsed);
-    //update AI ?
+    pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
+    pr::game().getPlayer2().getPaddle().setIsAI(true);
+    pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);
 }
 
 void PlaySoloState::handleEvent(const sf::Event &ev)
@@ -49,12 +45,12 @@ void PlaySoloState::handleEvent(const sf::Event &ev)
     PlayState::handleEvent(ev);
 }
 
-Player &PlaySoloState::player()
+void PlaySoloState::handleLoss(int looser)
 {
-    return pr::game().getPlayer1();//solo game => player 1 is human, player 2 is computer
+    bool playerWon = looser == 2;
+    pr::game().getPlayer1().setIsWinner(playerWon);
+    pr::game().getPlayer2().setIsWinner(!playerWon);
 }
-
-
 
 PlaySoloState::~PlaySoloState()
 {

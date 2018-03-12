@@ -39,6 +39,8 @@ PlayState::PlayState():
     m_p2ScoreText("0", pr::resourceManager().getFont()),
     m_countdownText("3", pr::resourceManager().getFont())
 {
+    ClientApp::getInstance().setPNumber(1);
+
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
     m_countdownText.setPosition(
@@ -66,11 +68,13 @@ void PlayState::draw(Renderer &renderer) const
         renderer.render(m_countdownText);
     }
 
+    renderer.scale(M_TO_P);//meter to pixel
     renderer.renderBall(pr::game().getBall());
     renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
     renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
     renderer.renderWall(pr::game().upperWall());
     renderer.renderWall(pr::game().lowerWall());
+    renderer.scale(P_TO_M);//back to normal pixel
 
     renderer.render(m_p1ScoreText);
     renderer.render(m_p2ScoreText);
@@ -91,7 +95,7 @@ PlayState::~PlayState()
 void PlayState::handleEvent(const sf::Event &ev)
 {
     sf::Event realEv = pr::keyBinding().toGameEvent(ev);
-    pr::game().handleEvent(realEv, player());
+    pr::game().handleEvent(realEv, pr::player());
 }
 
 void PlayState::onEnter(BaseStateData *data)

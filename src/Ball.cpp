@@ -54,8 +54,11 @@ game(game)
     def.shape = &mShape;
     def.restitution = 1.f;
     def.density = 0.f;
+    def.friction = 0.f;
 
-    mBody->CreateFixture(&def);
+    auto *f = mBody->CreateFixture(&def);
+
+    std::cout << f->GetDensity() << "\n";
 }
 
 Ball::~Ball()
@@ -95,12 +98,17 @@ void Ball::retract()
     m_radiusBoost = -BALL_RADIUS_POWERUP;
 }
 
-const sf::Vector2f &Ball::getPosition() const
+sf::Vector2f Ball::getPosition() const
 {
     sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-    pos.x -= metersToPix(BALL_RADIUS);
-    pos.y -= metersToPix(BALL_RADIUS);
+    pos.x -= BALL_RADIUS;
+    pos.y -= BALL_RADIUS;
     return pos;
+}
+
+const b2Vec2 &Ball::getBodyPosition() const
+{
+    return mBody->GetPosition();
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)

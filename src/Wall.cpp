@@ -31,23 +31,26 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <Box2D/Dynamics/b2Body.h>
+#include <limits>
 
 #include "Wall.hpp"
 #include "Game.hpp"
 
-Wall::Wall(const Game &g, const b2Vec2 &startingPos)
+Wall::Wall(const Game &g, const b2Vec2 &startingPos):
+    mGame(g)
 {
     b2BodyDef def;
     def.position = startingPos;
     def.type = b2_staticBody;
+    def.fixedRotation = true;
 
     mBody = g.world().CreateBody(&def);
 
     b2PolygonShape boxShape;
-    boxShape.SetAsBox(WALL_WITDH, WALL_HEIGHT);
+    boxShape.SetAsBox(WALL_WITDH/2.f, WALL_HEIGHT/2.f);
 
     b2FixtureDef fixture;
-    fixture.restitution = 1.f;
+    fixture.restitution = 0.f;
     fixture.friction = 0.f;
     fixture.shape = &boxShape;
 
@@ -57,7 +60,14 @@ Wall::Wall(const Game &g, const b2Vec2 &startingPos)
 sf::Vector2f Wall::getPosition() const
 {   
     sf::Vector2f vec = b2VecToSfVect(mBody->GetPosition());
-    vec.x -= metersToPix(WALL_WITDH)/2.f;
-    vec.y -= metersToPix(WALL_HEIGHT)/2.f;
+    vec.x -= WALL_WITDH/2.f;
+    vec.y -= WALL_HEIGHT/2.f;
     return vec;
+}
+
+
+Wall::~Wall()
+{
+    mGame.world().DestroyBody(mBody);
+    mBody = 0;
 }

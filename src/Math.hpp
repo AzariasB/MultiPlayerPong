@@ -14,6 +14,7 @@
 
 //Meters to pixel ratio
 #define M_TO_P 64.f
+#define P_TO_M 1/64.f
 
 /**
  * @brief rand rand value between the given bounds

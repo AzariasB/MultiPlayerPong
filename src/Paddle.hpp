@@ -99,17 +99,17 @@ public:
 	 */
 	void reset();
 
+    /**
+     * @brief setIsAI changes the ai state of the paddle
+     * @param isAI wether the paddle is controlled by the computer
+     */
+    void setIsAI(bool isAI);
+
 	/**
 	 * @brief getPosition
 	 * @return const reference to the paddle's position
 	 */
-    sf::Vector2f getPosition() const
-	{
-        sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-        pos.x -= metersToPix(PADDLE_WIDTH)/2.f;
-        pos.y -= metersToPix(PADDLE_HEIGHT)/2.f;
-        return pos;
-	}
+    sf::Vector2f getPosition() const;
 
 	/**
 	 * @brief operator << serializes the paddle to the given sf::Packet
@@ -130,6 +130,8 @@ public:
 
 	virtual ~Paddle();
 private:
+    void setYVelocity(float32 yVelocity);
+
 	/**
 	 * @brief game reference to the game object
 	 */
@@ -143,10 +145,10 @@ private:
 
     sf::Int32 m_widthBoost = 0;
 
-	/**
-	 * @brief isAI wether the paddles is owned by an AI
-	 */
-	bool isAI;
+    /**
+     * @brief isAI wether this paddle is controlled by an AI
+     */
+    bool m_isAI = false;
 };
 
 

@@ -235,11 +235,8 @@ normalized(const sf::Vector2<T> &v)
  * @param vec
  * @return
  */
-inline sf::Vector2f b2VecToSfVect(const b2Vec2 &vec, bool convertToPixels = true)
+inline sf::Vector2f b2VecToSfVect(const b2Vec2 &vec)
 {
-    if(convertToPixels)
-        return sf::Vector2f(metersToPix(vec.x), metersToPix(vec.y));
-
     return sf::Vector2f(vec.x, vec.y);
 }
 

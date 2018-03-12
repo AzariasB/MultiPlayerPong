@@ -71,12 +71,16 @@ void Renderer::update(sf::Time elapsed)
 
 void Renderer::renderBall(const Ball& ball)
 {
-    sf::CircleShape circle(metersToPix(BALL_RADIUS));
+    sf::CircleShape circle(BALL_RADIUS);
 
     circle.setFillColor(sf::Color::Blue);
     circle.setPosition(ball.getPosition());
-
     render(circle);
+}
+
+void Renderer::scale(float nwScale)
+{
+    m_renderStates.transform.scale(nwScale, nwScale);
 }
 
 void Renderer::renderPowerup(const Powerup &powerup)
@@ -139,7 +143,7 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 
 void Renderer::renderPaddle(const Paddle& paddle)
 {
-    sf::RectangleShape rectangle(sf::Vector2f(metersToPix(PADDLE_WIDTH), metersToPix(PADDLE_HEIGHT)));
+    sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));
 
     rectangle.setFillColor(sf::Color::Yellow);
 
@@ -150,7 +154,7 @@ void Renderer::renderPaddle(const Paddle& paddle)
 
 void Renderer::renderWall(const Wall &wall)
 {
-    sf::RectangleShape rect( sf::Vector2f(SF_ARENA_WIDTH, metersToPix(PADDLE_WIDTH)) );
+    sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
     rect.setFillColor(sf::Color::White);
     rect.setPosition(wall.getPosition());
     render(rect);

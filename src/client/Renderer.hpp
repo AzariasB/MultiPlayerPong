@@ -108,6 +108,12 @@ public:
      */
     void resetView();
 
+    /**
+     * @brief scale scales the next object to render
+     * @param nwScale the new scale the use
+     */
+    void scale(float nwScale);
+
 	/**
 	 * @brief getRenderTarget a reference to the renderTarget
 	 * @return a reference to the renderTarget

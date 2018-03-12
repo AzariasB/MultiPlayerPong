@@ -70,11 +70,6 @@ void PlayMultiplayerState::handleEvent(const sf::Event& ev)
     }
 }
 
-Player &PlayMultiplayerState::player()
-{
-    return pr::player();
-}
-
 void PlayMultiplayerState::onEnter(BaseStateData *data)
 {
     Q_UNUSED(data);

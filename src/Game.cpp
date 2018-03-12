@@ -107,20 +107,6 @@ void Game::updatePlaying(const sf::Time &elapsed)
 
     mainBall.update(elapsed);
 
-    //handled by box2d
-    /*
-    if (p1.getPaddle().intersectsWith(mainBall)) {
-
-        float bounceDir = p1.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-        //mainBall.xBounce(bounceDir);
-        m_evManager.trigger(bounceEvent, 1, sf::Vector2f(p1.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ) );
-    } else if (p2.getPaddle().intersectsWith(mainBall)) {
-        float bounceDir = p2.getPaddle().getBounceAngle(mainBall.getPosition().y + BALL_RADIUS / 2);
-        //mainBall.xBounce(bounceDir);
-        m_evManager.trigger(bounceEvent, 2, sf::Vector2f(p2.getPaddle().getPosition().x + PADDLE_WIDTH, mainBall.getPosition().y + (BALL_RADIUS / 2.f) ));
-    }
-    */
-
     if (mainBall.getPosition().x < -BALL_RADIUS) {
         m_evManager.trigger(lostEvent, 1);//Player 1 lost
     } else if (mainBall.getPosition().x > SF_ARENA_WIDTH) {
@@ -218,8 +204,6 @@ void Game::powerupEffectFinished(std::pair<sf::Uint64, int> data)
 
     m_powerups.erase(powerupId);
 }
-
-
 
 void Game::reset()
 {

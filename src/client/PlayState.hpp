@@ -53,10 +53,6 @@ public:
 
     virtual ~PlayState();
 
-protected:
-
-    virtual Player &player() = 0;
-
 private:
 
 

@@ -48,7 +48,11 @@ public:
 
     sf::Vector2f getPosition() const;
 
+    virtual ~Wall();
+
 private:
+
+    const Game &mGame;
 
     b2Body *mBody;
 };

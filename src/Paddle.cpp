@@ -38,8 +38,7 @@
 #include "Game.hpp"
 
 Paddle::Paddle(const Game &game, b2Vec2 startPos) :
-game(game),
-isAI(isAI)
+game(game)
 {
     b2BodyDef bodyDef;
     bodyDef.position = startPos;
@@ -48,15 +47,23 @@ isAI(isAI)
     mBody->SetFixedRotation(true);
 
     b2PolygonShape mShape;
-    mShape.SetAsBox(PADDLE_WIDTH, PADDLE_HEIGHT);
+    mShape.SetAsBox(PADDLE_WIDTH/2.f, PADDLE_HEIGHT/2.f);
 
     b2FixtureDef fDef;
     fDef.restitution = 0.f;
     fDef.friction = 0.f;
-    fDef.density = std::numeric_limits<float>::max();
+    fDef.density = 100000.f;
 
     fDef.shape = &mShape;
     mBody->CreateFixture(&fDef);
+}
+
+sf::Vector2f Paddle::getPosition() const
+{
+    sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
+    pos.x -= PADDLE_WIDTH/2.f;
+    pos.y -= PADDLE_HEIGHT/2.f;
+    return pos;
 }
 
 void Paddle::reset()
@@ -73,20 +80,17 @@ Paddle::~Paddle()
 
 void Paddle::goDown()
 {
-    mVelocity.y = 1.f;
-    mBody->SetLinearVelocity(mVelocity);
+    setYVelocity(1.f);
 }
 
 void Paddle::goUp()
 {
-    mVelocity.y = -1.f;
-    mBody->SetLinearVelocity(mVelocity);
+    setYVelocity(-1.f);
 }
 
 void Paddle::stop()
 {
-    mVelocity.y = 0;
-    mBody->SetLinearVelocity(mVelocity);
+    setYVelocity(0);
 }
 
 void Paddle::extend()
@@ -99,6 +103,17 @@ void Paddle::retract()
     m_widthBoost = -PADDLE_WIDTH_POWERUP;
 }
 
+void Paddle::setYVelocity(float32 yVelocity)
+{
+    mVelocity.y = yVelocity;
+    mBody->SetLinearVelocity(mVelocity);
+}
+
+void Paddle::setIsAI(bool isAI)
+{
+    m_isAI = isAI;
+}
+
 void Paddle::resetPowerupEffect(Powerup::POWERUP_TYPE type)
 {
     if(type == Powerup::PADDLE_EXTEND || type == Powerup::PADDLE_RETRACT){
@@ -108,7 +123,21 @@ void Paddle::resetPowerupEffect(Powerup::POWERUP_TYPE type)
 
 void Paddle::update(const sf::Time &elapsed)
 {
-    //no need for update for now
+    B2_NOT_USED(elapsed);
+    if(!m_isAI)return;
+
+    float ballYPosition = game.getBall().getBodyPosition().y;
+
+    std::cout << mBody->GetLinearVelocity().y << "\n";
+
+    float mYPosition = mBody->GetPosition().y;
+    if(mYPosition < ballYPosition){
+        goDown();
+    }else if(mYPosition > ballYPosition){
+        goUp();
+    }else{
+        stop();
+    }
 }
 
 

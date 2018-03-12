@@ -82,9 +82,6 @@ public:
 
     virtual ~PlayMultiplayerState();
 
-protected:
-    Player &player();
-
 private:
 
 	/**

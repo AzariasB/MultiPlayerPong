@@ -42,17 +42,12 @@ class PlaySoloState : public PlayState
 public:
     PlaySoloState();
 
-    void update(const sf::Time &elapsed) override;
-
     void handleEvent(const sf::Event &ev) override;
 
     virtual ~PlaySoloState();
 
-protected:
-    Player &player() override;
-
 private:
-
+    void handleLoss(int looser);
 
 
 };

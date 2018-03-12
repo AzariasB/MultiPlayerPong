@@ -87,10 +87,16 @@ public:
     void resetPowerup(Powerup::POWERUP_TYPE type);
 
     /**
-     * @brief getPosition the current position
+     * @brief getPosition the current position (uper-left corner)
      * @return the current position of the ball
      */
-    const sf::Vector2f &getPosition() const;
+    sf::Vector2f getPosition() const;
+
+    /**
+     * @brief getBodyPosition the body position
+     * @return a const reference to the body position
+     */
+    const b2Vec2 &getBodyPosition() const;
 
 	/**
 	 * @brief operator << seraializes the ball into a sf::Packet
