@@ -43,7 +43,7 @@
 #include "StateMachine.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
-#include "ParticleGenerator.hpp"
+#include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
 
 /**

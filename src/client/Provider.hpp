@@ -33,14 +33,14 @@
 
 #include <SFML/Config.hpp>
 #include <SFML/Network/TcpSocket.hpp>
-#include "../Game.hpp"
-#include "../EventManager.hpp"
-#include "../Player.hpp"
+#include "src/Game.hpp"
+#include "src/EventManager.hpp"
+#include "src/Player.hpp"
 #include "StateMachine.hpp"
 #include "KeyBinding.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
-#include "ParticleGenerator.hpp"
+#include "particles/ParticleGenerator.hpp"
 #include "Renderer.hpp"
 
 namespace pr {

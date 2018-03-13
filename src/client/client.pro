@@ -1,3 +1,6 @@
+include(states/states.pro)
+include(particles/particles.pro)
+
 SOURCES +=\
     $$PWD/Button.cpp \
     $$PWD/ClientApp.cpp \
@@ -7,27 +10,11 @@ SOURCES +=\
     $$PWD/StateMachine.cpp \
     $$PWD/TextInput.cpp \
     $$PWD/Dialog.cpp \
-    $$PWD/ParticleGenerator.cpp \
-    $$PWD/ParticleExplosion.cpp \
     $$PWD/Menu.cpp \
     $$PWD/KeyBinding.cpp \
     $$PWD/Animation.cpp \
     $$PWD/Provider.cpp \
-    $$PWD/State.cpp \
-    $$PWD/BallTrailParticle.cpp \
-    #------------------------
-    # States
-    #------------------------
-    $$PWD/states/EndState.cpp \
-    $$PWD/states/KeyBindingState.cpp \
-    $$PWD/states/MenuState.cpp \
-    $$PWD/states/OptionState.cpp \
-    $$PWD/states/PlayState.cpp \
-    $$PWD/states/PlaySoloState.cpp \
-    $$PWD/states/TransitionState.cpp \
-    $$PWD/states/PlayMultiplayerState.cpp \
-    $$PWD/states/WaitingState.cpp
-
+    $$PWD/State.cpp
 
 HEADERS +=\
     $$PWD/Button.hpp \
@@ -40,22 +27,7 @@ HEADERS +=\
     $$PWD/State.hpp \
     $$PWD/Widget.hpp \
     $$PWD/Dialog.hpp \
-    $$PWD/ParticleGenerator.hpp \
-    $$PWD/ParticleExplosion.hpp \
     $$PWD/Menu.hpp \
     $$PWD/KeyBinding.hpp \
     $$PWD/Animation.hpp \
-    $$PWD/Provider.hpp \
-    $$PWD/BallTrailParticle.hpp \
-    #------------------------
-    # States
-    #------------------------
-    $$PWD/states/EndState.hpp \
-    $$PWD/states/KeyBindingState.hpp \
-    $$PWD/states/MenuState.hpp \
-    $$PWD/states/OptionState.hpp \
-    $$PWD/states/PlayState.hpp \
-    $$PWD/states/PlaySoloState.hpp \
-    $$PWD/states/TransitionState.hpp \
-    $$PWD/states/PlayMultiplayerState.hpp \
-    $$PWD/states/WaitingState.hpp
+    $$PWD/Provider.hpp
