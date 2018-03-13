@@ -34,13 +34,14 @@
 #include <QDebug>
 
 #include "ClientApp.hpp"
-#include "PlayMultiplayerState.hpp"
-#include "PlaySoloState.hpp"
-#include "WaitingState.hpp"
-#include "EndState.hpp"
-#include "MenuState.hpp"
-#include "OptionState.hpp"
-#include "TransitionState.hpp"
+#include "states/PlayMultiplayerState.hpp"
+#include "states/PlaySoloState.hpp"
+#include "states/WaitingState.hpp"
+#include "states/EndState.hpp"
+#include "states/MenuState.hpp"
+#include "states/OptionState.hpp"
+#include "states/KeyBindingState.hpp"
+#include "states/TransitionState.hpp"
 
 
 ClientApp &ClientApp::getInstance()
