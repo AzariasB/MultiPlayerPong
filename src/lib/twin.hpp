@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <type_traits>
+#include <functional>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -476,7 +477,6 @@ enum easing{
     bounceIn, bounceOut, bounceInOut
 };
 
-#include <functional>
 
 /**
      * @brief The Twin class the main class of the library,

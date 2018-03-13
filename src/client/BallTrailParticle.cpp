@@ -23,35 +23,50 @@
  */
 
 /*
- * File:   ParticleGenerator.h
+ * File:   BallTrailParticle.cpp
  * Author: azarias
  *
- * Created on 30/10/2017
+ * Created on 13/3/2018
  */
-#ifndef PARTICLEGENERATOR_H
-#define PARTICLEGENERATOR_H
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/System/Time.hpp>
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include "ParticleExplosion.hpp"
 #include "BallTrailParticle.hpp"
 
-class ParticleGenerator : public sf::Drawable, public sf::Transformable
+BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
+    m_center(center),
+    m_lifeTime(lifeTime),
+    m_color(color),
+    m_twin(twin::makeTwin(startRadius, 0.f,lifeTime.asMilliseconds(),twin::quartOut))
 {
-public:
-	ParticleGenerator();
 
-	void explode(const sf::Vector2f &explosionPosition);
+}
 
-    void ballTrail(const sf::Vector2f &ballCenter);
+void BallTrailParticle::update(const sf::Time &elapsed)
+{
+    m_twin.step(elapsed.asMilliseconds());
+}
 
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+bool BallTrailParticle::isFinished() const
+{
+    return m_twin.progress() == 1.f;
+}
 
-    void update(const sf::Time &elapsed);
+void BallTrailParticle::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    if(isFinished())return;
 
-private:
-	std::vector<ParticleExplosion> m_explosions;
-    std::vector<BallTrailParticle> m_ballTrails;
-};
+    states.transform *= getTransform();
+    states.texture = NULL;
 
-#endif // PARTICLEGENERATOR_H
+
+    float radius = m_twin.get();
+
+    sf::CircleShape mShape(radius);
+    mShape.setFillColor(m_color);
+    mShape.setPosition(m_center.x - radius, m_center.y - radius);
+
+    target.draw(mShape, states);
+}

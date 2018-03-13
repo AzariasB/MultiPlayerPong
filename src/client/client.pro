@@ -14,6 +14,7 @@ SOURCES +=\
     $$PWD/Animation.cpp \
     $$PWD/Provider.cpp \
     $$PWD/State.cpp \
+    $$PWD/BallTrailParticle.cpp \
     #------------------------
     # States
     #------------------------
@@ -45,6 +46,7 @@ HEADERS +=\
     $$PWD/KeyBinding.hpp \
     $$PWD/Animation.hpp \
     $$PWD/Provider.hpp \
+    $$PWD/BallTrailParticle.hpp \
     #------------------------
     # States
     #------------------------

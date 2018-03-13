@@ -28,8 +28,10 @@
  *
  * Created on 30/10/2017
  */
-#include "ParticleGenerator.hpp"
 #include <algorithm>
+
+#include "src/Config.hpp"
+#include "ParticleGenerator.hpp"
 
 ParticleGenerator::ParticleGenerator()
 {
@@ -38,7 +40,13 @@ ParticleGenerator::ParticleGenerator()
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 {
-	m_explosions.emplace_back(explosionPosition, 1000, sf::seconds(3));
+    m_explosions.emplace_back(explosionPosition, (std::rand()%10) + 10 , sf::milliseconds(500));
+}
+
+
+void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
+{
+    m_ballTrails.emplace_back(ballCenter, sf::milliseconds(100), (float)BALL_RADIUS, sf::Color::White);
 }
 
 void ParticleGenerator::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -46,16 +54,29 @@ void ParticleGenerator::draw(sf::RenderTarget &target, sf::RenderStates states) 
 	for(auto it = m_explosions.begin(); it != m_explosions.end(); ++it){
 		target.draw(*it, states);
 	}
+
+    for(auto it = m_ballTrails.begin(); it != m_ballTrails.end(); ++it){
+        target.draw(*it, states);
+    }
 }
 
-void ParticleGenerator::update(sf::Time elpased)
+void ParticleGenerator::update(const sf::Time &elapsed)
 {
 	for(auto it = m_explosions.begin(); it != m_explosions.end();){
-		(*it).update(elpased);
+        (*it).update(elapsed);
 		if((*it).isFinisehd()){
 			it = m_explosions.erase(it);
 		}else{
 			++it;
 		}
 	}
+
+    for(auto it = m_ballTrails.begin(); it != m_ballTrails.end();){
+        (*it).update(elapsed);
+        if((*it).isFinished() ){
+            it = m_ballTrails.erase(it);
+        }else{
+            ++it;
+        }
+    }
 }

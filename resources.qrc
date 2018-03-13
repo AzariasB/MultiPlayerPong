@@ -10,4 +10,7 @@
         <file alias="paddle_extend">res/paddle_extend.png</file>
         <file alias="paddle_retract">res/paddle_retract.png</file>
     </qresource>
+    <qresource prefix="/shaders" >
+        <file alias="wobble.frag">res/wobble.frag</file>
+    </qresource>
 </RCC>

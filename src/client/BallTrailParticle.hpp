@@ -23,35 +23,43 @@
  */
 
 /*
- * File:   ParticleGenerator.h
+ * File:   BallTrailParticle.hpp
  * Author: azarias
  *
- * Created on 30/10/2017
+ * Created on 13/3/2018
  */
-#ifndef PARTICLEGENERATOR_H
-#define PARTICLEGENERATOR_H
+#ifndef BALLTRAILPARTICLE_HPP
+#define BALLTRAILPARTICLE_HPP
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include "ParticleExplosion.hpp"
-#include "BallTrailParticle.hpp"
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/Color.hpp>
 
-class ParticleGenerator : public sf::Drawable, public sf::Transformable
+#include "src/lib/twin.hpp"
+
+namespace sf {
+    class Time;
+}
+
+class BallTrailParticle : public sf::Drawable, public sf::Transformable
 {
 public:
-	ParticleGenerator();
-
-	void explode(const sf::Vector2f &explosionPosition);
-
-    void ballTrail(const sf::Vector2f &ballCenter);
-
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color);
 
     void update(const sf::Time &elapsed);
 
+    bool isFinished() const;
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
 private:
-	std::vector<ParticleExplosion> m_explosions;
-    std::vector<BallTrailParticle> m_ballTrails;
+    sf::Vector2f m_center;
+
+    twin::Twin<float, sf::Int32> m_twin;
+
+    sf::Time m_lifeTime;
+
+    sf::Color m_color;
 };
 
-#endif // PARTICLEGENERATOR_H
+#endif // BALLTRAILPARTICLE_HPP
