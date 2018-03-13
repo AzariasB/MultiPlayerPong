@@ -35,22 +35,23 @@
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Color.hpp>
 
+#include "Particle.hpp"
 #include "src/lib/twin.hpp"
 
 namespace sf {
     class Time;
 }
 
-class BallTrailParticle : public sf::Drawable, public sf::Transformable
+class BallTrailParticle : public Particle
 {
 public:
     BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color);
 
-    void update(const sf::Time &elapsed);
+    void update(const sf::Time &elapsed) override;
 
-    bool isFinished() const;
+    bool isFinished() const override;
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    void render(Renderer &renderer) const override;
 
 private:
     sf::Vector2f m_center;

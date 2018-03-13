@@ -28,14 +28,15 @@
  *
  * Created on 30/10/2017
  */
-#include "ParticleExplosion.hpp"
+#include "ExplosionParticle.hpp"
 #include <algorithm>
 #include <math.h>
 #include <iostream>
 #include "src/VectorsUtils.hpp"
+#include "src/client/Renderer.hpp"
 
 
-ParticleExplosion::ParticleExplosion(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime):
+ExplosionParticle::ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime):
 m_maxLifeTime(maxLifeTime),
 m_vertices(sf::PrimitiveType::Lines, particleNumber*2),
 m_particles(particleNumber)
@@ -43,7 +44,7 @@ m_particles(particleNumber)
 	createParticles(origin, particleNumber);
 }
 
-void ParticleExplosion::createParticles(const sf::Vector2f &origin, std::size_t particleNumber)
+void ExplosionParticle::createParticles(const sf::Vector2f &origin, std::size_t particleNumber)
 {
     for(std::size_t i = 0; i < particleNumber;i++){
 		float angle = (std::rand() % 360) * 3.14f / 180.f;
@@ -55,16 +56,16 @@ void ParticleExplosion::createParticles(const sf::Vector2f &origin, std::size_t 
 	}
 }
 
-bool ParticleExplosion::isFinisehd() const
+bool ExplosionParticle::isFinished() const
 {
-	return std::all_of(m_particles.begin(), m_particles.end(), [](const Particle &p){return p.isOver();} );
+    return std::all_of(m_particles.begin(), m_particles.end(), [](const Line &p){return p.isOver();} );
 }
 
 
-void ParticleExplosion::update(sf::Time elapsed)
+void ExplosionParticle::update(const sf::Time &elapsed)
 {
 	for(std::size_t i = 0; i < m_particles.size(); i++){
-		Particle &p = m_particles[i];
+        Line &p = m_particles[i];
 		p.lifeTime -= elapsed;
 
 		if(p.lifeTime <= sf::Time::Zero)continue;
@@ -81,11 +82,7 @@ void ParticleExplosion::update(sf::Time elapsed)
 	}
 }
 
-void ParticleExplosion::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void ExplosionParticle::render(Renderer &renderer) const
 {
-	states.transform *= getTransform();
-	states.texture = NULL;
-
-
-	target.draw(m_vertices, states);
+    renderer.render(m_vertices);
 }

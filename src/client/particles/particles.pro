@@ -1,10 +1,11 @@
 SOURCES +=\
     $$PWD/ParticleGenerator.cpp \
-    $$PWD/ParticleExplosion.cpp \
+    $$PWD/ExplosionParticle.cpp \
     $$PWD/BallTrailParticle.cpp
 
 
 HEADERS +=\
     $$PWD/ParticleGenerator.hpp \
-    $$PWD/ParticleExplosion.hpp \
+    $$PWD/ExplosionParticle.hpp \
     $$PWD/BallTrailParticle.hpp \
+    $$PWD/Particle.hpp

@@ -23,37 +23,48 @@
  */
 
 /*
- * File:   ParticleGenerator.h
+ * File:   ParticleExplosion.h
  * Author: azarias
  *
  * Created on 30/10/2017
  */
-#ifndef PARTICLEGENERATOR_H
-#define PARTICLEGENERATOR_H
+#ifndef PARTICLEEXPLOSION_H
+#define PARTICLEEXPLOSION_H
 
-#include <SFML/Graphics.hpp>
-#include <list>
-#include <memory>
-
+#include <vector>
+#include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
 #include "Particle.hpp"
 
-class Renderer;
-
-class ParticleGenerator
+class ExplosionParticle : public Particle
 {
 public:
-	ParticleGenerator();
+    ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime);
 
-	void explode(const sf::Vector2f &explosionPosition);
+    bool isFinished() const override;
 
-    void ballTrail(const sf::Vector2f &ballCenter);
+    void render(Renderer &renderer) const override;
 
-    void draw(Renderer &renderer) const;
-
-    void update(const sf::Time &elapsed);
+    void update(const sf::Time &elapsed) override;
 
 private:
-    std::list<std::unique_ptr<Particle> > m_particles;
+	void createParticles(const sf::Vector2f &origin, std::size_t particleNumber);
+
+    struct Line{
+		sf::Vector2f velocity;
+		sf::Time lifeTime;
+
+		bool isOver() const{
+			return lifeTime <= sf::Time::Zero;
+		}
+	};
+
+    std::vector<Line> m_particles;
+
+	sf::Time m_maxLifeTime;
+
+	sf::VertexArray m_vertices;
 };
 
-#endif // PARTICLEGENERATOR_H
+#endif // PARTICLEEXPLOSION_H

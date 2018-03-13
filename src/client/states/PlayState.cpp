@@ -57,8 +57,7 @@ void PlayState::update(const sf::Time &elapsed)
         pr::game().update(elapsed);
 
 
-    if(std::rand()%100 <= 10)
-        pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
 
 
     pr::particleGenerator().update(elapsed);
@@ -74,7 +73,7 @@ void PlayState::draw(Renderer &renderer) const
     }
 
     renderer.scale(M_TO_P);//meter to pixel
-    renderer.render(pr::particleGenerator());
+    pr::particleGenerator().draw(renderer);
     renderer.renderBall(pr::game().getBall());
     renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
     renderer.renderPaddle(pr::game().getPlayer2().getPaddle());

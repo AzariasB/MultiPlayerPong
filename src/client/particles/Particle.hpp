@@ -23,46 +23,37 @@
  */
 
 /*
- * File:   ParticleExplosion.h
+ * File:   Particle.hpp
  * Author: azarias
  *
- * Created on 30/10/2017
+ * Created on 13/3/2018
  */
-#ifndef PARTICLEEXPLOSION_H
-#define PARTICLEEXPLOSION_H
+#ifndef PARTICLE_HPP
+#define PARTICLE_HPP
 
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include <SFML/System/Time.hpp>
+class Renderer;
+namespace sf {
+    class Time;
+}
 
-class ParticleExplosion : public sf::Drawable, public sf::Transformable
+class Particle
 {
 public:
-	ParticleExplosion(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime);
+    Particle()
+    {
 
-	bool isFinisehd() const;
+    }
 
-	void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    virtual void update(const sf::Time &elapsed) = 0;
 
-	void update(sf::Time elapsed);
+    virtual void render(Renderer &renderer) const = 0;
 
-private:
-	void createParticles(const sf::Vector2f &origin, std::size_t particleNumber);
+    virtual bool isFinished() const = 0;
 
-	struct Particle{
-		sf::Vector2f velocity;
-		sf::Time lifeTime;
+    virtual ~Particle()
+    {
 
-		bool isOver() const{
-			return lifeTime <= sf::Time::Zero;
-		}
-	};
-
-	std::vector<Particle> m_particles;
-
-	sf::Time m_maxLifeTime;
-
-	sf::VertexArray m_vertices;
+    }
 };
 
-#endif // PARTICLEEXPLOSION_H
+#endif // PARTICLE_HPP

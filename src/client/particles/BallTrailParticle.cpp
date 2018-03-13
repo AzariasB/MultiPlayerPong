@@ -33,9 +33,11 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Time.hpp>
 
+#include "src/client/Renderer.hpp"
 #include "BallTrailParticle.hpp"
 
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
+    Particle(),
     m_center(center),
     m_lifeTime(lifeTime),
     m_color(color),
@@ -54,13 +56,9 @@ bool BallTrailParticle::isFinished() const
     return m_twin.progress() == 1.f;
 }
 
-void BallTrailParticle::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void BallTrailParticle::render(Renderer &renderer) const
 {
     if(isFinished())return;
-
-    states.transform *= getTransform();
-    states.texture = NULL;
-
 
     float radius = m_twin.get();
 
@@ -68,5 +66,6 @@ void BallTrailParticle::draw(sf::RenderTarget &target, sf::RenderStates states) 
     mShape.setFillColor(m_color);
     mShape.setPosition(m_center.x - radius, m_center.y - radius);
 
-    target.draw(mShape, states);
+    renderer.render(mShape);
+
 }
