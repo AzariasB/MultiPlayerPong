@@ -39,8 +39,7 @@ m_evCounter(0)
 
 sf::Uint64 EventManager::nextEventCode()
 {
-	m_observers.insert(std::make_pair(++m_evCounter, std::vector<BaseEvent*>()));
-	//	m_observers[++m_evCounter] = std::vector< BaseEvent *> ();
+    m_observers.insert(std::make_pair(++m_evCounter, std::list<BaseEvent*>()));
 	return m_evCounter;
 }
 
@@ -53,8 +52,20 @@ EventManager::~EventManager()
 	}
 }
 
+std::list<BaseEvent*>::iterator &EventManager::last(sf::Uint64 evCode)
+{
+    auto last = m_observers[evCode].end();
+    last--;
+    return last;
+}
+
 void EventManager::assertEventCode(sf::Uint64 evCode)
 {
 	if (evCode <= 0 || evCode > m_evCounter)
 		throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") is out of range");
+}
+
+void EventManager::removeListener(const sf::Uint64 &eventCode, const std::list<BaseEvent*>::iterator &iter)
+{
+    m_observers[eventCode].erase(iter);
 }

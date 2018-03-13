@@ -34,7 +34,7 @@
 
 #include <functional>
 #include <unordered_map>
-#include <vector>
+#include <list>
 #include <memory>
 #include <iostream>
 #include <SFML/Config.hpp>
@@ -236,10 +236,11 @@ public:
 	 * @param trigger the function to call when the event is fired
 	 */
 	template<typename ...Args>
-	void declareListener(sf::Uint64 eventCode, void(*func)(Args...))
-	{
+    auto &declareListener(sf::Uint64 eventCode, void(*func)(Args...))
+	{      
 		assertEventCode(eventCode);
 		m_observers[eventCode].emplace_back(new EventFunctor<Args...>(func));
+        return last(eventCode);
 	}
 
 	/**
@@ -249,10 +250,11 @@ public:
 	 * @param trigger the function to call when the event is fired
 	 */
 	template<typename T, typename ...Args>
-	void declareListener(sf::Uint64 eventCode, void (T::*func)(Args...), T* obj)
+    auto &declareListener(sf::Uint64 eventCode, void (T::*func)(Args...), T* obj)
 	{
 		assertEventCode(eventCode);
-		m_observers[eventCode].emplace_back(new EventMemberFunc <T, Args...>(func, obj));
+        m_observers[eventCode].emplace_back(new EventMemberFunc<T, Args...>(func, obj));
+        return last(eventCode);
 	}
 
 	/**
@@ -264,11 +266,20 @@ public:
 	 * @param arg the additionnal argument
 	 */
 	template<typename T, typename A, typename ...Args>
-	void declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args...), T*obj, A arg)
+    auto &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args...), T*obj, A arg)
 	{
 		assertEventCode(eventCode);
 		m_observers[eventCode].emplace_back(new EventMemberFuncWithArg<T, A, Args...>(func, obj, arg));
+        return last(eventCode);
 	}
+
+    /**
+     * @brief removeListener removes the given listeners, used when
+     * one wants to stop listening for events
+     * @param eventCode the code of the event to stop to listen to
+     * @param iter the token given when creating the listener
+     */
+    void removeListener(const sf::Uint64 &eventCode, const std::list<BaseEvent*>::iterator &iter);
 
 	/**
 	 * @brief trigger calls all the method listening for the given evCode,
@@ -278,13 +289,13 @@ public:
 	 * @param argp all the arguments to pass to the listeners
 	 */
 	template<typename ...Args>
-	void trigger(sf::Uint64 evCode, Args... argp)
+    void trigger(sf::Uint64 evCode, Args... argp)
 	{
 		assertEventCode(evCode);
-		for (auto it = m_observers[evCode].begin(); it != m_observers[evCode].end(); ++it) {
-			EventFunc<Args...> *ef = static_cast<EventFunc<Args...>*> (*it);
-			ef->run(argp...);
-		}
+        for(auto &it : m_observers[evCode]){
+            EventFunc<Args...> &ef = static_cast<EventFunc<Args...>&>(*it);
+            ef.run(argp...);
+        }
 	}
 
 	virtual ~EventManager();
@@ -295,6 +306,13 @@ private:
 	 */
 	void assertEventCode(sf::Uint64 evCode);
 
+    /**
+     * @brief last returns the last inserted element of the given observer list
+     * @param evCode the event containing the list of events
+     * @return the last element of the list
+     */
+    std::list<BaseEvent*>::iterator &last(sf::Uint64 evCode);
+
 	/**
 	 * @brief m_evCounter each event has it's own code, for each new
 	 * request of event code, the event counter is incremented
@@ -304,7 +322,7 @@ private:
 	/**
 	 * @brief m_observers all the observers
 	 */
-	std::unordered_map<sf::Uint64, std::vector<BaseEvent*> > m_observers;
+    std::unordered_map<sf::Uint64, std::list<BaseEvent*> > m_observers;
 };
 
 #endif /* EVENTMANAGER_H */

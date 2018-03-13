@@ -23,58 +23,40 @@
  */
 
 /*
- * File:   PlayState.hpp
+ * File:   GainPointParticle.hpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 13/3/2018
  */
+#ifndef GAINPOINTPARTICLE_HPP
+#define GAINPOINTPARTICLE_HPP
 
-#ifndef PLAYSTATE_HPP
-#define PLAYSTATE_HPP
+#include <SFML/Graphics/Text.hpp>
 
-#include "src/client/State.hpp"
+#include "src/lib/twin.hpp"
+#include "Particle.hpp"
 
-class Player;
+namespace sf {
+    class Time;
+}
 
-class PlayState : public State
+class GainPointParticle : public Particle
 {
 public:
-    PlayState();
+    GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime);
 
-    virtual void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
-    virtual void update(const sf::Time &elapsed) override;
+    void update(const sf::Time &elapsed) override;
 
-    virtual void handleEvent(const sf::Event &ev) override;
-
-    virtual void onEnter(BaseStateData *data) override;
-
-    virtual void onLeave() override;
-
-    virtual ~PlayState();
+    bool isFinished() const override;
 
 private:
-    void bounced(std::size_t pNum, sf::Vector2f position);
 
-    /**
-     * @brief m_p1ScoreText score of the player1
-     */
-    sf::Text m_p1ScoreText;
-    /**
-     * @brief m_p2ScoreText score of the player2
-     */
-    sf::Text m_p2ScoreText;
+    twin::Twin<float, sf::Int32> m_positionTwin;
+    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
 
-    /**
-     * @brief m_countdownText text displayed for
-     * the countdown
-     */
-    sf::Text m_countdownText;
-
-    /**
-     * @brief gameFinisehd wether the game ended
-     */
-    bool gameFinisehd = false;
+    sf::Text m_text;
 };
 
-#endif // PLAYSTATE_HPP
+#endif // GAINPOINTPARTICLE_HPP

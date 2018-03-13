@@ -34,8 +34,7 @@
 #include "ParticleGenerator.hpp"
 #include "ExplosionParticle.hpp"
 #include "BallTrailParticle.hpp"
-
-#include <iostream>
+#include "GainPointParticle.hpp"
 
 ParticleGenerator::ParticleGenerator()
 {
@@ -54,6 +53,13 @@ void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 {
     m_particles.emplace_back(
         std::make_unique<BallTrailParticle>(ballCenter, sf::milliseconds((std::rand() % 500) + 100), (float)BALL_RADIUS, sf::Color::White)
+    );
+}
+
+void ParticleGenerator::gainPoint(const sf::Vector2f &position)
+{
+    m_particles.emplace_back(
+        std::make_unique<GainPointParticle>(position, sf::milliseconds(100))
     );
 }
 

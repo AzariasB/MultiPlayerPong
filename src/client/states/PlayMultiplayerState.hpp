@@ -76,9 +76,7 @@ public:
 	/**
 	 * @brief listenSocket function run by the thread
 	 */
-	void listenSocket();
-
-    void bounced(int pNum, sf::Vector2f position);
+    void listenSocket();
 
     virtual ~PlayMultiplayerState();
 

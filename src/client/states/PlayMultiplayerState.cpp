@@ -35,28 +35,18 @@
 #include "PlayMultiplayerState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
+#include "src/EventManager.hpp"
+
+#include <iostream>
 
 PlayMultiplayerState::PlayMultiplayerState() :
     PlayState(),
     listeningThread(&PlayMultiplayerState::listenSocket, this)
 {
-    pr::connect(
-                pr::game().hitPaddleEvent,
-                &PlayMultiplayerState::bounced,
-                this
-                ); //Subscribe to bounce event
 }
 
 PlayMultiplayerState::~PlayMultiplayerState()
 {
-}
-
-void PlayMultiplayerState::bounced(int pNum, sf::Vector2f position)
-{
-    Q_UNUSED(pNum);
-    pr::soundEngine().playSound(SoundEngine::BOUNCE);
-    pr::particleGenerator().explode(position);//get position
-    pr::renderer().shake();
 }
 
 void PlayMultiplayerState::handleEvent(const sf::Event& ev)

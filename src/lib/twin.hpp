@@ -503,7 +503,7 @@ enum easing{
          * @param finalCallback the function to call when the tweening
          * is over
          */
-        Twin(T from, T to, U time, easing ease, F finalCallback):
+        Twin(const T &from, const T& to, const U &time, easing ease, F finalCallback):
             from(from),
             to(to),
             totalTime(time),
@@ -656,7 +656,7 @@ enum easing{
     template<typename T,
              typename U,
              typename F>
-    Twin<T,U,F> makeTwin(T from, T to, U time, easing ez, F func)
+    Twin<T,U,F> makeTwin(const T &from, const T &to, const U &time, easing ez, F func)
     {
         return Twin<T,U,F>(from, to, time, ez, func);
     }
@@ -671,7 +671,7 @@ enum easing{
      * @param ez the easing function to use
      * @return a twing object
      */
-    Twin<T,U> makeTwin(T from, T to, U time, easing ez)
+    Twin<T,U> makeTwin(const T &from, const T &to, const U &time, easing ez)
     {
         return Twin<T,U>(from,to, time, ez);
     }

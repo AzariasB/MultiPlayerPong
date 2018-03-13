@@ -31,10 +31,14 @@
 
 #include "PlaySoloState.hpp"
 #include "src/client/Provider.hpp"
+#include "src/client/ClientApp.hpp"
+
 
 PlaySoloState::PlaySoloState():
     PlayState()
 {
+    ClientApp::getInstance().setPNumber(1);
+
     pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
     pr::game().getPlayer2().getPaddle().setIsAI(true);
     pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);

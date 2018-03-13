@@ -39,16 +39,19 @@
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
     Particle(),
     m_center(center),
-    m_lifeTime(lifeTime),
-    m_color(color),
-    m_twin(twin::makeTwin(startRadius, 0.f,lifeTime.asMilliseconds(),twin::quartOut))
+    m_twin(twin::makeTwin(startRadius, 0.f,lifeTime.asMilliseconds(),twin::quartOut)),
+    m_shape(startRadius, 10)
 {
-
+    m_shape.setPosition(m_center.x - startRadius, m_center.y - startRadius);
+    m_shape.setFillColor(color);
 }
 
 void BallTrailParticle::update(const sf::Time &elapsed)
 {
     m_twin.step(elapsed.asMilliseconds());
+    float radius = m_twin.get();
+    m_shape.setRadius(m_twin.get());
+    m_shape.setPosition(m_center.x - radius, m_center.y - radius);
 }
 
 bool BallTrailParticle::isFinished() const
@@ -59,13 +62,5 @@ bool BallTrailParticle::isFinished() const
 void BallTrailParticle::render(Renderer &renderer) const
 {
     if(isFinished())return;
-
-    float radius = m_twin.get();
-
-    sf::CircleShape mShape(radius);
-    mShape.setFillColor(m_color);
-    mShape.setPosition(m_center.x - radius, m_center.y - radius);
-
-    renderer.render(mShape);
-
+    renderer.render(m_shape);
 }

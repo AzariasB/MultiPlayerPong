@@ -34,6 +34,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 
 #include "Particle.hpp"
 #include "src/lib/twin.hpp"
@@ -58,9 +59,7 @@ private:
 
     twin::Twin<float, sf::Int32> m_twin;
 
-    sf::Time m_lifeTime;
-
-    sf::Color m_color;
+    sf::CircleShape m_shape;
 };
 
 #endif // BALLTRAILPARTICLE_HPP

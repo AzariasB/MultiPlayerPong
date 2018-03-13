@@ -23,58 +23,41 @@
  */
 
 /*
- * File:   PlayState.hpp
+ * File:   GainPointParticle.cpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 13/3/2018
  */
+#include <SFML/System/Time.hpp>
 
-#ifndef PLAYSTATE_HPP
-#define PLAYSTATE_HPP
+#include "src/client/Provider.hpp"
+#include "GainPointParticle.hpp"
 
-#include "src/client/State.hpp"
-
-class Player;
-
-class PlayState : public State
+GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
+    Particle(),
+    m_positionTwin(twin::makeTwin(position.y, position.y - 5.f, lifeTime.asMilliseconds(), twin::linear)),
+    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(255), lifeTime.asMilliseconds(), twin::linear ))
 {
-public:
-    PlayState();
 
-    virtual void draw(Renderer &renderer) const override;
+}
 
-    virtual void update(const sf::Time &elapsed) override;
+bool GainPointParticle::isFinished() const
+{
+    return m_positionTwin.progress() == 1.f;
+}
 
-    virtual void handleEvent(const sf::Event &ev) override;
+void GainPointParticle::render(Renderer &renderer) const
+{
+    renderer.render(m_text);
+}
 
-    virtual void onEnter(BaseStateData *data) override;
+void GainPointParticle::update(const sf::Time &elapsed)
+{
+    m_positionTwin.step(elapsed.asMilliseconds());
+    m_alphaTwin.step(elapsed.asMilliseconds());
 
-    virtual void onLeave() override;
-
-    virtual ~PlayState();
-
-private:
-    void bounced(std::size_t pNum, sf::Vector2f position);
-
-    /**
-     * @brief m_p1ScoreText score of the player1
-     */
-    sf::Text m_p1ScoreText;
-    /**
-     * @brief m_p2ScoreText score of the player2
-     */
-    sf::Text m_p2ScoreText;
-
-    /**
-     * @brief m_countdownText text displayed for
-     * the countdown
-     */
-    sf::Text m_countdownText;
-
-    /**
-     * @brief gameFinisehd wether the game ended
-     */
-    bool gameFinisehd = false;
-};
-
-#endif // PLAYSTATE_HPP
+    sf::Color textColor = m_text.getColor();
+    textColor.a = m_alphaTwin.get();
+    m_text.setColor(textColor);
+    m_text.setPosition(m_text.getPosition().x, m_positionTwin.get());
+}

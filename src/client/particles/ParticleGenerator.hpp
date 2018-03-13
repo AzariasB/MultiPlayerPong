@@ -48,6 +48,8 @@ public:
 
     void ballTrail(const sf::Vector2f &ballCenter);
 
+    void gainPoint(const sf::Vector2f &position);
+
     void draw(Renderer &renderer) const;
 
     void update(const sf::Time &elapsed);

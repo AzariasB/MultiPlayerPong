@@ -39,14 +39,26 @@ PlayState::PlayState():
     m_p2ScoreText("0", pr::resourceManager().getFont()),
     m_countdownText("3", pr::resourceManager().getFont())
 {
-    ClientApp::getInstance().setPNumber(1);
-
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
     m_countdownText.setPosition(
                 SF_ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
                 SF_ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
                 );
+
+    pr::connect(
+                     pr::game().hitPaddleEvent,
+                     &PlayState::bounced,
+                     this
+                     );  //Subscribe to bounce event
+}
+
+void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
+{
+    Q_UNUSED(pNum);
+    pr::soundEngine().playSound(SoundEngine::BOUNCE);
+    pr::particleGenerator().explode(position);//get position
+    pr::renderer().shake();
 }
 
 void PlayState::update(const sf::Time &elapsed)
@@ -59,11 +71,12 @@ void PlayState::update(const sf::Time &elapsed)
 
     pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
 
-
     pr::particleGenerator().update(elapsed);
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
-    m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
+
+    if(pr::game().isCountingDown())
+        m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
 }
 
 void PlayState::draw(Renderer &renderer) const
