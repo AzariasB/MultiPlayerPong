@@ -57,6 +57,15 @@ void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 {
     Q_UNUSED(pNum);
     pr::soundEngine().playSound(SoundEngine::BOUNCE);
+
+    sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
+    if(pNum == 2){
+        gainPointPos = m_p2ScoreText.getPosition();
+    }
+    gainPointPos.x -= 30.f;
+    gainPointPos.y += 30.f;
+
+    pr::particleGenerator().gainPoint(gainPointPos );
     pr::particleGenerator().explode(position);//get position
     pr::renderer().shake();
 }

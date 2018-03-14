@@ -84,16 +84,37 @@ public:
 		return gameFont;
 	}
 
+    /**
+     * @brief quicksand the small font
+     * of the game
+     * @return
+     */
+    const sf::Font &quicksand() const
+    {
+        return mQuicksandFont;
+    }
+
 private:
 	/**
 	 * @brief gameFont font used for the whole game
 	 */
 	sf::Font gameFont;
 
+    /**
+     * @brief mQuicksandFont font used
+     * for 'small' texts
+     */
+    sf::Font mQuicksandFont;
+
 	/**
 	 * @brief m_uncompressedFont the uncompressed font
 	 */
-	QByteArray m_uncompressedFont;
+    QByteArray m_uncompressedDefaultFont;
+
+    /**
+     * @brief m_uncompressedQuicksandFont uncompressed quicksand font
+     */
+    QResource m_uncompressedQuicksandFont;
 	
 	/**
 	 * @brief m_emptySound empty sound used when an unkonw sound is requested

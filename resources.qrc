@@ -3,6 +3,7 @@
         <file alias="bounce.wav">res/bounce.wav</file>
         <file alias="icons.png">res/icons.png</file>
         <file alias="ka1.ttf">res/ka1.ttf</file>
+        <file alias="quicksand.otf">res/quicksand.otf</file>
     </qresource>
     <qresource prefix="/animations">
         <file alias="ball_extend">res/ball_extend.png</file>

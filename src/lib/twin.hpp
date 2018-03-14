@@ -547,6 +547,7 @@ enum easing{
             totalProgress = advance/static_cast<float>(totalTime);
             if(advance >= totalTime){
                 advance = totalTime;
+                totalProgress = advance/static_cast<float>(totalTime);
                 finishCallback();
             }
         }

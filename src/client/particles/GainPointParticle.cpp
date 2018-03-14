@@ -33,22 +33,28 @@
 #include "src/client/Provider.hpp"
 #include "GainPointParticle.hpp"
 
+#include <iostream>
+
 GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
     Particle(),
-    m_positionTwin(twin::makeTwin(position.y, position.y - 5.f, lifeTime.asMilliseconds(), twin::linear)),
-    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(255), lifeTime.asMilliseconds(), twin::linear ))
+    m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime.asMilliseconds(), twin::linear)),
+    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifeTime.asMilliseconds(), twin::linear )),
+    m_text("+1",pr::resourceManager().quicksand(), 20)
 {
-
+    m_text.setPosition(position);
 }
 
 bool GainPointParticle::isFinished() const
 {
-    return m_positionTwin.progress() == 1.f;
+    return m_positionTwin.progress() == 1.f &&
+            m_alphaTwin.progress() == 1.f;
 }
 
 void GainPointParticle::render(Renderer &renderer) const
 {
+    renderer.scale(P_TO_M);
     renderer.render(m_text);
+    renderer.scale(M_TO_P);
 }
 
 void GainPointParticle::update(const sf::Time &elapsed)
@@ -56,8 +62,8 @@ void GainPointParticle::update(const sf::Time &elapsed)
     m_positionTwin.step(elapsed.asMilliseconds());
     m_alphaTwin.step(elapsed.asMilliseconds());
 
-    sf::Color textColor = m_text.getColor();
+    sf::Color textColor = m_text.getFillColor();
     textColor.a = m_alphaTwin.get();
-    m_text.setColor(textColor);
+    m_text.setFillColor(textColor);
     m_text.setPosition(m_text.getPosition().x, m_positionTwin.get());
 }

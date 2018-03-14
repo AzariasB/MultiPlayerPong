@@ -56,7 +56,7 @@ void BallTrailParticle::update(const sf::Time &elapsed)
 
 bool BallTrailParticle::isFinished() const
 {
-    return m_twin.progress() == 1.f;
+    return m_twin.progress() >= 1.f;
 }
 
 void BallTrailParticle::render(Renderer &renderer) const

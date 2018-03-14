@@ -59,7 +59,7 @@ void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 void ParticleGenerator::gainPoint(const sf::Vector2f &position)
 {
     m_particles.emplace_back(
-        std::make_unique<GainPointParticle>(position, sf::milliseconds(100))
+        std::make_unique<GainPointParticle>(position, sf::milliseconds(500))
     );
 }
 
