@@ -78,7 +78,11 @@ void PlayState::update(const sf::Time &elapsed)
         pr::game().update(elapsed);
 
 
-    pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    m_nextParticle -= elapsed;
+    if(m_nextParticle <= sf::Time::Zero){
+        m_nextParticle = sf::milliseconds(10);
+        pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    }
 
     pr::particleGenerator().update(elapsed);
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));

@@ -72,6 +72,11 @@ private:
     sf::Text m_countdownText;
 
     /**
+     * @brief m_nextParticle time until next particle spawn
+     */
+    sf::Time m_nextParticle;
+
+    /**
      * @brief gameFinisehd wether the game ended
      */
     bool gameFinisehd = false;

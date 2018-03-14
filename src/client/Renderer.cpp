@@ -83,6 +83,16 @@ void Renderer::scale(float nwScale)
     m_renderStates.transform.scale(nwScale, nwScale);
 }
 
+void Renderer::rotateAround(const sf::Vector2f &center, float angle)
+{
+    m_renderStates.transform.rotate(angle, center);
+}
+
+void Renderer::rotate(float angle)
+{
+    m_renderStates.transform.rotate(angle);
+}
+
 void Renderer::renderPowerup(const Powerup &powerup)
 {
     if(powerup.isHidden())return;

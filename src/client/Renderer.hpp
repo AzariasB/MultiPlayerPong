@@ -114,6 +114,18 @@ public:
      */
     void scale(float nwScale);
 
+    /**
+     * @brief rotate rotates the next objects to render
+     * @param angle the angle to rotate
+     */
+    void rotateAround(const sf::Vector2f &center, float angle);
+
+    /**
+     * @brief rotate rotates all the view
+     * @param angle the angle of rotation
+     */
+    void rotate(float angle);
+
 	/**
 	 * @brief getRenderTarget a reference to the renderTarget
 	 * @return a reference to the renderTarget

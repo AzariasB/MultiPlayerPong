@@ -36,11 +36,14 @@
 #include "src/client/Renderer.hpp"
 #include "BallTrailParticle.hpp"
 
+#include <iostream>
+
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
     Particle(),
     m_center(center),
-    m_twin(twin::makeTwin(startRadius, 0.f,lifeTime.asMilliseconds(),twin::quartOut)),
-    m_shape(startRadius, 10)
+    m_twin(twin::makeTwin(startRadius, 0.f,lifeTime.asMilliseconds(),twin::cubicOut)),
+    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifeTime.asMilliseconds(), twin::expoOut)),
+    m_shape(startRadius, 5)
 {
     m_shape.setPosition(m_center.x - startRadius, m_center.y - startRadius);
     m_shape.setFillColor(color);
@@ -49,18 +52,30 @@ BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time 
 void BallTrailParticle::update(const sf::Time &elapsed)
 {
     m_twin.step(elapsed.asMilliseconds());
+    m_alphaTwin.step(elapsed.asMilliseconds());
     float radius = m_twin.get();
+    sf::Color c = m_shape.getFillColor();
+    c.a = m_alphaTwin.get();
+
+    m_angle += 5.f;
     m_shape.setRadius(m_twin.get());
     m_shape.setPosition(m_center.x - radius, m_center.y - radius);
+    m_shape.setFillColor(c);
 }
 
 bool BallTrailParticle::isFinished() const
 {
-    return m_twin.progress() >= 1.f;
+    return m_twin.progress() == 1.f && m_alphaTwin.progress() == 1.f;
 }
 
 void BallTrailParticle::render(Renderer &renderer) const
 {
-    if(isFinished())return;
+    sf::Vector2f center = m_shape.getPosition();
+    center.x += m_shape.getRadius();
+    center.y += m_shape.getRadius();
+
+    renderer.rotateAround(center, m_angle);
     renderer.render(m_shape);
+    renderer.rotateAround(center, -m_angle);
+
 }

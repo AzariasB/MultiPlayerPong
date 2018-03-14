@@ -59,6 +59,10 @@ private:
 
     twin::Twin<float, sf::Int32> m_twin;
 
+    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
+
+    float m_angle = 0;
+
     sf::CircleShape m_shape;
 };
 
