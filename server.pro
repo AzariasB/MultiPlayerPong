@@ -44,6 +44,7 @@ SOURCES +=\
     src/EventManager.cpp \
     src/Game.cpp \
     src/Player.cpp \
+    src/Math.cpp \
     src/Powerup.cpp \
     src/Wall.cpp \
     src/PhysicObject.cpp \

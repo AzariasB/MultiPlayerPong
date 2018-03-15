@@ -70,21 +70,21 @@ namespace pr {
 
 
     template<typename T, typename ...Args>
-    std::list<BaseEvent*>::iterator connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
+    void connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
     {
-        return eventManager().declareListener(evCode, func, obj);
+        eventManager().declareListener(evCode, func, obj);
     }
 
     template<typename T, typename ...Args>
-    std::list<BaseEvent*>::iterator connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
+    void connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
     {
-        return eventManager().declareListener(evCode, func, obj, args...);
+        eventManager().declareListener(evCode, func, obj, args...);
     }
 
     template<typename ...Args>
-    std::list<BaseEvent*>::iterator connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
+    void connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
     {
-        return eventManager().declareListener(evCode, func, args...);
+        eventManager().declareListener(evCode, func, args...);
     }
 
     template<typename ...Args>

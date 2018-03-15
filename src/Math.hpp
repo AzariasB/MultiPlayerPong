@@ -11,10 +11,21 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <Box2D/Common/b2Math.h>
+#include <string>
+#include <cstdlib>
 
 //Meters to pixel ratio
 #define M_TO_P 64.f
 #define P_TO_M 1/64.f
+
+/**
+ * @brief CHARS used to generated UUID
+ */
+namespace math{
+const std::string CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+
+std::string uuid();
 
 /**
  * @brief rand rand value between the given bounds
@@ -22,10 +33,7 @@
  * @param max the max possible value
  * @return a pseudo-random value between the given bounds
  */
-inline int rrand(int min, int max)
-{
-    return (rand() % (max -min + 1)) + min;
-}
+int rrand(int min, int max);
 
 /**
  * @brief clampf floating clamp, returns value if value is between min and max, min if the value is less than min
@@ -35,56 +43,42 @@ inline int rrand(int min, int max)
  * @param val the value to evaluate
  * @return
  */
-inline float clampf(float min, float max, float val)
+template<typename T>
+T clampf(T min, T max, T val)
 {
-	return val < min ? min : val > max ? max : val;
+    return val < min ? min : val > max ? max : val;
 }
 
-/**
- * @brief clampi integer clamp, the same of clampf, for the ints
- * @param min min value
- * @param max max value
- * @param val value to evaluate
- * @return
- */
-inline int clampi(int min, int max, int val)
-{
-	return val < min ? min : val > max ? max : val;
-}
 
 /**
  * @brief sign returns the sign of the floating number
  * @param f the number
  * @return -1 if the number is less than 0, 1 otherwise
  */
-inline int sign(float f)
-{
-	return f < 0 ? -1 : 1;
-}
+int sign(float f);
+
 
 /**
  * @brief normalize normalizes the given vector
  * @param orig the original vector
  * @return the normalized vector
  */
-inline sf::Vector2f normalize(const sf::Vector2f &orig)
-{
-	float length = sqrtf((orig.x * orig.x) + (orig.y * orig.y));
-	if (length != 0)
-		return sf::Vector2f(orig.x / length, orig.y / length);
-	else
-		return orig;
-}
+sf::Vector2f normalize(const sf::Vector2f &orig);
 
+/**
+ * @brief pixToMeters returns the position in meter of the given pixel
+ * @param pixels the pixel index
+ * @return the meters mesurement of the given pixel
+ */
+float pixToMeters(int pixels);
 
-inline float pixToMeters(int pixels)
-{
-    return pixels/M_TO_P;
-}
+/**
+ * @brief metersToPix used to convert from meters (box2d) to pixels(sfml)
+ * @param meters the meters mesures
+ * @return the equivalent pixel value
+ */
+int metersToPix(float meters);
 
-inline int metersToPix(float meters)
-{
-    return static_cast<int>(meters*M_TO_P);
 }
 
 #endif /* MATH_H */

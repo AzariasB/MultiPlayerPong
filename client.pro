@@ -47,7 +47,8 @@ SOURCES +=\
     src/Powerup.cpp \
     src/Wall.cpp \
     src/ContactListener.cpp \
-    src/PhysicObject.cpp
+    src/PhysicObject.cpp \
+    src/Math.cpp
 
 HEADERS +=\
     src/Application.hpp \

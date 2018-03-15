@@ -243,7 +243,7 @@ inline sf::Vector2f b2VecToSfVect(const b2Vec2 &vec)
 inline b2Vec2 sfVecTob2Vec(const sf::Vector2f &vec, bool convertToMeters = true)
 {
     if(convertToMeters)
-        return b2Vec2(pixToMeters(vec.x), pixToMeters(vec.y));
+        return b2Vec2(math::pixToMeters(vec.x), math::pixToMeters(vec.y));
     return b2Vec2(vec.x, vec.y);
 }
 
