@@ -48,7 +48,7 @@
  */
 int main(int argc, char** argv)
 {
-
+    srand(time(NULL));
 #ifdef CLIENT
     ClientApp &app = ClientApp::getInstance();
     app.initStates();

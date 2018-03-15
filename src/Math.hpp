@@ -24,7 +24,10 @@
 namespace math{
 const std::string CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-
+/**
+ * @brief uuid universal unique identifier implementation
+ * @return an UUID
+ */
 std::string uuid();
 
 /**

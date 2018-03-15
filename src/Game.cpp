@@ -46,7 +46,6 @@ Game::Game() :
 {
     mPhysicWorld.SetContactListener(&mContactListener);
     m_evManager.declareListener(mContactListener.ballHitPaddleEvent, &Game::paddleHit, this);
-    //nothing for the wall for now
 }
 
 Game::~Game()

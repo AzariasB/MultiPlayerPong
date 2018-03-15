@@ -39,6 +39,8 @@
 #include <iostream>
 #include <SFML/Config.hpp>
 
+#include "Math.hpp"
+
 /**
  * @brief The BaseEvent struct base object for an event, (used to
  * store it in an array)
@@ -236,11 +238,11 @@ public:
 	 * @param trigger the function to call when the event is fired
 	 */
 	template<typename ...Args>
-    auto &declareListener(sf::Uint64 eventCode, void(*func)(Args...))
+    const std::string &declareListener(sf::Uint64 eventCode, void(*func)(Args...))
 	{      
 		assertEventCode(eventCode);
 		m_observers[eventCode].emplace_back(new EventFunctor<Args...>(func));
-        return last(eventCode);
+        return addIterator(eventCode, math::uuid());
 	}
 
 	/**
@@ -250,11 +252,11 @@ public:
 	 * @param trigger the function to call when the event is fired
 	 */
 	template<typename T, typename ...Args>
-    auto &declareListener(sf::Uint64 eventCode, void (T::*func)(Args...), T* obj)
+    const std::string &declareListener(sf::Uint64 eventCode, void (T::*func)(Args...), T* obj)
 	{
 		assertEventCode(eventCode);
         m_observers[eventCode].emplace_back(new EventMemberFunc<T, Args...>(func, obj));
-        return last(eventCode);
+        return addIterator(eventCode, math::uuid());
 	}
 
 	/**
@@ -266,11 +268,11 @@ public:
 	 * @param arg the additionnal argument
 	 */
 	template<typename T, typename A, typename ...Args>
-    auto &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args...), T*obj, A arg)
+    const std::string &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args...), T*obj, A arg)
 	{
 		assertEventCode(eventCode);
 		m_observers[eventCode].emplace_back(new EventMemberFuncWithArg<T, A, Args...>(func, obj, arg));
-        return last(eventCode);
+        return addIterator(eventCode, math::uuid());
 	}
 
     /**
@@ -279,7 +281,7 @@ public:
      * @param eventCode the code of the event to stop to listen to
      * @param iter the token given when creating the listener
      */
-    void removeListener(const sf::Uint64 &eventCode, const std::list<BaseEvent*>::iterator &iter);
+    void removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode);
 
 	/**
 	 * @brief trigger calls all the method listening for the given evCode,
@@ -311,7 +313,7 @@ private:
      * @param evCode the event containing the list of events
      * @return the last element of the list
      */
-    std::list<BaseEvent*>::iterator &last(sf::Uint64 evCode);
+    const std::string &addIterator(sf::Uint64 evCode, const std::string &uuid);
 
 	/**
 	 * @brief m_evCounter each event has it's own code, for each new
@@ -323,6 +325,13 @@ private:
 	 * @brief m_observers all the observers
 	 */
     std::unordered_map<sf::Uint64, std::list<BaseEvent*> > m_observers;
+
+    /**
+     * @brief m_tokens when creating an event listener, we create a UUID
+     * and returns it, so the listener can later be removed using the given
+     * token
+     */
+    std::unordered_map<std::string, std::list<BaseEvent*>::iterator> m_tokens;
 };
 
 #endif /* EVENTMANAGER_H */

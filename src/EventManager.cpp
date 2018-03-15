@@ -45,18 +45,19 @@ sf::Uint64 EventManager::nextEventCode()
 
 EventManager::~EventManager()
 {
-	for (auto it = m_observers.begin(); it != m_observers.end(); ++it) {
-		for (auto v = (*it).second.begin(); v != (*it).second.end(); ++v) {
-			delete (*v);
-		}
-	}
+    for(auto &lst : m_observers){
+        for(auto *ptr: lst.second){
+            delete ptr;
+        }
+    }
+    m_observers.clear();
 }
 
-std::list<BaseEvent*>::iterator &EventManager::last(sf::Uint64 evCode)
+const std::string &EventManager::addIterator(sf::Uint64 evCode, const std::string &uuid)
 {
-    auto last = m_observers[evCode].end();
-    last--;
-    return last;
+    return (*m_tokens.insert(
+                std::make_pair(uuid, std::prev(m_observers[evCode].end()))
+    ).first/* iterator to pair */).first /* key */;
 }
 
 void EventManager::assertEventCode(sf::Uint64 evCode)
@@ -65,7 +66,16 @@ void EventManager::assertEventCode(sf::Uint64 evCode)
 		throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") is out of range");
 }
 
-void EventManager::removeListener(const sf::Uint64 &eventCode, const std::list<BaseEvent*>::iterator &iter)
+void EventManager::removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode)
 {
-    m_observers[eventCode].erase(iter);
+    if(m_tokens.find(tokenUUID) != m_tokens.end() &&
+            m_observers.find(eventCode) != m_observers.end() &&
+            m_observers[eventCode].size() > 0){
+        std::list<BaseEvent*>::iterator listIt = m_tokens[tokenUUID];
+        delete (*listIt);
+        m_observers[eventCode].erase(listIt);
+        m_tokens.erase(tokenUUID);
+    }else{
+        std::out_of_range("The given uuid (" + tokenUUID + ") does not exist");
+    }
 }
