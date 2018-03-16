@@ -35,6 +35,8 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System.hpp>
 #include <unordered_map>
+#include <stack>
+
 #include "Animation.hpp"
 
 #include "../Powerup.hpp"
@@ -112,19 +114,41 @@ public:
      * @brief scale scales the next object to render
      * @param nwScale the new scale the use
      */
-    void scale(float nwScale);
+    Renderer &scale(float nwScale);
+
+
+    /**
+     * @brief setTexture changes the texture
+     * of the renderstates
+     */
+    Renderer &setTexture(const sf::Texture *texture);
 
     /**
      * @brief rotate rotates the next objects to render
      * @param angle the angle to rotate
      */
-    void rotateAround(const sf::Vector2f &center, float angle);
+    Renderer &rotateAround(const sf::Vector2f &center, float angle);
 
     /**
      * @brief rotate rotates all the view
      * @param angle the angle of rotation
      */
-    void rotate(float angle);
+    Renderer &rotate(float angle);
+
+    /**
+     * @brief push pushes the current renderstate
+     * on the stack, all the data of the last renderstate
+     * is kept and can be modified without changing
+     * the other render states
+     */
+    Renderer &push();
+
+    /**
+     * @brief pop pops the current render states,
+     * and changes the current render state to the one under the current
+     * throws exception if stack only contains one renderstate
+     */
+    Renderer &pop();
 
 	/**
 	 * @brief getRenderTarget a reference to the renderTarget
@@ -135,17 +159,14 @@ public:
 		return target;
 	}
 
-	/**
-	 * @brief getRenderStates a reference to the current renderStates
-	 * @return a reference to the current renderStates
-	 */
-	sf::RenderStates &getRenderStates()
-	{
-		return m_renderStates;
-	}
-
 	virtual ~Renderer();
 private:
+
+    /**
+     * @brief top the current render state
+     * @return
+     */
+    sf::RenderStates &top();
 
     /**
      * @brief addPowerUpAnimation adds the animations for the given powerup to the map
@@ -179,11 +200,6 @@ private:
 	sf::RenderTarget &target;
 
 	/**
-	 * @brief m_renderStates the current rendering state
-	 */
-	sf::RenderStates m_renderStates = sf::RenderStates::Default;
-
-	/**
 	 * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
 	 * otherwise, the screen is shaking
 	 */
@@ -193,6 +209,12 @@ private:
      * @brief m_powerupAnimations the animations of all the powerups
      */
     std::unordered_map<sf::Uint64, Animation> m_powerupAnimations;
+
+    /**
+     * @brief m_stack stack system to be able to modify a
+     * render state, push it or pop it
+     */
+    std::stack<sf::RenderStates> m_stack;
 };
 
 #endif /* RENDERER_HPP */

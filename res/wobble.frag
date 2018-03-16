@@ -14,5 +14,5 @@ void main()
 {
         v_clr = clr;
         vec3 new_pos = pos * (1.0 + 0.25*sin(pos.x+pos.y+pos.z+5.0*time));
-        gl_Position = projection * modelView * vec4(new_pos, 1.0);
+        gl_Color = vec4(0.5,0.5,0.5,0.5);
 }

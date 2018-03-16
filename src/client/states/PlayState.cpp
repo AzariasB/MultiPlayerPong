@@ -98,14 +98,17 @@ void PlayState::draw(Renderer &renderer) const
         renderer.render(m_countdownText);
     }
 
-    renderer.scale(M_TO_P);//meter to pixel
-    pr::particleGenerator().draw(renderer);
-    renderer.renderBall(pr::game().getBall());
-    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
-    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
-    renderer.renderWall(pr::game().upperWall());
-    renderer.renderWall(pr::game().lowerWall());
-    renderer.scale(P_TO_M);//back to normal pixel
+    const sf::Texture &txt = pr::resourceManager().getTexture("sketchy");
+    renderer.push()
+            .scale(M_TO_P)
+            .setTexture(&txt);
+        pr::particleGenerator().draw(renderer);
+        renderer.renderBall(pr::game().getBall());
+        renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
+        renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
+        renderer.renderWall(pr::game().upperWall());
+        renderer.renderWall(pr::game().lowerWall());
+    renderer.pop();
 
     renderer.render(m_p1ScoreText);
     renderer.render(m_p2ScoreText);

@@ -39,34 +39,56 @@
 Renderer::Renderer(sf::RenderTarget &target) :
     target(target)
 {
+    m_stack.push(sf::RenderStates::Default);
 }
 
 Renderer::~Renderer()
 {
 }
 
+Renderer &Renderer::pop()
+{
+    if(m_stack.size() == 0){
+        std::out_of_range("The contains only one element");
+    }
+    m_stack.pop();
+
+    return *this;
+}
+
+Renderer &Renderer::push()
+{
+    m_stack.push(m_stack.top());
+    return *this;
+}
+
+
 void Renderer::shake()
 {
-    m_shakeTimeout = sf::seconds(1.f);
+ //   m_shakeTimeout = sf::seconds(1.f);
 }
 
 void Renderer::update(sf::Time elapsed)
 {
-    if(m_shakeTimeout > sf::Time::Zero){
+  /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
         float randAngle = (std::rand() % 360);
         float radius = m_shakeTimeout.asSeconds();
         sf::Vector2f offset(std::cos(randAngle) * radius, std::sin(randAngle) * radius );
-        m_renderStates = sf::RenderStates::Default;
-        m_renderStates.transform.translate(offset);
+        top().transform.translate(offset);
     }else{
-        m_renderStates = sf::RenderStates::Default;
+        top().transform.
     }
 
     //update all powerup animations
     for(auto it = m_powerupAnimations.begin(); it != m_powerupAnimations.end(); ++it){
         it->second.update(elapsed);
-    }
+    }*/
+}
+
+sf::RenderStates &Renderer::top()
+{
+    return m_stack.top();
 }
 
 void Renderer::renderBall(const Ball& ball)
@@ -78,19 +100,28 @@ void Renderer::renderBall(const Ball& ball)
     render(circle);
 }
 
-void Renderer::scale(float nwScale)
+Renderer &Renderer::scale(float nwScale)
 {
-    m_renderStates.transform.scale(nwScale, nwScale);
+    top().transform.scale(nwScale, nwScale);
+    return *this;
 }
 
-void Renderer::rotateAround(const sf::Vector2f &center, float angle)
+Renderer &Renderer::setTexture(const sf::Texture *texture)
 {
-    m_renderStates.transform.rotate(angle, center);
+    top().texture = texture;
+    return *this;
 }
 
-void Renderer::rotate(float angle)
+Renderer &Renderer::rotateAround(const sf::Vector2f &center, float angle)
 {
-    m_renderStates.transform.rotate(angle);
+    top().transform.rotate(angle, center);
+    return *this;
+}
+
+Renderer &Renderer::rotate(float angle)
+{
+    top().transform.rotate(angle);
+    return *this;
 }
 
 void Renderer::renderPowerup(const Powerup &powerup)
@@ -184,6 +215,6 @@ void Renderer::resetView()
 
 void Renderer::render(const sf::Drawable& drawable)
 {
-    target.draw(drawable, m_renderStates);
+    target.draw(drawable, m_stack.top());
 }
 

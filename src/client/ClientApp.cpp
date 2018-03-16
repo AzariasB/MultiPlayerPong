@@ -60,6 +60,7 @@ ClientApp::ClientApp() :
 {
     //Textures
     rManager.registerTexture(":/icons.png", "icons");
+    rManager.registerTexture(":/sketchy.jpg","sketchy");
     rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
     rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
     rManager.registerTexture(":/animations/ball_extend","ball_extend");
