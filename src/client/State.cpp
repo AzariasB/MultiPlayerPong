@@ -33,18 +33,3 @@
 #include "Provider.hpp"
 #include "ClientApp.hpp"
 
-
-void State::goToState(std::pair<int, TransitionData::DIRECTION> dir)
-{
-    goToState(dir.first, dir.second);
-}
-
-
-void State::goToState(int statelabel, TransitionData::DIRECTION dir)
-{
-    TransitionData td;
-    td.enteringStateLabel = statelabel;
-    td.exitingStateLabel = pr::stateMachine().getCurrentStateIndex();
-    td.direction = dir;
-    pr::stateMachine().setCurrentState(STATE_TYPE::TRANSITION, &td);
-}

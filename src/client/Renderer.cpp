@@ -30,10 +30,13 @@
  */
 
 #include "Renderer.hpp"
-#include "../Config.hpp"
-#include "../Ball.hpp"
-#include "../Paddle.hpp"
+#include "src/Config.hpp"
+#include "src/Ball.hpp"
+#include "src/Paddle.hpp"
+#include "src/Wall.hpp"
+
 #include "Provider.hpp"
+#include "ResourcesManager.hpp"
 #include <math.h>
 
 Renderer::Renderer(sf::RenderTarget &target) :

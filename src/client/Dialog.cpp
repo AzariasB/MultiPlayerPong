@@ -29,8 +29,11 @@
  * Created on 23/10/2017
  */
 #include "Dialog.hpp"
-#include "Provider.hpp"
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+
+#include "ResourcesManager.hpp"
+#include "Provider.hpp"
 
 Dialog *Dialog::input(const std::string &title)
 {

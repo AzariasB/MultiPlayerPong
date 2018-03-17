@@ -13,8 +13,7 @@ SOURCES +=\
     $$PWD/Menu.cpp \
     $$PWD/KeyBinding.cpp \
     $$PWD/Animation.cpp \
-    $$PWD/Provider.cpp \
-    $$PWD/State.cpp
+    $$PWD/Provider.cpp
 
 HEADERS +=\
     $$PWD/Button.hpp \
@@ -30,4 +29,5 @@ HEADERS +=\
     $$PWD/Menu.hpp \
     $$PWD/KeyBinding.hpp \
     $$PWD/Animation.hpp \
-    $$PWD/Provider.hpp
+    $$PWD/Provider.hpp \
+    State.hpp

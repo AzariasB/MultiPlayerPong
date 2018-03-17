@@ -54,9 +54,9 @@ MenuState::MenuState() :
     const Button &quitButton = *m_menu.addButton("Quit", 0, multiPlayerButton.getHeight() + optionButton.getHeight() + soloButton.getHeight());
 
 
-    pr::connect(soloButton.clickedEvent, &State::goToState, static_cast<State*>(this), std::make_pair((int)STATE_TYPE::PLAY_SOLO, TransitionData::GO_UP) );
+    pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::PLAY_SOLO, TransitionData::GO_UP) );
     pr::connect(multiPlayerButton.clickedEvent, &Dialog::show, m_inputDialog);
-    pr::connect(optionButton.clickedEvent, &State::goToState, static_cast<State*>(this), std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_RIGHT));
+    pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
     pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
     pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);

@@ -30,7 +30,7 @@
  */
 #include "Menu.hpp"
 #include "Provider.hpp"
-#include "../Game.hpp"
+#include "ResourcesManager.hpp"
 
 Menu::Menu()
 {

@@ -31,9 +31,10 @@
 #include <SFML/System/Time.hpp>
 
 #include "src/client/Provider.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/Renderer.hpp"
 #include "GainPointParticle.hpp"
 
-#include <iostream>
 
 GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
     Particle(),

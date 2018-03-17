@@ -33,8 +33,7 @@
 #define CLIENTAPP_H
 
 #include <SFML/System/NonCopyable.hpp>
-#include <SFML/Network/Socket.hpp>
-#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Network/UdpSocket.hpp>
 #include <deque>
 
 #include "../Application.hpp"
@@ -121,7 +120,7 @@ public:
 	 * @brief getSocket reference to the client's socket
 	 * @return a reference to the socket
 	 */
-	sf::TcpSocket &getSocket();
+    sf::UdpSocket &getSocket();
 
 	/**
 	 * @brief setPNumber sets the player number (1 or 2)
@@ -253,7 +252,7 @@ private:
 	 * @brief socket the socket used to connect to the
 	 * server
 	 */
-	sf::TcpSocket socket;
+    sf::UdpSocket socket;
 
 	/**
 	 * @brief rManager the resource manager, holds all the data

@@ -36,6 +36,7 @@
 #include <unordered_map>
 
 #include "State.hpp"
+
 class ClientApp;
 
 /**
@@ -48,6 +49,21 @@ public:
 	 * @brief StateMachine constructor
 	 */
     StateMachine();
+
+
+    /**
+     * @brief goToState goes toe the given state, in the given direction (using a pair)
+     * @param dir the pair, containing the statelabel as first argument
+     * and the direction to use when doing the transition
+     */
+    void goToState(std::pair<int , TransitionData::DIRECTION> dir);
+
+    /**
+     * @brief goToState expanded version of the previous method
+     * @param statelabel
+     * @param dir
+     */
+    void goToState(int statelabel, TransitionData::DIRECTION dir);
 
 	/**
 	 * @brief addState adds the state given as template parameter to the list of states (creates a new state object)

@@ -56,7 +56,7 @@ void PlayMultiplayerState::handleEvent(const sf::Event& ev)
     if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
         sf::Packet p;
         p << realEv.type << realEv.key.code;
-        pr::socket().send(p);
+        pr::socket().send(p, sf::IpAddress::Any ,DEFAULT_PORT);
     }
 }
 
@@ -75,11 +75,10 @@ void PlayMultiplayerState::listenSocket()
 {
     while (1) {
         sf::Packet p;
-        if(pr::socket().getRemoteAddress() == sf::IpAddress::None){
-            std::cerr << "Socket is null \n";
-            return;
-        }
-        sf::Socket::Status rcvStatus = pr::socket().receive(p);
+        sf::IpAddress originAdress;
+        unsigned short originPort;
+
+        sf::Socket::Status rcvStatus = pr::socket().receive(p,originAdress, originPort);
         if (rcvStatus == sf::Socket::Done) {
             p >> pr::game();
         } else if (rcvStatus == sf::Socket::Disconnected) {

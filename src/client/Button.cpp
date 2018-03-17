@@ -30,9 +30,11 @@
  */
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 #include <iostream>
 #include "Button.hpp"
 #include "Provider.hpp"
+#include "ResourcesManager.hpp"
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),

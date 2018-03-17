@@ -34,6 +34,7 @@
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <unordered_map>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
@@ -66,6 +67,14 @@ public:
 	 */
 	void registerTexture(const std::string &filename, const std::string &textureName);
 
+    /**
+     * @brief registerShader saves the shader in memory, making it available at runtime
+     * @param filename the name of the file where to find the shader
+     * @param shaderName the name of the shader to use in the program
+     * @return the created shader
+     */
+    sf::Shader &registerShader(const std::string &filename, const std::string &shaderName);
+
 	/**
 	 * @brief getSound returns the sound associated with the name given when registered
 	 * @param soundName name of the sound
@@ -73,7 +82,20 @@ public:
 	 */
 	sf::Sound &getSound(const std::string &soundName);
 
+    /**
+     * @brief getTexture the texture with the given name
+     * @param textureName name of the texture
+     * @return a reference to the texture reserved with
+     * the given name
+     */
 	const sf::Texture &getTexture(const std::string &textureName) const;
+
+    /**
+     * @brief getShader access to the shader with the given name
+     * @param shaderName name of the shader
+     * @return  reference to the shader saved with the given name
+     */
+    sf::Shader &getShader(const std::string &shaderName);
 
 	/**
 	 * @brief getFont the font for the game
@@ -121,6 +143,11 @@ private:
 	 */
 	sf::Sound m_emptySound;
 
+    /**
+     * @brief m_emptyShader empty shader used when an unknwon shader is requested
+     */
+    sf::Shader m_emptyShader;
+
 	/**
 	 * @brief m_emptyTexture empty texture used when an unknown texture is requested
 	 */
@@ -131,7 +158,12 @@ private:
 	 */
 	std::unordered_map<std::string, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
 
+    /**
+     * @brief m_textures keep all the texture in memory
+     */
 	std::unordered_map<std::string, std::unique_ptr<sf::Texture>> m_textures;
+
+    std::unordered_map<std::string, sf::Shader> m_shaders;
 };
 
 #endif /* RESOURCESMANAGER_H */

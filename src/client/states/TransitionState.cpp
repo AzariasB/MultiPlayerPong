@@ -25,6 +25,7 @@
 #include "TransitionState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/Config.hpp"
+#include "src/client/StateMachine.hpp"
 
 const sf::Int32 TransitionState::mTransitionDuration = 100;
 

@@ -30,6 +30,14 @@
  */
 #include "Provider.hpp"
 #include "ClientApp.hpp"
+#include "particles/ParticleGenerator.hpp"
+#include "Renderer.hpp"
+#include "src/Game.hpp"
+#include "src/Player.hpp"
+#include "StateMachine.hpp"
+#include "KeyBinding.hpp"
+#include "ResourcesManager.hpp"
+#include "SoundEngine.hpp"
 
 Game &pr::game()
 {
@@ -82,7 +90,7 @@ Renderer &pr::renderer()
     return ClientApp::getInstance().getRenderer();
 }
 
-sf::TcpSocket &pr::socket()
+sf::UdpSocket &pr::socket()
 {
     return ClientApp::getInstance().getSocket();
 }

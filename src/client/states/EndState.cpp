@@ -64,7 +64,7 @@ EndState::~EndState()
 void EndState::backButtonPressed()
 {
     pr::game().reset();
-    goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
+    pr::stateMachine().goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
 }
 
 void EndState::draw(Renderer& renderer) const
@@ -94,7 +94,7 @@ void EndState::onEnter(BaseStateData *data)
 void EndState::onLeave()
 {
     //Disconnect the sockets and "null" them
-    pr::socket().disconnect();
+    pr::socket().unbind();
 }
 
 void EndState::update(const sf::Time &elapsed)

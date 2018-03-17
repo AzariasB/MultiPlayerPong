@@ -1,18 +1,12 @@
 
-#version 150 core
+#version 300 es
 
-uniform mat4 modelView;
-uniform mat4 projection;
-uniform float time;
-
-in vec3 pos;
-in vec4 clr;
-
-out vec4 v_clr;
+varying vec2 position;
 
 void main()
 {
-        v_clr = clr;
-        vec3 new_pos = pos * (1.0 + 0.25*sin(pos.x+pos.y+pos.z+5.0*time));
-        gl_Color = vec4(0.5,0.5,0.5,0.5);
+    gl_FragColor.r = position.x;
+    gl_FragColor.g = 0.0;
+    gl_FragColor.b = position.y;
+    gl_FragColor.a = 1.0;
 }

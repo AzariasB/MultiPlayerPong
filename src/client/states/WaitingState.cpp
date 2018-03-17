@@ -73,8 +73,8 @@ void WaitingState::handleEvent(const sf::Event& ev)
 void WaitingState::cancelClicked()
 {
 	listeningThread.terminate();
-    pr::socket().disconnect();
-    goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
+    pr::socket().unbind();
+    pr::stateMachine().goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
 }
 
 void WaitingState::update(const sf::Time &elapsed)
@@ -99,7 +99,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	m_messageDialog->setTitle(text.toAnsiString());
 
 	if (startGame)
-        goToState((int)STATE_TYPE::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
+        pr::stateMachine().goToState((int)STATE_TYPE::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
 }
 
@@ -111,7 +111,7 @@ void WaitingState::onEnter(BaseStateData *data)
 	StateData<std::string> *ipData = 0;
 	if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
 
-    sf::Socket::Status status = pr::socket().connect(sf::IpAddress(ipData->data()), 5300);
+    sf::Socket::Status status = pr::socket().bind(DEFAULT_PORT);
 	if (status != sf::Socket::Done) {
 		m_messageDialog->setTitle("Failed to connect");
 	} else {
@@ -128,7 +128,10 @@ void WaitingState::onLeave()
 void WaitingState::listenSocket()
 {
 	sf::Packet firstPacket;
-    sf::Socket::Status rcvStatus = pr::socket().receive(firstPacket);
+    sf::IpAddress remoteAddr;
+    unsigned short remotePort;
+
+    sf::Socket::Status rcvStatus = pr::socket().receive(firstPacket, remoteAddr , remotePort);
 	if (rcvStatus != sf::Socket::Done) {
 		std::cerr << "Failed to receive first packet (Socket status = " << rcvStatus << ")\n";
 		exit(-1);
@@ -144,8 +147,7 @@ void WaitingState::listenSocket()
 	receivedNumber = pNumber;
 	canBeginMutex.unlock();
 
-
-    if (pr::socket().receive(firstPacket) != sf::Socket::Done) {
+    if (pr::socket().receive(firstPacket, remoteAddr, remotePort) != sf::Socket::Done) {
 		cStateMutex.lock();
 		c_state = CONNECTION_STATE::DISCONNECTED;
 		cStateMutex.unlock();

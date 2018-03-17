@@ -61,7 +61,7 @@ KeyBindingState::KeyBindingState():
 
 
     sf::Uint64 backClicked = m_menu.addButton("Back", startX, ARENA_HEIGHT - 50)->clickedEvent;
-    pr::connect(backClicked, &State::goToState, static_cast<State*>(this) , std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_LEFT) );
+    pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_LEFT) );
 
     m_messageDialog->setOkButtonTitle("Cancel");
     pr::connect(m_messageDialog->cancelEvent, &KeyBindingState::cancelDialog, this);

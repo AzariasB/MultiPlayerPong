@@ -32,6 +32,7 @@
 #include <iostream>
 #include "ResourcesManager.hpp"
 #include <QResource>
+#include <SFML/System/MemoryInputStream.hpp>
 
 ResourcesManager::ResourcesManager():
     m_uncompressedQuicksandFont(":/quicksand.otf")
@@ -57,6 +58,27 @@ sf::Sound& ResourcesManager::getSound(const std::string& soundName) {
 		return m_emptySound;
 	}
 }
+
+sf::Shader &ResourcesManager::registerShader(const std::string &filename, const std::string &shaderName)
+{
+    QResource sRes(filename.c_str());
+
+    sf::MemoryInputStream mis;
+    mis.open(sRes.data(), sRes.size());
+
+    sf::Shader &s = m_shaders[shaderName];
+    s.loadFromStream(mis, sf::Shader::Fragment);
+    return s;
+}
+
+sf::Shader &ResourcesManager::getShader(const std::string &shaderName)
+{
+    if(m_shaders.find(shaderName) != m_shaders.end()){
+        return m_shaders[shaderName];
+    }
+    return m_emptyShader;
+}
+
 
 const sf::Texture &ResourcesManager::getTexture(const std::string &textureName) const
 {

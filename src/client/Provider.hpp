@@ -32,16 +32,21 @@
 #define PROVIDER_HPP
 
 #include <SFML/Config.hpp>
-#include <SFML/Network/TcpSocket.hpp>
-#include "src/Game.hpp"
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Network/UdpSocket.hpp>
+
 #include "src/EventManager.hpp"
-#include "src/Player.hpp"
-#include "StateMachine.hpp"
-#include "KeyBinding.hpp"
-#include "ResourcesManager.hpp"
-#include "SoundEngine.hpp"
-#include "particles/ParticleGenerator.hpp"
-#include "Renderer.hpp"
+
+class Game;
+class StateMachine;
+class EventManager;
+class KeyBinding;
+class SoundEngine;
+class ParticleGenerator;
+class Renderer;
+class Player;
+class ResourcesManager;
+
 
 namespace pr {
     Game &game();
@@ -64,7 +69,7 @@ namespace pr {
 
     Renderer &renderer();
 
-    sf::TcpSocket &socket();
+    sf::UdpSocket &socket();
 
     Player &player();
 

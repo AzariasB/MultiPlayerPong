@@ -30,6 +30,8 @@
  */
 
 #include "StateMachine.hpp"
+#include "src/client/ClientApp.hpp"
+#include "Provider.hpp"
 
 StateMachine::StateMachine()
 {
@@ -48,4 +50,20 @@ void StateMachine::setCurrentState(int stateLabel)
 
     BaseStateData dat;
     states[currentStateIndex]->onEnter(&dat);
+}
+
+
+void StateMachine::goToState(std::pair<int, TransitionData::DIRECTION> dir)
+{
+    goToState(dir.first, dir.second);
+}
+
+
+void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
+{
+    TransitionData td;
+    td.enteringStateLabel = statelabel;
+    td.exitingStateLabel = pr::stateMachine().getCurrentStateIndex();
+    td.direction = dir;
+    setCurrentState(STATE_TYPE::TRANSITION, &td);
 }

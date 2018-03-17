@@ -34,6 +34,8 @@
 
 #include "TextInput.hpp"
 #include "Provider.hpp"
+#include "ResourcesManager.hpp"
+#include "src/Config.hpp"
 
 TextInput::TextInput() :
 m_text("", pr::resourceManager().getFont()),

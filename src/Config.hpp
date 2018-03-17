@@ -31,6 +31,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+//Netorking
+#define DEFAULT_PORT 5300
+
 //Dimensions (all in meters)
 //Arena
 #define SF_ARENA_WIDTH 800

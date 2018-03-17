@@ -61,6 +61,7 @@ ClientApp::ClientApp() :
     //Textures
     rManager.registerTexture(":/icons.png", "icons");
     rManager.registerTexture(":/sketchy.jpg","sketchy");
+    //rManager.registerShader(":/shaders/wobble.frag","main"); /* shader not working on me computer :( */
     rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
     rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
     rManager.registerTexture(":/animations/ball_extend","ball_extend");
@@ -144,7 +145,7 @@ void ClientApp::run(int argc, char** argv)
 
         window.display();
     }
-    socket.disconnect();
+    socket.unbind();
     stateMachine.getCurrentState().onLeave(); //Close last threads
 }
 
@@ -195,7 +196,7 @@ Game& ClientApp::getGame()
     return game;
 }
 
-sf::TcpSocket& ClientApp::getSocket()
+sf::UdpSocket& ClientApp::getSocket()
 {
     return socket;
 }
