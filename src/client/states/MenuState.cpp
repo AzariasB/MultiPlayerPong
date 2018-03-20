@@ -33,9 +33,9 @@
 #include "MenuState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
+#include "src/client/ClientConf.hpp"
 #include "src/client/Button.hpp"
 #include "src/client/Dialog.hpp"
-#include "TransitionState.hpp"
 
 MenuState::~MenuState()
 {
@@ -54,9 +54,9 @@ MenuState::MenuState() :
     const Button &quitButton = *m_menu.addButton("Quit", 0, multiPlayerButton.getHeight() + optionButton.getHeight() + soloButton.getHeight());
 
 
-    pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::PLAY_SOLO, TransitionData::GO_UP) );
+    pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_UP) );
     pr::connect(multiPlayerButton.clickedEvent, &Dialog::show, m_inputDialog);
-    pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_RIGHT));
+    pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
     pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
     pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
@@ -67,10 +67,10 @@ MenuState::MenuState() :
 void MenuState::gotoOptionState()
 {
     TransitionData data;
-    data.enteringStateLabel = STATE_TYPE::OPTIONS;
-    data.enteringStateLabel = STATE_TYPE::MENU;
+    data.enteringStateLabel = cc::OPTIONS;
+    data.enteringStateLabel = cc::MENU;
     data.direction = TransitionData::GO_LEFT;
-    pr::stateMachine().setCurrentState(STATE_TYPE::TRANSITION, &data);
+    pr::stateMachine().setCurrentState(cc::TRANSITION, &data);
 }
 
 void MenuState::dialogConfirmed()
@@ -79,7 +79,7 @@ void MenuState::dialogConfirmed()
 		m_inputDialog->hide();
 		//change of state and indicate the server's ip
 		std::string res = m_inputDialog->getResult();
-        pr::stateMachine().setCurrentState(STATE_TYPE::WAITING, res);
+        pr::stateMachine().setCurrentState(cc::WAITING, res);
 	}else{
 		//Message
 		m_messageDialog->setTitle("Invalid IP");

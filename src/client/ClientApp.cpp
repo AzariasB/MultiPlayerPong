@@ -42,6 +42,7 @@
 #include "states/OptionState.hpp"
 #include "states/KeyBindingState.hpp"
 #include "states/TransitionState.hpp"
+#include "ClientConf.hpp"
 
 
 ClientApp &ClientApp::getInstance()
@@ -78,14 +79,14 @@ ClientApp::~ClientApp()
 
 void ClientApp::initStates()
 {
-    stateMachine.addState<WaitingState>(STATE_TYPE::WAITING);
-    stateMachine.addState<PlayMultiplayerState>(STATE_TYPE::PLAY_MULTIPLAYER);
-    stateMachine.addState<EndState>(STATE_TYPE::FINISHED);
-    stateMachine.addState<MenuState>(STATE_TYPE::MENU);
-    stateMachine.addState<OptionState>(STATE_TYPE::OPTIONS);
-    stateMachine.addState<KeyBindingState>(STATE_TYPE::KEY_BINDINGS);
-    stateMachine.addState<TransitionState>(STATE_TYPE::TRANSITION);
-    stateMachine.addState<PlaySoloState>(STATE_TYPE::PLAY_SOLO);
+    stateMachine.addState<WaitingState>(cc::WAITING);
+    stateMachine.addState<PlayMultiplayerState>(cc::PLAY_MULTIPLAYER);
+    stateMachine.addState<EndState>(cc::FINISHED);
+    stateMachine.addState<MenuState>(cc::MENU);
+    stateMachine.addState<OptionState>(cc::OPTIONS);
+    stateMachine.addState<KeyBindingState>(cc::KEY_BINDINGS);
+    stateMachine.addState<TransitionState>(cc::TRANSITION);
+    stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)
@@ -129,7 +130,7 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    stateMachine.setCurrentState(STATE_TYPE::MENU);
+    stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Event ev;

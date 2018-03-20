@@ -28,11 +28,13 @@
  *
  * Created on 3/11/2017
  */
+
+#include <qglobal.h>
 #include "KeyBindingState.hpp"
-#include "src/client//ClientApp.hpp"
+#include "src/client/ClientConf.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Dialog.hpp"
-
+#include "src/client/StateMachine.hpp"
 
 KeyBindingState::KeyBindingState():
     m_messageDialog(Dialog::message("","Press a key")),
@@ -61,7 +63,7 @@ KeyBindingState::KeyBindingState():
 
 
     sf::Uint64 backClicked = m_menu.addButton("Back", startX, ARENA_HEIGHT - 50)->clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)STATE_TYPE::OPTIONS, TransitionData::GO_LEFT) );
+    pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_messageDialog->setOkButtonTitle("Cancel");
     pr::connect(m_messageDialog->cancelEvent, &KeyBindingState::cancelDialog, this);

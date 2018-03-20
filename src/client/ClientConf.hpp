@@ -22,48 +22,32 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   StateMachine.cpp
+/*
+ * File:   ClientConf.hpp
  * Author: azarias
- * 
- * Created on 16 octobre 2017, 19:04
+ *
+ * Created on 20/3/2018
  */
+#ifndef CLIENTCONF_HPP
+#define CLIENTCONF_HPP
 
-#include "StateMachine.hpp"
-#include "ClientConf.hpp"
-#include "Provider.hpp"
-
-StateMachine::StateMachine()
+namespace cc//namespace client conf
 {
+/**
+ * @brief The STATE_TYPE enum associate with each state, an int (enum)
+ * to store these in the state machine, and retrieve them later
+ */
+enum STATE_TYPE {
+    MENU,//First state
+    PLAY_MULTIPLAYER,
+    PLAY_SOLO,
+    OPTIONS,
+    KEY_BINDINGS,
+    WAITING,
+    FINISHED,
+    TRANSITION
+};
 
 }
 
-StateMachine::~StateMachine()
-{
-}
-
-void StateMachine::setCurrentState(int stateLabel)
-{
-    if (currentStateIndex > -1)
-	states[currentStateIndex]->onLeave();
-    currentStateIndex = stateLabel;
-
-    BaseStateData dat;
-    states[currentStateIndex]->onEnter(&dat);
-}
-
-
-void StateMachine::goToState(std::pair<int, TransitionData::DIRECTION> dir)
-{
-    goToState(dir.first, dir.second);
-}
-
-
-void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
-{
-    TransitionData td;
-    td.enteringStateLabel = statelabel;
-    td.exitingStateLabel = pr::stateMachine().getCurrentStateIndex();
-    td.direction = dir;
-    setCurrentState(cc::TRANSITION, &td);
-}
+#endif // CLIENTCONF_HPP

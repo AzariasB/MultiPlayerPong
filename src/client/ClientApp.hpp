@@ -45,20 +45,6 @@
 #include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
 
-/**
- * @brief The STATE_TYPE enum associate with each state, an int (enum)
- * to store these in the state machine, and retrieve them later
- */
-enum STATE_TYPE {
-	MENU,//First state
-    PLAY_MULTIPLAYER,
-    PLAY_SOLO,
-	OPTIONS,
-    KEY_BINDINGS,
-	WAITING,
-    FINISHED,
-    TRANSITION
-};
 
 /**
  * @brief The ClientApp class the client application

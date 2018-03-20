@@ -34,6 +34,7 @@
 #include <SFML/Network/IpAddress.hpp>
 
 #include "src/client/ClientApp.hpp"
+#include "src/client/ClientConf.hpp"
 #include "WaitingState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Dialog.hpp"
@@ -72,7 +73,7 @@ void WaitingState::handleEvent(const sf::Event& ev)
 void WaitingState::cancelClicked()
 {
     pr::socket().disconnect();
-    pr::stateMachine().goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
+    pr::stateMachine().goToState((int)cc::MENU, TransitionData::GO_RIGHT);
 }
 
 void WaitingState::update(const sf::Time &elapsed)
@@ -103,7 +104,7 @@ void WaitingState::update(const sf::Time &elapsed)
 	m_messageDialog->setTitle(text.toAnsiString());
 
 	if (startGame)
-        pr::stateMachine().goToState((int)STATE_TYPE::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
+        pr::stateMachine().goToState((int)cc::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
 }
 

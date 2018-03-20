@@ -28,11 +28,11 @@
  *
  * Created on 16 octobre 2017, 22:50
  */
-
 #include "EndState.hpp"
-#include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
+#include "src/client/Provider.hpp"
 #include "src/client/Dialog.hpp"
+#include "src/client/ClientConf.hpp"
 
 
 EndState::EndState() :
@@ -64,7 +64,7 @@ EndState::~EndState()
 void EndState::backButtonPressed()
 {
     pr::game().reset();
-    pr::stateMachine().goToState((int)STATE_TYPE::MENU, TransitionData::GO_RIGHT);
+    pr::stateMachine().goToState((int)cc::MENU, TransitionData::GO_RIGHT);
 }
 
 void EndState::draw(Renderer& renderer) const
@@ -77,7 +77,7 @@ void EndState::handleEvent(const sf::Event& ev)
 {
     //When escape pressed, go to menu
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState(STATE_TYPE::MENU);
+        pr::stateMachine().setCurrentState(cc::MENU);
     }else{
         m_messageDialog->handleEvent(ev);
     }

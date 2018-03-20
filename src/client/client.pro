@@ -30,4 +30,5 @@ HEADERS +=\
     $$PWD/KeyBinding.hpp \
     $$PWD/Animation.hpp \
     $$PWD/Provider.hpp \
-    State.hpp
+    $$PWD/State.hpp \
+    $$PWD/ClientConf.hpp

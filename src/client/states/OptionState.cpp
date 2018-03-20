@@ -32,7 +32,9 @@
 #include "OptionState.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientApp.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/StateMachine.hpp"
+#include "src/client/SoundEngine.hpp"
 
 OptionState::OptionState():
 m_menu()
@@ -50,10 +52,10 @@ m_menu()
 
 
     sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
-    pr::connect(keyBindingClicked , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) STATE_TYPE::KEY_BINDINGS, TransitionData::GO_RIGHT) );
+    pr::connect(keyBindingClicked , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
     sf::Uint64 backClicked = m_menu.addButton("Menu", 0, SF_ARENA_HEIGHT - 50)->clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)STATE_TYPE::MENU, TransitionData::GO_LEFT) );
+    pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 }
 
 void OptionState::toggleSound()
@@ -87,7 +89,7 @@ void OptionState::update(const sf::Time &elapsed)
 void OptionState::handleEvent(const sf::Event &ev)
 {
 	if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState((int)STATE_TYPE::MENU);
+        pr::stateMachine().setCurrentState((int)cc::MENU);
 	}else{
 		m_menu.handleEvent(ev);
 	}

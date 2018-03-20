@@ -29,10 +29,17 @@
  * Created on 12/03/2018
  */
 
+#include "PlayState.hpp"
+
 #include "src/Config.hpp"
 #include "src/client/Provider.hpp"
- #include "PlayState.hpp"
-#include "src/client/ClientApp.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/SoundEngine.hpp"
+#include "src/client/particles/ParticleGenerator.hpp"
+#include "src/client/StateMachine.hpp"
+#include "src/client/KeyBinding.hpp"
+
 
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
@@ -73,7 +80,7 @@ void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 void PlayState::update(const sf::Time &elapsed)
 {
     if (pr::game().playerWon())
-        pr::stateMachine().setCurrentState(STATE_TYPE::FINISHED);
+        pr::stateMachine().setCurrentState(cc::FINISHED);
     else
         pr::game().update(elapsed);
 
