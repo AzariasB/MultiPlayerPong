@@ -37,12 +37,6 @@
 ResourcesManager::ResourcesManager():
     m_uncompressedQuicksandFont(":/quicksand.otf")
 {
-	QResource fontRes(":/ka1.ttf");
-    m_uncompressedDefaultFont = qUncompress(fontRes.data(), fontRes.size());
-    if (!gameFont.loadFromMemory(m_uncompressedDefaultFont.data(), m_uncompressedDefaultFont.size())) {
-        std::cerr << "Failed to load defaultfont font\n";
-		exit(-1);
-	}
 
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
         std::cerr << "Fail to load quicksand font\n";

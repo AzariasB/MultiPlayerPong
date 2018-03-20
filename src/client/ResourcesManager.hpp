@@ -103,35 +103,15 @@ public:
 	 */
 	const sf::Font &getFont() const
 	{
-		return gameFont;
+        return mQuicksandFont;
 	}
 
-    /**
-     * @brief quicksand the small font
-     * of the game
-     * @return
-     */
-    const sf::Font &quicksand() const
-    {
-        return mQuicksandFont;
-    }
-
 private:
-	/**
-	 * @brief gameFont font used for the whole game
-	 */
-	sf::Font gameFont;
-
     /**
      * @brief mQuicksandFont font used
      * for 'small' texts
      */
     sf::Font mQuicksandFont;
-
-	/**
-	 * @brief m_uncompressedFont the uncompressed font
-	 */
-    QByteArray m_uncompressedDefaultFont;
 
     /**
      * @brief m_uncompressedQuicksandFont uncompressed quicksand font
