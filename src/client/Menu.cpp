@@ -30,6 +30,7 @@
  */
 #include "Menu.hpp"
 #include "Provider.hpp"
+#include "ClientConf.hpp"
 #include "ResourcesManager.hpp"
 
 Menu::Menu()
@@ -54,10 +55,19 @@ std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, i
     return inserted;
 }
 
+std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, int xCenter, int yCenter)
+{
+    auto &btn = addButton(content, xCenter, yCenter);
+    sf::Vector2f btnPos(btn->getPosition().x - btn->getWidth() / 2.f, btn->getPosition().y  - btn->getHeight() / 2.f);
+    btn->setPosition(btnPos);
+    return btn;
+}
+
 
 std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, int xpOs, int yPos)
 {
     m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont()));
+    m_labels.back()->setFillColor(cc::colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();
 }

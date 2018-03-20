@@ -27,7 +27,7 @@
 #include "src/Config.hpp"
 #include "src/client/StateMachine.hpp"
 
-const sf::Int32 TransitionState::mTransitionDuration = 100;
+const sf::Int32 TransitionState::mTransitionDuration = 500;
 
 
 TransitionState::TransitionState()
@@ -37,18 +37,17 @@ TransitionState::TransitionState()
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    sf::Vector2f size(SF_ARENA_WIDTH, SF_ARENA_HEIGHT);
-
-    sf::View exitingView(mExitingCenter, size);
-    sf::View enteringView(mEnteringCenter, size);
-
-    renderer.setView(exitingView);
+    renderer.push();
+    renderer.translate(mExitingTranslate);
+    //translate
     pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
+    renderer.pop();
 
-    renderer.setView(enteringView);
+    renderer.push();
+    //translate
+    renderer.translate(mEnteringTranslate);
     pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
-
-    renderer.resetView();
+    renderer.pop();
 }
 
 void TransitionState::update(const sf::Time &elapsed)
@@ -70,25 +69,21 @@ void TransitionState::updateCenters()
 {
     float tVal = mTweening.get();
     if(mDirection == TransitionData::GO_UP || mDirection == TransitionData::GO_DOWN){
-        mEnteringCenter.x = SF_ARENA_WIDTH/2.f;
-        mExitingCenter.x = SF_ARENA_WIDTH/2.f;
-
-        int vertMult = mDirection == TransitionData::GO_UP ? -1 : 1;
-        mExitingCenter.y = SF_ARENA_HEIGHT/2.f + vertMult * tVal;
-        mEnteringCenter.y = ( (-vertMult) * SF_ARENA_HEIGHT + SF_ARENA_HEIGHT/2.f ) + vertMult * tVal;
+        int vertMult = mDirection == TransitionData::GO_UP ? 1 : -1;
+        mExitingTranslate.y = vertMult * tVal;
+        mEnteringTranslate.y = vertMult *(-SF_ARENA_HEIGHT + tVal);
     }else{
-        mEnteringCenter.y = SF_ARENA_HEIGHT/2.f;
-        mExitingCenter.y = SF_ARENA_HEIGHT/2.f;
-
-        int horiztontalMult = mDirection == TransitionData::GO_LEFT ? -1 : 1;
-        mExitingCenter.x = SF_ARENA_WIDTH/2.f + horiztontalMult * tVal;
-        mEnteringCenter.x = ( (-horiztontalMult) * SF_ARENA_WIDTH + SF_ARENA_WIDTH/2.f ) + horiztontalMult *  tVal;
+        float horiztontalMult = mDirection == TransitionData::GO_LEFT ? 1.f : -1.f;
+        mExitingTranslate.x = horiztontalMult * tVal;
+        mEnteringTranslate.x = horiztontalMult * (-SF_ARENA_WIDTH + tVal);
     }
 
 }
 
 void TransitionState::onEnter(BaseStateData *data)
 {
+    mEnteringTranslate = sf::Vector2f();
+    mExitingTranslate = sf::Vector2f();
     StateData<TransitionData*> *stData  = 0;
     if(!(stData = dynamic_cast<StateData<TransitionData*>*>(data)))return;
 

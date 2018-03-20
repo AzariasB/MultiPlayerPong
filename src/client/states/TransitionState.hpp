@@ -54,8 +54,8 @@ private:
     int mExitingStateLabel = -1,
         mEnteringStateLabel = -1;
 
-    sf::Vector2f mEnteringCenter;
-    sf::Vector2f mExitingCenter;
+    sf::Vector2f mEnteringTranslate;
+    sf::Vector2f mExitingTranslate;
 
     void updateCenters();
 

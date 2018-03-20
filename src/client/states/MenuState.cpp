@@ -48,10 +48,15 @@ MenuState::MenuState() :
     m_inputDialog(Dialog::input("IP adress")),
     m_messageDialog(Dialog::message("", "") )
 {
-    const Button &soloButton = *m_menu.addButton("Solo",0,0);
-    const Button &multiPlayerButton = *m_menu.addButton("Multiplayer", 0, soloButton.getHeight());
-    const Button &optionButton = *m_menu.addButton("Options", 0, multiPlayerButton.getHeight() + soloButton.getHeight());
-    const Button &quitButton = *m_menu.addButton("Quit", 0, multiPlayerButton.getHeight() + optionButton.getHeight() + soloButton.getHeight());
+    const float halfWay = SF_ARENA_WIDTH/2.f;
+    float currentHeight = SF_ARENA_WIDTH/4.f;
+    const Button &soloButton = *m_menu.addCenteredButton("Solo",halfWay ,currentHeight);
+    currentHeight += soloButton.getHeight();
+    const Button &multiPlayerButton = *m_menu.addCenteredButton("Multiplayer", halfWay, currentHeight);
+    currentHeight += multiPlayerButton.getHeight();
+    const Button &optionButton = *m_menu.addCenteredButton("Options", halfWay,currentHeight);
+    currentHeight += optionButton.getHeight();
+    const Button &quitButton = *m_menu.addCenteredButton("Quit", halfWay, currentHeight);
 
 
     pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_UP) );

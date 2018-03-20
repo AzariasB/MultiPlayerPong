@@ -100,22 +100,18 @@ public:
 	void render(const sf::Drawable &drawable);
 
     /**
-     * @brief setView changes the view of the renderer
-     * @param view the new view
-     */
-    void setView(const sf::View &view);
-
-    /**
-     * @brief resetView sets the view back to the default one
-     */
-    void resetView();
-
-    /**
      * @brief scale scales the next object to render
      * @param nwScale the new scale the use
      */
     Renderer &scale(float nwScale);
 
+
+    /**
+     * @brief translateY translates the current render states by the given y
+     * @param yTranslation the y to translate
+     * @return this renderer
+     */
+    Renderer &translate(const sf::Vector2f &translation);
 
     /**
      * @brief setTexture changes the texture

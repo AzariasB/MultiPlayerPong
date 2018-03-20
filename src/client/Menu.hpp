@@ -76,6 +76,17 @@ public:
 	 */
 	std::unique_ptr<Button> &addButton(const std::string &content, int xPos, int yPos);
 
+    /**
+     * @brief addCenteredButton adds the button to the menu, with the given text, and
+     * centers it at the given position (instead of placing its top left corner at the
+     * given position)
+     * @param content text of the button
+     * @param xCenter x coordinate of the button
+     * @param yCenter y coordinate of the button
+     * @return
+     */
+    std::unique_ptr<Button> &addCenteredButton(const std::string &content, int xCenter, int yCenter);
+
 	/**
 	 * @brief addLabel adds a label to the menu, with the given text, at the given result
 	 * @param content the string to display

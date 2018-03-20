@@ -52,7 +52,10 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT), "Pong", sf::Style::Default),
+    window(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+           "Pong",
+           sf::Style::Default,
+           sf::ContextSettings(0,0,8)),
     renderer(window),
     game(),
     stateMachine(),
@@ -137,7 +140,7 @@ void ClientApp::run(int argc, char** argv)
         while (window.pollEvent(ev))
             handleEvent(ev);
 
-        window.clear(sf::Color::Black);
+        window.clear(cc::colors::backgroundColor);
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);

@@ -88,7 +88,7 @@ public:
 	 */
 	const sf::Vector2f &getPosition()
 	{
-		return m_position;
+        return m_text.getPosition();
 	}
 
 	/**
@@ -141,11 +141,6 @@ private:
 	 * @brief m_text the text for the button
 	 */
     sf::Text m_text;
-
-	/**
-	 * @brief position the position of the button
-	 */
-	sf::Vector2f m_position;
 
 public:
 	const sf::Uint64 clickedEvent;

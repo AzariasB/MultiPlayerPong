@@ -35,12 +35,14 @@
 #include "Button.hpp"
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
+#include "ClientConf.hpp"
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
     selectdEvent(pr::nextEventCode())
 {
+    m_text.setFillColor(cc::colors::fontColor);
 }
 
 Button::Button(const std::string &text, float xPos, float yPos):
@@ -49,6 +51,7 @@ Button::Button(const std::string &text, float xPos, float yPos):
     selectdEvent(pr::nextEventCode())
 {
     setPosition(sf::Vector2f(xPos, yPos));
+    m_text.setFillColor(cc::colors::fontColor);
 }
 
 void Button::setPosition(const sf::Vector2f& position)

@@ -37,6 +37,8 @@
 
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
+#include "ClientConf.hpp"
+
 #include <math.h>
 
 Renderer::Renderer(sf::RenderTarget &target) :
@@ -96,9 +98,8 @@ sf::RenderStates &Renderer::top()
 
 void Renderer::renderBall(const Ball& ball)
 {
-    sf::CircleShape circle(BALL_RADIUS);
-
-    circle.setFillColor(sf::Color::Blue);
+    sf::CircleShape circle(BALL_RADIUS, 30);
+    circle.setFillColor(cc::colors::ballColor);
     circle.setPosition(ball.topLeftPosition());
     render(circle);
 }
@@ -118,6 +119,12 @@ Renderer &Renderer::setTexture(const sf::Texture *texture)
 Renderer &Renderer::rotateAround(const sf::Vector2f &center, float angle)
 {
     top().transform.rotate(angle, center);
+    return *this;
+}
+
+Renderer &Renderer::translate(const sf::Vector2f &translation)
+{
+    top().transform.translate(translation);
     return *this;
 }
 
@@ -189,7 +196,7 @@ void Renderer::renderPaddle(const Paddle& paddle)
 {
     sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));
 
-    rectangle.setFillColor(sf::Color::Yellow);
+    rectangle.setFillColor(cc::colors::paddleColor);
 
     rectangle.setPosition(paddle.topLeftPosition());
 
@@ -199,20 +206,9 @@ void Renderer::renderPaddle(const Paddle& paddle)
 void Renderer::renderWall(const Wall &wall)
 {
     sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
-    rect.setFillColor(sf::Color::White);
+    rect.setFillColor(cc::colors::wallColor);
     rect.setPosition(wall.topLeftPosition());
     render(rect);
-}
-
-
-void Renderer::setView(const sf::View &view)
-{
-    target.setView(view);
-}
-
-void Renderer::resetView()
-{
-    target.setView(target.getDefaultView());
 }
 
 

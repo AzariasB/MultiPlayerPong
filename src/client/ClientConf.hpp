@@ -31,6 +31,8 @@
 #ifndef CLIENTCONF_HPP
 #define CLIENTCONF_HPP
 
+#include <SFML/Graphics/Color.hpp>
+
 namespace cc//namespace client conf
 {
 /**
@@ -47,6 +49,14 @@ enum STATE_TYPE {
     FINISHED,
     TRANSITION
 };
+
+namespace colors {
+    const sf::Color backgroundColor = sf::Color(0,10, 30);
+    const sf::Color fontColor = sf::Color(220, 220, 220);
+    const sf::Color paddleColor = sf::Color(128, 255, 0);
+    const sf::Color ballColor = sf::Color(226, 88, 34);
+    const sf::Color wallColor = sf::Color(200,200,200);
+}
 
 }
 
