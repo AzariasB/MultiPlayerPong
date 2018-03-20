@@ -49,7 +49,8 @@ public:
 	 * @brief The SOUND_TYPE enum all the possible sound the soundEngine can play
 	 */
 	enum SOUND_TYPE {
-		BOUNCE
+        BOUNCE,
+        CLICK
 	};
 
 	/**
@@ -70,6 +71,7 @@ public:
 	 * @param s the type of the sound to play
 	 */
 	void playSound(SOUND_TYPE s);
+
 
 	void mute()
 	{
@@ -94,6 +96,7 @@ private:
 	 * @return the sound type turned into a string
 	 */
 	std::string toSoundName(SOUND_TYPE st);
+
 
 	/**
 	 * @brief m_manager reference to the resource manager,  to save the sound resources

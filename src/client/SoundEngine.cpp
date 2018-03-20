@@ -50,6 +50,7 @@ void SoundEngine::saveSound(SOUND_TYPE s, const std::string& filename)
 	m_manager.registerSound(filename, toSoundName(s));
 }
 
+
 std::string SoundEngine::toSoundName(SOUND_TYPE st)
 {
 	return "sound_" + std::to_string(static_cast<int> (st));

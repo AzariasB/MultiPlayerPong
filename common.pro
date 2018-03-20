@@ -47,10 +47,3 @@ HEADERS +=\
     src/Wall.hpp \
     src/ContactListener.hpp \
     src/PhysicObject.hpp
-
-DISTFILES +=\
-    ka1.ttf \
-    bounce.wav
-
-RESOURCES += \
-    resources.qrc

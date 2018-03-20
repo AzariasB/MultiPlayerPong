@@ -32,6 +32,7 @@
 #include "Provider.hpp"
 #include "ClientConf.hpp"
 #include "ResourcesManager.hpp"
+#include "SoundEngine.hpp"
 
 Menu::Menu()
 {
@@ -128,22 +129,21 @@ void Menu::handleEvent(const sf::Event &ev)
 
 void Menu::setSeletedIndex(int nwIndex)
 {
-    m_buttons[m_selectedButton]->setSelected(false);
-    m_selectedButton = nwIndex;
-    m_buttons[m_selectedButton]->setSelected(true);
+    if(nwIndex != m_selectedButton){
+        m_buttons[m_selectedButton]->setSelected(false);
+        m_selectedButton = nwIndex;
+        m_buttons[m_selectedButton]->setSelected(true);
+        pr::soundEngine().playSound(SoundEngine::CLICK);
+    }
 }
 
 void Menu::changeSelection(int dir)
 {
-    std::size_t oldSelected = m_selectedButton;
     if(dir == -1){
         if(m_selectedButton == 0)return;
-        m_selectedButton--;
+        setSeletedIndex(m_selectedButton -1);
     }else{
         if(m_selectedButton == m_buttons.size() -1)return;
-        m_selectedButton++;
+        setSeletedIndex(m_selectedButton + 1);
     }
-
-    m_buttons[oldSelected]->setSelected(false);
-    m_buttons[m_selectedButton]->setSelected(true);
 }

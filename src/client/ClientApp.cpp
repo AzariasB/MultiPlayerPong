@@ -72,7 +72,8 @@ ClientApp::ClientApp() :
     rManager.registerTexture(":/animations/ball_retract","ball_retract");
 
     socket.setBlocking(false);
-    m_sEngine.saveSound(SoundEngine::BOUNCE, ":/bounce.wav");
+    m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
+    m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
     window.setKeyRepeatEnabled(false);
 }
 
