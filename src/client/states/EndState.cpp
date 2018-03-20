@@ -94,7 +94,7 @@ void EndState::onEnter(BaseStateData *data)
 void EndState::onLeave()
 {
     //Disconnect the sockets and "null" them
-    pr::socket().unbind();
+    pr::socket().disconnect();
 }
 
 void EndState::update(const sf::Time &elapsed)

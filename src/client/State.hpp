@@ -68,7 +68,7 @@ struct StateData : public BaseStateData{
      * @brief reference to the data hold by the object
      * @return reference to the data hold by the object
      */
-    virtual const T &data() const
+    const T &data() const
     {
         return m_data;
     }

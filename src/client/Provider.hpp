@@ -33,7 +33,7 @@
 
 #include <SFML/Config.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Network/UdpSocket.hpp>
+#include <SFML/Network/TcpSocket.hpp>
 
 #include "src/EventManager.hpp"
 
@@ -69,7 +69,7 @@ namespace pr {
 
     Renderer &renderer();
 
-    sf::UdpSocket &socket();
+    sf::TcpSocket &socket();
 
     Player &player();
 

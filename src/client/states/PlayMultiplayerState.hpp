@@ -62,6 +62,13 @@ public:
 	 */
 	void handleEvent(const sf::Event& ev) override;
 
+
+    /**
+     * @brief update overriden method
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
+
 	/**
 	 * @brief onEnter inherited function
 	 * @param data
@@ -73,20 +80,9 @@ public:
 	 */
 	void onLeave() override;
 
-	/**
-	 * @brief listenSocket function run by the thread
-	 */
-    void listenSocket();
-
     virtual ~PlayMultiplayerState();
 
 private:
-
-	/**
-	 * @brief listeningThread the threads that listens at
-	 * the sockets input from the server
-	 */
-	sf::Thread listeningThread;
 
 	/**
 	 * @brief gameFinisehd wether the game ended

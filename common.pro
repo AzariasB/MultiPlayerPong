@@ -18,8 +18,6 @@ unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system ../../lib/libenet.a
 
 LIBS += ../../lib/libBox2D.a
 
-include(src/network/network.pro)
-
 SOURCES +=\
     src/main.cpp \
     src/Application.cpp \

@@ -183,7 +183,7 @@ public:
      * @brief getCountdownTime the countdown timer
      * @return
      */
-	sf::Time getCountdownTime() const;
+    const sf::Time &getCountdownTime() const;
 
 
     /**
@@ -294,11 +294,6 @@ private:
      * before sending them to the client
      */
     std::vector<Powerup*> mw_nwPowerups;
-
-	/**
-	 * @brief mutex the mutex used to make this class thread safe
-	 */
-	mutable sf::Mutex mutex;
 
     /**
      * @brief mContactListener

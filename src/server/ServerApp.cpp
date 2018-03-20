@@ -45,10 +45,13 @@ ServerApp::~ServerApp()
 
 void ServerApp::run(int argc, char** argv)
 {
+    B2_NOT_USED(argc);
+    B2_NOT_USED(argv);
+
     srand(time(NULL));
 	sf::TcpListener listener;
 
-	sf::Socket::Status status = listener.listen(5300);
+    sf::Socket::Status status = listener.listen(DEFAULT_PORT);
 
 	if (status != sf::Socket::Done) {
 		std::cerr << "Could not start server\n";

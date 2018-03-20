@@ -89,30 +89,12 @@ public:
 	void onLeave() override;
 
 	/**
-	 * @brief listenSocket function called by the thread to listen at the sockets
-	 */
-	void listenSocket();
-
-	/**
 	 * @brief cancelClicked function called when the button "cancel" is clicked
 	 */
 	void cancelClicked();
 
 	virtual ~WaitingState();
 private:
-	/**
-	 * @brief listeningThread the thread that listens inputs from the server
-	 */
-	sf::Thread listeningThread;
-	/**
-	 * @brief canBeginMutex mutex to lock the "canBegin" variable access
-	 */
-	mutable sf::Mutex canBeginMutex;
-	/**
-	 * @brief cStateMutex mutex to lock th "cState" variable access
-	 */
-	mutable sf::Mutex cStateMutex;
-
 	/**
 	 * @brief m_messageDialog the dialog to display, to show the state
 	 * of the application
@@ -123,17 +105,6 @@ private:
 	 * @brief c_state state current connection state
 	 */
 	CONNECTION_STATE c_state;
-
-	/**
-	 * @brief canBegin wether the game can begin
-	 */
-	bool canBegin = false;
-
-	/**
-	 * @brief receivedNumber number sent by the server
-	 * to the client to indicate it's player number
-	 */
-	int receivedNumber = -1;
 };
 
 #endif /* WAITINGSTATE_H */

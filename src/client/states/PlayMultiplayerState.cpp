@@ -40,13 +40,21 @@
 #include <iostream>
 
 PlayMultiplayerState::PlayMultiplayerState() :
-    PlayState(),
-    listeningThread(&PlayMultiplayerState::listenSocket, this)
+    PlayState()
 {
 }
 
 PlayMultiplayerState::~PlayMultiplayerState()
 {
+}
+
+void PlayMultiplayerState::update(const sf::Time &elapsed)
+{
+    PlayState::update(elapsed);
+    sf::Packet rcvPacket;
+    if(pr::socket().receive(rcvPacket) == sf::Socket::Done){
+        rcvPacket >> pr::game();
+    }
 }
 
 void PlayMultiplayerState::handleEvent(const sf::Event& ev)
@@ -56,33 +64,15 @@ void PlayMultiplayerState::handleEvent(const sf::Event& ev)
     if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
         sf::Packet p;
         p << realEv.type << realEv.key.code;
-        pr::socket().send(p, sf::IpAddress::Any ,DEFAULT_PORT);
+        pr::socket().send(p);
     }
 }
 
 void PlayMultiplayerState::onEnter(BaseStateData *data)
 {
     Q_UNUSED(data);
-    listeningThread.launch();
 }
 
 void PlayMultiplayerState::onLeave()
 {
-    listeningThread.terminate();
-}
-
-void PlayMultiplayerState::listenSocket()
-{
-    while (1) {
-        sf::Packet p;
-        sf::IpAddress originAdress;
-        unsigned short originPort;
-
-        sf::Socket::Status rcvStatus = pr::socket().receive(p,originAdress, originPort);
-        if (rcvStatus == sf::Socket::Done) {
-            p >> pr::game();
-        } else if (rcvStatus == sf::Socket::Disconnected) {
-            //Send message to main thread
-        }
-    }
 }

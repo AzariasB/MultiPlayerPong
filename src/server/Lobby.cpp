@@ -107,7 +107,7 @@ void Lobby::start()
 //        }
 
         game.update(elapsed);
-        if (totalTime.asMilliseconds() > 10) {
+        if (totalTime.asMilliseconds() > 1) {
             sf::Packet packet;
             packet << game;
             socket1->send(packet); //Update the players

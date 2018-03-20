@@ -67,7 +67,7 @@ ClientApp::ClientApp() :
     rManager.registerTexture(":/animations/ball_extend","ball_extend");
     rManager.registerTexture(":/animations/ball_retract","ball_retract");
 
-
+    socket.setBlocking(false);
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/bounce.wav");
     window.setKeyRepeatEnabled(false);
 }
@@ -145,7 +145,7 @@ void ClientApp::run(int argc, char** argv)
 
         window.display();
     }
-    socket.unbind();
+    socket.disconnect();
     stateMachine.getCurrentState().onLeave(); //Close last threads
 }
 
@@ -196,7 +196,7 @@ Game& ClientApp::getGame()
     return game;
 }
 
-sf::UdpSocket& ClientApp::getSocket()
+sf::TcpSocket& ClientApp::getSocket()
 {
     return socket;
 }

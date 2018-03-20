@@ -90,7 +90,7 @@ Renderer &pr::renderer()
     return ClientApp::getInstance().getRenderer();
 }
 
-sf::UdpSocket &pr::socket()
+sf::TcpSocket &pr::socket()
 {
     return ClientApp::getInstance().getSocket();
 }
