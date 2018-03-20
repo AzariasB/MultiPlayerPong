@@ -86,7 +86,7 @@ public:
 	 * @brief getPosition position of the button
 	 * @return position of the button
 	 */
-	const sf::Vector2f &getPosition()
+    const sf::Vector2f &getPosition() const
 	{
         return m_text.getPosition();
 	}

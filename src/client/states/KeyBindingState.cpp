@@ -40,14 +40,15 @@ KeyBindingState::KeyBindingState():
     m_messageDialog(Dialog::message("","Press a key")),
     m_menu()
 {
-    int startX = 0;
-    int startY = 0;
-    startY += m_menu.addLabel("Key bindings",startX, startY)->getGlobalBounds().height + 10;
+    const int startX = SF_ARENA_WIDTH/2.f;
+    int startY = 100;
+    startY += m_menu.addCenteredLabel("Key bindings", startX, startY)->getGlobalBounds().height + 20;
 
 
+    const int xSide = SF_ARENA_WIDTH / 4.f;
     for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
         std::string btnTitle = pr::keyBinding().toString(ka);
-        Button *b = m_menu.addButton( btnTitle ,startX, startY).get();
+        Button *b = m_menu.addButton(btnTitle ,xSide, startY).get();
         startY += b->getHeight();
         m_actions.emplace_back(std::make_unique<ActionsButton>(b, ka));
         pr::connect(
@@ -58,11 +59,12 @@ KeyBindingState::KeyBindingState():
                     );
     }
 
-    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY)->clickedEvent;
+    startY += 50.f;
+    sf::Uint64 resetClicked  = m_menu.addCenteredButton("Reset", startX, startY)->clickedEvent;
     pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, ARENA_HEIGHT - 50)->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addCenteredButton("Back", startX, startY + 100)->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_messageDialog->setOkButtonTitle("Cancel");

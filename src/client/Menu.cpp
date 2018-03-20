@@ -43,7 +43,7 @@ Menu::~Menu()
 
 }
 
-std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, int yPos)
+std::unique_ptr<Button> &Menu::addButton(const std::string &content, float xPos, float yPos)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
     std::unique_ptr<Button> &inserted = m_buttons.back();
@@ -55,7 +55,7 @@ std::unique_ptr<Button> &Menu::addButton(const std::string &content, int xPos, i
     return inserted;
 }
 
-std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, int xCenter, int yCenter)
+std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, float xCenter, float yCenter)
 {
     auto &btn = addButton(content, xCenter, yCenter);
     sf::Vector2f btnPos(btn->getPosition().x - btn->getWidth() / 2.f, btn->getPosition().y  - btn->getHeight() / 2.f);
@@ -64,7 +64,16 @@ std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, int
 }
 
 
-std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, int xpOs, int yPos)
+std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter)
+{
+    auto &label = addLabel(content, xCenter, yCenter);
+    sf::Vector2f labelPos(label->getPosition().x - label->getGlobalBounds().width / 2.f,
+                          label->getPosition().y - label->getGlobalBounds().height / 2.f);
+    label->setPosition(labelPos);
+    return label;
+}
+
+std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos)
 {
     m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont()));
     m_labels.back()->setFillColor(cc::colors::fontColor);
@@ -78,6 +87,15 @@ std::unique_ptr<sf::Sprite> &Menu::addSprite(const std::string &textureName, con
     m_sprites.emplace_back(std::unique_ptr<sf::Sprite>(new sf::Sprite(texture, textureRect)));
     m_sprites.back()->setPosition(pos);
     return m_sprites.back();
+}
+
+std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureName, const sf::Vector2f &centerPos, const sf::IntRect &textureRect)
+{
+    auto &sprite = addSprite(textureName, centerPos, textureRect);
+    sf::Vector2f center(sprite->getPosition().x - sprite->getGlobalBounds().width/2.f,
+                        sprite->getPosition().y - sprite->getGlobalBounds().height/2.f);
+    sprite->setPosition(center);
+    return sprite;
 }
 
 void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const

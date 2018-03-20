@@ -74,7 +74,7 @@ public:
 	 * @param yPos the Y position of the button
 	 * @return the button newly created
 	 */
-	std::unique_ptr<Button> &addButton(const std::string &content, int xPos, int yPos);
+    std::unique_ptr<Button> &addButton(const std::string &content, float xPos, float yPos);
 
     /**
      * @brief addCenteredButton adds the button to the menu, with the given text, and
@@ -85,7 +85,7 @@ public:
      * @param yCenter y coordinate of the button
      * @return
      */
-    std::unique_ptr<Button> &addCenteredButton(const std::string &content, int xCenter, int yCenter);
+    std::unique_ptr<Button> &addCenteredButton(const std::string &content, float xCenter, float yCenter);
 
 	/**
 	 * @brief addLabel adds a label to the menu, with the given text, at the given result
@@ -94,7 +94,17 @@ public:
 	 * @param yPos the Y position of the text
 	 * @return the text newly created
 	 */
-	std::unique_ptr<sf::Text> &addLabel(const std::string &content, int xpOs, int yPos);
+    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos);
+
+    /**
+     * @brief addCenteredLabel adds the label to the menu, with the given text, and centers it
+     * at the given position (instead of putting its top-left cordner at the given position)
+     * @param content the text of the label
+     * @param xCenter x position of the labels center
+     * @param yCenter y position of the labels center
+     * @return the newly created text
+     */
+    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter);
 
 	/**
 	 * @brief addSprite adds a sprite to the menu, using the given texture, and the texture rectangle
@@ -105,6 +115,15 @@ public:
 	 * @return the newly created sprite
 	 */
 	std::unique_ptr<sf::Sprite> &addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect);
+
+    /**
+     * @brief addCenteredSprite add the sprite to the menu, centered at the given location
+     * @param textureName name of the texture
+     * @param centerPos center of the sprite
+     * @param textureRect texture rectangle of the sprite
+     * @return
+     */
+    std::unique_ptr<sf::Sprite> &addCenteredSprite(const std::string &textureName, const sf::Vector2f &centerPos, const sf::IntRect &textureRect);
 
 private:
     /**

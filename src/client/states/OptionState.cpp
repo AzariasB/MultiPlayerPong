@@ -39,22 +39,23 @@
 OptionState::OptionState():
 m_menu()
 {
-    sf::Text &label =  *m_menu.addLabel("Options",SF_ARENA_WIDTH/2, 0);
-	label.setPosition(label.getPosition().x - label.getGlobalBounds().width / 2.f, label.getPosition().y);
+    float startY = 50.f;
+    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
 
-	int startY = 50;
-	Button &muteButton = *m_menu.addButton("Toggle sound", 0, startY);
+    const Button &muteButton = *m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY);
 
-    m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(SF_ARENA_WIDTH - 50, 0), getCurrentSoundRect()).get();
-	m_soundSprite->setPosition(m_soundSprite->getPosition().x, startY);
-	m_soundSprite->scale(4,4);
+    m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(muteButton.getPosition().x + muteButton.getWidth() + 10 , startY), getCurrentSoundRect()).get();
+    //m_soundSprite->setOrigin(2,2);
+    m_soundSprite->scale(3,3);
     pr::connect(muteButton.clickedEvent, &OptionState::toggleSound, this);
 
+    startY += muteButton.getHeight();
+    const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
 
-    sf::Uint64 keyBindingClicked = m_menu.addButton("Key bindings", 0, startY + muteButton.getHeight())->clickedEvent;
-    pr::connect(keyBindingClicked , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
+    startY += keyBindingButton.getHeight() + 50.f;
+    pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
-    sf::Uint64 backClicked = m_menu.addButton("Menu", 0, SF_ARENA_HEIGHT - 50)->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH/2.f , startY )->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 }
 
