@@ -112,7 +112,7 @@ void MenuState::handleEvent(const sf::Event& ev)
 
 void MenuState::update(const sf::Time &elapsed)
 {
-    Q_UNUSED(elapsed);
+    m_menu.update(elapsed);
 }
 
 bool MenuState::isValidIp(const std::string &enteredIp) const

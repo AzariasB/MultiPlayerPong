@@ -22,59 +22,51 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   Widget.h
+/*
+ * File:   ColorTweening.cpp
  * Author: azarias
  *
- * Created on 22 octobre 2017, 16:30
+ * Created on 26/3/2018
  */
+#include "ColorTweening.hpp"
 
-#ifndef WIDGET_H
-#define WIDGET_H
+ColorTweening::ColorTweening()
+{
+    m_running = false;
+}
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Window/Event.hpp>
+ColorTweening::ColorTweening(const sf::Color &defaultColor):
+    m_color(defaultColor)
+{
+    m_running = false;
+}
 
-class ClientApp;
+ColorTweening::ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing):
+    m_color(from)
+{
+    m_colorsTwin[0] = twin::makeTwin(from.r, to.r, duration, easing);
+    m_colorsTwin[1] = twin::makeTwin(from.g, to.g, duration, easing);
+    m_colorsTwin[2] = twin::makeTwin(from.b, to.b, duration, easing);
+    m_colorsTwin[3] = twin::makeTwin(from.a, to.a, duration, easing);
 
-/**
- * @brief The Widget class base class for all the widgets of this app
- */
-class Widget : public sf::Drawable {
-public:
+    m_running = true;
+}
 
-	/**
-	 * @brief Widget constructor
-	 * @param app a reference to the client's application
-	 */
-    Widget()
-	{
 
-	}
 
-	/**
-	 * @brief draw draws the widget to the given target, using the given rendering states
-	 * @param target the target in which to draw the widget
-	 * @param states the states to use when drawing the widget
-	 */
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
+const sf::Color &ColorTweening::get() const
+{
+    return m_color;
+}
 
-	/**
-	 * @brief handleEvent handles an event sent by sfml
-	 * @param ev the event to handle
-	 */
-	virtual void handleEvent(const sf::Event &ev) = 0;
+void ColorTweening::update(float deltaTime)
+{
+    if(!m_running)return;
 
-    virtual void update(const sf::Time &elapsed)
-    {
+    for(auto &tw : m_colorsTwin)
+        tw.step(deltaTime);
 
-    }
-
-	virtual ~Widget()
-	{
-
-	}
-};
-
-#endif /* WIDGET_H */
+    m_color = sf::Color(m_colorsTwin[0].get(), m_colorsTwin[1].get(), m_colorsTwin[2].get(), m_colorsTwin[3].get());
+    m_running = m_colorsTwin[0].progress() < 1.f;
+}
 

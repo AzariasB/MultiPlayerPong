@@ -36,8 +36,9 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
-#include "../EventManager.hpp"
+#include "src/EventManager.hpp"
 #include "Widget.hpp"
+#include "ColorTweening.hpp"
 
 /**
  * @brief The Button is a widget used to be clickable (and hoverable)
@@ -62,6 +63,13 @@ public:
 	 * @param yPos y position of the button
 	 */
     Button(const std::string &text, float xPos, float yPos);
+
+
+    /**
+     * @brief update inerited function
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
 
 	/**
 	 * @brief draw Function to draw the button
@@ -141,6 +149,8 @@ private:
 	 * @brief m_text the text for the button
 	 */
     sf::Text m_text;
+
+    ColorTweening m_color;
 
 public:
 	const sf::Uint64 clickedEvent;

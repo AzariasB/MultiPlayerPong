@@ -13,7 +13,8 @@ SOURCES +=\
     $$PWD/Menu.cpp \
     $$PWD/KeyBinding.cpp \
     $$PWD/Animation.cpp \
-    $$PWD/Provider.cpp
+    $$PWD/Provider.cpp \
+    $$PWD/ColorTweening.cpp
 
 HEADERS +=\
     $$PWD/Button.hpp \
@@ -31,4 +32,5 @@ HEADERS +=\
     $$PWD/Animation.hpp \
     $$PWD/Provider.hpp \
     $$PWD/State.hpp \
-    $$PWD/ClientConf.hpp
+    $$PWD/ClientConf.hpp \
+    $$PWD/ColorTweening.hpp

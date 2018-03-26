@@ -40,18 +40,26 @@
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    selectdEvent(pr::nextEventCode()),
+    m_color(cc::colors::fontColor)
 {
-    m_text.setFillColor(cc::colors::fontColor);
+    m_text.setFillColor(m_color.get());
 }
 
 Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    selectdEvent(pr::nextEventCode()),
+    m_color(cc::colors::fontColor)
 {
     setPosition(sf::Vector2f(xPos, yPos));
-    m_text.setFillColor(cc::colors::fontColor);
+    m_text.setFillColor(m_color.get());
+}
+
+void Button::update(const sf::Time &elapsed)
+{
+    m_color.update(elapsed.asSeconds());
+    updateText();
 }
 
 void Button::setPosition(const sf::Vector2f& position)
@@ -67,14 +75,17 @@ void Button::handleEvent(const sf::Event& ev)
 
         bool was_hilighted = m_hilighted;
         setSelected(m_text.getGlobalBounds().contains(realMovePos));
+
         if(was_hilighted != m_hilighted)
             pr::trigger(selectdEvent);
+
     } else if (ev.type == sf::Event::MouseButtonPressed) {
         sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
         isClicked = ev.mouseButton.button == sf::Mouse::Left && m_text.getGlobalBounds().contains(realClickPos);
     } else if(isSelectionEvent(ev)){
         isClicked = true;
     }
+
     if (isClicked)
         pr::trigger(clickedEvent);
 }
@@ -97,13 +108,18 @@ void Button::setText(const std::string &text)
 
 void Button::setSelected(bool selected)
 {
+    if(selected){
+        m_color = ColorTweening(m_color.get(), sf::Color::Red, 0.1, twin::easing::linear);
+    }else{
+        m_color = ColorTweening(m_color.get(), sf::Color::White, 0.1, twin::easing::linear);
+    }
     m_hilighted = selected;
     updateText();
 }
 
 void Button::updateText()
 {
-    m_text.setFillColor(m_hilighted ? sf::Color::Red : sf::Color::White);
+    m_text.setFillColor(m_color.get());
 }
 
 Button::~Button()

@@ -84,7 +84,7 @@ void OptionState::draw(Renderer &renderer) const
 
 void OptionState::update(const sf::Time &elapsed)
 {
-	Q_UNUSED(elapsed);
+    m_menu.update(elapsed);
 }
 
 void OptionState::handleEvent(const sf::Event &ev)

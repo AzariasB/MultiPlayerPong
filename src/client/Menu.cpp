@@ -44,6 +44,12 @@ Menu::~Menu()
 
 }
 
+void Menu::update(const sf::Time &elapsed)
+{
+    for(auto &it : m_buttons)
+        it->update(elapsed);
+}
+
 std::unique_ptr<Button> &Menu::addButton(const std::string &content, float xPos, float yPos)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));

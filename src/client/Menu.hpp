@@ -66,6 +66,12 @@ public:
 	 */
 	void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
+
 	/**
 	 * @brief addButton adds a button to the menu, with the given text, at the given position
 	 * returns the button if the caller wants to make additional changes, and store it for another usage
