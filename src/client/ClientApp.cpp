@@ -74,6 +74,7 @@ ClientApp::ClientApp() :
     socket.setBlocking(false);
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
     m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
+    m_sEngine.saveSound(SoundEngine::ROLLOVER, ":/sounds/rollover.wav");
     window.setKeyRepeatEnabled(false);
 }
 

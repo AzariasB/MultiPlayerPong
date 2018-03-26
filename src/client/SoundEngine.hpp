@@ -50,7 +50,8 @@ public:
 	 */
 	enum SOUND_TYPE {
         BOUNCE,
-        CLICK
+        CLICK,
+        ROLLOVER
 	};
 
 	/**

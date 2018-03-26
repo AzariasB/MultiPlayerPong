@@ -17,6 +17,7 @@
         <file alias="click3.wav" >res/UI_SFX_Set/click3.wav</file>
         <file alias="click4.wav" >res/UI_SFX_Set/click4.wav</file>
         <file alias="click5.wav" >res/UI_SFX_Set/click5.wav</file>
+        <file alias="rollover.wav" >res/UI_SFX_Set/rollover1.wav</file>
     </qresource>
     <qresource prefix="/shaders" >
         <file alias="wobble.frag">res/wobble.frag</file>
