@@ -3,6 +3,7 @@
         <file alias="icons.png">res/icons.png</file>
         <file alias="sketchy.jpg">res/sketchy.jpg</file>
         <file alias="quicksand.otf">res/quicksand.otf</file>
+        <file alias="WhateverItTakes.ttf">res/WhateverItTakes.ttf</file>
     </qresource>
     <qresource prefix="/animations">
         <file alias="ball_extend">res/ball_extend.png</file>

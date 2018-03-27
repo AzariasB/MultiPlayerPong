@@ -35,11 +35,11 @@
 #include <SFML/System/MemoryInputStream.hpp>
 
 ResourcesManager::ResourcesManager():
-    m_uncompressedQuicksandFont(":/quicksand.otf")
+    m_uncompressedQuicksandFont(":/WhateverItTakes.ttf")
 {
 
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
-        std::cerr << "Fail to load quicksand font\n";
+        std::cerr << "Fail to load Whatever it takes font\n";
         exit(-1);
     }
 }
