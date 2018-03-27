@@ -31,6 +31,7 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
 #include "Button.hpp"
 #include "Provider.hpp"
@@ -55,7 +56,7 @@ Button::Button(const std::string &text, float xPos, float yPos):
     setPosition(sf::Vector2f(xPos, yPos));
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
-    positionIcon();
+    updateIcon();
 }
 
 void Button::update(const sf::Time &elapsed)
@@ -128,15 +129,22 @@ const sf::Sprite &Button::getIcon() const
 void Button::setIcon(const sf::Sprite &sprite)
 {
     m_icon = sprite;
-    positionIcon();
+    updateIcon();
 }
 
-void Button::positionIcon()
+void Button::updateIcon()
 {
+    //At the right of the text
     sf::FloatRect fr = m_text.getGlobalBounds();
-    sf::Vector2f iconPosition(m_text.getPosition().x + fr.width + 10, m_text.getPosition().y);
+    sf::Vector2f iconPosition(m_text.getPosition().x + fr.width + 10, m_text.getPosition().y + fr.height * 0.3);
 
     m_icon.setPosition(iconPosition);
+
+    //Same height as the text
+    sf::FloatRect iFr = m_icon.getLocalBounds();
+    float scale = fr.height / iFr.height;
+    m_icon.setScale(scale, scale);
+
 }
 
 void Button::updateText()

@@ -153,7 +153,7 @@ public:
 private:
     void updateText();
 
-    void positionIcon();
+    void updateIcon();
 
     bool isSelectionEvent(const sf::Event &ev) const;
 	/**

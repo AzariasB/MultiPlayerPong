@@ -44,7 +44,6 @@ m_menu()
 
     m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
     sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture("sound_icons"), getCurrentSoundRect());
-    sound.scale(0.7,0.7);
     m_muteButton->setIcon(sound);
 
     pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
