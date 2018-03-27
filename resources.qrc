@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="icons.png">res/icons.png</file>
+        <file alias="sound_icons.png">res/sound_icons.png</file>
         <file alias="sketchy.jpg">res/sketchy.jpg</file>
         <file alias="quicksand.otf">res/quicksand.otf</file>
         <file alias="WhateverItTakes.ttf">res/WhateverItTakes.ttf</file>

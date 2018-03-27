@@ -107,17 +107,14 @@ std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureN
 
 void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
-        target.draw(**it, states);
-    }
+    for(auto &ptr : m_buttons)
+        target.draw(*ptr, states);
 
-    for(auto it = m_labels.begin(); it != m_labels.end(); ++it){
-        target.draw(**it, states);
-    }
+    for(auto &ptr : m_labels)
+        target.draw(*ptr, states);
 
-    for(auto it = m_sprites.begin(); it != m_sprites.end(); ++it){
-        target.draw(**it, states);
-    }
+    for(auto &ptr : m_sprites)
+        target.draw(*ptr, states);
 }
 
 void Menu::handleEvent(const sf::Event &ev)
@@ -127,9 +124,8 @@ void Menu::handleEvent(const sf::Event &ev)
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
         changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
     }else{
-        for(auto it = m_buttons.begin(); it != m_buttons.end(); ++it){
-            (*it)->handleEvent(ev);
-        }
+        for(auto &ptr : m_buttons)
+            ptr->handleEvent(ev);
     }
 }
 

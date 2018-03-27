@@ -42,14 +42,14 @@ m_menu()
     float startY = 50.f;
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
 
-    const Button &muteButton = *m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY);
+    m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
+    sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture("sound_icons"), getCurrentSoundRect());
+    sound.scale(0.7,0.7);
+    m_muteButton->setIcon(sound);
 
-    m_soundSprite = m_menu.addSprite("icons", sf::Vector2f(muteButton.getPosition().x + muteButton.getWidth() + 10 , startY), getCurrentSoundRect()).get();
-    //m_soundSprite->setOrigin(2,2);
-    m_soundSprite->scale(3,3);
-    pr::connect(muteButton.clickedEvent, &OptionState::toggleSound, this);
+    pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
 
-    startY += muteButton.getHeight();
+    startY += m_muteButton->getHeight();
     const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
 
     startY += keyBindingButton.getHeight() + 50.f;
@@ -61,10 +61,12 @@ m_menu()
 
 void OptionState::toggleSound()
 {
-
     pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
                                           pr::soundEngine().mute();
-	m_soundSprite->setTextureRect(getCurrentSoundRect());
+
+    sf::Sprite buttonSprite= m_muteButton->getIcon();
+    buttonSprite.setTextureRect(getCurrentSoundRect());
+    m_muteButton->setIcon(buttonSprite);
 }
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const

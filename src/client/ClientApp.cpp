@@ -65,6 +65,7 @@ ClientApp::ClientApp() :
     //Textures
     rManager.registerTexture(":/icons.png", "icons");
     rManager.registerTexture(":/sketchy.jpg","sketchy");
+    rManager.registerTexture(":/sound_icons.png","sound_icons");
     //rManager.registerShader(":/shaders/wobble.frag","main"); /* shader not working on me computer :( */
     rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
     rManager.registerTexture(":/animations/paddle_retract","paddle_retract");

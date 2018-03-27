@@ -54,6 +54,8 @@ Button::Button(const std::string &text, float xPos, float yPos):
 {
     setPosition(sf::Vector2f(xPos, yPos));
     m_text.setFillColor(m_color.get());
+    m_icon.setColor(m_color.get());
+    positionIcon();
 }
 
 void Button::update(const sf::Time &elapsed)
@@ -99,6 +101,7 @@ bool Button::isSelectionEvent(const sf::Event &ev) const
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(m_text, states);
+    target.draw(m_icon, states);
 }
 
 void Button::setText(const std::string &text)
@@ -117,9 +120,29 @@ void Button::setSelected(bool selected)
     updateText();
 }
 
+const sf::Sprite &Button::getIcon() const
+{
+    return m_icon;
+}
+
+void Button::setIcon(const sf::Sprite &sprite)
+{
+    m_icon = sprite;
+    positionIcon();
+}
+
+void Button::positionIcon()
+{
+    sf::FloatRect fr = m_text.getGlobalBounds();
+    sf::Vector2f iconPosition(m_text.getPosition().x + fr.width + 10, m_text.getPosition().y);
+
+    m_icon.setPosition(iconPosition);
+}
+
 void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
+    m_icon.setColor(m_color.get());
 }
 
 Button::~Button()

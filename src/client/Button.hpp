@@ -34,6 +34,7 @@
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
 #include "src/EventManager.hpp"
@@ -99,6 +100,19 @@ public:
         return m_text.getPosition();
 	}
 
+    /**
+     * @brief getIcon icon of the button (if any)
+     * @return
+     */
+    const sf::Sprite &getIcon() const;
+
+    /**
+     * @brief setIcon sets the icon
+     * @param sprite
+     */
+    void setIcon(const sf::Sprite &sprite);
+
+
 	/**
 	 * @brief getWidth the width of the button
 	 * @return the width of the button
@@ -139,6 +153,8 @@ public:
 private:
     void updateText();
 
+    void positionIcon();
+
     bool isSelectionEvent(const sf::Event &ev) const;
 	/**
 	 * @brief m_hilighted wether the button is currently higlighted
@@ -149,6 +165,8 @@ private:
 	 * @brief m_text the text for the button
 	 */
     sf::Text m_text;
+
+    sf::Sprite m_icon;
 
     ColorTweening m_color;
 

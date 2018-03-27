@@ -94,25 +94,21 @@ private:
 	 */
 	const sf::IntRect &getCurrentSoundRect() const;
 
-	/**
-	 * @brief m_soundSprite sprite showing the sound icon
-	 */
-	sf::Sprite *m_soundSprite = 0;
+    Button *m_muteButton = 0;
 
 	/**
 	 * @brief m_menu the menu with all the options
 	 */
 	Menu m_menu;
-
 	/**
 	 * @brief m_withSoundRect rect for the icon "with sound"
 	 */
-	sf::IntRect m_withSoundRect = sf::IntRect(8, 16, 8, 8);
+    sf::IntRect m_withSoundRect = sf::IntRect(65, 0, 64, 53);
 
 	/**
 	 * @brief m_withoutSoundRect rect for the icon "without sound"
 	 */
-	sf::IntRect m_withoutSoundRect = sf::IntRect(16, 16, 8, 8);
+    sf::IntRect m_withoutSoundRect = sf::IntRect(0, 0, 64, 53);
 
 
 };
