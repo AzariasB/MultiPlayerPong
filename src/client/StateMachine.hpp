@@ -35,7 +35,10 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <unordered_map>
 
+#include "ClientConf.hpp"
+#include "SoundEngine.hpp"
 #include "State.hpp"
+#include "Provider.hpp"
 
 class ClientApp;
 
@@ -64,6 +67,24 @@ public:
      * @param dir
      */
     void goToState(int statelabel, TransitionData::DIRECTION dir);
+
+    /**
+     * @brief goToState changes the state, with an animation
+     * @param statelabel thelabel of the state to go to
+     * @param dir direction of animation
+     * @param data data to pass to the next state
+     */
+    template<typename T>
+    void goToState(int statelabel, TransitionData::DIRECTION dir, const T & data)
+    {
+        TransitionData td;
+        td.enteringStateLabel = statelabel;
+        td.exitingStateLabel = currentStateIndex;
+        td.direction = dir;
+        td.enteringData = std::make_unique<StateData<T>>(data);
+        setCurrentState(cc::TRANSITION, &td);
+        pr::soundEngine().playSound(SoundEngine::ROLLOVER);
+    }
 
 	/**
 	 * @brief addState adds the state given as template parameter to the list of states (creates a new state object)

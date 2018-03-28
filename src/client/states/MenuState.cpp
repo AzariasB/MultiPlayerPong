@@ -71,20 +71,16 @@ MenuState::MenuState() :
 
 void MenuState::gotoOptionState()
 {
-    TransitionData data;
-    data.enteringStateLabel = cc::OPTIONS;
-    data.enteringStateLabel = cc::MENU;
-    data.direction = TransitionData::GO_LEFT;
-    pr::stateMachine().setCurrentState(cc::TRANSITION, &data);
+    pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
 }
 
 void MenuState::dialogConfirmed()
 {
 	if(isValidIp(m_inputDialog->getResult())){
-		m_inputDialog->hide();
+        m_inputDialog->hide(false);//hide without animations
 		//change of state and indicate the server's ip
 		std::string res = m_inputDialog->getResult();
-        pr::stateMachine().setCurrentState(cc::WAITING, res);
+        pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, res);
 	}else{
 		//Message
 		m_messageDialog->setTitle("Invalid IP");
@@ -113,6 +109,8 @@ void MenuState::handleEvent(const sf::Event& ev)
 void MenuState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
+    m_inputDialog->update(elapsed);
+    m_messageDialog->update(elapsed);
 }
 
 bool MenuState::isValidIp(const std::string &enteredIp) const

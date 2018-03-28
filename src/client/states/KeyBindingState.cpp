@@ -120,6 +120,7 @@ void KeyBindingState::onLeave()
 void KeyBindingState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
+    m_messageDialog->update(elapsed);
 }
 
 void KeyBindingState::cancelDialog()

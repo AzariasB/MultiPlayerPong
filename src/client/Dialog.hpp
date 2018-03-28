@@ -97,12 +97,12 @@ public:
 	/**
 	 * @brief show shows the dialog, sets its state to visible
 	 */
-	void show();
+    void show(bool animate = true);
 
 	/**
 	 * @brief hide hides the dialog, sets its state to invisible
 	 */
-	void hide();
+    void hide(bool animate = true);
 
 	/**
 	 * @brief okButtonClicked function called when the button "ok" is pressed
@@ -155,7 +155,13 @@ private:
     /**
      * @brief m_yPosition y position of this dialog
      */
-    twin::Twin<float, float> m_yPosition;
+    twin::Twin<float, float> m_yTransition;
+
+    /**
+     * @brief m_yPosition Y position of the dialog
+     * (used to create animations)
+     */
+    float m_yPosition;
 
 	/**
 	 * @brief m_okButton the button to the bottom-left of the dialog ("confirm" by default)

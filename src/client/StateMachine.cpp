@@ -30,9 +30,7 @@
  */
 
 #include "StateMachine.hpp"
-#include "ClientConf.hpp"
 #include "SoundEngine.hpp"
-#include "Provider.hpp"
 
 StateMachine::StateMachine()
 {
@@ -64,7 +62,7 @@ void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
 {
     TransitionData td;
     td.enteringStateLabel = statelabel;
-    td.exitingStateLabel = pr::stateMachine().getCurrentStateIndex();
+    td.exitingStateLabel = currentStateIndex;
     td.direction = dir;
     setCurrentState(cc::TRANSITION, &td);
     pr::soundEngine().playSound(SoundEngine::ROLLOVER);

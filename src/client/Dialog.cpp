@@ -82,7 +82,6 @@ Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE
                               originX + SF_DIALOG_WIDTH - m_xButton.getWidth(),
                               originY
                               ));
-
 }
 
 void Dialog::cancelButtonClicked()
@@ -102,12 +101,22 @@ const std::string &Dialog::getResult() const
 
 void Dialog::update(const sf::Time &elapsed)
 {
+    if(m_isVisible){
+        m_yTransition.step(elapsed.asSeconds());
+        m_yPosition = m_yTransition.get();
 
+        if(m_yTransition.progress() == 1.f && m_yPosition == -SF_ARENA_HEIGHT){
+            m_isVisible = false;
+        }
+    }
 }
 
 void Dialog::draw(Renderer &renderer) const
 {
     if(!m_isVisible)return;
+
+    renderer.push();
+    renderer.translate(sf::Vector2f(0, m_yPosition));
     sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,SF_DIALOG_HEIGHT));
     rect.setPosition(originX,originY);
     rect.setOutlineColor(sf::Color::White);
@@ -125,6 +134,8 @@ void Dialog::draw(Renderer &renderer) const
 
     m_okButton.draw(renderer);
     m_xButton.draw(renderer);
+
+    renderer.pop();
 }
 
 void Dialog::handleEvent(const sf::Event &ev)
@@ -159,12 +170,21 @@ void Dialog::setOkButtonTitle(const std::string &str)
     m_okButton.setText(str);
 }
 
-void Dialog::show()
+void Dialog::show(bool animate)
 {
     m_isVisible =  true;
+    if(animate){
+        m_yTransition = twin::makeTwin(-(float)SF_ARENA_HEIGHT, 0.f, 0.5f, twin::backInOut);
+    }else{
+        m_yPosition = 0;
+    }
 }
 
-void Dialog::hide()
+void Dialog::hide(bool animate)
 {
-    m_isVisible = false;
+    if(animate){
+         m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, 0.5f, twin::backInOut);
+    }else{
+        m_isVisible = false;
+    }
 }

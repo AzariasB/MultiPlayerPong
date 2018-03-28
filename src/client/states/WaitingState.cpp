@@ -79,6 +79,7 @@ void WaitingState::cancelClicked()
 void WaitingState::update(const sf::Time &elapsed)
 {
     Q_UNUSED(elapsed);
+    m_messageDialog->update(elapsed);
 
 	//Blinking point
     bool startGame = false;
