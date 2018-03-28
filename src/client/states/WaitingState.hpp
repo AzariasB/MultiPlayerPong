@@ -84,11 +84,6 @@ public:
 	void onEnter(BaseStateData *data) override;
 
 	/**
-	 * @brief onLeave inherited function
-	 */
-	void onLeave() override;
-
-	/**
 	 * @brief cancelClicked function called when the button "cancel" is clicked
 	 */
 	void cancelClicked();

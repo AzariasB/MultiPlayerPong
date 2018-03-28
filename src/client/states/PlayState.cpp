@@ -31,14 +31,16 @@
 
 #include "PlayState.hpp"
 
+#include "src/Game.hpp"
 #include "src/Config.hpp"
+#include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientConf.hpp"
-#include "src/client/ResourcesManager.hpp"
-#include "src/client/SoundEngine.hpp"
-#include "src/client/particles/ParticleGenerator.hpp"
-#include "src/client/StateMachine.hpp"
 #include "src/client/KeyBinding.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/SoundEngine.hpp"
+#include "src/client/StateMachine.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/particles/ParticleGenerator.hpp"
 
 
 PlayState::PlayState():
@@ -135,14 +137,4 @@ void PlayState::handleEvent(const sf::Event &ev)
 {
     sf::Event realEv = pr::keyBinding().toGameEvent(ev);
     pr::game().handleEvent(realEv, pr::player());
-}
-
-void PlayState::onEnter(BaseStateData *data)
-{
-    Q_UNUSED(data);
-}
-
-void PlayState::onLeave()
-{
-
 }

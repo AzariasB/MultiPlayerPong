@@ -78,7 +78,7 @@ public:
 	/**
 	 * @brief onLeave inherited function
 	 */
-	void onLeave() override;
+	void onBeforeLeaving() override;
 
     virtual ~PlayMultiplayerState();
 

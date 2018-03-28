@@ -77,13 +77,13 @@ public:
 	/**
 	 * @brief onLeave inherited function
 	 */
-	void onLeave() override;
+	void onBeforeLeaving() override;
 
 	/**
 	 * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
 	 * goes back to the main menu
 	 */
-	void backButtonPressed();
+    void goToMenu();
 
 	virtual ~EndState();
 private:

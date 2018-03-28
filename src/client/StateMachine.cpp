@@ -44,7 +44,7 @@ StateMachine::~StateMachine()
 void StateMachine::setCurrentState(int stateLabel)
 {
     if (currentStateIndex > -1)
-	states[currentStateIndex]->onLeave();
+    states[currentStateIndex]->onBeforeLeaving();
     currentStateIndex = stateLabel;
 
     BaseStateData dat;

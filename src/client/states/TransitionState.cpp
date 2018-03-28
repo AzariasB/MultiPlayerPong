@@ -23,8 +23,10 @@
  */
 
 #include "TransitionState.hpp"
-#include "src/client/Provider.hpp"
+
 #include "src/Config.hpp"
+#include "src/client/Provider.hpp"
+#include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"
 
 const sf::Int32 TransitionState::mTransitionDuration = 500;
@@ -39,12 +41,10 @@ void TransitionState::draw(Renderer &renderer) const
 {
     renderer.push();
     renderer.translate(mExitingTranslate);
-    //translate
     pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
     renderer.pop();
 
     renderer.push();
-    //translate
     renderer.translate(mEnteringTranslate);
     pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
     renderer.pop();
@@ -59,8 +59,14 @@ void TransitionState::update(const sf::Time &elapsed)
         }else{
             pr::stateMachine().setCurrentState(mEnteringStateLabel);
         }
+        pr::stateMachine().getStateAt(mExitingStateLabel).onAfterLeaving();
     }else{
-       updateCenters();
+        if(m_tickExistingState)
+            pr::stateMachine().getStateAt(mExitingStateLabel).update(elapsed);
+
+        if(m_tickEnteringState)
+            pr::stateMachine().getStateAt(mEnteringStateLabel).update(elapsed);
+        updateCenters();
     }
 
 }
@@ -100,17 +106,19 @@ void TransitionState::onEnter(BaseStateData *data)
 
     mTweening = twin::makeTwin(tweening.first, tweening.second, mTransitionDuration, twin::easing::backInOut);
 
-    mEnteringStateLabel = stData->data()->enteringStateLabel;
-    mExitingStateLabel = stData->data()->exitingStateLabel;
-    mEnteringData.swap(stData->data()->enteringData);
+    TransitionData &td = *stData->data();
+
+    mEnteringStateLabel = td.enteringStateLabel;
+    mExitingStateLabel = td.exitingStateLabel;
+    m_tickEnteringState = td.updateEnteringState;
+    m_tickExistingState = td.updateExistingState;
+    mEnteringData.swap(td.enteringData);
     mDirection = dir;
     updateCenters();
 }
 
-void TransitionState::onLeave()
+void TransitionState::onBeforeLeaving()
 {
-    mEnteringStateLabel = -1;
-    mExitingStateLabel = -1;
     mEnteringData = {};
 }
 

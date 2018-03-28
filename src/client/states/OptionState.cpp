@@ -29,12 +29,13 @@
  * Created on 1/11/2017
  */
 #include <qglobal.h>
+#include "src/Config.hpp"
 #include "OptionState.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientConf.hpp"
-#include "src/client/StateMachine.hpp"
 #include "src/client/SoundEngine.hpp"
+#include "src/client/StateMachine.hpp"
 
 OptionState::OptionState():
 m_menu()
@@ -95,14 +96,4 @@ void OptionState::handleEvent(const sf::Event &ev)
 	}else{
 		m_menu.handleEvent(ev);
 	}
-}
-
-void OptionState::onEnter(BaseStateData *data)
-{
-	Q_UNUSED(data);
-}
-
-void OptionState::onLeave()
-{
-
 }
