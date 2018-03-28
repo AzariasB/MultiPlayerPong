@@ -80,16 +80,10 @@ public:
 	 */
 	void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
-
-	/**
-	 * @brief onLeave inherited function
-	 */
-	void onLeave() override;
+    /**
+     * @brief onAfterLeaving inherited function
+     */
+    void onAfterLeaving() override;
 
 	virtual ~MenuState();
 private :

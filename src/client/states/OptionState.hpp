@@ -68,17 +68,6 @@ public:
 	void handleEvent(const sf::Event &ev) override;
 
 	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
-
-	/**
-	 * @brief onLeave inherited function
-	 */
-	void onLeave() override;
-
-	/**
 	 * @brief toggleSound changes the sound state
 	 * and update the icon
 	 */

@@ -69,16 +69,9 @@ public:
     void draw(Renderer &renderer) const override;
 
     /**
-     * @brief onEnter inherited function
-     * @param data
+     * @brief update inherited function
+     * @param elapsed
      */
-    void onEnter(BaseStateData *data) override;
-
-    /**
-     * @brief onLeave inherited function
-     */
-    void onLeave() override;
-
     void update(const sf::Time &elapsed) override;
 
 private:

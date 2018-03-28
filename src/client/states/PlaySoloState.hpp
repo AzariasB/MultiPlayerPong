@@ -34,6 +34,8 @@
 
 #include "PlayState.hpp"
 
+#include <Box2D/Common/b2Math.h>
+
 class Player;
 
 

@@ -153,7 +153,7 @@ void ClientApp::run(int argc, char** argv)
         window.display();
     }
     socket.disconnect();
-    stateMachine.getCurrentState().onLeave(); //Close last threads
+    stateMachine.getCurrentState().onBeforeLeaving(); //Close last threads
 }
 
 void ClientApp::quit()

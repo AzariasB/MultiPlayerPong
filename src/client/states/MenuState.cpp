@@ -77,7 +77,6 @@ void MenuState::gotoOptionState()
 void MenuState::dialogConfirmed()
 {
 	if(isValidIp(m_inputDialog->getResult())){
-        m_inputDialog->hide(false);//hide without animations
 		//change of state and indicate the server's ip
 		std::string res = m_inputDialog->getResult();
         pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, res);
@@ -118,12 +117,8 @@ bool MenuState::isValidIp(const std::string &enteredIp) const
 	return std::regex_match(enteredIp, std::regex("^((2(5[0-5]|[0-4][0-9])|1[0-9]{2}|[0-9]{1,2})(\\.|$)){4}"));
 }
 
-void MenuState::onEnter(BaseStateData *data)
+void MenuState::onAfterLeaving()
 {
-    Q_UNUSED(data);
-}
-
-void MenuState::onLeave()
-{
-
+    m_inputDialog->hide(false);
+    m_messageDialog->hide(false);
 }

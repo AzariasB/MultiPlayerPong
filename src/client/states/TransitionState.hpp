@@ -25,6 +25,7 @@
 #ifndef TRANSITIONSTATE_HPP
 #define TRANSITIONSTATE_HPP
 
+#include <SFML/System/Vector2.hpp>
 #include "src/client/State.hpp"
 #include "src/lib/twin.hpp"
 #include <queue>
@@ -47,12 +48,15 @@ public:
 
     void onEnter(BaseStateData *data) override;
 
-    void onLeave() override;
+    void onBeforeLeaving() override;
 
     void handleEvent(const sf::Event &ev) override;
 private:
     int mExitingStateLabel = -1,
         mEnteringStateLabel = -1;
+    bool m_tickEnteringState = false,
+         m_tickExistingState = false;
+
 
     sf::Vector2f mEnteringTranslate;
     sf::Vector2f mExitingTranslate;
@@ -64,8 +68,6 @@ private:
     twin::Twin<float, sf::Int32> mTweening;
 
     std::unique_ptr<BaseStateData> mEnteringData = {};
-
-    sf::Int32 mCurrentProgress;
 
     static const sf::Int32 mTransitionDuration;
 };

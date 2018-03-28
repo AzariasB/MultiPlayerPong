@@ -111,7 +111,7 @@ public:
 	template<typename T>
 	void setCurrentState(int stateLabel, const T &data)
 	{
-        if (currentStateIndex > -1) states[currentStateIndex]->onLeave();
+        if (currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
 	    currentStateIndex = stateLabel;
 
 	    StateData<T> dat(data);
@@ -127,7 +127,7 @@ public:
      */
     void setCurrentState(int stateLabel, BaseStateData &data)
     {
-        if(currentStateIndex > -1) states[currentStateIndex]->onLeave();
+        if(currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
         currentStateIndex = stateLabel;
         states[currentStateIndex]->onEnter(&data);
     }

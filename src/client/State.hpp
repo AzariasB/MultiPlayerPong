@@ -32,12 +32,16 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <SFML/Window/Event.hpp>
+#include <SFML/System/NonCopyable.hpp>
+#include <memory>
+#include <qglobal.h>
 
-#include "../Game.hpp"
-#include "Renderer.hpp"
+namespace sf {
+    class Event;
+    class Time;
+}
 
-class ClientApp;
+class Renderer;
 
 /**
  * @brief The BaseStateData struct base struct given to the states
@@ -84,6 +88,8 @@ private:
 
 struct TransitionData {
     int enteringStateLabel, exitingStateLabel;
+    bool updateEnteringState = false,
+         updateExistingState = false;
 
     std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
 
@@ -137,13 +143,30 @@ public:
      * is used to init some data
      * @param data data passed by the previous state (if any) can be null
      */
-    virtual void onEnter(BaseStateData *data) = 0;
+    virtual void onEnter(BaseStateData *data)
+    {
+        Q_UNUSED(data);
+    }
 
     /**
      * @brief onLeave function called when the states looses the focus to let another state enters
      * this function is not the destructor, the state could be used another time during the app's lifetime
      */
-    virtual void onLeave() = 0;
+    virtual void onBeforeLeaving()
+    {
+
+    }
+
+    /**
+     * @brief onAfterLeaving function called when the transition if finished, can
+     * be used to hide stuff once the camera is not filming
+     * is not pure because it might not be used for usefull
+     * purpose
+     */
+    virtual void onAfterLeaving()
+    {
+
+    }
 
     virtual ~State()
     {

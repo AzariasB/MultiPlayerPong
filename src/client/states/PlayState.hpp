@@ -32,6 +32,9 @@
 #ifndef PLAYSTATE_HPP
 #define PLAYSTATE_HPP
 
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Time.hpp>
 #include "src/client/State.hpp"
 
 class Player;
@@ -46,10 +49,6 @@ public:
     virtual void update(const sf::Time &elapsed) override;
 
     virtual void handleEvent(const sf::Event &ev) override;
-
-    virtual void onEnter(BaseStateData *data) override;
-
-    virtual void onLeave() override;
 
     virtual ~PlayState();
 

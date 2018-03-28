@@ -42,13 +42,13 @@ EndState::EndState() :
 
     pr::connect(
                 m_messageDialog->okEvent,
-                &EndState::backButtonPressed,
+                &EndState::goToMenu,
                 this
                 );
 
     pr::connect(
                 m_messageDialog->cancelEvent,
-                &EndState::backButtonPressed,
+                &EndState::goToMenu,
                 this
                 );
 
@@ -61,10 +61,9 @@ EndState::~EndState()
 }
 
 
-void EndState::backButtonPressed()
+void EndState::goToMenu()
 {
-    pr::game().reset();
-    pr::stateMachine().goToState((int)cc::MENU, TransitionData::GO_RIGHT);
+    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
 void EndState::draw(Renderer& renderer) const
@@ -77,7 +76,7 @@ void EndState::handleEvent(const sf::Event& ev)
 {
     //When escape pressed, go to menu
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState(cc::MENU);
+        goToMenu();
     }else{
         m_messageDialog->handleEvent(ev);
     }
@@ -91,13 +90,14 @@ void EndState::onEnter(BaseStateData *data)
     pr::game().reset();
 }
 
-void EndState::onLeave()
+void EndState::onBeforeLeaving()
 {
     //Disconnect the sockets and "null" them
     pr::socket().disconnect();
+    m_messageDialog->hide();
 }
 
 void EndState::update(const sf::Time &elapsed)
 {
-    Q_UNUSED(elapsed);
+    m_messageDialog->update(elapsed);
 }

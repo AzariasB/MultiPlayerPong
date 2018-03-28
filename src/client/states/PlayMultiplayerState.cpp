@@ -73,6 +73,6 @@ void PlayMultiplayerState::onEnter(BaseStateData *data)
     Q_UNUSED(data);
 }
 
-void PlayMultiplayerState::onLeave()
+void PlayMultiplayerState::onBeforeLeaving()
 {
 }
