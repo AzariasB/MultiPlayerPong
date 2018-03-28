@@ -69,7 +69,7 @@ void EndState::backButtonPressed()
 
 void EndState::draw(Renderer& renderer) const
 {
-    renderer.render(*m_messageDialog);
+    m_messageDialog->draw(renderer);
 }
 
 

@@ -29,13 +29,12 @@
  * Created on 22 octobre 2017, 16:29
  */
 
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-
 #include "TextInput.hpp"
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
 #include "src/Config.hpp"
+#include "Renderer.hpp"
 
 TextInput::TextInput() :
 m_text("", pr::resourceManager().getFont()),
@@ -45,7 +44,7 @@ m_typed("")
 
 }
 
-void TextInput::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void TextInput::draw(Renderer &renderer) const
 {
 
 	sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,50));
@@ -54,11 +53,11 @@ void TextInput::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	rect.setOutlineThickness(5);
 	rect.setFillColor(sf::Color::Black);
 
-	target.draw(rect, states);
-	target.draw(m_text, states);
+    renderer.render(rect);
+    renderer.render(m_text);
 
 	if(m_clock.getElapsedTime().asSeconds() < 0.7){
-		target.draw(m_pipe,states);
+        renderer.render(m_pipe);
 	}else if(m_clock.getElapsedTime().asSeconds() > 1.4){
 		m_clock.restart();
 	}

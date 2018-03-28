@@ -34,7 +34,8 @@
 #include "Widget.hpp"
 #include "Button.hpp"
 #include "TextInput.hpp"
-#include "../Config.hpp"
+#include "src/Config.hpp"
+#include "src/lib/twin.hpp"
 
 /**
  * @brief The Dialog class used to show a dialog in the middle
@@ -64,13 +65,19 @@ public:
 	 * @param target the target in which to draw
 	 * @param states the states to use to draw
 	 */
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
+    virtual void draw(Renderer &renderer) const;
 	/**
 	 * @brief handleEvent inherited function
 	 * @param ev
 	 */
 	virtual void handleEvent(const sf::Event &ev);
+
+
+    /**
+     * @brief update inherited function
+     * @param elapsed elapsed time
+     */
+    virtual void update(const sf::Time &elapsed);
 
 	/**
 	 * @brief isVisible wether the dialog is currently displayed
@@ -143,6 +150,12 @@ private:
 	 * @param type the type of the dialog
 	 */
     Dialog(const std::string &title, const std::string &message = "", DIALOG_TYPE type = DIALOG_TYPE::MESSAGE);
+
+
+    /**
+     * @brief m_yPosition y position of this dialog
+     */
+    twin::Twin<float, float> m_yPosition;
 
 	/**
 	 * @brief m_okButton the button to the bottom-left of the dialog ("confirm" by default)

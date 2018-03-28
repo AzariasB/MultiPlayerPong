@@ -33,6 +33,7 @@
 #include "ClientConf.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
+#include "Renderer.hpp"
 
 Menu::Menu()
 {
@@ -105,16 +106,16 @@ std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureN
     return sprite;
 }
 
-void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void Menu::draw(Renderer &renderer) const
 {
     for(auto &ptr : m_buttons)
-        target.draw(*ptr, states);
+        ptr->draw(renderer);
 
     for(auto &ptr : m_labels)
-        target.draw(*ptr, states);
+        renderer.render(*ptr);
 
     for(auto &ptr : m_sprites)
-        target.draw(*ptr, states);
+        renderer.render(*ptr);
 }
 
 void Menu::handleEvent(const sf::Event &ev)

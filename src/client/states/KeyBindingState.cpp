@@ -86,8 +86,8 @@ void KeyBindingState::resetKeys()
 
 void KeyBindingState::draw(Renderer &renderer) const
 {
-    renderer.render(m_menu);
-    renderer.render(*m_messageDialog);
+    m_menu.draw(renderer);
+    m_messageDialog->draw(renderer);
 }
 
 void KeyBindingState::handleEvent(const sf::Event &ev)

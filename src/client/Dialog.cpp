@@ -29,9 +29,7 @@
  * Created on 23/10/2017
  */
 #include "Dialog.hpp"
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-
+#include "Renderer.hpp"
 #include "ResourcesManager.hpp"
 #include "Provider.hpp"
 
@@ -102,7 +100,12 @@ const std::string &Dialog::getResult() const
     return m_input.getText();
 }
 
-void Dialog::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void Dialog::update(const sf::Time &elapsed)
+{
+
+}
+
+void Dialog::draw(Renderer &renderer) const
 {
     if(!m_isVisible)return;
     sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,SF_DIALOG_HEIGHT));
@@ -111,16 +114,17 @@ void Dialog::draw(sf::RenderTarget &target, sf::RenderStates states) const
     rect.setFillColor(sf::Color::Black);
     rect.setOutlineThickness(5);
 
-    target.draw(rect, states);
-    target.draw(m_title, states);
+    renderer.render(rect);
+    renderer.render(m_title);
     if(m_type == DIALOG_TYPE::INPUT){
-        target.draw(m_input, states);
-        target.draw(m_cancelButton, states);
+        m_input.draw(renderer);
+        m_cancelButton.draw(renderer);
     }else{
-        target.draw(m_message, states);
+        renderer.render(m_message);
     }
-    target.draw(m_okButton, states);
-    target.draw(m_xButton, states);
+
+    m_okButton.draw(renderer);
+    m_xButton.draw(renderer);
 }
 
 void Dialog::handleEvent(const sf::Event &ev)

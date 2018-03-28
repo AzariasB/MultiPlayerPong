@@ -37,6 +37,7 @@
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
 #include "ClientConf.hpp"
+#include "Renderer.hpp"
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
@@ -99,10 +100,10 @@ bool Button::isSelectionEvent(const sf::Event &ev) const
                 ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
 }
 
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Button::draw(Renderer &renderer) const
 {
-    target.draw(m_text, states);
-    target.draw(m_icon, states);
+    renderer.render(m_text);
+    renderer.render(m_icon);
 }
 
 void Button::setText(const std::string &text)

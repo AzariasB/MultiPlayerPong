@@ -36,11 +36,12 @@
 #include <SFML/Window/Event.hpp>
 
 class ClientApp;
+class Renderer;
 
 /**
  * @brief The Widget class base class for all the widgets of this app
  */
-class Widget : public sf::Drawable {
+class Widget {
 public:
 
 	/**
@@ -57,7 +58,7 @@ public:
 	 * @param target the target in which to draw the widget
 	 * @param states the states to use when drawing the widget
 	 */
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
+    virtual void draw(Renderer &rendere) const = 0;
 
 	/**
 	 * @brief handleEvent handles an event sent by sfml

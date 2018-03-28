@@ -37,6 +37,8 @@
 
 #include "Widget.hpp"
 
+class Renderer;
+
 /**
  * @brief The TextInput class a widget used to enter text
  * and get the text entered when needed
@@ -54,7 +56,7 @@ public:
 	 * @param target
 	 * @param states
 	 */
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(Renderer &renderer) const;
 
 	/**
 	 * @brief handleEvent inherited function

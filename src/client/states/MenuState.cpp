@@ -94,9 +94,9 @@ void MenuState::dialogConfirmed()
 
 void MenuState::draw(Renderer& renderer) const
 {
-	renderer.render(m_menu);
-	renderer.render(*m_inputDialog);
-	renderer.render(*m_messageDialog);
+    m_menu.draw(renderer);
+    m_inputDialog->draw(renderer);
+    m_messageDialog->draw(renderer);
 }
 
 void MenuState::handleEvent(const sf::Event& ev)

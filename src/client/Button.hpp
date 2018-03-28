@@ -32,7 +32,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System.hpp>
@@ -40,6 +39,9 @@
 #include "src/EventManager.hpp"
 #include "Widget.hpp"
 #include "ColorTweening.hpp"
+
+
+class Renderer;
 
 /**
  * @brief The Button is a widget used to be clickable (and hoverable)
@@ -77,7 +79,7 @@ public:
 	 * @param target the target to use to draw the shapes
 	 * @param states the states to use when rendering
 	 */
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(Renderer &renderer) const;
 
 	/**
 	 * @brief setPosition sets the position of the button
