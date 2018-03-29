@@ -52,6 +52,8 @@ enum STATE_TYPE {
 
 namespace colors {
     const sf::Color backgroundColor = sf::Color(0,10, 30);
+    const sf::Color dialogBackgroundColor = sf::Color(0,20, 50);
+    const sf::Color dialogOutlineColor = sf::Color(220, 220, 220);
     const sf::Color fontColor = sf::Color(220, 220, 220);
     const sf::Color paddleColor = sf::Color(128, 255, 0);
     const sf::Color ballColor = sf::Color(226, 88, 34);

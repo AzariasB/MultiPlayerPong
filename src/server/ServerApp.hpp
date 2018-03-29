@@ -35,8 +35,8 @@
 #include <SFML/Network/Socket.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "../Application.hpp"
-#include "../Game.hpp"
+#include "src/common/Application.hpp"
+#include "src/common/Game.hpp"
 #include "Lobby.hpp"
 
 /**

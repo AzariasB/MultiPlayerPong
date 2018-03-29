@@ -31,7 +31,7 @@
 #include "EndState.hpp"
 #include "src/client/ClientApp.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/Dialog.hpp"
+#include "src/client/widgets/Dialog.hpp"
 #include "src/client/ClientConf.hpp"
 
 

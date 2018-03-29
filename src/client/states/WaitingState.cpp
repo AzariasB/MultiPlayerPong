@@ -37,7 +37,7 @@
 #include "src/client/ClientConf.hpp"
 #include "WaitingState.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/Dialog.hpp"
+#include "src/client/widgets/Dialog.hpp"
 
 
 WaitingState::~WaitingState()

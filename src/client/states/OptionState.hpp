@@ -32,7 +32,7 @@
 #define OPTIONSTATE_HPP
 
 #include "src/client/State.hpp"
-#include "src/client/Menu.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 
 /**

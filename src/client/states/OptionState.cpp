@@ -29,7 +29,7 @@
  * Created on 1/11/2017
  */
 #include <qglobal.h>
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "OptionState.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"

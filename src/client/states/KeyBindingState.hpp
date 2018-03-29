@@ -31,7 +31,7 @@
 #ifndef KEYOPTIONS_HPP
 #define KEYOPTIONS_HPP
 
-#include "src/client/Menu.hpp"
+#include "src/client/widgets/Menu.hpp"
 #include "src/client/KeyBinding.hpp"
 #include "src/client/State.hpp"
 

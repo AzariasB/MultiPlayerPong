@@ -32,9 +32,6 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include "Ball.hpp"
-#include "Paddle.hpp"
-#include "Application.hpp"
 
 #ifdef CLIENT
 #include "client/ClientApp.hpp"

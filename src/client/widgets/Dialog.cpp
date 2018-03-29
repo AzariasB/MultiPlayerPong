@@ -29,9 +29,11 @@
  * Created on 23/10/2017
  */
 #include "Dialog.hpp"
-#include "Renderer.hpp"
-#include "ResourcesManager.hpp"
-#include "Provider.hpp"
+
+#include "src/client/Renderer.hpp"
+#include "src/client/Provider.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/ClientConf.hpp"
 
 Dialog *Dialog::input(const std::string &title)
 {
@@ -47,9 +49,10 @@ Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE
     m_okButton("Confirm"),
     m_cancelButton("Cancel"),
     m_xButton("X"),
-    m_input(),
+    m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
     m_title(sf::String(title), pr::resourceManager().getFont()),
     m_message("",pr::resourceManager().getFont()),
+    m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_type(type),
     okEvent(pr::nextEventCode()),
     cancelEvent(pr::nextEventCode())
@@ -58,30 +61,31 @@ Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE
     pr::connect(m_cancelButton.clickedEvent, &Dialog::cancelButtonClicked, this);
     pr::connect(m_xButton.clickedEvent, &Dialog::cancelButtonClicked, this);
 
-    m_title.setPosition(originX + 1,originY +1);
+    m_title.setPosition(originX + 5,originY + 5);
     m_input.setText(message);
-    m_input.setPosition(sf::Vector2f(
-                            originX + 10,
-                            originY + SF_DIALOG_HEIGHT/2
-                            ));
     m_message.setPosition(sf::Vector2f(
-                              originX,
-                              originY + SF_DIALOG_HEIGHT/2
+                              originX + 5,
+                              originY + SF_DIALOG_HEIGHT/2 + 5
                               ));
 
     m_okButton.setPosition(sf::Vector2f(
-                               originX,
-                               originY + SF_DIALOG_HEIGHT - m_okButton.getHeight()
+                               originX + 5,
+                               originY + SF_DIALOG_HEIGHT - m_okButton.getHeight() - 5
                                ));
     m_cancelButton.setPosition(sf::Vector2f(
-                                   originX + SF_DIALOG_WIDTH - m_cancelButton.getWidth(),
-                                   originY + SF_DIALOG_HEIGHT - m_cancelButton.getHeight()
+                                   originX + SF_DIALOG_WIDTH - m_cancelButton.getWidth() - 5,
+                                   originY + SF_DIALOG_HEIGHT - m_cancelButton.getHeight() - 5
                                    ));
 
     m_xButton.setPosition(sf::Vector2f(
-                              originX + SF_DIALOG_WIDTH - m_xButton.getWidth(),
-                              originY
+                              originX + SF_DIALOG_WIDTH - m_xButton.getWidth() - 5,
+                              originY + 5
                               ));
+
+    m_background.setPosition(originX, originY);
+    m_background.setFillColor(cc::colors::dialogBackgroundColor);
+    m_background.setOutlineColor(cc::colors::dialogOutlineColor);
+    m_background.setOutlineThickness(5);
 }
 
 void Dialog::cancelButtonClicked()
@@ -108,6 +112,10 @@ void Dialog::update(const sf::Time &elapsed)
         if(m_yTransition.progress() == 1.f && m_yPosition == -SF_ARENA_HEIGHT){
             m_isVisible = false;
         }
+
+        m_okButton.update(elapsed);
+        m_cancelButton.update(elapsed);
+        m_xButton.update(elapsed);
     }
 }
 
@@ -117,13 +125,8 @@ void Dialog::draw(Renderer &renderer) const
 
     renderer.push();
     renderer.translate(sf::Vector2f(0, m_yPosition));
-    sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,SF_DIALOG_HEIGHT));
-    rect.setPosition(originX,originY);
-    rect.setOutlineColor(sf::Color::White);
-    rect.setFillColor(sf::Color::Black);
-    rect.setOutlineThickness(5);
 
-    renderer.render(rect);
+    renderer.render(m_background);
     renderer.render(m_title);
     if(m_type == DIALOG_TYPE::INPUT){
         m_input.draw(renderer);

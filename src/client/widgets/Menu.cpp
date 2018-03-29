@@ -29,11 +29,11 @@
  * Created on 1/11/2017
  */
 #include "Menu.hpp"
-#include "Provider.hpp"
-#include "ClientConf.hpp"
-#include "ResourcesManager.hpp"
-#include "SoundEngine.hpp"
-#include "Renderer.hpp"
+#include "src/client/Provider.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/SoundEngine.hpp"
+#include "src/client/Renderer.hpp"
 
 Menu::Menu()
 {

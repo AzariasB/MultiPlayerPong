@@ -34,10 +34,10 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
 #include "Button.hpp"
-#include "Provider.hpp"
-#include "ResourcesManager.hpp"
-#include "ClientConf.hpp"
-#include "Renderer.hpp"
+#include "src/client/Provider.hpp"
+#include "src/client/ResourcesManager.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/Renderer.hpp"
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),

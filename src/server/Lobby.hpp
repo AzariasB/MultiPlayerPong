@@ -38,7 +38,7 @@
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/SocketSelector.hpp>
 
-#include "../Game.hpp"
+#include "src/common/Game.hpp"
 
 enum LOBBY_STATE {
 	WAIT,

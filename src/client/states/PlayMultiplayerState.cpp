@@ -35,7 +35,7 @@
 #include "PlayMultiplayerState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
-#include "src/EventManager.hpp"
+#include "src/common/EventManager.hpp"
 
 #include <iostream>
 

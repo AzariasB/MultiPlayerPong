@@ -32,7 +32,7 @@
 #include <algorithm>
 #include <math.h>
 #include <iostream>
-#include "src/VectorsUtils.hpp"
+#include "src/common/VectorsUtils.hpp"
 #include "src/client/Renderer.hpp"
 
 

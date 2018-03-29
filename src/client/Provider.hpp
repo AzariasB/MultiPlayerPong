@@ -35,7 +35,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "src/EventManager.hpp"
+#include "src/common/EventManager.hpp"
 
 class Game;
 class StateMachine;

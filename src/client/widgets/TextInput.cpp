@@ -31,29 +31,30 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "TextInput.hpp"
-#include "Provider.hpp"
-#include "ResourcesManager.hpp"
-#include "src/Config.hpp"
-#include "Renderer.hpp"
 
-TextInput::TextInput() :
+#include "src/client/Provider.hpp"
+#include "src/client/Renderer.hpp"
+#include "src/common/Config.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/ResourcesManager.hpp"
+
+TextInput::TextInput(const sf::Vector2f &position) :
 m_text("", pr::resourceManager().getFont()),
 m_pipe("|", pr::resourceManager().getFont()),
-m_typed("")
+m_typed(""),
+m_background(sf::Vector2f(SF_DIALOG_WIDTH, 50))
 {
-
+    m_background.setOutlineColor(cc::colors::dialogOutlineColor);
+    m_background.setFillColor(cc::colors::backgroundColor);
+    m_background.setOutlineThickness(5);
+    m_background.setPosition(position.x - 10, position.y);
+    m_text.setPosition(position);
+    updatePipePos();
 }
 
 void TextInput::draw(Renderer &renderer) const
 {
-
-	sf::RectangleShape rect(sf::Vector2f(SF_DIALOG_WIDTH,50));
-	rect.setPosition(m_text.getPosition().x - 10, m_text.getPosition().y);
-	rect.setOutlineColor(sf::Color::White);
-	rect.setOutlineThickness(5);
-	rect.setFillColor(sf::Color::Black);
-
-    renderer.render(rect);
+    renderer.render(m_background);
     renderer.render(m_text);
 
 	if(m_clock.getElapsedTime().asSeconds() < 0.7){
@@ -86,11 +87,6 @@ TextInput::~TextInput()
 {
 }
 
-void TextInput::setPosition(const sf::Vector2f &pos)
-{
-	m_text.setPosition(pos);
-	updatePipePos();
-}
 
 void TextInput::setText(const std::string &str)
 {

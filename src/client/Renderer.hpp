@@ -38,8 +38,7 @@
 #include <stack>
 
 #include "Animation.hpp"
-
-#include "../Powerup.hpp"
+#include "src/common/Powerup.hpp"
 
 class Ball;
 class Paddle;

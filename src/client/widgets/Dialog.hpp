@@ -31,10 +31,11 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "Widget.hpp"
 #include "Button.hpp"
 #include "TextInput.hpp"
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "src/lib/twin.hpp"
 
 /**
@@ -192,6 +193,11 @@ private:
 	 * @brief m_message message of the dialog (only used if the dialog is of MESSAGE type)
 	 */
 	sf::Text m_message;
+
+    /**
+     * @brief background shape
+     */
+    sf::RectangleShape m_background;
 
 	/**
 	 * @brief m_type the type of the dialog

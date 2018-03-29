@@ -36,9 +36,9 @@
 #include <SFML/Network/TcpSocket.hpp>
 #include <deque>
 
-#include "../Application.hpp"
+#include "src/common/Application.hpp"
+#include "src/common/Game.hpp"
 #include "Renderer.hpp"
-#include "../Game.hpp"
 #include "StateMachine.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"

@@ -34,6 +34,7 @@
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Widget.hpp"
 
@@ -49,7 +50,7 @@ public:
 	 * @brief TextInput constructor
 	 * @param app a reference to the client's app
 	 */
-    TextInput();
+    TextInput(const sf::Vector2f &position);
 
 	/**
 	 * @brief draw inherited function
@@ -63,12 +64,6 @@ public:
 	 * @param ev
 	 */
 	void handleEvent(const sf::Event& ev) override;
-
-	/**
-	 * @brief setPosition sets the position of the text input
-	 * @param pos the new position of the text input
-	 */
-	void setPosition(const sf::Vector2f &pos);
 
 	/**
 	 * @brief setText sets the text inside the text input
@@ -103,6 +98,11 @@ private:
 	 * @brief m_typed the actual text entered by the user
 	 */
 	std::string m_typed;
+
+    /**
+     * @brief m_background background of the text input
+     */
+    sf::RectangleShape m_background;
 
 	/**
 	 * @brief m_clock a mutable object in order to make the pipe blink

@@ -36,9 +36,9 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
-#include "src/EventManager.hpp"
+#include "src/common/EventManager.hpp"
 #include "Widget.hpp"
-#include "ColorTweening.hpp"
+#include "src/client/ColorTweening.hpp"
 
 
 class Renderer;

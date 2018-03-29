@@ -31,8 +31,8 @@
 
 #include "PlayState.hpp"
 
-#include "src/Game.hpp"
-#include "src/Config.hpp"
+#include "src/common/Game.hpp"
+#include "src/common/Config.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/KeyBinding.hpp"

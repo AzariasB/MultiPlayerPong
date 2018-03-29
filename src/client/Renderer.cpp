@@ -30,10 +30,10 @@
  */
 
 #include "Renderer.hpp"
-#include "src/Config.hpp"
-#include "src/Ball.hpp"
-#include "src/Paddle.hpp"
-#include "src/Wall.hpp"
+#include "src/common/Config.hpp"
+#include "src/common/Ball.hpp"
+#include "src/common/Paddle.hpp"
+#include "src/common/Wall.hpp"
 
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"

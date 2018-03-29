@@ -34,8 +34,8 @@
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
 #include "src/client/ClientConf.hpp"
-#include "src/client/Button.hpp"
-#include "src/client/Dialog.hpp"
+#include "src/client/widgets/Button.hpp"
+#include "src/client/widgets/Dialog.hpp"
 
 MenuState::~MenuState()
 {

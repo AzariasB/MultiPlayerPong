@@ -24,7 +24,7 @@
 
 #include "TransitionState.hpp"
 
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"

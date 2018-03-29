@@ -33,7 +33,7 @@
 #define MENUSTATE_H
 
 #include "src/client//State.hpp"
-#include "src/client/Menu.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 namespace sf {
     class Event;

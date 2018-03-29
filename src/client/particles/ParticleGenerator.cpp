@@ -30,7 +30,7 @@
  */
 #include <algorithm>
 
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "ParticleGenerator.hpp"
 #include "ExplosionParticle.hpp"
 #include "BallTrailParticle.hpp"
