@@ -35,47 +35,20 @@
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
 
-Dialog *Dialog::input(const std::string &title)
-{
-    return new Dialog(title, "", DIALOG_TYPE::INPUT);
-}
 
-Dialog* Dialog::message(const std::string &message, const std::string &title)
-{
-    return new Dialog(title, message, DIALOG_TYPE::MESSAGE);
-}
 
-Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE type):
-    m_okButton("Confirm"),
-    m_cancelButton("Cancel"),
+// DIALOG BEGIN
+Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_xButton("X"),
-    m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
     m_title(sf::String(title), pr::resourceManager().getFont()),
-    m_message("",pr::resourceManager().getFont()),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
-    m_type(type),
-    okEvent(pr::nextEventCode()),
-    cancelEvent(pr::nextEventCode())
+    m_id(id),
+    closeEvent(pr::nextEventCode()),
+    hiddenEvent(pr::nextEventCode())
 {
-    pr::connect(m_okButton.clickedEvent, &Dialog::okButtonClicked, this);
-    pr::connect(m_cancelButton.clickedEvent, &Dialog::cancelButtonClicked, this);
-    pr::connect(m_xButton.clickedEvent, &Dialog::cancelButtonClicked, this);
+    pr::connect(m_xButton.clickedEvent, &Dialog::closed, this);
 
     m_title.setPosition(originX + 5,originY + 5);
-    m_input.setText(message);
-    m_message.setPosition(sf::Vector2f(
-                              originX + 5,
-                              originY + SF_DIALOG_HEIGHT/2 + 5
-                              ));
-
-    m_okButton.setPosition(sf::Vector2f(
-                               originX + 5,
-                               originY + SF_DIALOG_HEIGHT - m_okButton.getHeight() - 5
-                               ));
-    m_cancelButton.setPosition(sf::Vector2f(
-                                   originX + SF_DIALOG_WIDTH - m_cancelButton.getWidth() - 5,
-                                   originY + SF_DIALOG_HEIGHT - m_cancelButton.getHeight() - 5
-                                   ));
 
     m_xButton.setPosition(sf::Vector2f(
                               originX + SF_DIALOG_WIDTH - m_xButton.getWidth() - 5,
@@ -86,81 +59,65 @@ Dialog::Dialog(const std::string &title, const std::string &message, DIALOG_TYPE
     m_background.setFillColor(cc::colors::dialogBackgroundColor);
     m_background.setOutlineColor(cc::colors::dialogOutlineColor);
     m_background.setOutlineThickness(5);
+    m_state = DIALOG_HIDDEN;
 }
 
-void Dialog::cancelButtonClicked()
+const sf::Uint64 &Dialog::id() const
 {
-    pr::trigger(cancelEvent);
+    return m_id;
 }
 
-void Dialog::okButtonClicked()
+void Dialog::closed()
 {
-    pr::trigger(okEvent);
-}
-
-const std::string &Dialog::getResult() const
-{
-    return m_input.getText();
+    pr::trigger(closeEvent);
 }
 
 void Dialog::update(const sf::Time &elapsed)
 {
-    if(m_isVisible){
+    if(m_state != DIALOG_HIDDEN){
         m_yTransition.step(elapsed.asSeconds());
         m_yPosition = m_yTransition.get();
 
-        if(m_yTransition.progress() == 1.f && m_yPosition == -SF_ARENA_HEIGHT){
-            m_isVisible = false;
+        if(m_yTransition.progress() == 1.f){
+            if(m_state == DIALOG_APPEARING)
+                m_state = DIALOG_VISIBLE;
+            else if(m_state == DIALOG_HIDING){
+                m_state = DIALOG_HIDDEN;
+                pr::trigger(hiddenEvent);
+            }
+
         }
 
-        m_okButton.update(elapsed);
-        m_cancelButton.update(elapsed);
         m_xButton.update(elapsed);
     }
 }
 
 void Dialog::draw(Renderer &renderer) const
 {
-    if(!m_isVisible)return;
-
-    renderer.push();
-    renderer.translate(sf::Vector2f(0, m_yPosition));
-
     renderer.render(m_background);
     renderer.render(m_title);
-    if(m_type == DIALOG_TYPE::INPUT){
-        m_input.draw(renderer);
-        m_cancelButton.draw(renderer);
-    }else{
-        renderer.render(m_message);
-    }
-
-    m_okButton.draw(renderer);
     m_xButton.draw(renderer);
+}
 
+void Dialog::beforeDraw(Renderer &renderer) const
+{
+    renderer.push();
+    renderer.translate(sf::Vector2f(0, m_yPosition));
+}
+
+void Dialog::afterDraw(Renderer &renderer) const
+{
     renderer.pop();
 }
 
 void Dialog::handleEvent(const sf::Event &ev)
 {
-    if(!m_isVisible)return;
+    if(!isVisible())return;
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::trigger(cancelEvent);
-    }else if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return){
-        pr::trigger(okEvent);
+        pr::trigger(closeEvent);
     }else{
-        m_okButton.handleEvent(ev);
-        if(m_type == DIALOG_TYPE::INPUT){
-            m_cancelButton.handleEvent(ev);
-            m_input.handleEvent(ev);
-        }
         m_xButton.handleEvent(ev);
     }
-}
-
-void Dialog::setMessage(const std::string &str)
-{
-    m_message.setString(str);
 }
 
 void Dialog::setTitle(const std::string &str)
@@ -168,14 +125,11 @@ void Dialog::setTitle(const std::string &str)
     m_title.setString(str);
 }
 
-void Dialog::setOkButtonTitle(const std::string &str)
-{
-    m_okButton.setText(str);
-}
-
 void Dialog::show(bool animate)
 {
-    m_isVisible =  true;
+    if(m_state == DIALOG_APPEARING || m_state == DIALOG_VISIBLE)return;
+    m_state = DIALOG_APPEARING;
+
     if(animate){
         m_yTransition = twin::makeTwin(-(float)SF_ARENA_HEIGHT, 0.f, 0.5f, twin::backInOut);
     }else{
@@ -185,9 +139,206 @@ void Dialog::show(bool animate)
 
 void Dialog::hide(bool animate)
 {
+    if(m_state == DIALOG_HIDING || m_state == DIALOG_HIDDEN)return;
+
+    m_state = DIALOG_HIDING;
+
     if(animate){
          m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, 0.5f, twin::backInOut);
     }else{
-        m_isVisible = false;
+        m_state = DIALOG_HIDDEN;
     }
 }
+
+Dialog::DIALOG_STATE Dialog::state() const
+{
+    return m_state;
+}
+
+// DIALOG END
+
+//INPUT DIALOG
+
+DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question):
+Dialog(id, title),
+m_questionText(question, pr::resourceManager().getFont()),
+m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
+m_confirmButton("Confirm",  originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+cancelClickedEvent(pr::nextEventCode()),
+confirmClickedEvent(pr::nextEventCode())
+{
+    m_questionText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT/4.f);
+
+    pr::connect(m_confirmButton.clickedEvent, &DialogInput::confirmClicked, this);
+    pr::connect(m_cancelButton.clickedEvent, &DialogInput::cancelClicked, this);
+}
+
+
+void DialogInput::confirmClicked()
+{
+    pr::trigger(confirmClickedEvent, m_input.getText());
+}
+
+void DialogInput::cancelClicked()
+{
+    pr::trigger(cancelClickedEvent);
+}
+
+void DialogInput::update(const sf::Time &elapsed)
+{
+    Dialog::update(elapsed);
+    m_cancelButton.update(elapsed);
+    m_confirmButton.update(elapsed);
+    m_input.update(elapsed);
+}
+
+void DialogInput::draw(Renderer &renderer) const
+{
+    beforeDraw(renderer);
+
+    Dialog::draw(renderer);
+    m_cancelButton.draw(renderer);
+    m_confirmButton.draw(renderer);
+    m_input.draw(renderer);
+
+    afterDraw(renderer);
+}
+
+void DialogInput::handleEvent(const sf::Event &ev)
+{
+    Dialog::handleEvent(ev);
+    if(state() == DIALOG_VISIBLE && ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return){
+        confirmClicked();
+    }else{
+        m_cancelButton.handleEvent(ev);
+        m_confirmButton.handleEvent(ev);
+        m_input.handleEvent(ev);
+    }
+}
+
+// INPUT END
+
+// QUESTION DIALOG
+
+
+DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
+Dialog(id, title),
+m_questionText(question, pr::resourceManager().getFont()),
+m_yesButton("Yes", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+yesClickedEvent(pr::nextEventCode()),
+noClickedEvent(pr::nextEventCode())
+{
+    m_questionText.setPosition(originX + 10, originY  +SF_DIALOG_HEIGHT/2.f);
+
+    pr::connect(m_yesButton.clickedEvent, &DialogQuestion::yesClicked, this);
+    pr::connect(m_noButton.clickedEvent, &DialogQuestion::noClicked, this);
+
+}
+
+const std::string &DialogQuestion::getQuestion() const
+{
+    return m_questionText.getString().toAnsiString();
+}
+
+void DialogQuestion::setQuestion(const std::string &nwQuestion)
+{
+    m_questionText.setString(nwQuestion);
+}
+
+void DialogQuestion::update(const sf::Time &elapsed)
+{
+    Dialog::update(elapsed);
+    m_yesButton.update(elapsed);
+    m_noButton.update(elapsed);
+}
+
+void DialogQuestion::draw(Renderer &renderer) const
+{
+    beforeDraw(renderer);
+
+    Dialog::draw(renderer);
+    m_yesButton.draw(renderer);
+    m_noButton.draw(renderer);
+    renderer.render(m_questionText);
+
+    afterDraw(renderer);
+}
+
+void DialogQuestion::handleEvent(const sf::Event &ev)
+{
+    Dialog::handleEvent(ev);
+    m_yesButton.handleEvent(ev);
+    m_noButton.handleEvent(ev);
+}
+
+void DialogQuestion::yesClicked()
+{
+    pr::trigger(yesClickedEvent);
+}
+
+void DialogQuestion::noClicked()
+{
+    pr::trigger(noClickedEvent);
+}
+
+// QUESTION END
+
+
+// MESSAGE BEGIN
+
+DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
+Dialog(id, title),
+m_messageText(message, pr::resourceManager().getFont()),
+m_okButton("Ok", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+okClickedEvent(pr::nextEventCode())
+{
+    m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
+
+    pr::connect(m_okButton.clickedEvent, &DialogMessage::okClicked, this);
+}
+
+const std::string &DialogMessage::getMessage() const
+{
+    return m_messageText.getString().toAnsiString();
+}
+
+void DialogMessage::setMessage(const std::string &nwMessage)
+{
+    m_messageText.setString(nwMessage);
+}
+
+void DialogMessage::update(const sf::Time &elapsed)
+{
+    Dialog::update(elapsed);
+    m_okButton.update(elapsed);
+}
+
+void DialogMessage::draw(Renderer &renderer) const
+{
+    beforeDraw(renderer);
+
+    Dialog::draw(renderer);
+    m_okButton.draw(renderer);
+    renderer.render(m_messageText);
+
+    afterDraw(renderer);
+}
+
+void DialogMessage::handleEvent(const sf::Event &ev)
+{
+    Dialog::handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return){
+        okClicked();
+    }else{
+        m_okButton.handleEvent(ev);
+    }
+}
+
+void DialogMessage::okClicked()
+{
+    pr::trigger(okClickedEvent);
+}
+
+// MESSAGE END

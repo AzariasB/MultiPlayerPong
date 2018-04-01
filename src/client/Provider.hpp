@@ -46,6 +46,7 @@ class ParticleGenerator;
 class Renderer;
 class Player;
 class ResourcesManager;
+class DialogManager;
 
 
 namespace pr {
@@ -72,6 +73,8 @@ namespace pr {
     sf::TcpSocket &socket();
 
     Player &player();
+
+    DialogManager &dialogManager();
 
 
     template<typename T, typename ...Args>

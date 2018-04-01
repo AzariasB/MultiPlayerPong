@@ -38,6 +38,8 @@
 #include "src/common/Config.hpp"
 #include "src/lib/twin.hpp"
 
+
+//BEGIN DIALOG
 /**
  * @brief The Dialog class used to show a dialog in the middle
  * of the screen. There can be two types of dialogs : a message dialog,
@@ -46,20 +48,20 @@
 class Dialog : public Widget
 {
 public:
-	/**
-	 * @brief message a pointer to a dialog showing the given message, with the given title
-	 * @param message the message to display in the middle of the dialog
-	 * @param title the title of the dialog
-	 * @return a pointer to the dialog
-	 */
-    static Dialog *message(const std::string &message, const std::string &title);
+    enum DIALOG_STATE{
+        DIALOG_HIDDEN,
+        DIALOG_VISIBLE,
+        DIALOG_APPEARING,
+        DIALOG_HIDING
+    };
 
-	/**
-	 * @brief input a pointer to a dialog with a text input
-	 * @param title the title of the input
-	 * @return a pointer to the dialog
-	 */
-    static Dialog *input(const std::string &title);
+    /**
+     * @brief Dialog private dialog constructor, the user must call either input or message to get a pointer to a dialog
+     * @param title the title of the dialog
+     * @param message the message (if the dialog is a message dialog)
+     * @param type the type of the dialog
+     */
+    Dialog(const sf::Uint64 id, const std::string &title);
 
 	/**
 	 * @brief draw draws the dialog and all its sub-components
@@ -86,14 +88,8 @@ public:
 	 */
 	bool isVisible() const
 	{
-		return m_isVisible;
+        return m_state == DIALOG_APPEARING || m_state == DIALOG_VISIBLE;
 	}
-
-	/**
-	 * @brief getResult used when the dialog is an input dialog (otherwise, returns an empty string)
-	 * @return the text typed by the user
-	 */
-	const std::string &getResult() const;
 
 	/**
 	 * @brief show shows the dialog, sets its state to visible
@@ -106,52 +102,46 @@ public:
     void hide(bool animate = true);
 
 	/**
-	 * @brief okButtonClicked function called when the button "ok" is pressed
-	 * will fire the "ok" event of the dialog
-	 */
-	void okButtonClicked();
-
-	/**
-	 * @brief cancelButtonClicked function called when the button "cancel" or the cross is pressed
-	 * will fire the "cancel" event of the dialog
-	 */
-	void cancelButtonClicked();
-
-	/**
 	 * @brief setTitle changes the title of the dialog
 	 * @param str the new title of the dialog
 	 */
 	void setTitle(const std::string &str);
 
-	/**
-	 * @brief setMessage changes the message of the dialog
-	 * @param str the new message of the dialog
-	 */
-	void setMessage(const std::string &str);
+    const sf::Uint64 &id() const;
 
-	/**
-	 * @brief setOkButtonTitle changes the text contained in the "ok" button
-	 * @param str the new text of the "ok" button
-	 */
-	void setOkButtonTitle(const std::string &str);
+protected:
+    /**
+     * @brief beforeDraw must be called before a child class starts to draw
+     * in order to have the animation effect aplly
+     * @param renderer
+     */
+    void beforeDraw(Renderer &renderer) const;
+
+    /**
+     * @brief afterDraw to call by child classes to remove
+     * the effect applyed on 'beforedraw'
+     * @param renderer
+     */
+    void afterDraw(Renderer &renderer) const;
+
+    /**
+     * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
+     */
+    const int originX = (SF_ARENA_WIDTH- SF_DIALOG_WIDTH)/2;
+
+    /**
+     * @brief originY y origin of the dialog
+     */
+    const int originY = (SF_ARENA_HEIGHT - SF_DIALOG_HEIGHT)/2;
+
+    DIALOG_STATE state() const;
 
 private:
-	/**
-	 * @brief The DIALOG_TYPE enum types of dialogs
-	 */
-	enum DIALOG_TYPE{
-	        INPUT,
-	        MESSAGE
-	};
 
-	/**
-	 * @brief Dialog private dialog constructor, the user must call either input or message to get a pointer to a dialog
-	 * @param title the title of the dialog
-	 * @param message the message (if the dialog is a message dialog)
-	 * @param type the type of the dialog
-	 */
-    Dialog(const std::string &title, const std::string &message = "", DIALOG_TYPE type = DIALOG_TYPE::MESSAGE);
-
+    /**
+     * @brief closed when the 'x' button is pressed
+     */
+    void closed();
 
     /**
      * @brief m_yPosition y position of this dialog
@@ -165,64 +155,134 @@ private:
     float m_yPosition;
 
 	/**
-	 * @brief m_okButton the button to the bottom-left of the dialog ("confirm" by default)
-	 */
-	Button m_okButton;
-
-	/**
-	 * @brief m_cancelButton the button to the bottom-right of the dialog("cancel" by default)
-	 */
-	Button m_cancelButton;
-
-	/**
 	 * @brief m_xButton the top-right cross of the dialog
 	 */
 	Button m_xButton;
-
-	/**
-	 * @brief m_input the text input (only used if the dialog is of INPUT type)
-	 */
-	TextInput m_input;
 
 	/**
 	 * @brief m_title title of the dialog
 	 */
 	sf::Text m_title;
 
-	/**
-	 * @brief m_message message of the dialog (only used if the dialog is of MESSAGE type)
-	 */
-	sf::Text m_message;
-
     /**
      * @brief background shape
      */
     sf::RectangleShape m_background;
 
-	/**
-	 * @brief m_type the type of the dialog
-	 */
-	DIALOG_TYPE m_type;
+    /**
+     * @brief m_state current display state of the dialog
+     */
+    DIALOG_STATE m_state;
 
-	/**
-	 * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
-	 */
-    const int originX = (SF_ARENA_WIDTH- SF_DIALOG_WIDTH)/2;
-
-	/**
-	 * @brief originY y origin of the dialog
-	 */
-    const int originY = (SF_ARENA_HEIGHT - SF_DIALOG_HEIGHT)/2;
-
-	/**
-	 * @brief m_isVisible wether the dialog is visible
-	 */
-	bool m_isVisible = false;
+    /**
+     * @brief m_id id of the dialog
+     */
+    const sf::Uint64 m_id;
 
 public:
-
-	const sf::Uint64 okEvent;
-	const sf::Uint64 cancelEvent;
+    const sf::Uint64 closeEvent;
+    const sf::Uint64 hiddenEvent;
 };
+
+//END DIALOG
+
+//BEGIN INPUT DIALOG
+class DialogInput : public Dialog
+{
+public:
+    DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question);
+
+    const std::string &getValue() const;
+
+    void update(const sf::Time &elapsed) override;
+
+    void draw(Renderer &renderer) const override;
+
+    void handleEvent(const sf::Event &ev) override;
+
+private:
+
+    sf::Text m_questionText;
+
+    TextInput m_input;
+
+    Button m_confirmButton;
+
+    Button m_cancelButton;
+
+    void confirmClicked();
+
+    void cancelClicked();
+
+public:
+    const sf::Uint64 confirmClickedEvent;
+    const sf::Uint64 cancelClickedEvent;
+};
+//END INPUT DIALOG
+
+
+//BEGIN QUESTION DIALOG
+class DialogQuestion : public Dialog
+{
+public:
+    DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question);
+
+    const std::string &getQuestion() const;
+
+    void setQuestion(const std::string &nwQuestion);
+
+    void update(const sf::Time &elapsed) override;
+
+    void draw(Renderer &renderer) const override;
+
+    void handleEvent(const sf::Event &ev) override;
+
+private:
+
+    sf::Text m_questionText;
+
+    Button m_yesButton;
+
+    Button m_noButton;
+
+    void yesClicked();
+
+    void noClicked();
+
+public:
+    const sf::Uint64 yesClickedEvent;
+    const sf::Uint64 noClickedEvent;
+};
+//END QUESTION DIALOG
+
+//BEGIN MESSAGE DIALOG
+class DialogMessage : public Dialog
+{
+public:
+    DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message);
+
+    const std::string &getMessage() const;
+
+    void setMessage(const std::string &nwMessage);
+
+    void update(const sf::Time &elapsed) override;
+
+    void draw(Renderer &renderer) const override;
+
+    void handleEvent(const sf::Event &ev) override;
+
+private:
+
+    void okClicked();
+
+    sf::Text m_messageText;
+
+    Button m_okButton;
+
+public:
+    const sf::Uint64 okClickedEvent;
+};
+//END MESSAGE DIALOG
+
 
 #endif // DIALOG_H

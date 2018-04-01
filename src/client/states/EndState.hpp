@@ -86,13 +86,6 @@ public:
     void goToMenu();
 
 	virtual ~EndState();
-private:
-	/**
-	 * @brief m_messageDialog the dialog used to show the result
-	 * of the game
-	 */
-	Dialog *m_messageDialog;
-
 };
 
 #endif /* ENDSTATE_H */

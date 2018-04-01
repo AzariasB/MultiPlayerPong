@@ -60,7 +60,8 @@ ClientApp::ClientApp() :
     game(),
     stateMachine(),
     m_sEngine(rManager),
-    m_keyBinding()
+    m_keyBinding(),
+    m_dialogManager()
 {
     //Textures
     rManager.registerTexture(":/icons.png", "icons");
@@ -103,6 +104,7 @@ void ClientApp::handleEvent(const sf::Event& event)
         resizeEvent(event);
     } else {
         stateMachine.getCurrentState().handleEvent(event);
+        m_dialogManager.handleEvent(event);
     }
 }
 
@@ -147,8 +149,10 @@ void ClientApp::run(int argc, char** argv)
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);
+        m_dialogManager.update(elapsed);
         stateMachine.getCurrentState().update(elapsed);
         stateMachine.getCurrentState().draw(renderer);
+        m_dialogManager.draw(renderer);
 
         window.display();
     }
@@ -236,6 +240,11 @@ sf::RenderWindow &ClientApp::getWindow()
 KeyBinding &ClientApp::getKeyBindings()
 {
     return m_keyBinding;
+}
+
+DialogManager &ClientApp::getDialogManager()
+{
+    return m_dialogManager;
 }
 
 const ParticleGenerator &ClientApp::getParticleGenerator() const

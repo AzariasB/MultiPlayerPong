@@ -90,11 +90,6 @@ public:
 
 	virtual ~WaitingState();
 private:
-	/**
-	 * @brief m_messageDialog the dialog to display, to show the state
-	 * of the application
-	 */
-	Dialog *m_messageDialog;
 
 	/**
 	 * @brief c_state state current connection state

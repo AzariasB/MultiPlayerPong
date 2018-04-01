@@ -39,14 +39,10 @@
 
 MenuState::~MenuState()
 {
-	delete m_inputDialog;
-	delete m_messageDialog;
 }
 
 MenuState::MenuState() :
-    m_menu(),
-    m_inputDialog(Dialog::input("IP adress")),
-    m_messageDialog(Dialog::message("", "") )
+    m_menu()
 {
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
@@ -60,13 +56,23 @@ MenuState::MenuState() :
 
 
     pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_UP) );
-    pr::connect(multiPlayerButton.clickedEvent, &Dialog::show, m_inputDialog);
+    pr::connect(multiPlayerButton.clickedEvent, &MenuState::showInputDialog, this);
     pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
-    pr::connect(m_inputDialog->cancelEvent, &Dialog::hide, m_inputDialog);
-    pr::connect(m_inputDialog->okEvent, &MenuState::dialogConfirmed, this);
-    pr::connect(m_messageDialog->okEvent, &Dialog::hide, m_messageDialog);
-    pr::connect(m_messageDialog->cancelEvent, &Dialog::hide, m_messageDialog);
+}
+
+void MenuState::showInputDialog()
+{
+    DialogInput &ip = pr::dialogManager().input("Ip","Enter server ip");
+    m_inputDialiogId = ip.id();
+    pr::connect(ip.cancelClickedEvent, &MenuState::inputDialogHidden, this);
+    pr::connect(ip.closeEvent, &MenuState::inputDialogHidden, this);
+    pr::connect(ip.confirmClickedEvent, &MenuState::ipEntered, this);
+}
+
+void MenuState::inputDialogHidden()
+{
+    m_inputDialiogId = 0;
 }
 
 void MenuState::gotoOptionState()
@@ -74,42 +80,30 @@ void MenuState::gotoOptionState()
     pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
 }
 
-void MenuState::dialogConfirmed()
+void MenuState::ipEntered(const std::string &entered)
 {
-	if(isValidIp(m_inputDialog->getResult())){
-		//change of state and indicate the server's ip
-		std::string res = m_inputDialog->getResult();
-        pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, res);
-	}else{
-		//Message
-		m_messageDialog->setTitle("Invalid IP");
-		m_messageDialog->show();
-	}
+    if(isValidIp(entered)){
+        pr::dialogManager().hideDialog(m_inputDialiogId);
+        pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
+    }else{
+        pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
+    }
 }
 
 void MenuState::draw(Renderer& renderer) const
 {
     m_menu.draw(renderer);
-    m_inputDialog->draw(renderer);
-    m_messageDialog->draw(renderer);
 }
 
 void MenuState::handleEvent(const sf::Event& ev)
 {
-    if(m_messageDialog->isVisible()){
-        m_messageDialog->handleEvent(ev);
-    }else if(m_inputDialog->isVisible()){
-        m_inputDialog->handleEvent(ev);
-    }else{
+    if(!pr::dialogManager().hasActiveDialogs())
         m_menu.handleEvent(ev);
-    }
 }
 
 void MenuState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
-    m_inputDialog->update(elapsed);
-    m_messageDialog->update(elapsed);
 }
 
 bool MenuState::isValidIp(const std::string &enteredIp) const
@@ -119,6 +113,4 @@ bool MenuState::isValidIp(const std::string &enteredIp) const
 
 void MenuState::onAfterLeaving()
 {
-    m_inputDialog->hide(false);
-    m_messageDialog->hide(false);
 }

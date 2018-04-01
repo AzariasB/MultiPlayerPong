@@ -42,31 +42,21 @@
 
 WaitingState::~WaitingState()
 {
-	delete m_messageDialog;
 }
 
 
 WaitingState::WaitingState() :
-    State(),
-    m_messageDialog(Dialog::message("","Connecting..."))
+    State()
 {
-	m_messageDialog->setOkButtonTitle("Cancel");
-
-    pr::connect(m_messageDialog->okEvent, &WaitingState::cancelClicked, this);
-    pr::connect(m_messageDialog->cancelEvent, &WaitingState::cancelClicked, this);
-
-	m_messageDialog->show();
 }
 
 
 void WaitingState::draw(Renderer& renderer) const
 {
-    m_messageDialog->draw(renderer);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)
 {
-	m_messageDialog->handleEvent(ev);
 }
 
 
@@ -79,7 +69,6 @@ void WaitingState::cancelClicked()
 void WaitingState::update(const sf::Time &elapsed)
 {
     Q_UNUSED(elapsed);
-    m_messageDialog->update(elapsed);
 
 	//Blinking point
     bool startGame = false;
@@ -102,8 +91,6 @@ void WaitingState::update(const sf::Time &elapsed)
         c_state = DISCONNECTED;
     }
 
-	m_messageDialog->setTitle(text.toAnsiString());
-
 	if (startGame)
         pr::stateMachine().goToState(cc::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
@@ -123,7 +110,6 @@ void WaitingState::onEnter(BaseStateData *data)
     pr::socket().setBlocking(false);
 	if (status != sf::Socket::Done) {
         std::cerr << "Failed to connect" << std::endl;
-		m_messageDialog->setTitle("Failed to connect");
 	} else {
         std::cout << "Successfully connected to server" << std::endl;
 	}

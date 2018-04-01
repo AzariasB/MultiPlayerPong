@@ -268,10 +268,10 @@ public:
 	 * @param arg the additionnal argument
 	 */
 	template<typename T, typename A, typename ...Args>
-    const std::string &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args...), T*obj, A arg)
+    const std::string &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args&&...), T*obj, A arg)
 	{
 		assertEventCode(eventCode);
-		m_observers[eventCode].emplace_back(new EventMemberFuncWithArg<T, A, Args...>(func, obj, arg));
+        m_observers[eventCode].emplace_back(new EventMemberFuncWithArg<T, A, Args&&...>(func, obj, arg));
         return addIterator(eventCode, math::uuid());
 	}
 

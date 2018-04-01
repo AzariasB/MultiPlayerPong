@@ -58,7 +58,7 @@ public:
 	 * @param target the target in which to draw the widget
 	 * @param states the states to use when drawing the widget
 	 */
-    virtual void draw(Renderer &rendere) const = 0;
+    virtual void draw(Renderer &renderer) const = 0;
 
 	/**
 	 * @brief handleEvent handles an event sent by sfml

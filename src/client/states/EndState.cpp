@@ -35,29 +35,13 @@
 #include "src/client/ClientConf.hpp"
 
 
-EndState::EndState() :
-    m_messageDialog(Dialog::message( "",""))
+EndState::EndState()
 {
-    m_messageDialog->setOkButtonTitle("Menu");
-
-    pr::connect(
-                m_messageDialog->okEvent,
-                &EndState::goToMenu,
-                this
-                );
-
-    pr::connect(
-                m_messageDialog->cancelEvent,
-                &EndState::goToMenu,
-                this
-                );
-
-    m_messageDialog->show();
 }
 
 EndState::~EndState()
 {
-    delete m_messageDialog;
+   // delete m_messageDialog;
 }
 
 
@@ -68,7 +52,7 @@ void EndState::goToMenu()
 
 void EndState::draw(Renderer& renderer) const
 {
-    m_messageDialog->draw(renderer);
+    //m_messageDialog->draw(renderer);
 }
 
 
@@ -77,16 +61,14 @@ void EndState::handleEvent(const sf::Event& ev)
     //When escape pressed, go to menu
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
         goToMenu();
-    }else{
-        m_messageDialog->handleEvent(ev);
     }
 }
 
 void EndState::onEnter(BaseStateData *data)
 {
-    Q_UNUSED(data);
+   /* Q_UNUSED(data);
     m_messageDialog->setMessage("Your score :" + std::to_string(pr::player().getScore()));
-    m_messageDialog->setTitle(ClientApp::getInstance().isWinner() ? "You won ! " : "You lost");
+    m_messageDialog->setTitle(ClientApp::getInstance().isWinner() ? "You won ! " : "You lost"); */
     pr::game().reset();
 }
 
@@ -94,10 +76,10 @@ void EndState::onBeforeLeaving()
 {
     //Disconnect the sockets and "null" them
     pr::socket().disconnect();
-    m_messageDialog->hide();
+    /*m_messageDialog->hide();*/
 }
 
 void EndState::update(const sf::Time &elapsed)
 {
-    m_messageDialog->update(elapsed);
+   // m_messageDialog->update(elapsed);
 }

@@ -122,11 +122,8 @@ private:
 	 */
 	void resetKeys();
 
-	/**
-	 * @brief m_messageDialog the dialog used
-	 * to show the "press key" message when needed
-	 */
-	Dialog *m_messageDialog = 0;
+
+    sf::Uint64 m_messageDialogId = 0;
 
     /**
      * @brief m_menu the menu showing all the keys

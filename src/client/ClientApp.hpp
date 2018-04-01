@@ -44,6 +44,7 @@
 #include "SoundEngine.hpp"
 #include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
+#include "widgets/DialogManager.hpp"
 
 
 /**
@@ -160,9 +161,24 @@ public:
 	const ResourcesManager &getResourcesManager();
 
 
+    /**
+     * @brief getKeyBindings access to the keybinding options
+     * @return a reference to the client's key binding
+     */
 	KeyBinding &getKeyBindings();
 
+    /**
+     * @brief getKeyBindings const access to key binding
+     * @return a const reference to the client's key bindings
+     */
 	const KeyBinding &getKeyBindings() const;
+
+
+    /**
+     * @brief getDialogManager access to the dialogmanager
+     * @return reference to the client's dialog manager
+     */
+    DialogManager &getDialogManager();
 
 	/**
 	 * @brief isWinner wether the app's client is the winner (false if the game is still running)
@@ -263,6 +279,8 @@ private:
 	 * the key bindings
 	 */
 	KeyBinding m_keyBinding;
+
+    DialogManager m_dialogManager;
 
 };
 

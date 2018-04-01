@@ -34,9 +34,7 @@
 #include "Renderer.hpp"
 #include "src/common/Game.hpp"
 #include "src/common/Player.hpp"
-#include "StateMachine.hpp"
 #include "KeyBinding.hpp"
-#include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
 
 Game &pr::game()
@@ -98,4 +96,9 @@ sf::TcpSocket &pr::socket()
 Player &pr::player()
 {
     return ClientApp::getInstance().getPlayer();
+}
+
+DialogManager &pr::dialogManager()
+{
+    return ClientApp::getInstance().getDialogManager();
 }

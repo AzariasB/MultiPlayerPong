@@ -35,9 +35,9 @@
 #include "src/client/Provider.hpp"
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/StateMachine.hpp"
+#include "src/client/widgets/DialogManager.hpp"
 
 KeyBindingState::KeyBindingState():
-    m_messageDialog(Dialog::message("","Press a key")),
     m_menu()
 {
     const int startX = SF_ARENA_WIDTH/2.f;
@@ -66,15 +66,10 @@ KeyBindingState::KeyBindingState():
 
     sf::Uint64 backClicked = m_menu.addCenteredButton("Back", startX, startY + 100)->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
-
-    m_messageDialog->setOkButtonTitle("Cancel");
-    pr::connect(m_messageDialog->cancelEvent, &KeyBindingState::cancelDialog, this);
-    pr::connect(m_messageDialog->okEvent, &KeyBindingState::cancelDialog, this);
 }
 
 KeyBindingState::~KeyBindingState()
 {
-    delete m_messageDialog;
 }
 
 void KeyBindingState::resetKeys()
@@ -87,20 +82,17 @@ void KeyBindingState::resetKeys()
 void KeyBindingState::draw(Renderer &renderer) const
 {
     m_menu.draw(renderer);
-    m_messageDialog->draw(renderer);
 }
 
 void KeyBindingState::handleEvent(const sf::Event &ev)
 {
-    if(m_messageDialog->isVisible()){
+    if(pr::dialogManager().isActiveDialog(m_messageDialogId)){
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
             pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
             std::string nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
             m_waitingAction->button->setText(nwBtnTitle);
             m_waitingAction = 0;
-            m_messageDialog->hide();
-        }else{
-            m_messageDialog->handleEvent(ev);
+            pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
         m_menu.handleEvent(ev);
@@ -110,18 +102,20 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
 void KeyBindingState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
-    m_messageDialog->update(elapsed);
 }
 
 void KeyBindingState::cancelDialog()
 {
     m_waitingAction = 0;
-    m_messageDialog->hide();
+    m_messageDialogId = 0;
 }
 
 
 void KeyBindingState::buttonClicked(ActionsButton *ab)
 {
     m_waitingAction = ab;
-    m_messageDialog->show();
+    DialogMessage &dm = pr::dialogManager().message("Change key binding","Press a key");
+    m_messageDialogId = dm.id();
+    pr::connect(dm.okClickedEvent, &KeyBindingState::cancelDialog, this);
+    pr::connect(dm.closeEvent, &KeyBindingState::cancelDialog, this);
 }

@@ -86,7 +86,25 @@ public:
     void onAfterLeaving() override;
 
 	virtual ~MenuState();
-private :
+private:
+
+    /**
+     * @brief ipEntered method called whenever the ip dialog is confirmed
+     * @param entered
+     */
+    void ipEntered(const std::string &entered);
+
+
+    /**
+     * @brief showInputDialog shows input dialog
+     */
+    void showInputDialog();
+
+    /**
+     * @brief inputDialogHidden when the input dialog is hidden
+     */
+    void inputDialogHidden();
+
 	/**
 	 * @brief isValidIp checks if the given string is a valid ip (using regexp)
 	 * @param enteredIp the ip entered by the user
@@ -109,12 +127,7 @@ private :
 	/**
 	 * @brief m_inputDialog input dialog
 	 */
-	Dialog *m_inputDialog;
-
-	/**
-	 * @brief m_messageDialog the message dialog
-	 */
-	Dialog *m_messageDialog;
+    sf::Uint64 m_inputDialiogId = 0;
 };
 
 #endif /* MENUSTATE_H */
