@@ -112,10 +112,10 @@ void ClientApp::resizeEvent(const sf::Event &event)
 {
     float width = event.size.width;
     float height = event.size.height;
-    sf::Vector2u minSize(width, height);
 
-    if(minSize.y < SF_ARENA_HEIGHT || minSize.x < SF_ARENA_WIDTH){
+    if(height < SF_ARENA_HEIGHT || width < SF_ARENA_WIDTH){
         window.setSize(sf::Vector2u(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+        return;//do not update the view
     }
 
     float nwX = (width - SF_ARENA_WIDTH) /2.f;
@@ -123,9 +123,10 @@ void ClientApp::resizeEvent(const sf::Event &event)
 
     float nwXRatio = nwX / width;
     float nwYRatio = nwY / height;
-    sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 , 1 );
+    sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 - (nwXRatio * 2), 1 - (nwYRatio * 2));
 
-    sf::View view(sf::FloatRect(0,0, width, height));
+
+    sf::View view(sf::FloatRect(0,0, SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
     view.setViewport(visibleArea);
     window.setView(view);
 }
@@ -154,7 +155,6 @@ void ClientApp::run(int argc, char** argv)
         window.display();
     }
     socket.disconnect();
-    stateMachine.getCurrentState().onBeforeLeaving(); //Close last threads
 }
 
 void ClientApp::quit()

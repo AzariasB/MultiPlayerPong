@@ -142,6 +142,14 @@ public:
     Renderer &push();
 
     /**
+     * @brief pushTranslate pushes the current render state, and translate the pushed
+     * render state of the given translation
+     * @param translation
+     * @return the renderer itself
+     */
+    Renderer &pushTranslate(const sf::Vector2f &translation);
+
+    /**
      * @brief pop pops the current render states,
      * and changes the current render state to the one under the current
      * throws exception if stack only contains one renderstate

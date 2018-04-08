@@ -39,13 +39,11 @@ TransitionState::TransitionState()
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    renderer.push();
-    renderer.translate(mExitingTranslate);
+    renderer.pushTranslate(mExitingTranslate);
     pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
     renderer.pop();
 
-    renderer.push();
-    renderer.translate(mEnteringTranslate);
+    renderer.pushTranslate(mEnteringTranslate);
     pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
     renderer.pop();
 }

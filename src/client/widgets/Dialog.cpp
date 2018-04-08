@@ -101,8 +101,8 @@ void Dialog::draw(Renderer &renderer) const
 
 void Dialog::beforeDraw(Renderer &renderer) const
 {
-    renderer.push();
-    renderer.translate(sf::Vector2f(0, m_yPosition));
+
+    renderer.pushTranslate(sf::Vector2f(0, m_yPosition));
 }
 
 void Dialog::afterDraw(Renderer &renderer) const

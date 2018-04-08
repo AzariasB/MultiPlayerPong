@@ -67,6 +67,11 @@ Renderer &Renderer::push()
     return *this;
 }
 
+Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
+{
+    push();
+    translate(translation);
+}
 
 void Renderer::shake()
 {
