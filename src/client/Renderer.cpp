@@ -96,16 +96,6 @@ sf::RenderStates &Renderer::top()
     return m_stack.top();
 }
 
-void Renderer::renderBall(const Ball& ball)
-{
-    sf::CircleShape circle(BALL_RADIUS, 30);
-    circle.setOrigin(BALL_RADIUS, BALL_RADIUS);
-    circle.setFillColor(cc::colors::ballColor);
-    const b2Vec2 &pos = ball.getPosition();
-    circle.setPosition(pos.x, pos.y);
-    render(circle);
-}
-
 Renderer &Renderer::scale(float nwScale)
 {
     top().transform.scale(nwScale, nwScale);
@@ -196,28 +186,49 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 
 void Renderer::renderPaddle(const Paddle& paddle)
 {
-    sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));
-    rectangle.setOrigin(PADDLE_WIDTH /2.f, PADDLE_HEIGHT / 2.f);
-
-    rectangle.setFillColor(cc::colors::paddleColor);
-
-    const b2Vec2 &pos = paddle.getPosition();
-    rectangle.setPosition(pos.x, pos.y);
-
-    render(rectangle);
+    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::colors::paddleColor));
 }
 
 void Renderer::renderWall(const Wall &wall)
 {
-    sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
-    rect.setOrigin(WALL_WITDH/2.f, WALL_HEIGHT / 2.f);
-
-    rect.setFillColor(cc::colors::wallColor);
-    const b2Vec2 &pos = wall.getPosition();
-    rect.setPosition(pos.x, pos.y);
-    render(rect);
+    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::colors::wallColor));
 }
 
+void Renderer::renderBall(const Ball& ball)
+{
+    render(*assertCircleExist(&ball, BALL_RADIUS, cc::colors::ballColor));
+}
+
+std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
+{
+    if(m_shapes.find(obj) == m_shapes.end()){
+        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::CircleShape>(radius));
+        target->setOrigin(radius, radius);
+        target->setFillColor(fillColor);
+        const b2Vec2 &pos = obj->getPosition();
+        target->setPosition(pos.x, pos.y);
+    }else if(!obj->isStatic()){
+        const b2Vec2 &pos = obj->getPosition();
+        m_shapes[obj]->setPosition(pos.x, pos.y);
+    }
+    return m_shapes[obj];
+}
+
+
+std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, float width, float height, const sf::Color &fillColor)
+{
+    if(m_shapes.find(obj) == m_shapes.end()){//not found
+        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::RectangleShape>(sf::Vector2f(width, height)));
+        target->setOrigin(width/2, height/2);
+        target->setFillColor(fillColor);
+        const b2Vec2 &pos = obj->getPosition();
+        target->setPosition(pos.x, pos.y);
+    }else if(!obj->isStatic()){//object can move
+        const b2Vec2 &pos = obj->getPosition();
+        m_shapes[obj]->setPosition(pos.x, pos.y);
+    }
+    return m_shapes[obj];
+}
 
 void Renderer::render(const sf::Drawable& drawable)
 {

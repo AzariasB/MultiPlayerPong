@@ -46,6 +46,8 @@ public:
 
     const b2Vec2 &getPosition() const;
 
+    bool isStatic() const;
+
     virtual ~PhysicObject();
 protected:
     const Game &mGame;

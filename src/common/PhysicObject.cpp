@@ -46,6 +46,11 @@ const b2Vec2 &PhysicObject::getPosition() const
     return mBody->GetPosition();
 }
 
+bool PhysicObject::isStatic() const
+{
+    return (mBody && mBody->GetType() == b2_staticBody);
+}
+
 PhysicObject::~PhysicObject()
 {
     mGame.world().DestroyBody(mBody);

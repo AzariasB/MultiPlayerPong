@@ -33,6 +33,7 @@
 #define RENDERER_HPP
 
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Shape.hpp>
 #include <SFML/System.hpp>
 #include <unordered_map>
 #include <stack>
@@ -43,6 +44,8 @@
 class Ball;
 class Paddle;
 class Wall;
+class PhysicObject;
+
 /**
  * @brief The Renderer class used to render every objects of the game
  * knows how to render the game's objects (ball, paddle)
@@ -189,6 +192,26 @@ private:
      */
     void destroyAnimation(sf::Uint64 animationId);
 
+    /**
+     * @brief assertRectExist
+     * @param obj
+     * @param width
+     * @param height
+     * @param fillColor
+     * @return
+     */
+    std::unique_ptr<sf::Shape> &assertRectExist(const PhysicObject *obj, float width, float height, const sf::Color &fillColor);
+
+
+    /**
+     * @brief assertCircleExist
+     * @param obj
+     * @param radius
+     * @param fillColor
+     * @return
+     */
+    std::unique_ptr<sf::Shape> &assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor);
+
 	/**
 	 * @brief target the target to use to draw stuff on it
 	 */
@@ -204,6 +227,13 @@ private:
      * @brief m_powerupAnimations the animations of all the powerups
      */
     std::unordered_map<sf::Uint64, Animation> m_powerupAnimations;
+
+    /**
+     * @brief m_shapes store the shapes to draw
+     * in order to avoid having to instanciate
+     * them at every draw call
+     */
+    std::unordered_map<const PhysicObject*, std::unique_ptr<sf::Shape>> m_shapes;
 
     /**
      * @brief m_stack stack system to be able to modify a
