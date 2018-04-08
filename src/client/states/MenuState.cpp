@@ -72,6 +72,7 @@ void MenuState::showInputDialog()
 
 void MenuState::inputDialogHidden()
 {
+    pr::dialogManager().hideDialog(m_inputDialiogId);
     m_inputDialiogId = 0;
 }
 
@@ -86,7 +87,8 @@ void MenuState::ipEntered(const std::string &entered)
         pr::dialogManager().hideDialog(m_inputDialiogId);
         pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
     }else{
-        pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
+        DialogMessage &msg = pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
+        pr::connect(msg.okClickedEvent, &Dialog::hide, static_cast<Dialog*>(&msg));
     }
 }
 

@@ -99,7 +99,7 @@ public:
 	/**
 	 * @brief hide hides the dialog, sets its state to invisible
 	 */
-    void hide(bool animate = true);
+    void hide();
 
 	/**
 	 * @brief setTitle changes the title of the dialog

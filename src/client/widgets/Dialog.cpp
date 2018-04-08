@@ -137,17 +137,13 @@ void Dialog::show(bool animate)
     }
 }
 
-void Dialog::hide(bool animate)
+void Dialog::hide()
 {
     if(m_state == DIALOG_HIDING || m_state == DIALOG_HIDDEN)return;
 
     m_state = DIALOG_HIDING;
 
-    if(animate){
-         m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, 0.5f, twin::backInOut);
-    }else{
-        m_state = DIALOG_HIDDEN;
-    }
+    m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, 0.5f, twin::backInOut);
 }
 
 Dialog::DIALOG_STATE Dialog::state() const

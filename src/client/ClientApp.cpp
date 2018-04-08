@@ -113,13 +113,10 @@ void ClientApp::resizeEvent(const sf::Event &event)
     float width = event.size.width;
     float height = event.size.height;
     sf::Vector2u minSize(width, height);
-    if(width < SF_ARENA_WIDTH)
-        minSize.x = SF_ARENA_WIDTH;
-    if(height < SF_ARENA_HEIGHT)
-        minSize.y = SF_ARENA_HEIGHT;
 
-    window.setSize(minSize);
-
+    if(minSize.y < SF_ARENA_HEIGHT || minSize.x < SF_ARENA_WIDTH){
+        window.setSize(sf::Vector2u(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+    }
 
     float nwX = (width - SF_ARENA_WIDTH) /2.f;
     float nwY = (height - SF_ARENA_HEIGHT)/2.f;
