@@ -93,15 +93,6 @@ void Ball::retract()
     m_radiusBoost = -BALL_RADIUS_POWERUP;
 }
 
-sf::Vector2f Ball::topLeftPosition() const
-{
-    sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-    pos.x -= BALL_RADIUS;
-    pos.y -= BALL_RADIUS;
-    return pos;
-}
-
-
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)
 {
     return packet << ball.mBody->GetPosition() << ball.mBody->GetLinearVelocity() << ball.m_radiusBoost;

@@ -61,14 +61,6 @@ mStartPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARE
     mBody->CreateFixture(&fDef);
 }
 
-sf::Vector2f Paddle::topLeftPosition() const
-{
-    sf::Vector2f pos = b2VecToSfVect(mBody->GetPosition());
-    pos.x -= PADDLE_WIDTH/2.f;
-    pos.y -= PADDLE_HEIGHT/2.f;
-    return pos;
-}
-
 void Paddle::reset()
 {
     mBody->SetTransform(mStartPos, mBody->GetAngle());

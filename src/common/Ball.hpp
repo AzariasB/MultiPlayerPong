@@ -86,12 +86,6 @@ public:
      */
     void resetPowerup(Powerup::POWERUP_TYPE type);
 
-    /**
-     * @brief getPosition the current position (uper-left corner)
-     * @return the current position of the ball
-     */
-    sf::Vector2f topLeftPosition() const override;
-
 	/**
 	 * @brief operator << seraializes the ball into a sf::Packet
 	 * @param packet the packet in which to seralize

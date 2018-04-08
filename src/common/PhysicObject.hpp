@@ -46,8 +46,6 @@ public:
 
     const b2Vec2 &getPosition() const;
 
-    virtual sf::Vector2f topLeftPosition() const = 0;
-
     virtual ~PhysicObject();
 protected:
     const Game &mGame;

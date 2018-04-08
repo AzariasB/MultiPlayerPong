@@ -57,15 +57,6 @@ Wall::Wall(const Game &g, const b2Vec2 &startingPos):
     mBody->CreateFixture(&fixture);
 }
 
-sf::Vector2f Wall::topLeftPosition() const
-{   
-    sf::Vector2f vec = b2VecToSfVect(mBody->GetPosition());
-    vec.x -= WALL_WITDH/2.f;
-    vec.y -= WALL_HEIGHT/2.f;
-    return vec;
-}
-
-
 Wall::~Wall()
 {
 }

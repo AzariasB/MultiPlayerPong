@@ -47,10 +47,6 @@ class Wall : public PhysicObject
 public:
     Wall(const Game &g, const b2Vec2 &startingPos);
 
-    sf::Vector2f topLeftPosition() const override;
-
-
-
     virtual ~Wall();
 };
 

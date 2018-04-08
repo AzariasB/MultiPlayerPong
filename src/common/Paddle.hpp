@@ -112,11 +112,6 @@ public:
      */
     std::size_t getNum() const;
 
-	/**
-	 * @brief getPosition
-	 * @return const reference to the paddle's position
-	 */
-    sf::Vector2f topLeftPosition() const override;
 
 	/**
 	 * @brief operator << serializes the paddle to the given sf::Packet

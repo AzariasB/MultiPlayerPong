@@ -99,8 +99,10 @@ sf::RenderStates &Renderer::top()
 void Renderer::renderBall(const Ball& ball)
 {
     sf::CircleShape circle(BALL_RADIUS, 30);
+    circle.setOrigin(BALL_RADIUS, BALL_RADIUS);
     circle.setFillColor(cc::colors::ballColor);
-    circle.setPosition(ball.topLeftPosition());
+    const b2Vec2 &pos = ball.getPosition();
+    circle.setPosition(pos.x, pos.y);
     render(circle);
 }
 
@@ -195,10 +197,12 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 void Renderer::renderPaddle(const Paddle& paddle)
 {
     sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));
+    rectangle.setOrigin(PADDLE_WIDTH /2.f, PADDLE_HEIGHT / 2.f);
 
     rectangle.setFillColor(cc::colors::paddleColor);
 
-    rectangle.setPosition(paddle.topLeftPosition());
+    const b2Vec2 &pos = paddle.getPosition();
+    rectangle.setPosition(pos.x, pos.y);
 
     render(rectangle);
 }
@@ -206,8 +210,11 @@ void Renderer::renderPaddle(const Paddle& paddle)
 void Renderer::renderWall(const Wall &wall)
 {
     sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
+    rect.setOrigin(WALL_WITDH/2.f, WALL_HEIGHT / 2.f);
+
     rect.setFillColor(cc::colors::wallColor);
-    rect.setPosition(wall.topLeftPosition());
+    const b2Vec2 &pos = wall.getPosition();
+    rect.setPosition(pos.x, pos.y);
     render(rect);
 }
 
