@@ -72,18 +72,18 @@ std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, flo
 }
 
 
-std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter)
+std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)
 {
-    auto &label = addLabel(content, xCenter, yCenter);
+    auto &label = addLabel(content, xCenter, yCenter, charSize);
     sf::Vector2f labelPos(label->getPosition().x - label->getGlobalBounds().width / 2.f,
                           label->getPosition().y - label->getGlobalBounds().height / 2.f);
     label->setPosition(labelPos);
     return label;
 }
 
-std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos)
+std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize)
 {
-    m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont()));
+    m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont(), charSize));
     m_labels.back()->setFillColor(cc::colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();

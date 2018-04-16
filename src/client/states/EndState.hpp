@@ -33,6 +33,7 @@
 #define ENDSTATE_H
 
 #include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 class Dialog;
 
@@ -75,17 +76,17 @@ public:
 	void onEnter(BaseStateData *data) override;
 
 	/**
-	 * @brief onLeave inherited function
-	 */
-	void onBeforeLeaving() override;
-
-	/**
 	 * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
 	 * goes back to the main menu
 	 */
     void goToMenu();
 
 	virtual ~EndState();
+
+private:
+    Menu m_menu;
+
+    sf::Text &m_content;
 };
 
 #endif /* ENDSTATE_H */

@@ -100,7 +100,7 @@ public:
 	 * @param yPos the Y position of the text
 	 * @return the text newly created
 	 */
-    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos);
+    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize = 30);
 
     /**
      * @brief addCenteredLabel adds the label to the menu, with the given text, and centers it
@@ -110,7 +110,7 @@ public:
      * @param yCenter y position of the labels center
      * @return the newly created text
      */
-    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter);
+    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 30);
 
 	/**
 	 * @brief addSprite adds a sprite to the menu, using the given texture, and the texture rectangle

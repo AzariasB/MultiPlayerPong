@@ -90,8 +90,8 @@ void Button::handleEvent(const sf::Event& ev)
         isClicked = true;
     }
 
-    if (isClicked)
-        pr::trigger(clickedEvent);
+    if (isClicked)pr::trigger(clickedEvent);
+
 }
 
 bool Button::isSelectionEvent(const sf::Event &ev) const
