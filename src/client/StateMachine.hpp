@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 19:04
  */
 
-#ifndef STATEMACHINE_H
-#define STATEMACHINE_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <unordered_map>
@@ -174,5 +174,5 @@ private:
 
 };
 
-#endif /* STATEMACHINE_H */
+
 

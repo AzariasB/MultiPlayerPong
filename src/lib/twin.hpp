@@ -1,5 +1,5 @@
-#ifndef TWIN_HPP
-#define TWIN_HPP
+
+#pragma once
 
 #include <cmath>
 #include <type_traits>
@@ -678,5 +678,3 @@ enum easing{
     }
 }
 
-
-#endif // TWIN_HPP

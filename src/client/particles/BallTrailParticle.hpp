@@ -28,8 +28,7 @@
  *
  * Created on 13/3/2018
  */
-#ifndef BALLTRAILPARTICLE_HPP
-#define BALLTRAILPARTICLE_HPP
+#pragma once
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -66,4 +65,4 @@ private:
     sf::CircleShape m_shape;
 };
 
-#endif // BALLTRAILPARTICLE_HPP
+

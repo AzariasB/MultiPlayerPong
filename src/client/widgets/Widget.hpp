@@ -29,8 +29,8 @@
  * Created on 22 octobre 2017, 16:30
  */
 
-#ifndef WIDGET_H
-#define WIDGET_H
+#pragma once
+
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Window/Event.hpp>
@@ -77,5 +77,5 @@ public:
 	}
 };
 
-#endif /* WIDGET_H */
+
 

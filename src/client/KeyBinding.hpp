@@ -28,8 +28,7 @@
  *
  * Created on 2/11/2017
  */
-#ifndef KEYBINDING_HPP
-#define KEYBINDING_HPP
+#pragma once
 
 #include <SFML/Window.hpp>
 #include <unordered_map>
@@ -177,4 +176,4 @@ private:
     std::unordered_map<sf::Keyboard::Key, std::string, EnumClassHash> m_keyMap;
 };
 
-#endif // KEYBINDING_HPP
+

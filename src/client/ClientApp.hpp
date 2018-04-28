@@ -29,8 +29,8 @@
  * Created on 9 octobre 2017, 18:06
  */
 
-#ifndef CLIENTAPP_H
-#define CLIENTAPP_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/TcpSocket.hpp>
@@ -284,5 +284,5 @@ private:
 
 };
 
-#endif /* CLIENTAPP_H */
+
 

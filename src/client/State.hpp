@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 17:20
  */
 
-#ifndef STATE_H
-#define STATE_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <memory>
@@ -174,4 +174,4 @@ public:
 
 };
 
-#endif /* STATE_H */
+

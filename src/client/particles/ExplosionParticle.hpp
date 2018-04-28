@@ -28,8 +28,8 @@
  *
  * Created on 30/10/2017
  */
-#ifndef PARTICLEEXPLOSION_H
-#define PARTICLEEXPLOSION_H
+#pragma once
+
 
 #include <vector>
 #include <SFML/System/Time.hpp>
@@ -67,4 +67,4 @@ private:
 	sf::VertexArray m_vertices;
 };
 
-#endif // PARTICLEEXPLOSION_H
+

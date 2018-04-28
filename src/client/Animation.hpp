@@ -28,8 +28,7 @@
  *
  * Created on 17/11/2017
  */
-#ifndef ANIMATION_HPP
-#define ANIMATION_HPP
+#pragma once
 
 
 #include <SFML/Graphics/Texture.hpp>
@@ -69,4 +68,4 @@ private:
     bool m_loop;
 };
 
-#endif // ANIMATION_HPP
+

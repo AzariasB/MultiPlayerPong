@@ -28,8 +28,7 @@
  *
  * Created on 12/3/2018
  */
-#ifndef PHYSICOBJECT_HPP
-#define PHYSICOBJECT_HPP
+#pragma once
 
 #include <SFML/System/Vector2.hpp>
 
@@ -55,4 +54,4 @@ protected:
     b2Body *mBody;
 };
 
-#endif // PHYSICOBJECT_HPP
+

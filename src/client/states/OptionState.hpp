@@ -28,8 +28,7 @@
  *
  * Created on 1/11/2017
  */
-#ifndef OPTIONSTATE_HPP
-#define OPTIONSTATE_HPP
+#pragma once
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
@@ -102,4 +101,4 @@ private:
 
 };
 
-#endif // OPTIONSTATE_HPP
+

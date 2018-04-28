@@ -29,8 +29,8 @@
  * Created on 11 octobre 2017, 18:03
  */
 
-#ifndef VECTORSUTILS_H
-#define VECTORSUTILS_H
+#pragma once
+
 
 #include <SFML/Network/Packet.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -247,5 +247,5 @@ inline b2Vec2 sfVecTob2Vec(const sf::Vector2f &vec, bool convertToMeters = true)
     return b2Vec2(vec.x, vec.y);
 }
 
-#endif /* VECTORSUTILS_H */
+
 

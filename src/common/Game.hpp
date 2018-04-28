@@ -29,8 +29,8 @@
  * Created on 11 octobre 2017, 10:09
  */
 
-#ifndef GAME_H
-#define GAME_H
+#pragma once
+
 
 #include <SFML/Network/Packet.hpp>
 #include <Box2D/Box2D.h>
@@ -310,5 +310,5 @@ public:
 };
 
 
-#endif /* GAME_H */
+
 

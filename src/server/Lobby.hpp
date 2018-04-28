@@ -29,8 +29,8 @@
  * Created on 17 octobre 2017, 16:45
  */
 
-#ifndef LOBBY_H
-#define LOBBY_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/TcpSocket.hpp>
@@ -208,5 +208,5 @@ struct LobbyThread {
 	Lobby lobby;
 	sf::Thread thread;
 };
-#endif /* LOBBY_H */
+
 

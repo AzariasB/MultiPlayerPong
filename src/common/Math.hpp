@@ -6,8 +6,8 @@
  * Created on 8 octobre 2017, 19:29
  */
 
-#ifndef MATH_H
-#define MATH_H
+#pragma once
+
 
 #include <SFML/System/Vector2.hpp>
 #include <Box2D/Common/b2Math.h>
@@ -84,5 +84,5 @@ int metersToPix(float meters);
 
 }
 
-#endif /* MATH_H */
+
 

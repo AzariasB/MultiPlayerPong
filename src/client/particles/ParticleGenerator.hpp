@@ -28,8 +28,8 @@
  *
  * Created on 30/10/2017
  */
-#ifndef PARTICLEGENERATOR_H
-#define PARTICLEGENERATOR_H
+#pragma once
+
 
 #include <SFML/Graphics.hpp>
 #include <list>
@@ -58,4 +58,4 @@ private:
     std::list<std::unique_ptr<Particle> > m_particles;
 };
 
-#endif // PARTICLEGENERATOR_H
+

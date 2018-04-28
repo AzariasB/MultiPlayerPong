@@ -29,8 +29,8 @@
  * Created on 18 octobre 2017, 22:05
  */
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
+
 
 #include <SFML/Config.hpp>
 
@@ -169,5 +169,5 @@ private:
 	Paddle m_paddle;
 };
 
-#endif /* PLAYER_H */
+
 

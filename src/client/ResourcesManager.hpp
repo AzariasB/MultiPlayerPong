@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 22:08
  */
 
-#ifndef RESOURCESMANAGER_H
-#define RESOURCESMANAGER_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -146,5 +146,5 @@ private:
     std::unordered_map<std::string, sf::Shader> m_shaders;
 };
 
-#endif /* RESOURCESMANAGER_H */
+
 

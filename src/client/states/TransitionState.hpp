@@ -22,8 +22,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef TRANSITIONSTATE_HPP
-#define TRANSITIONSTATE_HPP
+#pragma once
 
 #include <SFML/System/Vector2.hpp>
 #include "src/client/State.hpp"
@@ -72,4 +71,4 @@ private:
     static const sf::Int32 mTransitionDuration;
 };
 
-#endif // TRANSITIONSTATE_HPP
+

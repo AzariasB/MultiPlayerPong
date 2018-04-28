@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 17:48
  */
 
-#ifndef WAITINGSTATE_H
-#define WAITINGSTATE_H
+#pragma once
+
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
@@ -109,5 +109,5 @@ private:
     sf::Text &m_content;
 };
 
-#endif /* WAITINGSTATE_H */
+
 

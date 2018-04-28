@@ -29,8 +29,7 @@
  * Created on 16 octobre 2017, 22:50
  */
 
-#ifndef ENDSTATE_H
-#define ENDSTATE_H
+#pragma once
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
@@ -97,6 +96,4 @@ private:
      */
     sf::Text &m_content;
 };
-
-#endif /* ENDSTATE_H */
 

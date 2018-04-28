@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 17:49
  */
 
-#ifndef PLAYSTATE_H
-#define PLAYSTATE_H
+#pragma once
+
 
 #include <SFML/System/Thread.hpp>
 #include "PlayState.hpp"
@@ -90,5 +90,5 @@ private:
 	bool gameFinisehd = false;
 };
 
-#endif /* PLAYSTATE_H */
+
 

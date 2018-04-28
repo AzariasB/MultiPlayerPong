@@ -28,8 +28,7 @@
  *
  * Created on 20/11/2017
  */
-#ifndef POWERUP_HPP
-#define POWERUP_HPP
+#pragma once
 
 #include <SFML/Config.hpp>
 #include <SFML/System.hpp>
@@ -128,4 +127,4 @@ public:
     //event "destroyed" by ball
 };
 
-#endif // POWERUP_HPP
+

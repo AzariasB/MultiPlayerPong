@@ -28,8 +28,7 @@
  *
  * Created on 12/3/2018
  */
-#ifndef CONTACTLISTENER_HPP
-#define CONTACTLISTENER_HPP
+#pragma once
 
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 #include <SFML/Config.hpp>
@@ -55,4 +54,4 @@ public:
     const sf::Int64 ballHitPaddleEvent;
 };
 
-#endif // CONTACTLISTENER_HPP
+

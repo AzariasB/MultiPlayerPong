@@ -29,8 +29,8 @@
  * Created on 21 octobre 2017, 11:49
  */
 
-#ifndef SOUNDENGINE_H
-#define SOUNDENGINE_H
+#pragma once
+
 
 #include "ResourcesManager.hpp"
 
@@ -110,5 +110,5 @@ private:
 	bool m_isMuted = false;
 };
 
-#endif /* SOUNDENGINE_H */
+
 

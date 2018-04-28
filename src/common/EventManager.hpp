@@ -29,8 +29,8 @@
  * Created on 21 octobre 2017, 12:18
  */
 
-#ifndef EVENTMANAGER_H
-#define EVENTMANAGER_H
+#pragma once
+
 
 #include <functional>
 #include <unordered_map>
@@ -334,5 +334,5 @@ private:
     std::unordered_map<std::string, std::list<BaseEvent*>::iterator> m_tokens;
 };
 
-#endif /* EVENTMANAGER_H */
+
 

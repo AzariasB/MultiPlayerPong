@@ -28,8 +28,7 @@
  *
  * Created on 20/3/2018
  */
-#ifndef CLIENTCONF_HPP
-#define CLIENTCONF_HPP
+#pragma once
 
 #include <SFML/Graphics/Color.hpp>
 
@@ -62,4 +61,4 @@ namespace colors {
 
 }
 
-#endif // CLIENTCONF_HPP
+

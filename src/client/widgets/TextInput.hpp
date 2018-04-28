@@ -29,8 +29,8 @@
  * Created on 22 octobre 2017, 16:29
  */
 
-#ifndef TEXTINPUT_H
-#define TEXTINPUT_H
+#pragma once
+
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Clock.hpp>
@@ -111,5 +111,5 @@ private:
 
 };
 
-#endif /* TEXTINPUT_H */
+
 

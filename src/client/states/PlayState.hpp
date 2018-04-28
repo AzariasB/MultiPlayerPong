@@ -29,8 +29,7 @@
  * Created on 12/03/2018
  */
 
-#ifndef PLAYSTATE_HPP
-#define PLAYSTATE_HPP
+#pragma once
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -81,4 +80,4 @@ private:
     bool gameFinisehd = false;
 };
 
-#endif // PLAYSTATE_HPP
+

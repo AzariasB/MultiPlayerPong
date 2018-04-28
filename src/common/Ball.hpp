@@ -29,8 +29,8 @@
  */
 
 
-#ifndef BALL_H
-#define BALL_H
+#pragma once
+
 
 #include <SFML/Config.hpp>
 
@@ -110,5 +110,5 @@ private:
 
 
 
-#endif /* BALL_H */
+
 

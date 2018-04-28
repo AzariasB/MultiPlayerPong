@@ -29,8 +29,8 @@
  * Created on 21 octobre 2017, 16:49
  */
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
+
 
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -177,5 +177,5 @@ public:
     const sf::Uint64 selectdEvent;
 };
 
-#endif /* BUTTON_H */
+
 

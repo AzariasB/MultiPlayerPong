@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 17:48
  */
 
-#ifndef MENUSTATE_H
-#define MENUSTATE_H
+#pragma once
+
 
 #include "src/client//State.hpp"
 #include "src/client/widgets/Menu.hpp"
@@ -130,5 +130,5 @@ private:
     sf::Uint64 m_inputDialiogId = 0;
 };
 
-#endif /* MENUSTATE_H */
+
 

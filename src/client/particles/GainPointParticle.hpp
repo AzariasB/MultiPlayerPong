@@ -28,8 +28,7 @@
  *
  * Created on 13/3/2018
  */
-#ifndef GAINPOINTPARTICLE_HPP
-#define GAINPOINTPARTICLE_HPP
+#pragma once
 
 #include <SFML/Graphics/Text.hpp>
 
@@ -59,4 +58,4 @@ private:
     sf::Text m_text;
 };
 
-#endif // GAINPOINTPARTICLE_HPP
+

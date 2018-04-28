@@ -29,8 +29,7 @@
  * Created on 12/03/2018
  */
 
-#ifndef PLAYSOLOSTATE_HPP
-#define PLAYSOLOSTATE_HPP
+#pragma once
 
 #include "PlayState.hpp"
 
@@ -55,4 +54,4 @@ private:
 
 };
 
-#endif // PLAYSOLOSTATE_HPP
+

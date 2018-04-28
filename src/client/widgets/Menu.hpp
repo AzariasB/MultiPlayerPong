@@ -28,8 +28,7 @@
  *
  * Created on 1/11/2017
  */
-#ifndef MENU_HPP
-#define MENU_HPP
+#pragma once
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -162,4 +161,4 @@ private:
 	std::vector<std::unique_ptr<sf::Sprite>> m_sprites;
 };
 
-#endif // MENU_HPP
+

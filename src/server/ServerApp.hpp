@@ -28,8 +28,8 @@
  * Created on 9 octobre 2017, 18:06
  */
 
-#ifndef SERVERAPP_H
-#define SERVERAPP_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/Socket.hpp>
@@ -71,4 +71,4 @@ private:
 	std::vector<std::unique_ptr<LobbyThread>> lobbies;
 };
 
-#endif /* SERVERAPP_H */
+

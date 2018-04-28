@@ -28,8 +28,7 @@
  *
  * Created on 26/3/2018
  */
-#ifndef COLORTWEENING_HPP
-#define COLORTWEENING_HPP
+#pragma once
 
 #include <SFML/Graphics/Color.hpp>
 #include "src/lib/twin.hpp"
@@ -87,4 +86,4 @@ private:
     std::array<twin::Twin<sf::Uint8, float>, 4> m_colorsTwin;
 };
 
-#endif // COLORTWEENING_HPP
+

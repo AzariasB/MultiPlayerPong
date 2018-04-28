@@ -136,7 +136,7 @@ const Powerup &Game::addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &
 #ifdef SERVER
     if(pair.second){
         mw_nwPowerups.emplace_back(&pair.first->second);
-        m_evManager.declareListener(pair.first->second.hitPaddle, &Game::powerupHitPaddle, this, pair.first->first);
+        //m_evManager.declareListener(pair.first->second.hitPaddle, &Game::powerupHitPaddle, this, pair.first->first);
     }
 #endif
     return m_powerups.find(key)->second;

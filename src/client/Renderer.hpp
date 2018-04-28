@@ -29,8 +29,7 @@
  * Created on 9 octobre 2017, 19:19
  */
 
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
+#pragma once
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Shape.hpp>
@@ -250,5 +249,5 @@ private:
     std::stack<sf::RenderStates> m_stack;
 };
 
-#endif /* RENDERER_HPP */
+
 

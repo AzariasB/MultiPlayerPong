@@ -28,8 +28,8 @@
  *
  * Created on 24/10/2017
  */
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
+
 
 //Netorking
 #define DEFAULT_PORT 5300
@@ -73,5 +73,3 @@
 
 #define VELOCITY_ITERATIONS 8
 #define POSITION_ITERATIONS 3
-
-#endif // CONFIG_H

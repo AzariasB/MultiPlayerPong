@@ -28,8 +28,8 @@
  * Created on 9 octobre 2017, 08:49
  */
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
+
 
 #include <unordered_map>
 #include <SFML/System/String.hpp>
@@ -74,5 +74,5 @@ private:
 
 };
 
-#endif /* APPLICATION_H */
+
 

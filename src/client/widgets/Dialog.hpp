@@ -28,8 +28,8 @@
  *
  * Created on 23/10/2017
  */
-#ifndef DIALOG_H
-#define DIALOG_H
+#pragma once
+
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "Widget.hpp"
@@ -285,4 +285,4 @@ public:
 //END MESSAGE DIALOG
 
 
-#endif // DIALOG_H
+

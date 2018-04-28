@@ -28,8 +28,7 @@
  *
  * Created on 18/11/2017
  */
-#ifndef PROVIDER_HPP
-#define PROVIDER_HPP
+#pragma once
 
 #include <SFML/Config.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -102,4 +101,4 @@ namespace pr {
     }
 }
 
-#endif // PROVIDER_HPP
+

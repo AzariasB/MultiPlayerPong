@@ -47,7 +47,7 @@ WaitingState::~WaitingState()
 WaitingState::WaitingState() :
     State(),
     m_menu(),
-    m_content()
+    m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
 }
 

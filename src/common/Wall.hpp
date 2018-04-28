@@ -29,8 +29,7 @@
  * Created on 09/03/2018
  */
 
-#ifndef WALL_HPP
-#define WALL_HPP
+#pragma once
 
 #include <SFML/System/Vector2.hpp>
 #include "PhysicObject.hpp"
@@ -50,4 +49,4 @@ public:
     virtual ~Wall();
 };
 
-#endif // WALL_HPP
+

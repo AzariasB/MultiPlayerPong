@@ -28,8 +28,7 @@
  *
  * Created on 13/3/2018
  */
-#ifndef PARTICLE_HPP
-#define PARTICLE_HPP
+#pragma once
 
 class Renderer;
 namespace sf {
@@ -56,4 +55,4 @@ public:
     }
 };
 
-#endif // PARTICLE_HPP
+

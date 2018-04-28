@@ -28,8 +28,7 @@
  *
  * Created on 3/11/2017
  */
-#ifndef KEYOPTIONS_HPP
-#define KEYOPTIONS_HPP
+#pragma once
 
 #include "src/client/widgets/Menu.hpp"
 #include "src/client/KeyBinding.hpp"
@@ -142,5 +141,3 @@ private:
 	ActionsButton *m_waitingAction = 0;
 
 };
-
-#endif // KEYOPTIONS_HPP

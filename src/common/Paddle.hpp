@@ -29,8 +29,8 @@
  * Created on 8 octobre 2017, 19:10
  */
 
-#ifndef PADDLE_H
-#define PADDLE_H
+#pragma once
+
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -159,5 +159,5 @@ private:
 
 
 
-#endif /* PADDLE_H */
+
 

@@ -28,8 +28,7 @@
  *
  * Created on 29/3/2018
  */
-#ifndef DIALOGMANAGER_HPP
-#define DIALOGMANAGER_HPP
+#pragma once
 
 #include <map>
 #include "Widget.hpp"
@@ -90,4 +89,4 @@ private:
     }
 };
 
-#endif // DIALOGMANAGER_HPP
+
