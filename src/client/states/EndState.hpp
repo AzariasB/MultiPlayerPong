@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -84,8 +84,17 @@ public:
 	virtual ~EndState();
 
 private:
+    /**
+     * @brief m_menu the menu of the state, to show
+     * the texts and the "back" button menu
+     */
     Menu m_menu;
 
+    /**
+     * @brief m_content reference
+     * to the "content" text, to show the text "win"
+     * or "loose"
+     */
     sf::Text &m_content;
 };
 

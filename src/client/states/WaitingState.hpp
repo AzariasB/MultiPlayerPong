@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@
 #define WAITINGSTATE_H
 
 #include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 namespace sf {
     class Event;
@@ -95,6 +96,17 @@ private:
 	 * @brief c_state state current connection state
 	 */
 	CONNECTION_STATE c_state;
+
+    /**
+     * @brief m_menu Menu to show the texts
+     * and the "menu" button
+     */
+    Menu m_menu;
+
+    /**
+     * @brief m_content text containing
+     */
+    sf::Text &m_content;
 };
 
 #endif /* WAITINGSTATE_H */
