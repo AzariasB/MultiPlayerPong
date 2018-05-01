@@ -31,6 +31,8 @@
 
 #include "Lobby.hpp"
 
+namespace mp {
+
 //LobbyThread
 
 LobbyThread::LobbyThread() :
@@ -102,9 +104,9 @@ void Lobby::start()
         totalTime += elapsed;
 
         running = !game.playerWon();
-//        if(tryAddPowerup(elapsed)){
-//            std::cout << "Adding a powerup\n";
-//        }
+        //        if(tryAddPowerup(elapsed)){
+        //            std::cout << "Adding a powerup\n";
+        //        }
 
         game.update(elapsed);
         if (totalTime.asMilliseconds() > 1) {
@@ -232,4 +234,6 @@ bool Lobby::isFinished() const
     isFinished = state == LOBBY_STATE::STOP;
     stateMutex.unlock();
     return isFinished;
+}
+
 }

@@ -34,6 +34,8 @@
 #include "PhysicObject.hpp"
 #include "Game.hpp"
 
+namespace mp {
+
 PhysicObject::PhysicObject(const Game &game, PO_TYPE poType):
     type(poType),
     mGame(game)
@@ -55,4 +57,6 @@ PhysicObject::~PhysicObject()
 {
     mGame.world().DestroyBody(mBody);
     mBody = 0;
+}
+
 }

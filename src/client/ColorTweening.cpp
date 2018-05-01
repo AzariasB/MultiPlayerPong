@@ -30,43 +30,46 @@
  */
 #include "ColorTweening.hpp"
 
-ColorTweening::ColorTweening()
-{
-    m_running = false;
+namespace mp {
+
+    ColorTweening::ColorTweening()
+    {
+        m_running = false;
+    }
+
+    ColorTweening::ColorTweening(const sf::Color &defaultColor):
+        m_color(defaultColor)
+    {
+        m_running = false;
+    }
+
+    ColorTweening::ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing):
+        m_color(from)
+    {
+        m_colorsTwin[0] = twin::makeTwin(from.r, to.r, duration, easing);
+        m_colorsTwin[1] = twin::makeTwin(from.g, to.g, duration, easing);
+        m_colorsTwin[2] = twin::makeTwin(from.b, to.b, duration, easing);
+        m_colorsTwin[3] = twin::makeTwin(from.a, to.a, duration, easing);
+
+        m_running = true;
+    }
+
+
+
+    const sf::Color &ColorTweening::get() const
+    {
+        return m_color;
+    }
+
+    void ColorTweening::update(float deltaTime)
+    {
+        if(!m_running)return;
+
+        for(auto &tw : m_colorsTwin)
+            tw.step(deltaTime);
+
+        m_color = sf::Color(m_colorsTwin[0].get(), m_colorsTwin[1].get(), m_colorsTwin[2].get(), m_colorsTwin[3].get());
+        m_running = m_colorsTwin[0].progress() < 1.f;
+    }
+
 }
-
-ColorTweening::ColorTweening(const sf::Color &defaultColor):
-    m_color(defaultColor)
-{
-    m_running = false;
-}
-
-ColorTweening::ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing):
-    m_color(from)
-{
-    m_colorsTwin[0] = twin::makeTwin(from.r, to.r, duration, easing);
-    m_colorsTwin[1] = twin::makeTwin(from.g, to.g, duration, easing);
-    m_colorsTwin[2] = twin::makeTwin(from.b, to.b, duration, easing);
-    m_colorsTwin[3] = twin::makeTwin(from.a, to.a, duration, easing);
-
-    m_running = true;
-}
-
-
-
-const sf::Color &ColorTweening::get() const
-{
-    return m_color;
-}
-
-void ColorTweening::update(float deltaTime)
-{
-    if(!m_running)return;
-
-    for(auto &tw : m_colorsTwin)
-        tw.step(deltaTime);
-
-    m_color = sf::Color(m_colorsTwin[0].get(), m_colorsTwin[1].get(), m_colorsTwin[2].get(), m_colorsTwin[3].get());
-    m_running = m_colorsTwin[0].progress() < 1.f;
-}
-

@@ -36,6 +36,9 @@
 #include "Widget.hpp"
 #include "Button.hpp"
 
+namespace mp {
+
+
 /**
  * @brief The Menu class a menu is a widget
  * containing several buttons and labels
@@ -44,26 +47,26 @@
 class Menu : public Widget
 {
 public:
-	/**
-	 * @brief Menu constructor
-	 * @param app reference to the application
-	 */
+    /**
+     * @brief Menu constructor
+     * @param app reference to the application
+     */
     Menu();
 
-	virtual ~Menu();
+    virtual ~Menu();
 
-	/**
-	 * @brief draw inherited function
-	 * @param target
-	 * @param states
-	 */
+    /**
+     * @brief draw inherited function
+     * @param target
+     * @param states
+     */
     void draw(Renderer &renderer) const;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event &ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief update inherited function
@@ -71,14 +74,14 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief addButton adds a button to the menu, with the given text, at the given position
-	 * returns the button if the caller wants to make additional changes, and store it for another usage
-	 * @param content the string to display
-	 * @param xPos the X position of the button
-	 * @param yPos the Y position of the button
-	 * @return the button newly created
-	 */
+    /**
+     * @brief addButton adds a button to the menu, with the given text, at the given position
+     * returns the button if the caller wants to make additional changes, and store it for another usage
+     * @param content the string to display
+     * @param xPos the X position of the button
+     * @param yPos the Y position of the button
+     * @return the button newly created
+     */
     std::unique_ptr<Button> &addButton(const std::string &content, float xPos, float yPos);
 
     /**
@@ -92,13 +95,13 @@ public:
      */
     std::unique_ptr<Button> &addCenteredButton(const std::string &content, float xCenter, float yCenter);
 
-	/**
-	 * @brief addLabel adds a label to the menu, with the given text, at the given result
-	 * @param content the string to display
-	 * @param xpOs the X position of the text
-	 * @param yPos the Y position of the text
-	 * @return the text newly created
-	 */
+    /**
+     * @brief addLabel adds a label to the menu, with the given text, at the given result
+     * @param content the string to display
+     * @param xpOs the X position of the text
+     * @param yPos the Y position of the text
+     * @return the text newly created
+     */
     std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize = 30);
 
     /**
@@ -111,15 +114,15 @@ public:
      */
     std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 30);
 
-	/**
-	 * @brief addSprite adds a sprite to the menu, using the given texture, and the texture rectangle
-	 * returns the created sprite, in order to modify it more if needed
-	 * @param textureName the name of the texture in the resource manager
-	 * @param pos the position of the sprite
-	 * @param textureRect the rectangle texture
-	 * @return the newly created sprite
-	 */
-	std::unique_ptr<sf::Sprite> &addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect);
+    /**
+     * @brief addSprite adds a sprite to the menu, using the given texture, and the texture rectangle
+     * returns the created sprite, in order to modify it more if needed
+     * @param textureName the name of the texture in the resource manager
+     * @param pos the position of the sprite
+     * @param textureRect the rectangle texture
+     * @return the newly created sprite
+     */
+    std::unique_ptr<sf::Sprite> &addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect);
 
     /**
      * @brief addCenteredSprite add the sprite to the menu, centered at the given location
@@ -143,22 +146,24 @@ private:
      */
     void setSeletedIndex(int nwIndex);
 
-	/**
-	 * @brief m_labels all the labels of the menu
-	 */
-	std::vector<std::unique_ptr<sf::Text>> m_labels;
+    /**
+     * @brief m_labels all the labels of the menu
+     */
+    std::vector<std::unique_ptr<sf::Text>> m_labels;
 
-	/**
-	 * @brief m_buttons all the buttons of the menu
-	 */
-	std::vector<std::unique_ptr<Button>> m_buttons;
+    /**
+     * @brief m_buttons all the buttons of the menu
+     */
+    std::vector<std::unique_ptr<Button>> m_buttons;
 
     std::size_t m_selectedButton = 0;
 
-	/**
-	 * @brief m_sprites all the sprites of the menu
-	 */
-	std::vector<std::unique_ptr<sf::Sprite>> m_sprites;
+    /**
+     * @brief m_sprites all the sprites of the menu
+     */
+    std::vector<std::unique_ptr<sf::Sprite>> m_sprites;
 };
 
 
+
+}

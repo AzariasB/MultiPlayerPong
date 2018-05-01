@@ -37,6 +37,8 @@
 #include "KeyBinding.hpp"
 #include "SoundEngine.hpp"
 
+namespace mp {
+
 Game &pr::game()
 {
     return ClientApp::getInstance().getGame();
@@ -101,4 +103,6 @@ Player &pr::player()
 DialogManager &pr::dialogManager()
 {
     return ClientApp::getInstance().getDialogManager();
+}
+
 }

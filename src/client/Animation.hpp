@@ -35,6 +35,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 
+namespace mp {
+
 class Animation : public sf::Drawable
 {
 public:
@@ -69,3 +71,5 @@ private:
 };
 
 
+
+}

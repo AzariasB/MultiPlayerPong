@@ -39,6 +39,8 @@
 #include "src/client/ClientConf.hpp"
 #include "src/client/Renderer.hpp"
 
+namespace mp {
+
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
@@ -97,7 +99,7 @@ void Button::handleEvent(const sf::Event& ev)
 bool Button::isSelectionEvent(const sf::Event &ev) const
 {
     return (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return ||
-                ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
+            ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
 }
 
 void Button::draw(Renderer &renderer) const
@@ -158,4 +160,7 @@ Button::~Button()
 {
 
 }
+
+}
+
 

@@ -34,6 +34,7 @@
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/ClientConf.hpp"
 
+namespace mp {
 
 EndState::EndState():
     m_menu(),
@@ -87,3 +88,6 @@ void EndState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
 }
+
+}
+

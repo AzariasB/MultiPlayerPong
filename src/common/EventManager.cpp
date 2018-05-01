@@ -25,14 +25,16 @@
 /* 
  * File:   EventManager.cpp
  * Author: azarias
- * 
+ *
  * Created on 21 octobre 2017, 12:18
  */
 
 #include "EventManager.hpp"
 
+namespace mp {
+
 EventManager::EventManager():
-m_evCounter(0)
+    m_evCounter(0)
 {
 
 }
@@ -40,7 +42,7 @@ m_evCounter(0)
 sf::Uint64 EventManager::nextEventCode()
 {
     m_observers.insert(std::make_pair(++m_evCounter, std::list<BaseEvent*>()));
-	return m_evCounter;
+    return m_evCounter;
 }
 
 EventManager::~EventManager()
@@ -57,13 +59,13 @@ const std::string &EventManager::addIterator(sf::Uint64 evCode, const std::strin
 {
     return (*m_tokens.insert(
                 std::make_pair(uuid, std::prev(m_observers[evCode].end()))
-    ).first/* iterator to pair */).first /* key */;
+                ).first/* iterator to pair */).first /* key */;
 }
 
 void EventManager::assertEventCode(sf::Uint64 evCode)
 {
-	if (evCode <= 0 || evCode > m_evCounter)
-		throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") is out of range");
+    if (evCode <= 0 || evCode > m_evCounter)
+        throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") is out of range");
 }
 
 void EventManager::removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode)
@@ -78,4 +80,6 @@ void EventManager::removeListener(const std::string &tokenUUID, const sf::Uint64
     }else{
         std::out_of_range("The given uuid (" + tokenUUID + ") does not exist");
     }
+}
+
 }

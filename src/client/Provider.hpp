@@ -36,6 +36,8 @@
 
 #include "src/common/EventManager.hpp"
 
+namespace mp {
+
 class Game;
 class StateMachine;
 class EventManager;
@@ -49,56 +51,58 @@ class DialogManager;
 
 
 namespace pr {
-    Game &game();
+Game &game();
 
-    StateMachine &stateMachine();
+StateMachine &stateMachine();
 
-    const ResourcesManager &resourceManager();
+const ResourcesManager &resourceManager();
 
-    EventManager &eventManager();
+EventManager &eventManager();
 
-    sf::Uint64 nextEventCode();
+sf::Uint64 nextEventCode();
 
-    sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
+sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
 
-    KeyBinding &keyBinding();
+KeyBinding &keyBinding();
 
-    SoundEngine &soundEngine();
+SoundEngine &soundEngine();
 
-    ParticleGenerator &particleGenerator();
+ParticleGenerator &particleGenerator();
 
-    Renderer &renderer();
+Renderer &renderer();
 
-    sf::TcpSocket &socket();
+sf::TcpSocket &socket();
 
-    Player &player();
+Player &player();
 
-    DialogManager &dialogManager();
+DialogManager &dialogManager();
 
 
-    template<typename T, typename ...Args>
-    const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
-    {
-        return eventManager().declareListener(evCode, func, obj);
-    }
-
-    template<typename T, typename ...Args>
-    const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
-    {
-        return eventManager().declareListener(evCode, func, obj, args...);
-    }
-
-    template<typename ...Args>
-    const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
-    {
-        return eventManager().declareListener(evCode, func, args...);
-    }
-
-    template<typename ...Args>
-    void trigger(sf::Uint64 evCode, Args... argp)
-    {
-        eventManager().trigger(evCode, argp...);
-    }
+template<typename T, typename ...Args>
+const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
+{
+    return eventManager().declareListener(evCode, func, obj);
 }
 
+template<typename T, typename ...Args>
+const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
+{
+    return eventManager().declareListener(evCode, func, obj, args...);
+}
 
+template<typename ...Args>
+const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
+{
+    return eventManager().declareListener(evCode, func, args...);
+}
+
+template<typename ...Args>
+void trigger(sf::Uint64 evCode, Args... argp)
+{
+    eventManager().trigger(evCode, argp...);
+}
+
+}//namespace pr
+
+
+}//namespace mp

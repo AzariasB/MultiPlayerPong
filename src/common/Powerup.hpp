@@ -36,6 +36,8 @@
 #include <SFML/Network/Packet.hpp>
 #include "Config.hpp"
 
+namespace mp {
+
 class Game;
 
 class Powerup
@@ -128,3 +130,4 @@ public:
 };
 
 
+}

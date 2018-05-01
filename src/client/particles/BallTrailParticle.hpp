@@ -30,8 +30,6 @@
  */
 #pragma once
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
@@ -39,30 +37,76 @@
 #include "src/lib/twin.hpp"
 
 namespace sf {
-    class Time;
+class Time;
 }
 
+namespace mp {
+
+/**
+ * @brief The BallTrailParticle class
+ * particle used to show a trail behind the ball
+ * it looks a bit like dust smoke
+ */
 class BallTrailParticle : public Particle
 {
 public:
+    /**
+     * @brief BallTrailParticle constructor
+     * @param center center position of the particle
+     * @param lifeTime lifetime of the particle
+     * @param startRadius starting radius of this particle
+     * @param color color of the particle
+     */
     BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color);
 
+    /**
+     * @brief update overriden function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief isFinished whenever this particle is over
+     * @return when the radius of this particle is zero, it can be destroyed
+     */
     bool isFinished() const override;
 
+    /**
+     * @brief render draws the particle
+     * @param renderer
+     */
     void render(Renderer &renderer) const override;
 
 private:
+    /**
+     * @brief m_center center point of the particle
+     */
     sf::Vector2f m_center;
 
+    /**
+     * @brief m_twin tweening for the radius
+     */
     twin::Twin<float, sf::Int32> m_twin;
 
+    /**
+     * @brief m_alphaTwin tweening for the alpha color
+     */
     twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
 
+    /**
+     * @brief m_angle current rotating angle
+     */
     float m_angle = 0;
 
+    /**
+     * @brief m_shape save the shape to draw
+     * to avoid instanciate it at every frame
+     */
     sf::CircleShape m_shape;
 };
 
+
+
+
+}
 

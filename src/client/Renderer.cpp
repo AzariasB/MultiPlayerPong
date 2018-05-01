@@ -41,6 +41,8 @@
 
 #include <math.h>
 
+namespace mp {
+
 Renderer::Renderer(sf::RenderTarget &target) :
     target(target)
 {
@@ -75,12 +77,12 @@ Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
 
 void Renderer::shake()
 {
- //   m_shakeTimeout = sf::seconds(1.f);
+    //   m_shakeTimeout = sf::seconds(1.f);
 }
 
 void Renderer::update(sf::Time elapsed)
 {
-  /*  if(m_shakeTimeout > sf::Time::Zero){
+    /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
         float randAngle = (std::rand() % 360);
         float radius = m_shakeTimeout.asSeconds();
@@ -150,9 +152,9 @@ Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
     const sf::Texture &texture = powerupTexture(powerup.getType());
     sf::Vector2i sprites = powerupSprites(powerup.getType());
     auto pair = m_powerupAnimations.emplace(std::piecewise_construct,
-                                   std::forward_as_tuple(powerup.getId()),
-                                   std::forward_as_tuple(texture, sprites, sf::seconds(1))
-                                   );
+                                            std::forward_as_tuple(powerup.getId()),
+                                            std::forward_as_tuple(texture, sprites, sf::seconds(1))
+                                            );
     pr::connect(powerup.powerupDestroyed, &Renderer::destroyAnimation, this, powerup.getId());
     return pair.first->second;
 }
@@ -240,3 +242,4 @@ void Renderer::render(const sf::Drawable& drawable)
     target.draw(drawable, m_stack.top());
 }
 
+}

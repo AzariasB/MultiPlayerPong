@@ -37,6 +37,8 @@
 #include "src/client/widgets/Button.hpp"
 #include "src/client/widgets/Dialog.hpp"
 
+namespace mp {
+
 MenuState::~MenuState()
 {
 }
@@ -110,9 +112,11 @@ void MenuState::update(const sf::Time &elapsed)
 
 bool MenuState::isValidIp(const std::string &enteredIp) const
 {
-	return std::regex_match(enteredIp, std::regex("^((2(5[0-5]|[0-4][0-9])|1[0-9]{2}|[0-9]{1,2})(\\.|$)){4}"));
+    return std::regex_match(enteredIp, std::regex("^((2(5[0-5]|[0-4][0-9])|1[0-9]{2}|[0-9]{1,2})(\\.|$)){4}"));
 }
 
 void MenuState::onAfterLeaving()
 {
+}
+
 }

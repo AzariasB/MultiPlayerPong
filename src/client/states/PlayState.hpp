@@ -36,17 +36,40 @@
 #include <SFML/System/Time.hpp>
 #include "src/client/State.hpp"
 
+namespace mp {
+
 class Player;
 
+/**
+ * @brief The PlayState class
+ * abstract class used by multiplayer and solo states
+ * performs all the commons parts of rendering, handling
+ * events, state switching and point managment
+ */
 class PlayState : public State
 {
 public:
+    /**
+     * @brief PlayState constructor
+     */
     PlayState();
 
+    /**
+     * @brief draw draws all the entity of the stage
+     * @param renderer
+     */
     virtual void draw(Renderer &renderer) const override;
 
+    /**
+     * @brief update updates all the entities of the stage
+     * @param elapsed
+     */
     virtual void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief handleEvent handles the player event
+     * @param ev sfml event
+     */
     virtual void handleEvent(const sf::Event &ev) override;
 
     virtual ~PlayState();
@@ -80,4 +103,6 @@ private:
     bool gameFinisehd = false;
 };
 
+
+}
 

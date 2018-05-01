@@ -32,32 +32,42 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-namespace cc//namespace client conf
+
+namespace mp
 {
-/**
+
+    constexpr int SF_DIALOG_WIDTH = 700;
+    constexpr int SF_DIALOG_HEIGHT = 200;
+
+    namespace cc//namespace client conf
+    {
+        /**
  * @brief The STATE_TYPE enum associate with each state, an int (enum)
  * to store these in the state machine, and retrieve them later
  */
-enum STATE_TYPE {
-    MENU,//First state
-    PLAY_MULTIPLAYER,
-    PLAY_SOLO,
-    OPTIONS,
-    KEY_BINDINGS,
-    WAITING,
-    FINISHED,
-    TRANSITION
-};
+        enum STATE_TYPE {
+            MENU,//First state
+            PLAY_MULTIPLAYER,
+            PLAY_SOLO,
+            OPTIONS,
+            KEY_BINDINGS,
+            WAITING,
+            FINISHED,
+            TRANSITION
+        };
 
-namespace colors {
-    const sf::Color backgroundColor = sf::Color(0,10, 30);
-    const sf::Color dialogBackgroundColor = sf::Color(0,20, 50);
-    const sf::Color dialogOutlineColor = sf::Color(220, 220, 220);
-    const sf::Color fontColor = sf::Color(220, 220, 220);
-    const sf::Color paddleColor = sf::Color(128, 255, 0);
-    const sf::Color ballColor = sf::Color(226, 88, 34);
-    const sf::Color wallColor = sf::Color(200,200,200);
-}
+        namespace colors {
+            const sf::Color backgroundColor = sf::Color(0,10, 30);
+            const sf::Color dialogBackgroundColor = sf::Color(0,20, 50);
+            const sf::Color dialogOutlineColor = sf::Color(220, 220, 220);
+            const sf::Color fontColor = sf::Color(220, 220, 220);
+            const sf::Color paddleColor = sf::Color(128, 255, 0);
+            const sf::Color ballColor = sf::Color(226, 88, 34);
+            const sf::Color wallColor = sf::Color(200,200,200);
+        }
+
+    }
+
 
 }
 

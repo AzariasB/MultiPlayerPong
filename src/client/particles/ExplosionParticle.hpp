@@ -37,34 +37,84 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include "Particle.hpp"
 
+namespace mp {
+
+/**
+ * @brief The ExplosionParticle class
+ * whenever a paddle hist the ball, an explosion
+ * is created, this explosion is composed of several lines
+ * going away from the impact point
+ */
 class ExplosionParticle : public Particle
 {
 public:
+    /**
+     * @brief ExplosionParticle constructor
+     * @param origin the collision point
+     * @param particleNumber number of lines to draw
+     * @param maxLifeTime max lifetime of a single line
+     */
     ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime);
 
+    /**
+     * @brief isFinished overriden function
+     * @return when all the lines are 'dead'
+     */
     bool isFinished() const override;
 
+    /**
+     * @brief render overriden function
+     * @param renderer
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief update overriden function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
 private:
-	void createParticles(const sf::Vector2f &origin, std::size_t particleNumber);
+    /**
+     * @brief createParticles creates the lines
+     * @param origin where the lines starts from
+     * @param particleNumber number of line to create
+     */
+    void createParticles(const sf::Vector2f &origin, std::size_t particleNumber);
 
+    /**
+     * @brief The Line struct
+     * structure holding data
+     * about a single line
+     */
     struct Line{
-		sf::Vector2f velocity;
-		sf::Time lifeTime;
+        sf::Vector2f velocity;
+        sf::Time lifeTime;
 
-		bool isOver() const{
-			return lifeTime <= sf::Time::Zero;
-		}
-	};
+        bool isOver() const{
+            return lifeTime <= sf::Time::Zero;
+        }
+    };
 
+    /**
+     * @brief m_particles all the lines to draw
+     */
     std::vector<Line> m_particles;
 
-	sf::Time m_maxLifeTime;
+    /**
+     * @brief m_maxLifeTime
+     * max lifetime of a line
+     */
+    sf::Time m_maxLifeTime;
 
-	sf::VertexArray m_vertices;
+    /**
+     * @brief m_vertices the
+     * vertex array containing the lines to draw
+     */
+    sf::VertexArray m_vertices;
 };
 
+
+
+}
 

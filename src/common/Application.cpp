@@ -31,12 +31,14 @@
 
 #include "Application.hpp"
 
+namespace mp {
+
 Application* Application::_app = 0;
 
 Application& Application::instance()
 {
-	if (!_app) _app = new Application();
-	return *_app;
+    if (!_app) _app = new Application();
+    return *_app;
 }
 
 Application::Application()
@@ -49,5 +51,8 @@ Application::~Application()
 
 void Application::run(int argc, char** argv)
 {
-	
+
+}
+
+
 }

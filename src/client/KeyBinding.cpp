@@ -30,6 +30,8 @@
  */
 #include "KeyBinding.hpp"
 
+namespace mp {
+
 const std::array<KeyBinding::KEY_ACTION, 2> KeyBinding::allActions = {KeyBinding::GO_UP, KeyBinding::GO_DOWN};
 
 KeyBinding::KeyBinding()
@@ -196,5 +198,7 @@ void KeyBinding::initKeyMap()
     MAP_KEY(F14);
     MAP_KEY(F15);
     MAP_KEY(Pause);
+
+}
 
 }

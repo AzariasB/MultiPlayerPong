@@ -38,6 +38,8 @@
 
 #include "Widget.hpp"
 
+namespace mp {
+
 class Renderer;
 
 /**
@@ -46,70 +48,73 @@ class Renderer;
  */
 class TextInput : public Widget {
 public:
-	/**
-	 * @brief TextInput constructor
-	 * @param app a reference to the client's app
-	 */
+    /**
+     * @brief TextInput constructor
+     * @param app a reference to the client's app
+     */
     TextInput(const sf::Vector2f &position);
 
-	/**
-	 * @brief draw inherited function
-	 * @param target
-	 * @param states
-	 */
+    /**
+     * @brief draw inherited function
+     * @param target
+     * @param states
+     */
     void draw(Renderer &renderer) const;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief setText sets the text inside the text input
-	 * @param str the new text
-	 */
-	void setText(const std::string &str);
+    /**
+     * @brief setText sets the text inside the text input
+     * @param str the new text
+     */
+    void setText(const std::string &str);
 
-	/**
-	 * @brief getText a reference to the text entered by the user
-	 * @return the text entered by the user
-	 */
-	const std::string &getText() const;
+    /**
+     * @brief getText a reference to the text entered by the user
+     * @return the text entered by the user
+     */
+    const std::string &getText() const;
 
-	virtual ~TextInput();
+    virtual ~TextInput();
 private:
-	/**
-	 * @brief updatePipePos update the blinking pipe position
-	 */
-	void updatePipePos();
+    /**
+     * @brief updatePipePos update the blinking pipe position
+     */
+    void updatePipePos();
 
-	/**
-	 * @brief m_text the text to draw showing what the user typed
-	 */
-	sf::Text m_text;
+    /**
+     * @brief m_text the text to draw showing what the user typed
+     */
+    sf::Text m_text;
 
-	/**
-	 * @brief m_pipe the blinking pipe at the end of the text entered
-	 */
-	sf::Text m_pipe;
+    /**
+     * @brief m_pipe the blinking pipe at the end of the text entered
+     */
+    sf::Text m_pipe;
 
-	/**
-	 * @brief m_typed the actual text entered by the user
-	 */
-	std::string m_typed;
+    /**
+     * @brief m_typed the actual text entered by the user
+     */
+    std::string m_typed;
 
     /**
      * @brief m_background background of the text input
      */
     sf::RectangleShape m_background;
 
-	/**
-	 * @brief m_clock a mutable object in order to make the pipe blink
-	 */
-	mutable sf::Clock m_clock;
+    /**
+     * @brief m_clock a mutable object in order to make the pipe blink
+     */
+    mutable sf::Clock m_clock;
 
 };
+
+}
+
 
 
 

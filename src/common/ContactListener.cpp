@@ -34,6 +34,9 @@
 #include "Paddle.hpp"
 #include "PhysicObject.hpp"
 
+
+namespace mp {
+
 class Ball;
 
 ContactListener::ContactListener(EventManager &evManager):
@@ -69,4 +72,6 @@ void ContactListener::BeginContact(b2Contact *contact)
     if(userDataIsBall(objA, objB))return;
 
     userDataIsBall(objB, objA);
+}
+
 }

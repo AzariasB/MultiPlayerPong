@@ -31,9 +31,9 @@
 
 #pragma once
 
-
-#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Window/Event.hpp>
+
+namespace mp {
 
 class ClientApp;
 class Renderer;
@@ -44,38 +44,40 @@ class Renderer;
 class Widget {
 public:
 
-	/**
-	 * @brief Widget constructor
-	 * @param app a reference to the client's application
-	 */
+    /**
+     * @brief Widget constructor
+     * @param app a reference to the client's application
+     */
     Widget()
-	{
+    {
 
-	}
+    }
 
-	/**
-	 * @brief draw draws the widget to the given target, using the given rendering states
-	 * @param target the target in which to draw the widget
-	 * @param states the states to use when drawing the widget
-	 */
+    /**
+     * @brief draw draws the widget to the given target, using the given rendering states
+     * @param target the target in which to draw the widget
+     * @param states the states to use when drawing the widget
+     */
     virtual void draw(Renderer &renderer) const = 0;
 
-	/**
-	 * @brief handleEvent handles an event sent by sfml
-	 * @param ev the event to handle
-	 */
-	virtual void handleEvent(const sf::Event &ev) = 0;
+    /**
+     * @brief handleEvent handles an event sent by sfml
+     * @param ev the event to handle
+     */
+    virtual void handleEvent(const sf::Event &ev) = 0;
 
     virtual void update(const sf::Time &elapsed)
     {
 
     }
 
-	virtual ~Widget()
-	{
+    virtual ~Widget()
+    {
 
-	}
+    }
 };
 
+
+}
 
 

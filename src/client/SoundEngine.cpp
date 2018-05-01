@@ -25,38 +25,41 @@
 /* 
  * File:   SoundEngine.cpp
  * Author: azarias
- * 
+ *
  * Created on 21 octobre 2017, 11:49
  */
 
 #include "SoundEngine.hpp"
 #include <iostream>
 
+namespace mp {
+
 SoundEngine::SoundEngine(ResourcesManager& sManager) :
-m_manager(sManager)
+    m_manager(sManager)
 {
 
 }
 
 void SoundEngine::playSound(SOUND_TYPE s)
 {
-	if(m_isMuted)return;
-	sf::Sound &sound = m_manager.getSound(toSoundName(s));
-	sound.play();
+    if(m_isMuted)return;
+    sf::Sound &sound = m_manager.getSound(toSoundName(s));
+    sound.play();
 }
 
 void SoundEngine::saveSound(SOUND_TYPE s, const std::string& filename)
 {
-	m_manager.registerSound(filename, toSoundName(s));
+    m_manager.registerSound(filename, toSoundName(s));
 }
 
 
 std::string SoundEngine::toSoundName(SOUND_TYPE st)
 {
-	return "sound_" + std::to_string(static_cast<int> (st));
+    return "sound_" + std::to_string(static_cast<int> (st));
 }
 
 SoundEngine::~SoundEngine()
 {
 }
 
+}

@@ -43,12 +43,14 @@
 #include "Wall.hpp"
 #include "ContactListener.hpp"
 
+namespace mp {
+
 /**
  * @brief The GAMESTATE enum current state of the game
  */
 enum GAMESTATE{
-	COUNTDOWN,
-	PLAYING,
+    COUNTDOWN,
+    PLAYING,
 };
 
 /**
@@ -60,47 +62,47 @@ enum GAMESTATE{
  */
 class Game {
 public:
-	/**
-	 * @brief Game constructor
-	 */
-	Game();
-	virtual ~Game();
+    /**
+     * @brief Game constructor
+     */
+    Game();
+    virtual ~Game();
 
-	/**
-	 * @brief update updates the game states, and all it's sub-components
-	 * @param dtS the time since the last update
-	 */
-	void update(const sf::Time &elapsed);
+    /**
+     * @brief update updates the game states, and all it's sub-components
+     * @param dtS the time since the last update
+     */
+    void update(const sf::Time &elapsed);
 
-	/**
-	 * @brief handleEvent handles the given event, trigerred by the given player
-	 * @param ev the sfml event
-	 * @param player the player who trigerred the event
-	 */
-	void handleEvent(const sf::Event &ev, Player &player);
+    /**
+     * @brief handleEvent handles the given event, trigerred by the given player
+     * @param ev the sfml event
+     * @param player the player who trigerred the event
+     */
+    void handleEvent(const sf::Event &ev, Player &player);
 
-	/**
-	 * @brief getBall const reference to the ball object
-	 * @return const reference to the ball object
-	 */
-	const Ball& getBall() const;
+    /**
+     * @brief getBall const reference to the ball object
+     * @return const reference to the ball object
+     */
+    const Ball& getBall() const;
 
-	/**
-	 * @brief getPlayer1 const reference to the first player
-	 * @return const reference to the first player
-	 */
-	const Player &getPlayer1() const;
+    /**
+     * @brief getPlayer1 const reference to the first player
+     * @return const reference to the first player
+     */
+    const Player &getPlayer1() const;
 
-	/**
-	 * @brief getPlayer1 reference to the first player
-	 * @return reference to the first player
-	 */
-	Player &getPlayer1();
+    /**
+     * @brief getPlayer1 reference to the first player
+     * @return reference to the first player
+     */
+    Player &getPlayer1();
 
-	/**
-	 * @brief getPlayer2 reference to the second player
-	 * @return reference to the second player
-	 */
+    /**
+     * @brief getPlayer2 reference to the second player
+     * @return reference to the second player
+     */
     Player &getPlayer2();
 
     /**
@@ -116,28 +118,28 @@ public:
     const Wall &lowerWall() const;
 
 
-	/**
-	 * @brief getEventManager reference to the event manager
-	 * @return a reference to the event manager
-	 */
-	EventManager &getEventManager();
+    /**
+     * @brief getEventManager reference to the event manager
+     * @return a reference to the event manager
+     */
+    EventManager &getEventManager();
 
-	/**
-	 * @brief getPlayer2 const reference to the second player
-	 * @return const reference to the second player
-	 */
-	const Player &getPlayer2() const;
+    /**
+     * @brief getPlayer2 const reference to the second player
+     * @return const reference to the second player
+     */
+    const Player &getPlayer2() const;
 
-	/**
-	 * @brief setGameState changes the current game state
-	 * @param gameState the new game state
-	 */
-	void setGameState(GAMESTATE gameState);
+    /**
+     * @brief setGameState changes the current game state
+     * @param gameState the new game state
+     */
+    void setGameState(GAMESTATE gameState);
 
-	/**
-	 * @brief reset resets the inner state of the game object
-	 */
-	void reset();
+    /**
+     * @brief reset resets the inner state of the game object
+     */
+    void reset();
 
     /**
      * @brief addPowerUp creates a powerup
@@ -145,39 +147,39 @@ public:
      */
     const Powerup &addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction);
 
-	/**
-	 * @brief operator << serialize the game to a sf::Packet
-	 * @param packet the packet in which to serialize the game object
-	 * @param game the game to serialize
-	 * @return the packet with the serialize game object
-	 */
-	friend sf::Packet &operator<<(sf::Packet &packet, Game &game);
+    /**
+     * @brief operator << serialize the game to a sf::Packet
+     * @param packet the packet in which to serialize the game object
+     * @param game the game to serialize
+     * @return the packet with the serialize game object
+     */
+    friend sf::Packet &operator<<(sf::Packet &packet, Game &game);
 
-	/**
-	 * @brief operator >> deserializes the game object using the given packet
-	 * @param packet the packet from where to retrieve the data
-	 * @param game the game to init with the packet's data
-	 * @return
-	 */
-	friend sf::Packet &operator>>(sf::Packet &packet, Game &game);
+    /**
+     * @brief operator >> deserializes the game object using the given packet
+     * @param packet the packet from where to retrieve the data
+     * @param game the game to init with the packet's data
+     * @return
+     */
+    friend sf::Packet &operator>>(sf::Packet &packet, Game &game);
 
-	/**
-	 * @brief playerWon wether one player won the match
-	 * @return wether one player won the match
-	 */
-	bool playerWon() const;
+    /**
+     * @brief playerWon wether one player won the match
+     * @return wether one player won the match
+     */
+    bool playerWon() const;
 
-	/**
-	 * @brief getNumWinner
-	 * @return the number of the winner (-1) if no one won
-	 */
-	int getNumWinner() const;
+    /**
+     * @brief getNumWinner
+     * @return the number of the winner (-1) if no one won
+     */
+    int getNumWinner() const;
 
-	/**
-	 * @brief isCountingDown
-	 * @return wether the game is currently doing the countdown before the start
-	 */
-	bool isCountingDown() const;
+    /**
+     * @brief isCountingDown
+     * @return wether the game is currently doing the countdown before the start
+     */
+    bool isCountingDown() const;
 
     /**
      * @brief getCountdownTime the countdown timer
@@ -219,16 +221,16 @@ public:
 
 
 private:
-	/**
-	 * @brief updateCountdown updates the game when in countdown mode
-	 * @param elapsed time elapsed since last update
-	 */
-	void updateCountdown(const sf::Time &elapsed);
+    /**
+     * @brief updateCountdown updates the game when in countdown mode
+     * @param elapsed time elapsed since last update
+     */
+    void updateCountdown(const sf::Time &elapsed);
 
-	/**
-	 * @brief updatePlaying updates the game when in playing mode
-	 * @param elapsed time elapsed since last update
-	 */
+    /**
+     * @brief updatePlaying updates the game when in playing mode
+     * @param elapsed time elapsed since last update
+     */
     void updatePlaying(const sf::Time &elapsed);
 
     void paddleHit(std::size_t pNum, b2Vec2 position);
@@ -244,25 +246,25 @@ private:
      */
     mutable b2World mPhysicWorld;
 
-	/**
-	 * @brief mainBall the ball object for the game
-	 */
-	Ball mainBall;
+    /**
+     * @brief mainBall the ball object for the game
+     */
+    Ball mainBall;
 
-	/**
-	 * @brief m_evManager THE event manager for the game
-	 */
-	EventManager m_evManager;
+    /**
+     * @brief m_evManager THE event manager for the game
+     */
+    EventManager m_evManager;
 
-	/**
-	 * @brief p1 the first player
-	 */
-	Player p1;
+    /**
+     * @brief p1 the first player
+     */
+    Player p1;
 
-	/**
-	 * @brief p2 the second player
-	 */
-	Player p2;
+    /**
+     * @brief p2 the second player
+     */
+    Player p2;
 
     /**
      * @brief upperWall upper wall of the arena
@@ -274,15 +276,15 @@ private:
      */
     Wall mLowerWall;
 
-	/**
-	 * @brief m_countDownTime time before we can start the game
-	 */
-	sf::Time m_countDownTime;
+    /**
+     * @brief m_countDownTime time before we can start the game
+     */
+    sf::Time m_countDownTime;
 
-	/**
-	 * @brief m_state current state of the game
-	 */
-	GAMESTATE m_state;
+    /**
+     * @brief m_state current state of the game
+     */
+    GAMESTATE m_state;
 
     /**
      * @brief m_powerups all the game's powerups
@@ -302,13 +304,11 @@ private:
      */
     ContactListener mContactListener;
 
-	//"signals"
+    //"signals"
 public:
     const sf::Uint64 hitPaddleEvent = m_evManager.nextEventCode();
-	const sf::Uint64 lostEvent = m_evManager.nextEventCode();
-	const sf::Uint64 countdownEndedEvent = m_evManager.nextEventCode();
+    const sf::Uint64 lostEvent = m_evManager.nextEventCode();
+    const sf::Uint64 countdownEndedEvent = m_evManager.nextEventCode();
 };
 
-
-
-
+}

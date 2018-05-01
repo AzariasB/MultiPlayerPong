@@ -41,16 +41,19 @@
 
 #include "Math.hpp"
 
+
+namespace mp {
+
 /**
  * @brief The BaseEvent struct base object for an event, (used to
  * store it in an array)
  */
 struct BaseEvent {
 
-	virtual ~BaseEvent()
-	{
+    virtual ~BaseEvent()
+    {
 
-	}
+    }
 };
 
 /**
@@ -63,17 +66,17 @@ struct BaseEvent {
 template <typename... Args>
 struct EventFunc : BaseEvent {
 
-	virtual ~EventFunc()
-	{
-	}
+    virtual ~EventFunc()
+    {
+    }
 
-	/**
-	 * @brief run is called when the function associated with the event is fired
-	 * if the trigerrer passed some arguments when trigerred, the function "run"
-	 * is called with these arguments
-	 * @param argp the arguments to pass to the function
-	 */
-	virtual void run(Args... argp) = 0;
+    /**
+     * @brief run is called when the function associated with the event is fired
+     * if the trigerrer passed some arguments when trigerred, the function "run"
+     * is called with these arguments
+     * @param argp the arguments to pass to the function
+     */
+    virtual void run(Args... argp) = 0;
 };
 
 /**
@@ -83,26 +86,26 @@ struct EventFunc : BaseEvent {
 template <typename ...Args>
 struct EventFunctor : EventFunc<Args...> {
 
-	/**
-	 * @brief EventFunctor constructor
-	 * @param func the function to call whenever the event is fired
-	 */
-	EventFunctor(void (*func)(Args...)) :
-	m_func(func)
-	{
-	}
+    /**
+     * @brief EventFunctor constructor
+     * @param func the function to call whenever the event is fired
+     */
+    EventFunctor(void (*func)(Args...)) :
+        m_func(func)
+    {
+    }
 
-	/**
-	 * @brief run calls the simple function passed to the constructor
-	 * @param argp
-	 */
-	void run(Args... argp) override
-	{
-		(*m_func)(argp...);
-	}
+    /**
+     * @brief run calls the simple function passed to the constructor
+     * @param argp
+     */
+    void run(Args... argp) override
+    {
+        (*m_func)(argp...);
+    }
 
 
-	void (*m_func)(Args...);
+    void (*m_func)(Args...);
 };
 
 /**
@@ -113,31 +116,31 @@ struct EventFunctor : EventFunc<Args...> {
 template<typename A, typename ...Args>
 struct EventFunctorWithArg : EventFunc<Args...> {
 
-	/**
-	 * @brief EventFunctorWithArg constructor
-	 * @param func the function to call
-	 * @param arg the arg to use when calling the function
-	 */
-	EventFunctorWithArg(void (*func)(A, Args...), A arg) :
-	m_func(func),
-	m_arg(arg)
-	{
+    /**
+     * @brief EventFunctorWithArg constructor
+     * @param func the function to call
+     * @param arg the arg to use when calling the function
+     */
+    EventFunctorWithArg(void (*func)(A, Args...), A arg) :
+        m_func(func),
+        m_arg(arg)
+    {
 
-	}
+    }
 
-	/**
-	 * @brief run runs the function with the given argument in parameter
-	 * in the constructor, followed by the others arguments (if any)
-	 * @param argp the other arguments
-	 */
-	void run(Args... argp) override
-	{
-		(*m_func)(m_arg, argp...);
-	}
+    /**
+     * @brief run runs the function with the given argument in parameter
+     * in the constructor, followed by the others arguments (if any)
+     * @param argp the other arguments
+     */
+    void run(Args... argp) override
+    {
+        (*m_func)(m_arg, argp...);
+    }
 
 
-	void (*m_func)(A, Args...);
-	A m_arg;
+    void (*m_func)(A, Args...);
+    A m_arg;
 };
 
 /**
@@ -148,30 +151,30 @@ struct EventFunctorWithArg : EventFunc<Args...> {
 template<typename T, typename ...Args>
 struct EventMemberFunc : EventFunc<Args...> {
 
-	/**
-	 * @brief EventMemberFunc constructor
-	 * @param func the member method
-	 * @param obj the object containing the method
-	 */
-	EventMemberFunc(void(T::*func)(Args...), T* obj) :
-	m_func(func),
-	m_obj(obj)
-	{
+    /**
+     * @brief EventMemberFunc constructor
+     * @param func the member method
+     * @param obj the object containing the method
+     */
+    EventMemberFunc(void(T::*func)(Args...), T* obj) :
+        m_func(func),
+        m_obj(obj)
+    {
 
-	}
+    }
 
-	/**
-	 * @brief run calls the object's method with the given arguments
-	 * @param argp the arguments
-	 */
-	void run(Args... argp) override
-	{
-		(m_obj->*m_func)(argp...);
-	}
+    /**
+     * @brief run calls the object's method with the given arguments
+     * @param argp the arguments
+     */
+    void run(Args... argp) override
+    {
+        (m_obj->*m_func)(argp...);
+    }
 
 
-	void(T::*m_func)(Args...);
-	T* m_obj = 0;
+    void(T::*m_func)(Args...);
+    T* m_obj = 0;
 };
 
 /**
@@ -182,32 +185,32 @@ struct EventMemberFunc : EventFunc<Args...> {
 template<typename T, typename A, typename ...Args>
 struct EventMemberFuncWithArg : EventFunc<Args...> {
 
-	/**
-	 * @brief EventMemberFuncWithArg constructor
-	 * @param func the member method
-	 * @param obj the object containing the method
-	 * @param arg the argument to use when calling the methdo
-	 */
+    /**
+     * @brief EventMemberFuncWithArg constructor
+     * @param func the member method
+     * @param obj the object containing the method
+     * @param arg the argument to use when calling the methdo
+     */
     EventMemberFuncWithArg(void(T::*func)(A, Args...), T*obj, A arg) :
-	m_func(func),
-	m_obj(obj),
-    m_arg(arg)
-	{
+        m_func(func),
+        m_obj(obj),
+        m_arg(arg)
+    {
 
-	}
+    }
 
-	/**
-	 * @brief run calls the object's method with the argument given in the constructor
-	 * followed by the arguments in parameter
-	 * @param argp the other arguments
-	 */
-	void run(Args... argp) override
-	{
-		(m_obj->*m_func)(m_arg, argp...);
-	}
+    /**
+     * @brief run calls the object's method with the argument given in the constructor
+     * followed by the arguments in parameter
+     * @param argp the other arguments
+     */
+    void run(Args... argp) override
+    {
+        (m_obj->*m_func)(m_arg, argp...);
+    }
 
 
-	void(T::*m_func)(A, Args...);
+    void(T::*m_func)(A, Args...);
     T*m_obj;
     A m_arg;
 };
@@ -218,62 +221,62 @@ struct EventMemberFuncWithArg : EventFunc<Args...> {
  */
 class EventManager {
 public:
-	/**
-	 * @brief EventManager constructor
-	 */
-	EventManager();
+    /**
+     * @brief EventManager constructor
+     */
+    EventManager();
 
-	/**
-	 * Declares a code event. So every observers can subscribe for this event
-	 * for when it's fired
-	 * 
-	 * @param eventCode
-	 */
-	sf::Uint64 nextEventCode();
+    /**
+     * Declares a code event. So every observers can subscribe for this event
+     * for when it's fired
+     *
+     * @param eventCode
+     */
+    sf::Uint64 nextEventCode();
 
-	/**
-	 * Just calls a function when an event is trigerred
-	 * 
-	 * @param eventCode the code of the event to listen to
-	 * @param trigger the function to call when the event is fired
-	 */
-	template<typename ...Args>
+    /**
+     * Just calls a function when an event is trigerred
+     *
+     * @param eventCode the code of the event to listen to
+     * @param trigger the function to call when the event is fired
+     */
+    template<typename ...Args>
     const std::string &declareListener(sf::Uint64 eventCode, void(*func)(Args...))
-	{      
-		assertEventCode(eventCode);
-		m_observers[eventCode].emplace_back(new EventFunctor<Args...>(func));
+    {
+        assertEventCode(eventCode);
+        m_observers[eventCode].emplace_back(new EventFunctor<Args...>(func));
         return addIterator(eventCode, math::uuid());
-	}
+    }
 
-	/**
-	 * Calls an object's function when an event is trigerred
-	 * 
-	 * @param eventCode the code of the event to listen to
-	 * @param trigger the function to call when the event is fired
-	 */
-	template<typename T, typename ...Args>
+    /**
+     * Calls an object's function when an event is trigerred
+     *
+     * @param eventCode the code of the event to listen to
+     * @param trigger the function to call when the event is fired
+     */
+    template<typename T, typename ...Args>
     const std::string &declareListener(sf::Uint64 eventCode, void (T::*func)(Args...), T* obj)
-	{
-		assertEventCode(eventCode);
+    {
+        assertEventCode(eventCode);
         m_observers[eventCode].emplace_back(new EventMemberFunc<T, Args...>(func, obj));
         return addIterator(eventCode, math::uuid());
-	}
+    }
 
-	/**
-	 * @brief declareListener stores an eventMemberFuncWithArg in the observers map, the
-	 * function will be called when the event eventCode is fired
-	 * @param func the member method
-	 * @param eventCode the eventCode to listen for
-	 * @param obj the object containing the method
-	 * @param arg the additionnal argument
-	 */
-	template<typename T, typename A, typename ...Args>
+    /**
+     * @brief declareListener stores an eventMemberFuncWithArg in the observers map, the
+     * function will be called when the event eventCode is fired
+     * @param func the member method
+     * @param eventCode the eventCode to listen for
+     * @param obj the object containing the method
+     * @param arg the additionnal argument
+     */
+    template<typename T, typename A, typename ...Args>
     const std::string &declareListener(sf::Uint64 eventCode, void(T::*func)(A, Args&&...), T*obj, A arg)
-	{
-		assertEventCode(eventCode);
+    {
+        assertEventCode(eventCode);
         m_observers[eventCode].emplace_back(new EventMemberFuncWithArg<T, A, Args&&...>(func, obj, arg));
         return addIterator(eventCode, math::uuid());
-	}
+    }
 
     /**
      * @brief removeListener removes the given listeners, used when
@@ -283,30 +286,30 @@ public:
      */
     void removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode);
 
-	/**
-	 * @brief trigger calls all the method listening for the given evCode,
-	 * all the listeners will be called (in order of registering) with the provided
-	 * arguments
-	 * @param evCode the code of the event to fire
-	 * @param argp all the arguments to pass to the listeners
-	 */
-	template<typename ...Args>
+    /**
+     * @brief trigger calls all the method listening for the given evCode,
+     * all the listeners will be called (in order of registering) with the provided
+     * arguments
+     * @param evCode the code of the event to fire
+     * @param argp all the arguments to pass to the listeners
+     */
+    template<typename ...Args>
     void trigger(sf::Uint64 evCode, Args... argp)
-	{
-		assertEventCode(evCode);
+    {
+        assertEventCode(evCode);
         for(auto &it : m_observers[evCode]){
             EventFunc<Args...> &ef = static_cast<EventFunc<Args...>&>(*it);
             ef.run(argp...);
         }
-	}
+    }
 
-	virtual ~EventManager();
+    virtual ~EventManager();
 private:
-	/**
-	 * @brief assertEventCode asserts that the given code is between an existing range of event code
-	 * @param evCode the event code to check
-	 */
-	void assertEventCode(sf::Uint64 evCode);
+    /**
+     * @brief assertEventCode asserts that the given code is between an existing range of event code
+     * @param evCode the event code to check
+     */
+    void assertEventCode(sf::Uint64 evCode);
 
     /**
      * @brief last returns the last inserted element of the given observer list
@@ -315,15 +318,15 @@ private:
      */
     const std::string &addIterator(sf::Uint64 evCode, const std::string &uuid);
 
-	/**
-	 * @brief m_evCounter each event has it's own code, for each new
-	 * request of event code, the event counter is incremented
-	 */
-	sf::Uint64 m_evCounter = 0;
+    /**
+     * @brief m_evCounter each event has it's own code, for each new
+     * request of event code, the event counter is incremented
+     */
+    sf::Uint64 m_evCounter = 0;
 
-	/**
-	 * @brief m_observers all the observers
-	 */
+    /**
+     * @brief m_observers all the observers
+     */
     std::unordered_map<sf::Uint64, std::list<BaseEvent*> > m_observers;
 
     /**
@@ -334,5 +337,4 @@ private:
     std::unordered_map<std::string, std::list<BaseEvent*>::iterator> m_tokens;
 };
 
-
-
+}

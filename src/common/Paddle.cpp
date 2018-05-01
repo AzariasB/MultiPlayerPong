@@ -24,7 +24,7 @@
 /* 
  * File:   Paddle.cpp
  * Author: azarias
- * 
+ *
  * Created on 8 octobre 2017, 19:10
  */
 
@@ -37,10 +37,12 @@
 #include "Paddle.hpp"
 #include "Game.hpp"
 
+namespace mp {
+
 Paddle::Paddle(const Game &game, std::size_t pNumber) :
-PhysicObject(game, PO_TYPE::PADDLE),
-mNum(pNumber),
-mStartPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
+    PhysicObject(game, PO_TYPE::PADDLE),
+    mNum(pNumber),
+    mStartPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
 {
     b2BodyDef bodyDef;
     bodyDef.position = mStartPos;
@@ -89,12 +91,12 @@ void Paddle::stop()
 
 void Paddle::extend()
 {
-    m_widthBoost = PADDLE_WIDTH_POWERUP;
+    //m_widthBoost = PADDLE_WIDTH_POWERUP;
 }
 
 void Paddle::retract()
 {
-    m_widthBoost = -PADDLE_WIDTH_POWERUP;
+    //m_widthBoost = -PADDLE_WIDTH_POWERUP;
 }
 
 void Paddle::setYVelocity(float32 yVelocity)
@@ -153,4 +155,6 @@ sf::Packet &operator>>(sf::Packet &packet, Paddle &paddle)
     paddle.mBody->SetTransform(position, paddle.mBody->GetAngle());
     paddle.mBody->SetLinearVelocity(velocity);
     return packet;
+}
+
 }

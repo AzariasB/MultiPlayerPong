@@ -34,6 +34,8 @@
 #include <SFML/System/Vector2.hpp>
 #include "PhysicObject.hpp"
 
+namespace mp {
+
 class Game;
 
 /**
@@ -50,3 +52,4 @@ public:
 };
 
 
+}

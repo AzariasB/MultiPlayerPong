@@ -34,24 +34,54 @@
 
 class b2Body;
 class b2Vec2;
+
+namespace mp {
+
 class Game;
 
+/**
+ * @brief The PhysicObject class a physicobject
+ * is an object with a body, that can collide
+ */
 class PhysicObject
 {
 public:
+    /**
+      * Different types of physic objects
+      */
     const enum PO_TYPE{WALL, BALL, PADDLE} type;
 
+    /**
+     * @brief PhysicObject constructor
+     * @param game the game in which the object is added
+     * @param poType the type of physic object this represents
+     */
     PhysicObject(const Game& game, PO_TYPE poType);
 
+    /**
+     * @brief getPosition the current position of the body
+     * @return
+     */
     const b2Vec2 &getPosition() const;
 
+    /**
+     * @brief isStatic if the body of this object is static
+     * @return
+     */
     bool isStatic() const;
 
     virtual ~PhysicObject();
 protected:
+    /**
+     * @brief mGame game this object is in
+     */
     const Game &mGame;
 
+    /**
+     * @brief mBody body of the object
+     */
     b2Body *mBody;
 };
 
 
+}

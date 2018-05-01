@@ -30,46 +30,40 @@
  */
 #pragma once
 
+namespace mp {
 
-//Netorking
-#define DEFAULT_PORT 5300
+//Server
+constexpr int DEFAULT_PORT = 5300;
 
 //Dimensions (all in meters)
 //Arena
-#define SF_ARENA_WIDTH 800
-#define SF_ARENA_HEIGHT 600
+constexpr int SF_ARENA_WIDTH = 800;
+constexpr int SF_ARENA_HEIGHT = 600;
 
-#define ARENA_WIDTH 12.5
-#define ARENA_HEIGHT 9.375
+constexpr float ARENA_WIDTH = 12.5;
+constexpr float ARENA_HEIGHT = 9.375;
 
 //Paddle
-#define PADDLE_WIDTH 0.1
-#define PADDLE_HEIGHT 1
+constexpr float PADDLE_WIDTH = 0.1;
+constexpr float PADDLE_HEIGHT = 1;
 
-//ball
-#define BALL_RADIUS  0.2
+//Ball
+constexpr float BALL_RADIUS = 0.2;
+constexpr float BALL_START_X = ARENA_WIDTH / 2.f;
+constexpr float BALL_START_Y = ARENA_HEIGHT  / 2.f;
 
-//dialog
-#define SF_DIALOG_WIDTH 700
-#define SF_DIALOG_HEIGHT 200
+constexpr float BALL_DIR_X = -3;
+constexpr float BALL_DIR_Y = 1;
 
-//powerup
-#define POWERUP_SIDE 50
-
-//walls
-#define WALL_WITDH ARENA_WIDTH
-#define WALL_HEIGHT PADDLE_WIDTH
-
-//Starting conf
-#define BALL_START_X (ARENA_WIDTH/2.f)
-#define BALL_START_Y (ARENA_HEIGHT/2.f)
-
-#define BALL_DIR_X -3
-#define BALL_DIR_Y 1
+//Wall
+constexpr float WALL_WITDH = ARENA_WIDTH;
+constexpr float WALL_HEIGHT = PADDLE_WIDTH;
 
 //Powerups
-#define PADDLE_WIDTH_POWERUP 10
-#define BALL_RADIUS_POWERUP 10
+constexpr float POWERUP_SIDE = 50;
 
-#define VELOCITY_ITERATIONS 8
-#define POSITION_ITERATIONS 3
+//Physics
+constexpr int VELOCITY_ITERATIONS = 8;
+constexpr int POSITION_ITERATIONS = 3;
+
+}

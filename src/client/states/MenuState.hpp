@@ -36,8 +36,10 @@
 #include "src/client/widgets/Menu.hpp"
 
 namespace sf {
-    class Event;
+class Event;
 }
+
+namespace mp {
 
 class Dialog;
 
@@ -48,44 +50,44 @@ class Dialog;
  */
 class MenuState : public State {
 public:
-	/**
-	 * @brief MenuState constructor
-	 * @param client reference to the app
-	 */
+    /**
+     * @brief MenuState constructor
+     * @param client reference to the app
+     */
     MenuState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer& renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief dialogConfirmed when the dialog asking for the IP
-	 * is confirmed, checks if the IP adress is correct, and if
-	 * it is, goes to the Waiting state, otherwise, shows a dialog
-	 * saying the ip is a wrong one
-	 */
-	void dialogConfirmed();
+    /**
+     * @brief dialogConfirmed when the dialog asking for the IP
+     * is confirmed, checks if the IP adress is correct, and if
+     * it is, goes to the Waiting state, otherwise, shows a dialog
+     * saying the ip is a wrong one
+     */
+    void dialogConfirmed();
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param dtS
+     */
+    void update(const sf::Time &elapsed) override;
 
     /**
      * @brief onAfterLeaving inherited function
      */
     void onAfterLeaving() override;
 
-	virtual ~MenuState();
+    virtual ~MenuState();
 private:
 
     /**
@@ -105,12 +107,12 @@ private:
      */
     void inputDialogHidden();
 
-	/**
-	 * @brief isValidIp checks if the given string is a valid ip (using regexp)
-	 * @param enteredIp the ip entered by the user
-	 * @return wehter the given string is a valid ip
-	 */
-	bool isValidIp(const std::string &enteredIp) const;
+    /**
+     * @brief isValidIp checks if the given string is a valid ip (using regexp)
+     * @param enteredIp the ip entered by the user
+     * @return wehter the given string is a valid ip
+     */
+    bool isValidIp(const std::string &enteredIp) const;
 
     /**
      * @brief gotoOptionState
@@ -119,16 +121,19 @@ private:
      */
     void gotoOptionState();
 
-	/**
-	 * @brief m_menu Menu holding all the differents buttons
-	 */
-	Menu m_menu;
+    /**
+     * @brief m_menu Menu holding all the differents buttons
+     */
+    Menu m_menu;
 
-	/**
-	 * @brief m_inputDialog input dialog
-	 */
+    /**
+     * @brief m_inputDialog input dialog
+     */
     sf::Uint64 m_inputDialiogId = 0;
 };
+
+
+}
 
 
 

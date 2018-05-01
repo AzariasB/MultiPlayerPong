@@ -33,20 +33,49 @@
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 #include <SFML/Config.hpp>
 
+namespace mp {
+
+
+
 class EventManager;
 class PhysicObject;
 
-
+/**
+ * @brief The ContactListener class class used
+ * to interface with box2d and listen for any
+ * contact between two physicobjects,
+ * and send an event on the event manager
+ * whenever it happends
+ */
 class ContactListener : public b2ContactListener
 {
 public:
+    /**
+     * @brief ContactListener constructor
+     * @param evManager eventmanager to use to
+     * trigger the different collisions events
+     */
     ContactListener(EventManager &evManager);
 
+    /**
+     * @brief BeginContact overriden function
+     * @param contact contact data between two fixtures
+     */
     void BeginContact(b2Contact *contact) override;
 
 private:
+    /**
+     * @brief m_evManager event manager used to trigger
+     * the collisions events
+     */
     EventManager &m_evManager;
 
+    /**
+     * @brief userDataIsBall given two phyisics objects, check if one of them is the ball
+     * @param objA first physic object
+     * @param objB second physic object
+     * @return wether one of the two given object is a ball
+     */
     bool userDataIsBall(PhysicObject &objA, PhysicObject &objB) const;
 
 public:
@@ -55,3 +84,4 @@ public:
 };
 
 
+}

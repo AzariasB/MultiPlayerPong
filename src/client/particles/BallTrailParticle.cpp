@@ -38,6 +38,8 @@
 
 #include <iostream>
 
+namespace mp {
+
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
     Particle(),
     m_center(center),
@@ -79,3 +81,6 @@ void BallTrailParticle::render(Renderer &renderer) const
     renderer.rotateAround(center, -m_angle);
 
 }
+
+}
+

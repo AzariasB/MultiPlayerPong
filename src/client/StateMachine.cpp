@@ -25,12 +25,14 @@
 /* 
  * File:   StateMachine.cpp
  * Author: azarias
- * 
+ *
  * Created on 16 octobre 2017, 19:04
  */
 
 #include "StateMachine.hpp"
 #include "SoundEngine.hpp"
+
+namespace mp {
 
 StateMachine::StateMachine()
 {
@@ -44,7 +46,7 @@ StateMachine::~StateMachine()
 void StateMachine::setCurrentState(int stateLabel)
 {
     if (currentStateIndex > -1)
-    states[currentStateIndex]->onBeforeLeaving();
+        states[currentStateIndex]->onBeforeLeaving();
     currentStateIndex = stateLabel;
 
     BaseStateData dat;
@@ -66,4 +68,6 @@ void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
     td.direction = dir;
     setCurrentState(cc::TRANSITION, &td);
     pr::soundEngine().playSound(SoundEngine::ROLLOVER);
+}
+
 }

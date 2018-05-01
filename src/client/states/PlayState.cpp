@@ -43,6 +43,8 @@
 #include "src/client/particles/ParticleGenerator.hpp"
 
 
+namespace mp {
+
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
     m_p2ScoreText("0", pr::resourceManager().getFont()),
@@ -56,10 +58,10 @@ PlayState::PlayState():
                 );
 
     pr::connect(
-                     pr::game().hitPaddleEvent,
-                     &PlayState::bounced,
-                     this
-                     );  //Subscribe to bounce event
+                pr::game().hitPaddleEvent,
+                &PlayState::bounced,
+                this
+                );  //Subscribe to bounce event
 }
 
 void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
@@ -106,17 +108,15 @@ void PlayState::draw(Renderer &renderer) const
     if(pr::game().isCountingDown()){
         renderer.render(m_countdownText);
     }
-
-    const sf::Texture &txt = pr::resourceManager().getTexture("sketchy");
     renderer.push()
-            .scale(M_TO_P)
-            .setTexture(&txt);
-        pr::particleGenerator().draw(renderer);
-        renderer.renderBall(pr::game().getBall());
-        renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
-        renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
-        renderer.renderWall(pr::game().upperWall());
-        renderer.renderWall(pr::game().lowerWall());
+            .scale(M_TO_P);
+
+    pr::particleGenerator().draw(renderer);
+    renderer.renderBall(pr::game().getBall());
+    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
+    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
+    renderer.renderWall(pr::game().upperWall());
+    renderer.renderWall(pr::game().lowerWall());
     renderer.pop();
 
     renderer.render(m_p1ScoreText);
@@ -137,4 +137,7 @@ void PlayState::handleEvent(const sf::Event &ev)
 {
     sf::Event realEv = pr::keyBinding().toGameEvent(ev);
     pr::game().handleEvent(realEv, pr::player());
+}
+
+
 }

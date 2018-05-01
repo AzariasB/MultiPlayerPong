@@ -40,6 +40,8 @@
 #include "Animation.hpp"
 #include "src/common/Powerup.hpp"
 
+namespace mp {
+
 class Ball;
 class Paddle;
 class Wall;
@@ -53,23 +55,23 @@ class PhysicObject;
  */
 class Renderer {
 public:
-	/**
-	 * @brief Renderer constructor
-	 * @param target the target that will be used to render all the game's objects
-	 */
-	Renderer(sf::RenderTarget &target);
+    /**
+     * @brief Renderer constructor
+     * @param target the target that will be used to render all the game's objects
+     */
+    Renderer(sf::RenderTarget &target);
 
-	/**
-	 * @brief renderBall renders the game's ball (as a blue circle for now)
-	 * @param ball the ball to render
-	 */
-	void renderBall(const Ball &ball);
+    /**
+     * @brief renderBall renders the game's ball (as a blue circle for now)
+     * @param ball the ball to render
+     */
+    void renderBall(const Ball &ball);
 
-	/**
-	 * @brief renderPaddle renders one paddle. (as a yellow rectangle for now)
-	 * @param paddle a const reference to the paddle to render
-	 */
-	void renderPaddle(const Paddle &paddle);
+    /**
+     * @brief renderPaddle renders one paddle. (as a yellow rectangle for now)
+     * @param paddle a const reference to the paddle to render
+     */
+    void renderPaddle(const Paddle &paddle);
 
     /**
      * @brief renderWall renders a wall
@@ -83,22 +85,22 @@ public:
      */
     void renderPowerup(const Powerup &powerup);
 
-	/**
-	 * @brief shake triggers a slight screen shaking for one second
-	 */
-	void shake();
+    /**
+     * @brief shake triggers a slight screen shaking for one second
+     */
+    void shake();
 
-	/**
-	 * @brief update updates the inner state of this object
-	 * @param elapsed the time elapsed since the last update
-	 */
-	void update(sf::Time elapsed);
+    /**
+     * @brief update updates the inner state of this object
+     * @param elapsed the time elapsed since the last update
+     */
+    void update(sf::Time elapsed);
 
-	/**
-	 * @brief render renders any drawable components, using it's inner renderstate
-	 * @param drawable the drawable object to render
-	 */
-	void render(const sf::Drawable &drawable);
+    /**
+     * @brief render renders any drawable components, using it's inner renderstate
+     * @param drawable the drawable object to render
+     */
+    void render(const sf::Drawable &drawable);
 
     /**
      * @brief scale scales the next object to render
@@ -155,16 +157,16 @@ public:
      */
     Renderer &pop();
 
-	/**
-	 * @brief getRenderTarget a reference to the renderTarget
-	 * @return a reference to the renderTarget
-	 */
-	sf::RenderTarget &getRenderTarget()
-	{
-		return target;
-	}
+    /**
+     * @brief getRenderTarget a reference to the renderTarget
+     * @return a reference to the renderTarget
+     */
+    sf::RenderTarget &getRenderTarget()
+    {
+        return target;
+    }
 
-	virtual ~Renderer();
+    virtual ~Renderer();
 private:
 
     /**
@@ -219,16 +221,16 @@ private:
      */
     std::unique_ptr<sf::Shape> &assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor);
 
-	/**
-	 * @brief target the target to use to draw stuff on it
-	 */
-	sf::RenderTarget &target;
+    /**
+     * @brief target the target to use to draw stuff on it
+     */
+    sf::RenderTarget &target;
 
-	/**
-	 * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
-	 * otherwise, the screen is shaking
-	 */
-	sf::Time m_shakeTimeout;
+    /**
+     * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
+     * otherwise, the screen is shaking
+     */
+    sf::Time m_shakeTimeout;
 
     /**
      * @brief m_powerupAnimations the animations of all the powerups
@@ -250,4 +252,4 @@ private:
 };
 
 
-
+}

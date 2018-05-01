@@ -34,6 +34,8 @@
 #include "src/client/widgets/Menu.hpp"
 
 
+namespace mp {
+
 /**
  * @brief The OptionState class
  *  state used to change the client's options
@@ -42,63 +44,66 @@
 class OptionState : public State
 {
 public:
-	/**
-	 * @brief OptionState Constructor
-	 * @param app reference to the app
-	 */
+    /**
+     * @brief OptionState Constructor
+     * @param app reference to the app
+     */
     OptionState();
 
-	/**
-	 * @brief update inherited function
-	 * @param elapsed
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer &renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer &renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event &ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event &ev) override;
 
-	/**
-	 * @brief toggleSound changes the sound state
-	 * and update the icon
-	 */
-	void toggleSound();
+    /**
+     * @brief toggleSound changes the sound state
+     * and update the icon
+     */
+    void toggleSound();
 
-	virtual ~OptionState();
+    virtual ~OptionState();
 
 private:
-	/**
-	 * @brief getCurrentSoundRect the textureRect corresponding to the current
-	 * sound state
-	 * @return
-	 */
-	const sf::IntRect &getCurrentSoundRect() const;
+    /**
+     * @brief getCurrentSoundRect the textureRect corresponding to the current
+     * sound state
+     * @return
+     */
+    const sf::IntRect &getCurrentSoundRect() const;
 
     Button *m_muteButton = 0;
 
-	/**
-	 * @brief m_menu the menu with all the options
-	 */
-	Menu m_menu;
-	/**
-	 * @brief m_withSoundRect rect for the icon "with sound"
-	 */
+    /**
+     * @brief m_menu the menu with all the options
+     */
+    Menu m_menu;
+    /**
+     * @brief m_withSoundRect rect for the icon "with sound"
+     */
     sf::IntRect m_withSoundRect = sf::IntRect(65, 0, 64, 53);
 
-	/**
-	 * @brief m_withoutSoundRect rect for the icon "without sound"
-	 */
+    /**
+     * @brief m_withoutSoundRect rect for the icon "without sound"
+     */
     sf::IntRect m_withoutSoundRect = sf::IntRect(0, 0, 64, 53);
 
 
 };
+
+
+}
 
 

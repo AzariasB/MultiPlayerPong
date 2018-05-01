@@ -35,43 +35,128 @@
 #include "Dialog.hpp"
 #include "src/client/Provider.hpp"
 
+namespace mp {
+
+/**
+ * @brief The DialogManager class
+ * class used to handle the dialogs during
+ * the game.
+ * The dialogs are not really part of any
+ * stage or state. They have their own states
+ * this is managed by the dialogmanager, it
+ * can be used to show hide different types
+ * of dialogs
+ */
 class DialogManager : public Widget
 {
 public:
+    /**
+     * @brief DialogManager constructor
+     */
     DialogManager();
 
+    /**
+     * @brief draw draws all the visible dialogs
+     * @param renderer renderer to use
+     */
     void draw(Renderer &renderer) const override;
 
+    /**
+     * @brief handleEvent perform the event on the current dialog
+     * @param ev event to handle
+     */
     void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief update updates all the visible dialogs
+     * @param elapsed time
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief isActiveDialog checks wether the given dialog is the active dialog
+     * @param dialogId dialog's id to check
+     * @return if the given id is the active dialog
+     */
     bool isActiveDialog(const sf::Uint64 &dialogId);
 
+    /**
+     * @brief hasActiveDialogs
+     * @return wether they are any active dialogs
+     */
     bool hasActiveDialogs() const;
 
+    /**
+     * @brief hideDialog hides the dialog with the given id
+     * @param dialogId id of the dialog to hide
+     * if the dialog does not exist or is already hidden/hiding,
+     * will do nothing
+     */
     void hideDialog(const sf::Uint64 &dialogId);
 
+    /**
+     * @brief input creates an input dialog (a dialog with a simple text input)
+     * @param title the title of the dialog
+     * @param question the question to show
+     * @return a reference to the created dialog
+     */
     DialogInput &input(const std::string &title, const std::string &question);
 
+    /**
+     * @brief message create a message dialog (showing a simple message)
+     * @param title title of the dialog
+     * @param message message to show
+     * @return a reference to the created message dialog
+     */
     DialogMessage &message(const std::string &title, const std::string & message);
 
+    /**
+     * @brief question creates a yes-no question dialog
+     * @param title the title of the dialog
+     * @param question the question to show
+     * @return a reference to the created dialogquestion
+     */
     DialogQuestion &question(const std::string &title, const std::string &question);
 
     ~DialogManager();
 
 private:
-
+    /**
+     * @brief m_idGenerator used to generate the id of the dialogs
+     */
     sf::Uint64 m_idGenerator = 0;
 
+    /**
+     * @brief m_activeDialogId id of the active dialog
+     * 0 means no active dialog
+     */
     sf::Uint64 m_activeDialogId = 0;
 
+    /**
+     * @brief m_dialogs map containing all the created dialogs
+     * they are either showing, shown, hiding or hidden
+     * otherwise they should be destroyed
+     * A unique_ptr is used because Dialog is an abstract class
+     */
     std::map<sf::Uint64, std::unique_ptr<Dialog>> m_dialogs;
 
+    /**
+     * @brief removeDialog remves the dialog from the map
+     * @param dialogId id of the dialog to remove
+     */
     void removeDialog(sf::Uint64 dialogId);
 
+    /**
+     * @brief closeDialog closes the dialog
+     * @param dialogId id of the dialog to close
+     */
     void closeDialog(sf::Uint64 dialogId);
 
+    /**
+     * @brief createDialog create the dialog, and gives it the given arguments
+     * @param args args to pass to the dialog constructor
+     * @return a reference to the created dialog
+     */
     template<typename T, typename ...Args>
     T &createDialog(const Args&... args)
     {
@@ -88,5 +173,8 @@ private:
         return static_cast<T&>(*m_dialogs[m_activeDialogId]);
     }
 };
+
+}
+
 
 

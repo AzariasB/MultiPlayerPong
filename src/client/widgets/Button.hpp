@@ -41,6 +41,8 @@
 #include "src/client/ColorTweening.hpp"
 
 
+namespace mp {
+
 class Renderer;
 
 /**
@@ -51,20 +53,20 @@ class Renderer;
  */
 class Button : public Widget {
 public:
-	/**
-	 * @brief Button
-	 * @param app reference to the Client application
-	 * @param text the text to display inside the button
-	 */
+    /**
+     * @brief Button
+     * @param app reference to the Client application
+     * @param text the text to display inside the button
+     */
     Button(const std::string &text = "");
 
-	/**
-	 * @brief Button constructor
-	 * @param app reference to the Client application
-	 * @param text text to show
-	 * @param xpos x position of the button
-	 * @param yPos y position of the button
-	 */
+    /**
+     * @brief Button constructor
+     * @param app reference to the Client application
+     * @param text text to show
+     * @param xpos x position of the button
+     * @param yPos y position of the button
+     */
     Button(const std::string &text, float xPos, float yPos);
 
 
@@ -74,33 +76,33 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief draw Function to draw the button
-	 * @param target the target to use to draw the shapes
-	 * @param states the states to use when rendering
-	 */
+    /**
+     * @brief draw Function to draw the button
+     * @param target the target to use to draw the shapes
+     * @param states the states to use when rendering
+     */
     void draw(Renderer &renderer) const;
 
-	/**
-	 * @brief setPosition sets the position of the button
-	 * @param position the new position (top-left) of the button
-	 */
-	void setPosition(const sf::Vector2f &m_position);
+    /**
+     * @brief setPosition sets the position of the button
+     * @param position the new position (top-left) of the button
+     */
+    void setPosition(const sf::Vector2f &m_position);
 
-	/**
-	 * @brief handleEvent handles a SFML input/event
-	 * @param ev the sfml object for the event
-	 */
+    /**
+     * @brief handleEvent handles a SFML input/event
+     * @param ev the sfml object for the event
+     */
     void handleEvent(const sf::Event &ev);
 
-	/**
-	 * @brief getPosition position of the button
-	 * @return position of the button
-	 */
+    /**
+     * @brief getPosition position of the button
+     * @return position of the button
+     */
     const sf::Vector2f &getPosition() const
-	{
+    {
         return m_text.getPosition();
-	}
+    }
 
     /**
      * @brief getIcon icon of the button (if any)
@@ -115,34 +117,34 @@ public:
     void setIcon(const sf::Sprite &sprite);
 
 
-	/**
-	 * @brief getWidth the width of the button
-	 * @return the width of the button
-	 */
-	int getWidth() const
-	{
-		return m_text.getGlobalBounds().width + 10;
-	}
+    /**
+     * @brief getWidth the width of the button
+     * @return the width of the button
+     */
+    int getWidth() const
+    {
+        return m_text.getGlobalBounds().width + 10;
+    }
 
-	/**
-	 * @brief getHeight the height of the button
-	 * @return the height of the button
-	 */
-	int getHeight() const
-	{
-		return m_text.getGlobalBounds().height + 10;
-	}
+    /**
+     * @brief getHeight the height of the button
+     * @return the height of the button
+     */
+    int getHeight() const
+    {
+        return m_text.getGlobalBounds().height + 10;
+    }
 
     bool isSelected() const
     {
         return m_hilighted;
     }
 
-	/**
-	 * @brief changes the text of the button, the dimensions will also change
-	 * @param text the new text to set
-	 */
-	void setText(const std::string &text);
+    /**
+     * @brief changes the text of the button, the dimensions will also change
+     * @param text the new text to set
+     */
+    void setText(const std::string &text);
 
     /**
      * @brief setSelected changes the selected state of the button
@@ -158,14 +160,14 @@ private:
     void updateIcon();
 
     bool isSelectionEvent(const sf::Event &ev) const;
-	/**
-	 * @brief m_hilighted wether the button is currently higlighted
-	 */
+    /**
+     * @brief m_hilighted wether the button is currently higlighted
+     */
     bool m_hilighted = false;
 
-	/**
-	 * @brief m_text the text for the button
-	 */
+    /**
+     * @brief m_text the text for the button
+     */
     sf::Text m_text;
 
     sf::Sprite m_icon;
@@ -173,9 +175,12 @@ private:
     ColorTweening m_color;
 
 public:
-	const sf::Uint64 clickedEvent;
+    const sf::Uint64 clickedEvent;
     const sf::Uint64 selectdEvent;
 };
 
+
+
+}
 
 

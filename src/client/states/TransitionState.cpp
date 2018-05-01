@@ -29,6 +29,9 @@
 #include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"
 
+
+namespace mp {
+
 const sf::Int32 TransitionState::mTransitionDuration = 500;
 
 
@@ -124,4 +127,7 @@ void TransitionState::handleEvent(const sf::Event &ev)
 {
     if(mEnteringStateLabel != -1)
         pr::stateMachine().getStateAt(mEnteringStateLabel).handleEvent(ev);
+}
+
+
 }

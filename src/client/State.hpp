@@ -37,9 +37,12 @@
 #include <qglobal.h>
 
 namespace sf {
-    class Event;
-    class Time;
+class Event;
+class Time;
 }
+
+
+namespace mp {
 
 class Renderer;
 
@@ -89,7 +92,7 @@ private:
 struct TransitionData {
     int enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
-         updateExistingState = false;
+    updateExistingState = false;
 
     std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
 
@@ -174,4 +177,4 @@ public:
 
 };
 
-
+}

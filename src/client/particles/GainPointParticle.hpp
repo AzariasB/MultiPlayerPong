@@ -36,26 +36,63 @@
 #include "Particle.hpp"
 
 namespace sf {
-    class Time;
+class Time;
 }
 
+
+namespace mp {
+
+/**
+ * @brief The GainPointParticle class
+ * whenever a paddle hit the ball, this particle
+ * is created next to the points counting
+ */
 class GainPointParticle : public Particle
 {
 public:
+    /**
+     * @brief GainPointParticle constructor
+     * @param position starting position of the particle
+     * @param lifeTime lifetime of this particle
+     */
     GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime);
 
+    /**
+     * @brief render overriden function
+     * @param renderer
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief update overriden function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief isFinished whenever the particle is finished
+     * @return when the the animation is over (and alpha = 0)
+     */
     bool isFinished() const override;
 
 private:
-
+    /**
+     * @brief m_positionTwin tweening for the position
+     */
     twin::Twin<float, sf::Int32> m_positionTwin;
+
+    /**
+     * @brief m_alphaTwin tweening for the alpha color
+     */
     twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
 
+    /**
+     * @brief m_text "+1" text
+     */
     sf::Text m_text;
 };
 
+
+
+}
 

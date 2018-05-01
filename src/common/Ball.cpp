@@ -25,7 +25,7 @@
 /* 
  * File:   Ball.cpp
  * Author: azarias
- * 
+ *
  * Created on 8 octobre 2017, 18:48
  */
 
@@ -36,8 +36,10 @@
 #include "Ball.hpp"
 #include "Game.hpp"
 
+namespace mp {
+
 Ball::Ball(const Game& game) :
-PhysicObject(game, PO_TYPE::BALL)
+    PhysicObject(game, PO_TYPE::BALL)
 {
     b2BodyDef mBodyDef;
     mBodyDef.position = b2Vec2(BALL_START_X, BALL_START_Y);
@@ -85,12 +87,12 @@ void Ball::reset()
 
 void Ball::extend()
 {
-    m_radiusBoost = BALL_RADIUS_POWERUP;
+    //m_radiusBoost = BALL_RADIUS_POWERUP;
 }
 
 void Ball::retract()
 {
-    m_radiusBoost = -BALL_RADIUS_POWERUP;
+    //m_radiusBoost = -BALL_RADIUS_POWERUP;
 }
 
 sf::Packet &operator<<(sf::Packet &packet, const Ball &ball)
@@ -107,4 +109,6 @@ sf::Packet &operator>>(sf::Packet &packet, Ball &ball)
     ball.mBody->SetLinearVelocity(linearVelocity);
     ball.mBody->SetTransform(position, ball.mBody->GetAngle());
     return packet;
+}
+
 }

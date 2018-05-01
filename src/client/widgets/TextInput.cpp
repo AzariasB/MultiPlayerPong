@@ -25,7 +25,7 @@
 /* 
  * File:   TextInput.cpp
  * Author: azarias
- * 
+ *
  * Created on 22 octobre 2017, 16:29
  */
 
@@ -38,11 +38,13 @@
 #include "src/client/ClientConf.hpp"
 #include "src/client/ResourcesManager.hpp"
 
+namespace mp {
+
 TextInput::TextInput(const sf::Vector2f &position) :
-m_text("", pr::resourceManager().getFont()),
-m_pipe("|", pr::resourceManager().getFont()),
-m_typed(""),
-m_background(sf::Vector2f(SF_DIALOG_WIDTH, 50))
+    m_text("", pr::resourceManager().getFont()),
+    m_pipe("|", pr::resourceManager().getFont()),
+    m_typed(""),
+    m_background(sf::Vector2f(SF_DIALOG_WIDTH, 50))
 {
     m_background.setOutlineColor(cc::colors::dialogOutlineColor);
     m_background.setFillColor(cc::colors::backgroundColor);
@@ -57,30 +59,30 @@ void TextInput::draw(Renderer &renderer) const
     renderer.render(m_background);
     renderer.render(m_text);
 
-	if(m_clock.getElapsedTime().asSeconds() < 0.7){
+    if(m_clock.getElapsedTime().asSeconds() < 0.7){
         renderer.render(m_pipe);
-	}else if(m_clock.getElapsedTime().asSeconds() > 1.4){
-		m_clock.restart();
-	}
+    }else if(m_clock.getElapsedTime().asSeconds() > 1.4){
+        m_clock.restart();
+    }
 }
 
 void TextInput::handleEvent(const sf::Event& ev)
 {
-	if (ev.type == sf::Event::TextEntered) {
-		sf::Uint32 txt = ev.text.unicode;
-		if(txt == 8){//backspace
-			if(!m_typed.empty())
-				m_typed.pop_back();
-		}else if(txt > 31 && txt < 127){
-			m_typed += (char) ev.text.unicode;
-		}
-		m_text.setString(m_typed);
-		if(m_text.getGlobalBounds().width + 40 > SF_DIALOG_WIDTH){
-			m_typed.pop_back();
-			m_text.setString(m_typed);
-		}
-		updatePipePos();
-	}
+    if (ev.type == sf::Event::TextEntered) {
+        sf::Uint32 txt = ev.text.unicode;
+        if(txt == 8){//backspace
+            if(!m_typed.empty())
+                m_typed.pop_back();
+        }else if(txt > 31 && txt < 127){
+            m_typed += (char) ev.text.unicode;
+        }
+        m_text.setString(m_typed);
+        if(m_text.getGlobalBounds().width + 40 > SF_DIALOG_WIDTH){
+            m_typed.pop_back();
+            m_text.setString(m_typed);
+        }
+        updatePipePos();
+    }
 }
 
 TextInput::~TextInput()
@@ -90,18 +92,20 @@ TextInput::~TextInput()
 
 void TextInput::setText(const std::string &str)
 {
-	m_typed = str;
-	m_text.setString(m_typed);
-	updatePipePos();
+    m_typed = str;
+    m_text.setString(m_typed);
+    updatePipePos();
 }
 
 void TextInput::updatePipePos()
 {
-	float textWidth = m_text.getGlobalBounds().width;
-	m_pipe.setPosition(m_text.getPosition().x + textWidth, m_text.getPosition().y );
+    float textWidth = m_text.getGlobalBounds().width;
+    m_pipe.setPosition(m_text.getPosition().x + textWidth, m_text.getPosition().y );
 }
 
 const std::string& TextInput::getText() const
 {
-	return m_typed;
+    return m_typed;
+}
+
 }

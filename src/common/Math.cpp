@@ -31,6 +31,8 @@
 
 #include "Math.hpp"
 
+namespace mp {
+
 std::string math::uuid()
 {
     {
@@ -45,13 +47,13 @@ std::string math::uuid()
         uuid[14] = '4';
 
         for(int i=0;i<36;i++){
-          if (i != 8 && i != 13 && i != 18 && i != 14 && i != 23) {
-            if (rnd <= 0x02) {
-                rnd = 0x2000000 + (std::rand() * 0x1000000) | 0;
+            if (i != 8 && i != 13 && i != 18 && i != 14 && i != 23) {
+                if (rnd <= 0x02) {
+                    rnd = 0x2000000 + (std::rand() * 0x1000000) | 0;
+                }
+                rnd >>= 4;
+                uuid[i] = math::CHARS[(i == 19) ? ((rnd & 0xf) & 0x3) | 0x8 : rnd & 0xf];
             }
-            rnd >>= 4;
-            uuid[i] = math::CHARS[(i == 19) ? ((rnd & 0xf) & 0x3) | 0x8 : rnd & 0xf];
-          }
         }
         return uuid;
     }
@@ -87,4 +89,6 @@ float math::pixToMeters(int pixels)
 int math::metersToPix(float meters)
 {
     return static_cast<int>(meters*M_TO_P);
+}
+
 }

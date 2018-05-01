@@ -30,6 +30,8 @@
  */
 #include "DialogManager.hpp"
 
+namespace mp {
+
 DialogManager::DialogManager()
 {
 
@@ -108,3 +110,6 @@ DialogMessage &DialogManager::message(const std::string &title, const std::strin
 {
     return createDialog<DialogMessage>(title, message);
 }
+
+}
+

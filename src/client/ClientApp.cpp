@@ -44,6 +44,7 @@
 #include "states/TransitionState.hpp"
 #include "ClientConf.hpp"
 
+namespace mp {
 
 ClientApp &ClientApp::getInstance()
 {
@@ -264,3 +265,4 @@ const KeyBinding &ClientApp::getKeyBindings() const
     return m_keyBinding;
 }
 
+}

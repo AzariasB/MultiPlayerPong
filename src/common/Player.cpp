@@ -25,26 +25,28 @@
 /* 
  * File:   Player.cpp
  * Author: azarias
- * 
+ *
  * Created on 18 octobre 2017, 22:05
  */
 
 #include "Player.hpp"
 
+namespace mp {
+
 Player::Player(Game& game, std::size_t num) :
-m_game(game),
-m_num(num),
-m_paddle(game, num)
+    m_game(game),
+    m_num(num),
+    m_paddle(game, num)
 {
 
 }
 
 void Player::reset()
 {
-	m_paddle.reset();
-	m_num = -1;
-	m_score = 0;
-	m_isWinner = false;
+    m_paddle.reset();
+    m_num = -1;
+    m_score = 0;
+    m_isWinner = false;
 }
 
 Player::~Player()
@@ -53,15 +55,17 @@ Player::~Player()
 
 sf::Packet &operator<<(sf::Packet &packet, const Player &p)
 {
-	return packet << p.m_paddle << p.m_isWinner << p.m_num << p.m_score;
+    return packet << p.m_paddle << p.m_isWinner << p.m_num << p.m_score;
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Player &p)
 {
-	return packet >> p.m_paddle >> p.m_isWinner >> p.m_num >> p.m_score;
+    return packet >> p.m_paddle >> p.m_isWinner >> p.m_num >> p.m_score;
 }
 
 void Player::gainPoint()
 {
-	m_score++;
+    m_score++;
+}
+
 }

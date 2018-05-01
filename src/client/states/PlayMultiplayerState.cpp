@@ -39,6 +39,9 @@
 
 #include <iostream>
 
+namespace mp {
+
+
 PlayMultiplayerState::PlayMultiplayerState() :
     PlayState()
 {
@@ -75,4 +78,7 @@ void PlayMultiplayerState::onEnter(BaseStateData *data)
 
 void PlayMultiplayerState::onBeforeLeaving()
 {
+}
+
+
 }

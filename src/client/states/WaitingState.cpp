@@ -39,6 +39,8 @@
 #include "src/client/widgets/Dialog.hpp"
 
 
+namespace mp {
+
 WaitingState::~WaitingState()
 {
 }
@@ -71,12 +73,12 @@ void WaitingState::update(const sf::Time &elapsed)
 {
     Q_UNUSED(elapsed);
 
-	//Blinking point
+    //Blinking point
     bool startGame = false;
     sf::Packet rcvPacket;
     sf::Socket::Status rcvStatus = pr::socket().receive(rcvPacket);
     sf::String text = c_state == PENDING ? "Connecting..." :
-                      c_state == CONNECTED ? "Waiting for player ..." : "Disconnected :(";
+                                           c_state == CONNECTED ? "Waiting for player ..." : "Disconnected :(";
 
 
     if(rcvStatus == sf::Socket::Done){
@@ -92,26 +94,29 @@ void WaitingState::update(const sf::Time &elapsed)
         c_state = DISCONNECTED;
     }
 
-	if (startGame)
+    if (startGame)
         pr::stateMachine().goToState(cc::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
 }
 
 void WaitingState::onEnter(BaseStateData *data)
 {
-	c_state = CONNECTION_STATE::PENDING;
+    c_state = CONNECTION_STATE::PENDING;
 
-	StateData<std::string> *ipData = 0;
-	if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
+    StateData<std::string> *ipData = 0;
+    if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
 
     sf::IpAddress serverAddr(ipData->data());
 
     pr::socket().setBlocking(true);
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
     pr::socket().setBlocking(false);
-	if (status != sf::Socket::Done) {
+    if (status != sf::Socket::Done) {
         std::cerr << "Failed to connect" << std::endl;
-	} else {
+    } else {
         std::cout << "Successfully connected to server" << std::endl;
-	}
+    }
 }
+
+}
+

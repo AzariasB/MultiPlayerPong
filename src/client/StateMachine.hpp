@@ -40,6 +40,8 @@
 #include "State.hpp"
 #include "Provider.hpp"
 
+namespace mp {
+
 class ClientApp;
 
 /**
@@ -48,9 +50,9 @@ class ClientApp;
  */
 class StateMachine : public sf::NonCopyable {
 public:
-	/**
-	 * @brief StateMachine constructor
-	 */
+    /**
+     * @brief StateMachine constructor
+     */
     StateMachine();
 
 
@@ -86,37 +88,37 @@ public:
         pr::soundEngine().playSound(SoundEngine::ROLLOVER);
     }
 
-	/**
-	 * @brief addState adds the state given as template parameter to the list of states (creates a new state object)
-	 * @param stateLabel the id for the inserted state, will be used to retreive the state later
-	 */
-	template<typename T>
+    /**
+     * @brief addState adds the state given as template parameter to the list of states (creates a new state object)
+     * @param stateLabel the id for the inserted state, will be used to retreive the state later
+     */
+    template<typename T>
     typename std::enable_if<std::is_base_of<State,T>::value, State&>::type
     addState(int stateLabel)
-	{
+    {
         return *(states[stateLabel] = std::make_unique<T>());
     }
 
-	/**
-	 * @brief setCurrentState changes the current state, calls onLeave and onEnter for the current state and the new state
-	 * @param stateLabel id of the label to set, if the id is not in the bound of the known states, throws an error
-	 */
-	void setCurrentState(int stateLabel);
+    /**
+     * @brief setCurrentState changes the current state, calls onLeave and onEnter for the current state and the new state
+     * @param stateLabel id of the label to set, if the id is not in the bound of the known states, throws an error
+     */
+    void setCurrentState(int stateLabel);
 
-	/**
-	 * @brief setCurrentState sets the current state, and passes some data to the entering state
-	 * @param stateLabel id of the label to set
-	 * @param data data to pass to the entering state
-	 */
-	template<typename T>
-	void setCurrentState(int stateLabel, const T &data)
-	{
+    /**
+     * @brief setCurrentState sets the current state, and passes some data to the entering state
+     * @param stateLabel id of the label to set
+     * @param data data to pass to the entering state
+     */
+    template<typename T>
+    void setCurrentState(int stateLabel, const T &data)
+    {
         if (currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
-	    currentStateIndex = stateLabel;
+        currentStateIndex = stateLabel;
 
-	    StateData<T> dat(data);
-	    states[currentStateIndex]->onEnter(&dat);
-	}
+        StateData<T> dat(data);
+        states[currentStateIndex]->onEnter(&dat);
+    }
 
     /**
      * @brief setCurrentState overriden function, when
@@ -132,15 +134,15 @@ public:
         states[currentStateIndex]->onEnter(&data);
     }
 
-	/**
-	 * @brief getCurrentState a reference to the current state
-	 * @return a reference to the current state
-	 */
-	State &getCurrentState()
-	{
-		if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
-		return *states[currentStateIndex];
-	}
+    /**
+     * @brief getCurrentState a reference to the current state
+     * @return a reference to the current state
+     */
+    State &getCurrentState()
+    {
+        if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
+        return *states[currentStateIndex];
+    }
 
     State &getStateAt(int index)
     {
@@ -150,29 +152,29 @@ public:
         return *states[index];
     }
 
-	/**
-	 * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
-	 * @return the index of the current state (-1 if no states was set)
-	 */
-	int getCurrentStateIndex()
-	{
-		return currentStateIndex;
-	}
+    /**
+     * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
+     * @return the index of the current state (-1 if no states was set)
+     */
+    int getCurrentStateIndex()
+    {
+        return currentStateIndex;
+    }
 
-	virtual ~StateMachine();
+    virtual ~StateMachine();
 private:
-	/**
-	 * @brief states keep in memory all the newly created states
-	 * using smart pointers in order to delete them when getting out of scope
-	 */
-	std::unordered_map<int, std::unique_ptr<State>> states;
+    /**
+     * @brief states keep in memory all the newly created states
+     * using smart pointers in order to delete them when getting out of scope
+     */
+    std::unordered_map<int, std::unique_ptr<State>> states;
 
-	/**
-	 * @brief currentStateIndex index of the current state
-	 */
-	int currentStateIndex = -1;
+    /**
+     * @brief currentStateIndex index of the current state
+     */
+    int currentStateIndex = -1;
 
 };
 
-
+}
 

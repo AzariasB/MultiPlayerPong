@@ -14,14 +14,20 @@
 #include <string>
 #include <cstdlib>
 
+namespace mp {
+
 //Meters to pixel ratio
-#define M_TO_P 64.f
-#define P_TO_M 1/64.f
+constexpr float M_TO_P = 64.f;
+constexpr float P_TO_M = 1/M_TO_P;
 
 /**
  * @brief CHARS used to generated UUID
  */
 namespace math{
+
+/**
+ * @brief CHARS used to generate the UUID
+ */
 const std::string CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 /**
@@ -86,3 +92,4 @@ int metersToPix(float meters);
 
 
 
+}

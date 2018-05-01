@@ -37,8 +37,10 @@
 #include "src/client/SoundEngine.hpp"
 #include "src/client/StateMachine.hpp"
 
+namespace mp {
+
 OptionState::OptionState():
-m_menu()
+    m_menu()
 {
     float startY = 50.f;
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
@@ -62,7 +64,7 @@ m_menu()
 void OptionState::toggleSound()
 {
     pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
-                                          pr::soundEngine().mute();
+                                  pr::soundEngine().mute();
 
     sf::Sprite buttonSprite= m_muteButton->getIcon();
     buttonSprite.setTextureRect(getCurrentSoundRect());
@@ -91,9 +93,11 @@ void OptionState::update(const sf::Time &elapsed)
 
 void OptionState::handleEvent(const sf::Event &ev)
 {
-	if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
         pr::stateMachine().setCurrentState((int)cc::MENU);
-	}else{
-		m_menu.handleEvent(ev);
-	}
+    }else{
+        m_menu.handleEvent(ev);
+    }
+}
+
 }

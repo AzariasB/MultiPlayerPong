@@ -42,8 +42,11 @@
 
 class Game;
 namespace sf {
-    class Packet;
+class Packet;
 }
+
+
+namespace mp {
 
 /**
  * @brief The Ball class the ball is the game object moving
@@ -53,11 +56,11 @@ namespace sf {
  */
 class Ball : public PhysicObject {
 public:
-	/**
-	 * @brief Ball constructor
-	 * @param game a reference to the game
-	 */
-	Ball(const Game &game);
+    /**
+     * @brief Ball constructor
+     * @param game a reference to the game
+     */
+    Ball(const Game &game);
 
 
     /**
@@ -69,7 +72,7 @@ public:
     /**
      * @brief reset resets the informations about the ball
      */
-	void reset();
+    void reset();
 
     /**
      * @brief extend when the powerup 'extend' is caught
@@ -86,29 +89,26 @@ public:
      */
     void resetPowerup(Powerup::POWERUP_TYPE type);
 
-	/**
-	 * @brief operator << seraializes the ball into a sf::Packet
-	 * @param packet the packet in which to seralize
-	 * @param ball the ball object to serialize
-	 * @return the sf Packet with the serialized ball
-	 */
-	friend sf::Packet &operator<<(sf::Packet &packet, const Ball &ball);
+    /**
+     * @brief operator << seraializes the ball into a sf::Packet
+     * @param packet the packet in which to seralize
+     * @param ball the ball object to serialize
+     * @return the sf Packet with the serialized ball
+     */
+    friend sf::Packet &operator<<(sf::Packet &packet, const Ball &ball);
 
-	/**
-	 * @brief operator >> deserialize the ball int the given ball object
-	 * @param packet the packet to use to deserialize
-	 * @param ball the target ball to init
-	 * @return the sf::Packet with the deserialized ball
-	 */
-	friend sf::Packet &operator>>(sf::Packet &packet, Ball &ball);
+    /**
+     * @brief operator >> deserialize the ball int the given ball object
+     * @param packet the packet to use to deserialize
+     * @param ball the target ball to init
+     * @return the sf::Packet with the deserialized ball
+     */
+    friend sf::Packet &operator>>(sf::Packet &packet, Ball &ball);
 
-	virtual ~Ball();
+    virtual ~Ball();
 private:
     sf::Int32 m_radiusBoost;
 };
 
 
-
-
-
-
+}

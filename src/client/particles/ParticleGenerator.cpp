@@ -36,6 +36,8 @@
 #include "BallTrailParticle.hpp"
 #include "GainPointParticle.hpp"
 
+namespace mp {
+
 ParticleGenerator::ParticleGenerator()
 {
 
@@ -80,4 +82,7 @@ void ParticleGenerator::update(const sf::Time &elapsed)
             ++it;
         }
     }
+}
+
+
 }

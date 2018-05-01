@@ -35,6 +35,9 @@
 #include "src/client/SoundEngine.hpp"
 #include "src/client/Renderer.hpp"
 
+namespace mp {
+
+
 Menu::Menu()
 {
 
@@ -149,4 +152,7 @@ void Menu::changeSelection(int dir)
         if(m_selectedButton == m_buttons.size() -1)return;
         setSeletedIndex(m_selectedButton + 1);
     }
+}
+
+
 }

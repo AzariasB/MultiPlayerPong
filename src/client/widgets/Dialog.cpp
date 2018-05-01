@@ -35,7 +35,7 @@
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
 
-
+namespace mp {
 
 // DIALOG BEGIN
 Dialog::Dialog(const sf::Uint64 id, const std::string &title):
@@ -156,13 +156,13 @@ Dialog::DIALOG_STATE Dialog::state() const
 //INPUT DIALOG
 
 DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question):
-Dialog(id, title),
-m_questionText(question, pr::resourceManager().getFont()),
-m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
-m_confirmButton("Confirm",  originX + 10, originY + SF_DIALOG_HEIGHT - 50),
-m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
-cancelClickedEvent(pr::nextEventCode()),
-confirmClickedEvent(pr::nextEventCode())
+    Dialog(id, title),
+    m_questionText(question, pr::resourceManager().getFont()),
+    m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
+    m_confirmButton("Confirm",  originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+    cancelClickedEvent(pr::nextEventCode()),
+    confirmClickedEvent(pr::nextEventCode())
 {
     m_questionText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT/4.f);
 
@@ -219,12 +219,12 @@ void DialogInput::handleEvent(const sf::Event &ev)
 
 
 DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
-Dialog(id, title),
-m_questionText(question, pr::resourceManager().getFont()),
-m_yesButton("Yes", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
-m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
-yesClickedEvent(pr::nextEventCode()),
-noClickedEvent(pr::nextEventCode())
+    Dialog(id, title),
+    m_questionText(question, pr::resourceManager().getFont()),
+    m_yesButton("Yes", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+    yesClickedEvent(pr::nextEventCode()),
+    noClickedEvent(pr::nextEventCode())
 {
     m_questionText.setPosition(originX + 10, originY  +SF_DIALOG_HEIGHT/2.f);
 
@@ -285,10 +285,10 @@ void DialogQuestion::noClicked()
 // MESSAGE BEGIN
 
 DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
-Dialog(id, title),
-m_messageText(message, pr::resourceManager().getFont()),
-m_okButton("Ok", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
-okClickedEvent(pr::nextEventCode())
+    Dialog(id, title),
+    m_messageText(message, pr::resourceManager().getFont()),
+    m_okButton("Ok", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    okClickedEvent(pr::nextEventCode())
 {
     m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
 
@@ -338,3 +338,4 @@ void DialogMessage::okClicked()
 }
 
 // MESSAGE END
+}

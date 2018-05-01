@@ -35,6 +35,9 @@
 #include <SFML/System/String.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
+namespace mp {
+
+
 /**
  * @brief The Application class base class for all the applications (client and server)
  * contains a map of string for the configuration,
@@ -42,37 +45,39 @@
  */
 class Application : public sf::NonCopyable {
 public:
-	/**
-	 * @brief Application constructor
-	 */
-	Application();
+    /**
+     * @brief Application constructor
+     */
+    Application();
 
-	virtual ~Application();
+    virtual ~Application();
 
-	/**
-	 * @brief run starts the main loop of the application (may be an infinite loop)
-	 * @param argc the number of argument
-	 * @param argv the arguments
-	 */
-	virtual void run(int argc, char **argv);
+    /**
+     * @brief run starts the main loop of the application (may be an infinite loop)
+     * @param argc the number of argument
+     * @param argv the arguments
+     */
+    virtual void run(int argc, char **argv);
 
-	/**
-	 * @brief instance returns and instance of the application
-	 * @return the single instance of the client
-	 */
-	static Application &instance();
+    /**
+     * @brief instance returns and instance of the application
+     * @return the single instance of the client
+     */
+    static Application &instance();
 private:
-	/**
-	 * @brief _app static pointer of the application
-	 */
-	static Application *_app;
+    /**
+     * @brief _app static pointer of the application
+     */
+    static Application *_app;
 
-	/**
-	 * @brief config the app's configuration
-	 */
-	std::unordered_map<std::string, std::string> config;
+    /**
+     * @brief config the app's configuration
+     */
+    std::unordered_map<std::string, std::string> config;
 
 };
+
+}
 
 
 

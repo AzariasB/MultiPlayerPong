@@ -42,6 +42,7 @@
 
 #include "Math.hpp"
 
+namespace mp {
 
 template<typename K, typename V, typename ...Args>
 void deserialize(sf::Packet &packet, std::unordered_map<K,V> &mmap, Args&... argp)
@@ -248,4 +249,4 @@ inline b2Vec2 sfVecTob2Vec(const sf::Vector2f &vec, bool convertToMeters = true)
 }
 
 
-
+}

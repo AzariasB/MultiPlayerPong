@@ -36,8 +36,12 @@
 #include "Button.hpp"
 #include "TextInput.hpp"
 #include "src/common/Config.hpp"
+#include "src/client/ClientConf.hpp"
 #include "src/lib/twin.hpp"
 
+
+
+namespace mp {
 
 //BEGIN DIALOG
 /**
@@ -127,7 +131,7 @@ protected:
     /**
      * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
      */
-    const int originX = (SF_ARENA_WIDTH- SF_DIALOG_WIDTH)/2;
+    const int originX = (SF_ARENA_WIDTH - SF_DIALOG_WIDTH)/2;
 
     /**
      * @brief originY y origin of the dialog
@@ -285,4 +289,4 @@ public:
 //END MESSAGE DIALOG
 
 
-
+}

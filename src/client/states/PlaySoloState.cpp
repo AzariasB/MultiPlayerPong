@@ -34,6 +34,9 @@
 #include "src/client/ClientApp.hpp"
 
 
+namespace mp {
+
+
 PlaySoloState::PlaySoloState():
     PlayState()
 {
@@ -66,5 +69,7 @@ void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
 
 PlaySoloState::~PlaySoloState()
 {
+
+}
 
 }

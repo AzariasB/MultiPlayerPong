@@ -31,6 +31,8 @@
 #include "Powerup.hpp"
 #include "Game.hpp"
 
+namespace mp {
+
 sf::Uint64 Powerup::m_nextId = 0;
 
 sf::Uint64 Powerup::nextId()
@@ -141,4 +143,6 @@ sf::Packet &operator>>(sf::Packet &packet, Powerup &powerup)
     powerup.m_type = static_cast<Powerup::POWERUP_TYPE>(powerupType);
     powerup.m_effectTime = sf::microseconds(effectTime);
     return packet;
+}
+
 }

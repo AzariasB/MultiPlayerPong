@@ -34,6 +34,10 @@
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 
+
+namespace mp {
+
+
 class Dialog;
 
 /**
@@ -44,43 +48,43 @@ class Dialog;
  */
 class EndState : public State {
 public:
-	/**
-	 * @brief EndState constructor
-	 * @param app reference to the application
-	 */
+    /**
+     * @brief EndState constructor
+     * @param app reference to the application
+     */
     EndState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer& renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param dtS
+     */
+    void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
+    /**
+     * @brief onEnter inherited function
+     * @param data
+     */
+    void onEnter(BaseStateData *data) override;
 
-	/**
-	 * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
-	 * goes back to the main menu
-	 */
+    /**
+     * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
+     * goes back to the main menu
+     */
     void goToMenu();
 
-	virtual ~EndState();
+    virtual ~EndState();
 
 private:
     /**
@@ -97,3 +101,6 @@ private:
     sf::Text &m_content;
 };
 
+
+
+}

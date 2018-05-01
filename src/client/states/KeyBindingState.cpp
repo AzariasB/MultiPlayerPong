@@ -37,6 +37,8 @@
 #include "src/client/StateMachine.hpp"
 #include "src/client/widgets/DialogManager.hpp"
 
+namespace mp {
+
 KeyBindingState::KeyBindingState():
     m_menu()
 {
@@ -118,4 +120,7 @@ void KeyBindingState::buttonClicked(ActionsButton *ab)
     m_messageDialogId = dm.id();
     pr::connect(dm.okClickedEvent, &KeyBindingState::cancelDialog, this);
     pr::connect(dm.closeEvent, &KeyBindingState::cancelDialog, this);
+}
+
+
 }

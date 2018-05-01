@@ -39,6 +39,8 @@
 #include "src/common/Game.hpp"
 #include "Lobby.hpp"
 
+namespace mp {
+
 /**
  * @brief The ServerApp class the application run
  * by the server,
@@ -72,3 +74,4 @@ private:
 };
 
 
+}

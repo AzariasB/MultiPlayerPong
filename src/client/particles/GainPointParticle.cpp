@@ -36,6 +36,8 @@
 #include "GainPointParticle.hpp"
 
 
+namespace mp {
+
 GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
     Particle(),
     m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime.asMilliseconds(), twin::linear)),
@@ -67,4 +69,7 @@ void GainPointParticle::update(const sf::Time &elapsed)
     textColor.a = m_alphaTwin.get();
     m_text.setFillColor(textColor);
     m_text.setPosition(m_text.getPosition().x, m_positionTwin.get());
+}
+
+
 }

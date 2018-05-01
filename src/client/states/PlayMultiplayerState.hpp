@@ -36,8 +36,11 @@
 #include "PlayState.hpp"
 
 namespace sf{
-    class Event;
+class Event;
 }
+
+namespace mp {
+
 class Player;
 
 
@@ -50,17 +53,17 @@ class Player;
 class PlayMultiplayerState : public PlayState {
 public:
 
-	/**
-	 * @brief PlayState constructor
-	 * @param client a reference to the client's app
-	 */
+    /**
+     * @brief PlayState constructor
+     * @param client a reference to the client's app
+     */
     PlayMultiplayerState();
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
 
     /**
@@ -69,26 +72,28 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
+    /**
+     * @brief onEnter inherited function
+     * @param data
+     */
+    void onEnter(BaseStateData *data) override;
 
-	/**
-	 * @brief onLeave inherited function
-	 */
-	void onBeforeLeaving() override;
+    /**
+     * @brief onLeave inherited function
+     */
+    void onBeforeLeaving() override;
 
     virtual ~PlayMultiplayerState();
 
 private:
 
-	/**
-	 * @brief gameFinisehd wether the game ended
-	 */
-	bool gameFinisehd = false;
+    /**
+     * @brief gameFinisehd wether the game ended
+     */
+    bool gameFinisehd = false;
 };
 
 
+
+}
 

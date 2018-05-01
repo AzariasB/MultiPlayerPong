@@ -36,6 +36,8 @@
 #include "Wall.hpp"
 #include "Game.hpp"
 
+namespace mp {
+
 Wall::Wall(const Game &g, const b2Vec2 &startingPos):
     PhysicObject(g, PO_TYPE::WALL)
 {
@@ -59,4 +61,6 @@ Wall::Wall(const Game &g, const b2Vec2 &startingPos):
 
 Wall::~Wall()
 {
+}
+
 }

@@ -34,6 +34,8 @@
 #include <QResource>
 #include <SFML/System/MemoryInputStream.hpp>
 
+namespace mp {
+
 ResourcesManager::ResourcesManager():
     m_uncompressedQuicksandFont(":/WhateverItTakes.ttf")
 {
@@ -45,12 +47,12 @@ ResourcesManager::ResourcesManager():
 }
 
 sf::Sound& ResourcesManager::getSound(const std::string& soundName) {
-	if (m_sounds.find(soundName) != m_sounds.end()) {
-		return m_sounds[soundName]->second;
-	} else {
-		std::cerr << "Could not find the sound '" << soundName << "' you asked for\n";
-		return m_emptySound;
-	}
+    if (m_sounds.find(soundName) != m_sounds.end()) {
+        return m_sounds[soundName]->second;
+    } else {
+        std::cerr << "Could not find the sound '" << soundName << "' you asked for\n";
+        return m_emptySound;
+    }
 }
 
 sf::Shader &ResourcesManager::registerShader(const std::string &filename, const std::string &shaderName)
@@ -76,29 +78,30 @@ sf::Shader &ResourcesManager::getShader(const std::string &shaderName)
 
 const sf::Texture &ResourcesManager::getTexture(const std::string &textureName) const
 {
-	if(m_textures.find(textureName) != m_textures.end()){
-		return *m_textures.find(textureName)->second;
-	}else{
-		std::cerr << "Could not find the texture '" << textureName << "' you asked for\n";
-		return m_emptyTexture;
-	}
+    if(m_textures.find(textureName) != m_textures.end()){
+        return *m_textures.find(textureName)->second;
+    }else{
+        std::cerr << "Could not find the texture '" << textureName << "' you asked for\n";
+        return m_emptyTexture;
+    }
 }
 
 void ResourcesManager::registerSound(const std::string& filename, const std::string& soundName) {
-	QResource res(filename.c_str());
-	m_sounds[soundName] = std::make_unique<std::pair < sf::SoundBuffer, sf::Sound >> ();
-	m_sounds[soundName]->first.loadFromMemory(res.data(), res.size());
-	m_sounds[soundName]->second.setBuffer(m_sounds[soundName]->first);
+    QResource res(filename.c_str());
+    m_sounds[soundName] = std::make_unique<std::pair < sf::SoundBuffer, sf::Sound >> ();
+    m_sounds[soundName]->first.loadFromMemory(res.data(), res.size());
+    m_sounds[soundName]->second.setBuffer(m_sounds[soundName]->first);
 }
 
 void ResourcesManager::registerTexture(const std::string &filename, const std::string &textureName)
 {
-	QResource res(filename.c_str());
-	m_textures[textureName] = std::make_unique<sf::Texture>();
-	m_textures[textureName]->loadFromMemory(res.data(), res.size());
+    QResource res(filename.c_str());
+    m_textures[textureName] = std::make_unique<sf::Texture>();
+    m_textures[textureName]->loadFromMemory(res.data(), res.size());
 }
 
 ResourcesManager::~ResourcesManager() {
-	m_sounds.clear();
+    m_sounds.clear();
 }
 
+}

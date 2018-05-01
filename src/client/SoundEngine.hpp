@@ -34,6 +34,7 @@
 
 #include "ResourcesManager.hpp"
 
+namespace mp {
 
 class ResourcesManager;
 
@@ -45,70 +46,70 @@ class ResourcesManager;
 class SoundEngine {
 public:
 
-	/**
-	 * @brief The SOUND_TYPE enum all the possible sound the soundEngine can play
-	 */
-	enum SOUND_TYPE {
+    /**
+     * @brief The SOUND_TYPE enum all the possible sound the soundEngine can play
+     */
+    enum SOUND_TYPE {
         BOUNCE,
         CLICK,
         ROLLOVER
-	};
+    };
 
-	/**
-	 * @brief SoundEngine constructor
-	 * @param sManager a reference to the resourceManager in order to save the sound resources
-	 */
-	SoundEngine(ResourcesManager &sManager);
+    /**
+     * @brief SoundEngine constructor
+     * @param sManager a reference to the resourceManager in order to save the sound resources
+     */
+    SoundEngine(ResourcesManager &sManager);
 
-	/**
-	 * @brief saveSound saves the sound of the given type, with the given filename to read from
-	 * @param s the type of the sound to save
-	 * @param filename the filename to use for this sound type
-	 */
-	void saveSound(SOUND_TYPE s, const std::string &filename);
+    /**
+     * @brief saveSound saves the sound of the given type, with the given filename to read from
+     * @param s the type of the sound to save
+     * @param filename the filename to use for this sound type
+     */
+    void saveSound(SOUND_TYPE s, const std::string &filename);
 
-	/**
-	 * @brief playSound plays the given sound's type
-	 * @param s the type of the sound to play
-	 */
-	void playSound(SOUND_TYPE s);
+    /**
+     * @brief playSound plays the given sound's type
+     * @param s the type of the sound to play
+     */
+    void playSound(SOUND_TYPE s);
 
 
-	void mute()
-	{
-		m_isMuted = true;
-	}
+    void mute()
+    {
+        m_isMuted = true;
+    }
 
-	void unmute()
-	{
-		m_isMuted = false;
-	}
+    void unmute()
+    {
+        m_isMuted = false;
+    }
 
-	bool isMuted() const
-	{
-		return m_isMuted;
-	}
+    bool isMuted() const
+    {
+        return m_isMuted;
+    }
 
-	virtual ~SoundEngine();
+    virtual ~SoundEngine();
 private:
-	/**
-	 * @brief toSoundName turns the given sound type into a string in order to save it in the resource manager
-	 * @param st sound type to turn into a string
-	 * @return the sound type turned into a string
-	 */
-	std::string toSoundName(SOUND_TYPE st);
+    /**
+     * @brief toSoundName turns the given sound type into a string in order to save it in the resource manager
+     * @param st sound type to turn into a string
+     * @return the sound type turned into a string
+     */
+    std::string toSoundName(SOUND_TYPE st);
 
 
-	/**
-	 * @brief m_manager reference to the resource manager,  to save the sound resources
-	 */
-	ResourcesManager &m_manager;
+    /**
+     * @brief m_manager reference to the resource manager,  to save the sound resources
+     */
+    ResourcesManager &m_manager;
 
-	/**
-	 * @brief isMuted wether the game's sound is muted
-	 */
-	bool m_isMuted = false;
+    /**
+     * @brief isMuted wether the game's sound is muted
+     */
+    bool m_isMuted = false;
 };
 
 
-
+}

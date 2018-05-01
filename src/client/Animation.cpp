@@ -30,7 +30,8 @@
  */
 #include "Animation.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <QDebug>
+
+namespace mp {
 
 Animation::Animation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop):
     m_sprite(texture),
@@ -90,5 +91,8 @@ void Animation::nextFrame()
 
 Animation::~Animation()
 {
+
+}
+
 
 }

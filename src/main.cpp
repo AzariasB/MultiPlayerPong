@@ -47,10 +47,10 @@ int main(int argc, char** argv)
 {
     srand(time(NULL));
 #ifdef CLIENT
-    ClientApp &app = ClientApp::getInstance();
+    mp::ClientApp &app = mp::ClientApp::getInstance();
     app.initStates();
 #elif SERVER
-	ServerApp app;
+    mp::ServerApp app;
 #else
 #error "Found neither 'client' nor 'server' configuration"
 #endif

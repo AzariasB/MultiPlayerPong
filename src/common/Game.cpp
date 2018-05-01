@@ -33,6 +33,9 @@
 #include "Game.hpp"
 #include "Application.hpp"
 
+
+namespace mp {
+
 Game::Game() :
     mPhysicWorld(mGravity),
     mainBall(*this),
@@ -130,9 +133,9 @@ const Powerup &Game::addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &
 {
     sf::Uint64 key = Powerup::nextId();
     auto pair = m_powerups.emplace(std::piecewise_construct,
-                       std::forward_as_tuple(key),
-                       std::forward_as_tuple(*this, type, startPos, direction)
-                );
+                                   std::forward_as_tuple(key),
+                                   std::forward_as_tuple(*this, type, startPos, direction)
+                                   );
 #ifdef SERVER
     if(pair.second){
         mw_nwPowerups.emplace_back(&pair.first->second);
@@ -304,4 +307,6 @@ EventManager& Game::getEventManager()
 const std::unordered_map<sf::Uint64, Powerup> &Game::getPowerups() const
 {
     return m_powerups;
+}
+
 }

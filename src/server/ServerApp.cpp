@@ -25,7 +25,7 @@
 /* 
  * File:   ServerApp.cpp
  * Author: azarias
- * 
+ *
  * Created on 9 octobre 2017, 18:06
  */
 
@@ -34,6 +34,8 @@
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 #include <time.h>
+
+namespace mp {
 
 ServerApp::ServerApp()
 {
@@ -49,35 +51,36 @@ void ServerApp::run(int argc, char** argv)
     B2_NOT_USED(argv);
 
     srand(time(NULL));
-	sf::TcpListener listener;
+    sf::TcpListener listener;
 
     sf::Socket::Status status = listener.listen(DEFAULT_PORT);
 
-	if (status != sf::Socket::Done) {
-		std::cerr << "Could not start server\n";
-		exit(-1);
-	}
+    if (status != sf::Socket::Done) {
+        std::cerr << "Could not start server\n";
+        exit(-1);
+    }
 
-	std::cout << "Listening for any incomming connections\n";
-	while (1) {
-		lobbies.push_back(std::make_unique<LobbyThread>());
-		lobbies.back()->lobby.receivePlayers(listener);
-		lobbies.back()->thread.launch();
-		cleanLobbies();
-	}
+    std::cout << "Listening for any incomming connections\n";
+    while (1) {
+        lobbies.push_back(std::make_unique<LobbyThread>());
+        lobbies.back()->lobby.receivePlayers(listener);
+        lobbies.back()->thread.launch();
+        cleanLobbies();
+    }
 
-	listener.close(); //If ever ....
+    listener.close(); //If ever ....
 }
 
 void ServerApp::cleanLobbies()
 {
-	for (auto it = lobbies.begin(); it != lobbies.end();) {
-		if ((*it)->lobby.isFinished()) {
-			(*it)->thread.terminate();
-			it = lobbies.erase(it);
-		} else {
-			++it;
-		}
-	}
+    for (auto it = lobbies.begin(); it != lobbies.end();) {
+        if ((*it)->lobby.isFinished()) {
+            (*it)->thread.terminate();
+            it = lobbies.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
+}
