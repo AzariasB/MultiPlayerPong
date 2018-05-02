@@ -35,6 +35,7 @@
 #include "ExplosionParticle.hpp"
 #include "BallTrailParticle.hpp"
 #include "GainPointParticle.hpp"
+#include "CountdownParticle.hpp"
 
 namespace mp {
 
@@ -62,6 +63,13 @@ void ParticleGenerator::gainPoint(const sf::Vector2f &position)
 {
     m_particles.emplace_back(
         std::make_unique<GainPointParticle>(position, sf::milliseconds(500))
+    );
+}
+
+void ParticleGenerator::countdown(const std::string & countdownValue, const sf::Vector2f &position)
+{
+    m_particles.emplace_back(
+        std::make_unique<CountdownParticle>(countdownValue, position)
     );
 }
 

@@ -119,8 +119,6 @@ void WaitingState::onEnter(BaseStateData *data)
         pr::dialogManager().message("Error","Failed to connect to the server");
         pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     } else {
-
-        std::cout << "Successfully connected to server" << std::endl;
         m_content.setString("Waiting for player...");
     }
 }

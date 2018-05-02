@@ -87,10 +87,9 @@ private:
     sf::Text m_p2ScoreText;
 
     /**
-     * @brief m_countdownText text displayed for
-     * the countdown
+     * @brief lastCountdownValue last countdown displayed value
      */
-    sf::Text m_countdownText;
+    int m_lastCountdownValue = -1;
 
     /**
      * @brief m_nextParticle time until next particle spawn

@@ -72,6 +72,13 @@ public:
     void gainPoint(const sf::Vector2f &position);
 
     /**
+     * @brief countdown countdonw particle
+     * @param countdownValue the text to display inside the counter
+     * @param position position of the counter
+     */
+    void countdown(const std::string &countdownValue, const sf::Vector2f &position);
+
+    /**
      * @brief draw draws all the particles of the generator
      * @param renderer renderer to use
      */
