@@ -51,6 +51,8 @@ WaitingState::WaitingState() :
     m_menu(),
     m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
+    Button &btn =  *m_menu.addCenteredButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f);
+    pr::connect(btn.clickedEvent, &WaitingState::cancelClicked, this);
 }
 
 
@@ -73,7 +75,7 @@ void WaitingState::cancelClicked()
 
 void WaitingState::update(const sf::Time &elapsed)
 {
-    Q_UNUSED(elapsed);
+    m_menu.update(elapsed);
 
     //Blinking point
     bool startGame = false;
