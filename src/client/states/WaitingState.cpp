@@ -56,10 +56,12 @@ WaitingState::WaitingState() :
 
 void WaitingState::draw(Renderer& renderer) const
 {
+    m_menu.draw(renderer);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)
 {
+    m_menu.handleEvent(ev);
 }
 
 
@@ -112,9 +114,12 @@ void WaitingState::onEnter(BaseStateData *data)
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
     pr::socket().setBlocking(false);
     if (status != sf::Socket::Done) {
-        std::cerr << "Failed to connect" << std::endl;
+        pr::dialogManager().message("Error","Failed to connect to the server");
+        pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     } else {
+
         std::cout << "Successfully connected to server" << std::endl;
+        m_content.setString("Waiting for player...");
     }
 }
 
