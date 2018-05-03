@@ -30,6 +30,7 @@
  */
 
 #include "SoundEngine.hpp"
+#include "src/common/Math.hpp"
 #include <iostream>
 
 namespace mp {
@@ -40,10 +41,15 @@ SoundEngine::SoundEngine(ResourcesManager& sManager) :
 
 }
 
-void SoundEngine::playSound(SOUND_TYPE s)
+void SoundEngine::playSound(SOUND_TYPE s, const sf::Vector3f &position)
 {
     if(m_isMuted)return;
     sf::Sound &sound = m_manager.getSound(toSoundName(s));
+
+
+    sound.setRelativeToListener(math::length(position) != 0);
+    sound.setPosition(position);
+
     sound.play();
 }
 

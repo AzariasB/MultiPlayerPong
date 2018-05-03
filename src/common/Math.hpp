@@ -10,6 +10,7 @@
 
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/System/Vector3.hpp>
 #include <Box2D/Common/b2Math.h>
 #include <string>
 #include <cstdlib>
@@ -87,6 +88,14 @@ float pixToMeters(int pixels);
  * @return the equivalent pixel value
  */
 int metersToPix(float meters);
+
+
+/**
+ * @brief length the lenght of the given vector3
+ * @param orig the vector to calculate the length from
+ * @return the length of this vector
+ */
+float length(const sf::Vector3f &orig);
 
 }
 

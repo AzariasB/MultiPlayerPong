@@ -83,6 +83,19 @@ bool Lobby::acceptSocket(sf::TcpListener& listener, std::unique_ptr<sf::TcpSocke
     return true;
 }
 
+bool Lobby::pollEvent(std::pair<sf::Event, Player *> &event)
+{
+    m_eventsMutex.lock();
+    if(m_events.size() == 0){
+        m_eventsMutex.unlock();
+        return false;
+    }
+    event = m_events.front();
+    m_events.pop();
+    m_eventsMutex.unlock();
+    return true;
+}
+
 void Lobby::start()
 {
     sf::Packet startPacket;
@@ -106,7 +119,12 @@ void Lobby::start()
         running = !game.playerWon();
         //        if(tryAddPowerup(elapsed)){
         //            std::cout << "Adding a powerup\n";
+
         //        }
+        std::pair<sf::Event, Player*> ev;
+        while(pollEvent(ev)){
+            game.handleEvent(ev.first, *ev.second);
+        }
 
         game.update(elapsed);
         if (totalTime.asMilliseconds() > 1) {
@@ -117,7 +135,7 @@ void Lobby::start()
             game.clearNewPowerUps();
             totalTime = sf::Time(); // Reset total time
         }
-        //sf::sleep(sf::milliseconds(1));
+        sf::sleep(sf::milliseconds(10));
         socketMutex.lock();
         if (!socket1 || !socket2) {
             socketMutex.unlock();
@@ -196,10 +214,8 @@ void Lobby::listenSockets()
 {
     while (1) {
         if (!selector.wait())continue;
-        socketMutex.lock();
         receiveSocket(socket1, game.getPlayer1());
         receiveSocket(socket2, game.getPlayer2());
-        socketMutex.unlock();
         if (isFinished())
             break;
     }
@@ -221,9 +237,13 @@ void Lobby::receiveSocket(std::unique_ptr<sf::TcpSocket>& toReceive, Player &pla
         key = static_cast<sf::Keyboard::Key> (evtKey);
         ev.type = type;
         ev.key.code = key;
-        game.handleEvent(ev, player);
+        m_eventsMutex.lock();
+        m_events.emplace(ev, &player);
+        m_eventsMutex.unlock();
     } else /* if (rcvStatus == sf::Socket::Disconnected) */ {
+        socketMutex.lock();
         toReceive = std::unique_ptr<sf::TcpSocket>{};
+        socketMutex.unlock();
     }
 }
 

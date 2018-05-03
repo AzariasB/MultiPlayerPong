@@ -71,6 +71,10 @@ int math::sign(float f)
     return f < 0 ? -1 : 1;
 }
 
+float math::length(const sf::Vector3f &orig)
+{
+    return sqrtf((orig.x * orig.x) + (orig.y * orig.y) + (orig.z * orig.z));
+}
 
 sf::Vector2f math::normalize(const sf::Vector2f &orig)
 {

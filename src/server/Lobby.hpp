@@ -35,6 +35,7 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 #include <memory>
+#include <queue>
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/SocketSelector.hpp>
 
@@ -158,6 +159,14 @@ private:
      */
     void setState(LOBBY_STATE nwState);
 
+
+    /**
+     * @brief pollEvent used in the main loop to get access to the events
+     * @param event a pair containing the event trigerred by the player, and a pointer to the player who trigerred it
+     * @return if an event was polled
+     */
+    bool pollEvent(std::pair<sf::Event, Player*> &event);
+
     /**
      * @brief game the lobby's game
      */
@@ -187,6 +196,13 @@ private:
      * @brief socketMutex mutex to lock any modifications of the sockets
      */
     sf::Mutex socketMutex;
+
+    sf::Mutex m_eventsMutex;
+
+    /**
+     * @brief m_events
+     */
+    std::queue<std::pair<sf::Event,Player*>> m_events;
 
     /**
      * @brief m_timeSinceLastPowerUp time since last powerup poped up

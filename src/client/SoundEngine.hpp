@@ -52,7 +52,9 @@ public:
     enum SOUND_TYPE {
         BOUNCE,
         CLICK,
-        ROLLOVER
+        ROLLOVER,
+        NOMRAL_BIP,
+        HIGH_BIP
     };
 
     /**
@@ -72,7 +74,7 @@ public:
      * @brief playSound plays the given sound's type
      * @param s the type of the sound to play
      */
-    void playSound(SOUND_TYPE s);
+    void playSound(SOUND_TYPE s, const sf::Vector3f &position = {0,0,0});
 
 
     void mute()

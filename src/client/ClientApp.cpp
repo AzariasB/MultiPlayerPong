@@ -78,6 +78,8 @@ ClientApp::ClientApp() :
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
     m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
     m_sEngine.saveSound(SoundEngine::ROLLOVER, ":/sounds/rollover.wav");
+    m_sEngine.saveSound(SoundEngine::NOMRAL_BIP, ":/sounds/normal_bip.ogg");
+    m_sEngine.saveSound(SoundEngine::HIGH_BIP, ":/sounds/high_bip.wav");
     window.setKeyRepeatEnabled(false);
 }
 
