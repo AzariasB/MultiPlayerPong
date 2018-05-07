@@ -112,7 +112,7 @@ void Game::updatePlaying(const sf::Time &elapsed)
 
     if (mainBall.getPosition().x < -BALL_RADIUS) {
         m_evManager.trigger(lostEvent, 1);//Player 1 lost
-    } else if (mainBall.getPosition().x > SF_ARENA_WIDTH) {
+    } else if (mainBall.getPosition().x > ARENA_WIDTH) {
         m_evManager.trigger(lostEvent, 2);
     }
 

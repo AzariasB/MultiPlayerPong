@@ -143,6 +143,7 @@ void Lobby::start()
         }
         socketMutex.unlock();
     }
+    std::cout << "Game ended" << std::endl;
 
     if (socket1 && socket2) { // One player lost
         sf::Packet lastPacket;
