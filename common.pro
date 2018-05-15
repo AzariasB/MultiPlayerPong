@@ -8,15 +8,13 @@ QT              -= gui
 CONFIG          += c++14
 QMAKE_CXXFLAGS  += -std=c++14
 
-win32:INCLUDEPATH += C:\SFML-2.4.2\include C:\Box2D\include
+win32:INCLUDEPATH += C:\SFML-2.5.0\include C:\Box2D\include
 win32:DEFINES += "SFML_STATIC"
-win32:LIBS += -LC:\SFML-2.4.2\lib  -lsfml-network-s-d -lsfml-system-s-d \
-            -lws2_32 -lwinmm
+win32:LIBS += -LC:\SFML-2.5.0\lib ..\..\lib\Box2D.lib
 
 unix:INCLUDEPATH += /usr/local/include
 unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system
-
-LIBS += ../../lib/libBox2D.a
+unix:LIBS += ../../lib/libBox2D.a
 
 SOURCES +=\
     src/main.cpp \

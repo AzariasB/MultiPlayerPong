@@ -6,3 +6,4 @@ bin
 *.pro.user
 Makefile
 *.a
+*.lib
