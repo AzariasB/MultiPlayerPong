@@ -14,7 +14,7 @@ win32:LIBS += -LC:\SFML-2.4.2\lib  -lsfml-network-s-d -lsfml-system-s-d \
             -lws2_32 -lwinmm
 
 unix:INCLUDEPATH += /usr/local/include
-unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system ../../lib/libenet.a
+unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system
 
 LIBS += ../../lib/libBox2D.a
 
