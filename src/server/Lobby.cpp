@@ -162,6 +162,7 @@ void Lobby::start()
 
 bool Lobby::tryAddPowerup(const sf::Time &elapsed)
 {
+    /*
     m_nextPowerup -= elapsed;
     if(m_nextPowerup > sf::Time::Zero)return false;
     m_nextPowerup = sf::seconds(3);
@@ -170,6 +171,7 @@ bool Lobby::tryAddPowerup(const sf::Time &elapsed)
     int dirLeft = math::rrand(-100, 100);
     int dirUp = math::rrand(-100, 100);
     game.addPowerUp(pt,sf::Vector2f(SF_ARENA_WIDTH/2, SF_ARENA_HEIGHT/2), math::normalize(sf::Vector2f(dirLeft, dirUp)));
+    */
     return true;
 }
 
