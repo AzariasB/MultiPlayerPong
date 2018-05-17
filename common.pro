@@ -13,7 +13,7 @@ win32:DEFINES += "SFML_STATIC"
 win32:LIBS += -LC:\SFML-2.5.0\lib ..\..\lib\Box2D.lib
 
 unix:INCLUDEPATH += /usr/local/include
-unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system
+unix:LIBS +=  -L/usr/local/lib
 unix:LIBS += ../../lib/libBox2D.a
 
 SOURCES +=\

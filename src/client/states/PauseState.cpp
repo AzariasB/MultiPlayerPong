@@ -69,9 +69,14 @@ void PauseState::onEnter(BaseStateData *data)
 
 }
 
+void PauseState::menu()
+{
+
+}
+
 void PauseState::resume()
 {
-    pr::stateMachine().goToState();
+    //pr::stateMachine().goToState();
 }
 
 }
