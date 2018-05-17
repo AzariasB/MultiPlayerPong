@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017-2018 azarias.
+ * Copyright 2017 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,56 +23,59 @@
  */
 
 /*
- * File:   PlaySoloState.cpp
+ * File:   PauseState.cpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 7/5/2018
  */
-
-#include "PlaySoloState.hpp"
+#include "PauseState.hpp"
+#include "src/common/Config.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientApp.hpp"
-
+#include "src/client/ClientConf.hpp"
+#include "src/client/StateMachine.hpp"
 
 namespace mp {
 
-
-PlaySoloState::PlaySoloState():
-    PlayState()
+PauseState::PauseState():
+    m_menu()
 {
-    ClientApp::getInstance().setPNumber(1);
+    m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
-    pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
-    pr::game().getPlayer2().getPaddle().setIsAI(true);
-    pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);
-    pr::connect(pr::game().hitPaddleEvent, &PlaySoloState::hitPaddleEvent, this);
+    Button &resume = *m_menu.addCenteredButton("Resume", SF_ARENA_WIDTH / 2, 250);
+    pr::connect(resume.clickedEvent, &PauseState::resume, this);
+
+    Button &menuBtn = *m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, 300);
+    pr::connect(menuBtn.clickedEvent, &PauseState::menu, this);
 }
 
-void PlaySoloState::handleEvent(const sf::Event &ev)
+
+void PauseState::draw(Renderer &renderer) const
 {
-    PlayState::handleEvent(ev);
-    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState(cc::PAUSE);
-    }
+    pr::stateMachine().getStateAt(cc::PLAY_SOLO).draw(renderer);
+    m_menu.draw(renderer);
 }
 
-void PlaySoloState::handleLoss(int looser)
+void PauseState::update(const sf::Time &elapsed)
 {
-    bool playerWon = looser == 2;
-    pr::game().getPlayer1().setIsWinner(playerWon);
-    pr::game().getPlayer2().setIsWinner(!playerWon);
+    m_menu.update(elapsed);
 }
 
-void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
+void PauseState::handleEvent(const sf::Event &ev)
 {
-    B2_NOT_USED(position);
-    Player &p = pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
-    p.gainPoint();
+    m_menu.handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
+        resume();
 }
 
-PlaySoloState::~PlaySoloState()
-{
 
+void PauseState::menu()
+{
+    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);
+}
+
+void PauseState::resume()
+{
+    pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
 }
 
 }

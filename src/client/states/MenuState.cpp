@@ -54,12 +54,15 @@ MenuState::MenuState() :
     currentHeight += multiPlayerButton.getHeight();
     const Button &optionButton = *m_menu.addCenteredButton("Options", halfWay,currentHeight);
     currentHeight += optionButton.getHeight();
+    const Button &creditsButton = *m_menu.addCenteredButton("Credits", halfWay, currentHeight);
+    currentHeight += creditsButton.getHeight();
     const Button &quitButton = *m_menu.addCenteredButton("Quit", halfWay, currentHeight);
 
 
     pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_UP) );
     pr::connect(multiPlayerButton.clickedEvent, &MenuState::showInputDialog, this);
     pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
+    pr::connect(creditsButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::CREDITS, TransitionData::GO_LEFT));
     pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
 }
 

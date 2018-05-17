@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017-2018 azarias.
+ * Copyright 2017 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,56 +23,53 @@
  */
 
 /*
- * File:   PlaySoloState.cpp
+ * File:   CreditsState.cpp
  * Author: azarias
  *
- * Created on 12/03/2018
+ * Created on 17/5/2018
  */
-
-#include "PlaySoloState.hpp"
+#include "CreditsState.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientApp.hpp"
+#include "src/client/StateMachine.hpp"
 
 
 namespace mp {
 
-
-PlaySoloState::PlaySoloState():
-    PlayState()
+CreditsState::CreditsState():
+    mMenu()
 {
-    ClientApp::getInstance().setPNumber(1);
+    mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 40);
 
-    pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
-    pr::game().getPlayer2().getPaddle().setIsAI(true);
-    pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);
-    pr::connect(pr::game().hitPaddleEvent, &PlaySoloState::hitPaddleEvent, this);
+    mMenu.addLabel("- Programming : Azarias Boutin", 10, 150);
+    mMenu.addLabel("- Drawing : Azarias Boutin", 10, 200);
+    mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, 250);
+    mMenu.addLabel("- Font 'Whatever it takes' (http://brittneymurphydesign.com)", 10, 300);
+
+    Button &btn = *mMenu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 50);
+    pr::connect(btn.clickedEvent, &CreditsState::menu, this);
 }
 
-void PlaySoloState::handleEvent(const sf::Event &ev)
+
+void CreditsState::handleEvent(const sf::Event &ev)
 {
-    PlayState::handleEvent(ev);
-    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState(cc::PAUSE);
-    }
+    mMenu.handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
+        menu();
 }
 
-void PlaySoloState::handleLoss(int looser)
+void CreditsState::update(const sf::Time &elapsed)
 {
-    bool playerWon = looser == 2;
-    pr::game().getPlayer1().setIsWinner(playerWon);
-    pr::game().getPlayer2().setIsWinner(!playerWon);
+    mMenu.update(elapsed);
 }
 
-void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
+void CreditsState::draw(Renderer &renderer) const
 {
-    B2_NOT_USED(position);
-    Player &p = pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
-    p.gainPoint();
+    mMenu.draw(renderer);
 }
 
-PlaySoloState::~PlaySoloState()
+void CreditsState::menu()
 {
-
+    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
 }

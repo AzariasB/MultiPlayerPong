@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017-2018 azarias.
+ * Copyright 2017 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,42 +23,65 @@
  */
 
 /*
- * File:   Config.h
+ * File:   PauseState.hpp
  * Author: azarias
  *
- * Created on 24/10/2017
+ * Created on 7/5/2018
  */
+
 #pragma once
+
+#include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 namespace mp {
 
-//Server
-constexpr int DEFAULT_PORT = 5300;
+/**
+ * @brief The PauseState class
+ * State used only when playing solo
+ * allows the user to pause the game to quit,
+ * or to change some options
+ */
+class PauseState : public State
+{
+public:
+    PauseState();
 
-constexpr float ARENA_WIDTH = 12.5;
-constexpr float ARENA_HEIGHT = 9.375;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer &renderer) const override;
 
-//Paddle
-constexpr float PADDLE_WIDTH = 0.1;
-constexpr float PADDLE_HEIGHT = 1;
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
 
-//Ball
-constexpr float BALL_RADIUS = 0.2;
-constexpr float BALL_START_X = ARENA_WIDTH / 2.f;
-constexpr float BALL_START_Y = ARENA_HEIGHT  / 2.f;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event &ev) override;
 
-constexpr float BALL_DIR_X = -3;
-constexpr float BALL_DIR_Y = 1;
+private:
 
-//Wall
-constexpr float WALL_WITDH = ARENA_WIDTH;
-constexpr float WALL_HEIGHT = PADDLE_WIDTH;
+    Menu m_menu;
 
-//Powerups
-constexpr float POWERUP_SIDE = 50;
+    /**
+     * @brief resume resumes the game
+     * returns to the game state
+     */
+    void resume();
 
-//Physics
-constexpr int VELOCITY_ITERATIONS = 8;
-constexpr int POSITION_ITERATIONS = 3;
+
+    /**
+     * @brief menu goes to the menu state
+     * and quits the current game
+     */
+    void menu();
+};
+
 
 }
