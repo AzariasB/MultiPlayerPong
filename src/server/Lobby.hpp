@@ -32,10 +32,12 @@
 #pragma once
 
 
-#include <SFML/System/NonCopyable.hpp>
-#include <SFML/Network/TcpSocket.hpp>
 #include <memory>
 #include <queue>
+#include <atomic>
+
+#include <SFML/System/NonCopyable.hpp>
+#include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/SocketSelector.hpp>
 
@@ -129,7 +131,7 @@ private:
     /**
      * @brief state the lobby's current state
      */
-    LOBBY_STATE state = LOBBY_STATE::WAIT;
+    std::atomic<LOBBY_STATE> mState = { LOBBY_STATE::WAIT };
 
     /**
      * @brief receiveSocket received data from the given socket
@@ -208,11 +210,6 @@ private:
      * @brief m_timeSinceLastPowerUp time since last powerup poped up
      */
     sf::Time m_nextPowerup;
-
-    /**
-     * @brief stateMutex mutex to lock when getting/setting the state's value
-     */
-    mutable sf::Mutex stateMutex;
 };
 
 /**

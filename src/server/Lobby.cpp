@@ -155,7 +155,8 @@ void Lobby::start()
     } else {//One player disconnected
         earlyWinner();
     }
-    setState(LOBBY_STATE::STOP);
+
+    mState = { LOBBY_STATE::STOP };
     listeningThread.wait();
 }
 
@@ -204,13 +205,6 @@ void Lobby::earlyWinner()
     }
 }
 
-void Lobby::setState(LOBBY_STATE nwState)
-{
-    stateMutex.lock();
-    state = nwState;
-    stateMutex.unlock();
-}
-
 void Lobby::listenSockets()
 {
     while (1) {
@@ -250,11 +244,7 @@ void Lobby::receiveSocket(std::unique_ptr<sf::TcpSocket>& toReceive, Player &pla
 
 bool Lobby::isFinished() const
 {
-    bool isFinished = false;
-    stateMutex.lock();
-    isFinished = state == LOBBY_STATE::STOP;
-    stateMutex.unlock();
-    return isFinished;
+    return mState == LOBBY_STATE::STOP;
 }
 
 }
