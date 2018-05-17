@@ -5,8 +5,8 @@
 #-------------------------------------------------
 
 include(common.pro)
-win32:LIBS += -lsfml-audio-s-d -lsfml-graphics-s-d -lsfml-window-s-d \
-            -ljpeg -lfreetype -lopengl32 -lgdi32 -lvorbisfile -lvorbisenc -lvorbis -lflac -lopenal32 -logg
+win32:LIBS += -lsfml-audio-s-d -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-network-s-d -lsfml-system-s-d \
+            -lfreetype -lopengl32 -lgdi32 -lvorbisfile -lvorbisenc -lvorbis -lflac -lopenal32 -logg -lws2_32 -lwinmm
 
 unix:LIBS +=  -L/usr/local/lib -lsfml-audio -lsfml-graphics -lsfml-window
 DEFINES += "CLIENT"

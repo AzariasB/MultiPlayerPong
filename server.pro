@@ -6,6 +6,8 @@
 
 include(common.pro)
 
+win32:LIBS += -lsfml-network-s-d -lsfml-system-s-d -lws2_32 -lwinmm
+
 DEFINES += "SERVER"
 
 
