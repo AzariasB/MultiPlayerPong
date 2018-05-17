@@ -39,9 +39,9 @@ namespace mp {
 PauseState::PauseState():
     m_menu()
 {
-    m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 50);
+    m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
-    Button &resume = *m_menu.addCenteredButton("Resume", SF_ARENA_WIDTH / 2, 150);
+    Button &resume = *m_menu.addCenteredButton("Resume", SF_ARENA_WIDTH / 2, 250);
     pr::connect(resume.clickedEvent, &PauseState::resume, this);
 
     Button &menuBtn = *m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, 300);
@@ -51,6 +51,7 @@ PauseState::PauseState():
 
 void PauseState::draw(Renderer &renderer) const
 {
+    pr::stateMachine().getStateAt(cc::PLAY_SOLO).draw(renderer);
     m_menu.draw(renderer);
 }
 
@@ -62,6 +63,8 @@ void PauseState::update(const sf::Time &elapsed)
 void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
+        resume();
 }
 
 void PauseState::onEnter(BaseStateData *data)
@@ -71,12 +74,12 @@ void PauseState::onEnter(BaseStateData *data)
 
 void PauseState::menu()
 {
-
+    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);
 }
 
 void PauseState::resume()
 {
-    //pr::stateMachine().goToState();
+    pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
 }
 
 }

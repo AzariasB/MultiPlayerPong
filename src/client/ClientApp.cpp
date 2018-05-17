@@ -39,6 +39,7 @@
 #include "states/WaitingState.hpp"
 #include "states/EndState.hpp"
 #include "states/MenuState.hpp"
+#include "states/PauseState.hpp"
 #include "states/OptionState.hpp"
 #include "states/KeyBindingState.hpp"
 #include "states/TransitionState.hpp"
@@ -97,6 +98,7 @@ void ClientApp::initStates()
     stateMachine.addState<KeyBindingState>(cc::KEY_BINDINGS);
     stateMachine.addState<TransitionState>(cc::TRANSITION);
     stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
+    stateMachine.addState<PauseState>(cc::PAUSE);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)

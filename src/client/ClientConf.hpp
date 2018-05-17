@@ -49,6 +49,7 @@ namespace mp
             MENU,//First state
             PLAY_MULTIPLAYER,
             PLAY_SOLO,
+            PAUSE,
             OPTIONS,
             KEY_BINDINGS,
             WAITING,
