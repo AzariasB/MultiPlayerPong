@@ -35,22 +35,52 @@
 
 namespace mp {
 
-
+/**
+ * @brief The CreditsState class
+ * State used to credit all the work
+ * used for this project, all the frameworks
+ * librairies, artworks, ...
+ * It's just a simple menu with a single
+ * button to go back to the menu
+ */
 class CreditsState : public State
 {
 public:
+    /**
+     * @brief CreditsState
+     * empty constructor
+     */
     CreditsState();
 
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
     void draw(Renderer &renderer) const override;
 
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
     void handleEvent(const sf::Event &ev) override;
 
 private:
 
+    /**
+     * @brief menu transitions back to the menu
+     */
     void menu();
 
+    /**
+     * @brief mMenu the main menu
+     * to display, with all the credits in it
+     */
     Menu mMenu;
 };
 
