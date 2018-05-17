@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017-2018 azarias.
+ * Copyright 2017 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,42 +23,35 @@
  */
 
 /*
- * File:   Config.h
+ * File:   CreditsState.hpp
  * Author: azarias
  *
- * Created on 24/10/2017
+ * Created on 17/5/2018
  */
 #pragma once
 
+#include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
+
 namespace mp {
 
-//Server
-constexpr int DEFAULT_PORT = 5300;
 
-constexpr float ARENA_WIDTH = 12.5;
-constexpr float ARENA_HEIGHT = 9.375;
+class CreditsState : public State
+{
+public:
+    CreditsState();
 
-//Paddle
-constexpr float PADDLE_WIDTH = 0.1;
-constexpr float PADDLE_HEIGHT = 1;
+    void update(const sf::Time &elapsed) override;
 
-//Ball
-constexpr float BALL_RADIUS = 0.2;
-constexpr float BALL_START_X = ARENA_WIDTH / 2.f;
-constexpr float BALL_START_Y = ARENA_HEIGHT  / 2.f;
+    void draw(Renderer &renderer) const override;
 
-constexpr float BALL_DIR_X = -3;
-constexpr float BALL_DIR_Y = 1;
+    void handleEvent(const sf::Event &ev) override;
 
-//Wall
-constexpr float WALL_WITDH = ARENA_WIDTH;
-constexpr float WALL_HEIGHT = PADDLE_WIDTH;
+private:
 
-//Powerups
-constexpr float POWERUP_SIDE = 50;
+    void menu();
 
-//Physics
-constexpr int VELOCITY_ITERATIONS = 8;
-constexpr int POSITION_ITERATIONS = 3;
+    Menu mMenu;
+};
 
 }

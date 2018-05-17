@@ -39,6 +39,12 @@ namespace mp
     constexpr int SF_DIALOG_WIDTH = 700;
     constexpr int SF_DIALOG_HEIGHT = 200;
 
+    //Dimensions (all in meters)
+    //Arena
+    constexpr int SF_ARENA_WIDTH = 800;
+    constexpr int SF_ARENA_HEIGHT = 600;
+
+
     namespace cc//namespace client conf
     {
         /**
@@ -50,6 +56,7 @@ namespace mp
             PLAY_MULTIPLAYER,
             PLAY_SOLO,
             PAUSE,
+            CREDITS,
             OPTIONS,
             KEY_BINDINGS,
             WAITING,

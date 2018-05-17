@@ -9,7 +9,8 @@ SOURCES +=\
     $$PWD/TransitionState.cpp \
     $$PWD/PlayMultiplayerState.cpp \
     $$PWD/WaitingState.cpp \
-    $$PWD/PauseState.cpp
+    $$PWD/PauseState.cpp \
+    $$PWD/CreditsState.cpp
 
 HEADERS +=\
     $$PWD/EndState.hpp \
@@ -21,4 +22,5 @@ HEADERS +=\
     $$PWD/TransitionState.hpp \
     $$PWD/PlayMultiplayerState.hpp \
     $$PWD/WaitingState.hpp \
-    $$PWD/PauseState.hpp
+    $$PWD/PauseState.hpp \
+    $$PWD/CreditsState.hpp

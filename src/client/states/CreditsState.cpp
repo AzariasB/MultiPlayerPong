@@ -23,59 +23,53 @@
  */
 
 /*
- * File:   PauseState.cpp
+ * File:   CreditsState.cpp
  * Author: azarias
  *
- * Created on 7/5/2018
+ * Created on 17/5/2018
  */
-#include "PauseState.hpp"
-#include "src/common/Config.hpp"
+#include "CreditsState.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientConf.hpp"
 #include "src/client/StateMachine.hpp"
+
 
 namespace mp {
 
-PauseState::PauseState():
-    m_menu()
+CreditsState::CreditsState():
+    mMenu()
 {
-    m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
+    mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 40);
 
-    Button &resume = *m_menu.addCenteredButton("Resume", SF_ARENA_WIDTH / 2, 250);
-    pr::connect(resume.clickedEvent, &PauseState::resume, this);
+    mMenu.addLabel("- Programming : Azarias Boutin", 10, 150);
+    mMenu.addLabel("- Drawing : Azarias Boutin", 10, 200);
+    mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, 250);
+    mMenu.addLabel("- Font 'Whatever it takes' (http://brittneymurphydesign.com)", 10, 300);
 
-    Button &menuBtn = *m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, 300);
-    pr::connect(menuBtn.clickedEvent, &PauseState::menu, this);
+    Button &btn = *mMenu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 50);
+    pr::connect(btn.clickedEvent, &CreditsState::menu, this);
 }
 
 
-void PauseState::draw(Renderer &renderer) const
+void CreditsState::handleEvent(const sf::Event &ev)
 {
-    pr::stateMachine().getStateAt(cc::PLAY_SOLO).draw(renderer);
-    m_menu.draw(renderer);
-}
-
-void PauseState::update(const sf::Time &elapsed)
-{
-    m_menu.update(elapsed);
-}
-
-void PauseState::handleEvent(const sf::Event &ev)
-{
-    m_menu.handleEvent(ev);
+    mMenu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        resume();
+        menu();
 }
 
-
-void PauseState::menu()
+void CreditsState::update(const sf::Time &elapsed)
 {
-    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);
+    mMenu.update(elapsed);
 }
 
-void PauseState::resume()
+void CreditsState::draw(Renderer &renderer) const
 {
-    pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+    mMenu.draw(renderer);
+}
+
+void CreditsState::menu()
+{
+    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
 }

@@ -43,6 +43,7 @@
 #include "states/OptionState.hpp"
 #include "states/KeyBindingState.hpp"
 #include "states/TransitionState.hpp"
+#include "states/CreditsState.hpp"
 #include "ClientConf.hpp"
 
 namespace mp {
@@ -66,10 +67,7 @@ ClientApp::ClientApp() :
     m_dialogManager()
 {
     //Textures
-    rManager.registerTexture(":/icons.png", "icons");
-    rManager.registerTexture(":/sketchy.jpg","sketchy");
     rManager.registerTexture(":/sound_icons.png","sound_icons");
-    //rManager.registerShader(":/shaders/wobble.frag","main"); /* shader not working on me computer :( */
     rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
     rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
     rManager.registerTexture(":/animations/ball_extend","ball_extend");
@@ -99,6 +97,7 @@ void ClientApp::initStates()
     stateMachine.addState<TransitionState>(cc::TRANSITION);
     stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
     stateMachine.addState<PauseState>(cc::PAUSE);
+    stateMachine.addState<CreditsState>(cc::CREDITS);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)

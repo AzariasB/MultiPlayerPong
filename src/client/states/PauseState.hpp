@@ -65,12 +65,6 @@ public:
      */
     void handleEvent(const sf::Event &ev) override;
 
-    /**
-     * @brief onEnter inherited function
-     * @param data
-     */
-    void onEnter(BaseStateData *data) override;
-
 private:
 
     Menu m_menu;

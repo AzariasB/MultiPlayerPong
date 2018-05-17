@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="icons.png">res/icons.png</file>
         <file alias="sound_icons.png">res/sound_icons.png</file>
-        <file alias="sketchy.jpg">res/sketchy.jpg</file>
         <file alias="quicksand.otf">res/quicksand.otf</file>
         <file alias="WhateverItTakes.ttf">res/WhateverItTakes.ttf</file>
     </qresource>
@@ -22,8 +20,5 @@
         <file alias="rollover.wav" >res/UI_SFX_Set/rollover1.wav</file>
         <file alias="normal_bip.ogg">res/ping_pong_8bit_beeep.ogg</file>
         <file alias="high_bip.wav" >res/ping_pong_8bit_biiip.wav</file>
-    </qresource>
-    <qresource prefix="/shaders" >
-        <file alias="wobble.frag">res/wobble.frag</file>
     </qresource>
 </RCC>
