@@ -40,10 +40,15 @@ CreditsState::CreditsState():
 {
     mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 40);
 
-    mMenu.addLabel("- Programming : Azarias Boutin", 10, 150);
-    mMenu.addLabel("- Drawing : Azarias Boutin", 10, 200);
-    mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, 250);
-    mMenu.addLabel("- Font 'Whatever it takes' (http://brittneymurphydesign.com)", 10, 300);
+    float he = 150;
+
+    he += mMenu.addLabel("- Programming : Azarias Boutin", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Drawing : Azarias Boutin", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Font 'Whatever it takes' (brittneymurphydesign.com)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- SFML 2.5.0 (sfml-dev.org)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Box2D 2.3.1 (box2d.org)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Qt 5.10.1 (qt.io)", 10, he)->getLocalBounds().height;
 
     Button &btn = *mMenu.addCenteredButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 50);
     pr::connect(btn.clickedEvent, &CreditsState::menu, this);
