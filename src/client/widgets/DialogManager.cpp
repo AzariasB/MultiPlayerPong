@@ -70,7 +70,7 @@ bool DialogManager::hasActiveDialogs() const
     return m_dialogs.size() > 0;
 }
 
-void DialogManager::hideDialog(const sf::Uint64 &dialogId)
+void DialogManager::hideDialog(sf::Uint64 dialogId)
 {
     if(m_dialogs[dialogId]){
         m_dialogs[dialogId]->hide();

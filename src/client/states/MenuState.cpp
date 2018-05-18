@@ -46,6 +46,9 @@ MenuState::~MenuState()
 MenuState::MenuState() :
     m_menu()
 {
+
+    m_menu.addCenteredLabel("MultiPlayerPong", SF_ARENA_WIDTH/2.f, 100, 50);
+
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
     const Button &soloButton = *m_menu.addCenteredButton("Solo",halfWay ,currentHeight);
@@ -63,7 +66,7 @@ MenuState::MenuState() :
     pr::connect(multiPlayerButton.clickedEvent, &MenuState::showInputDialog, this);
     pr::connect(optionButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
     pr::connect(creditsButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::CREDITS, TransitionData::GO_LEFT));
-    pr::connect(quitButton.clickedEvent, &ClientApp::quit, &ClientApp::getInstance());
+    pr::connect(quitButton.clickedEvent, &MenuState::requestQuit, this);
 }
 
 void MenuState::showInputDialog()
@@ -95,6 +98,13 @@ void MenuState::ipEntered(const std::string &entered)
         DialogMessage &msg = pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
         pr::connect(msg.okClickedEvent, &Dialog::hide, static_cast<Dialog*>(&msg));
     }
+}
+
+void MenuState::requestQuit()
+{
+    DialogQuestion &leave = pr::dialogManager().question("Quit","Do you really want to quit ?");
+    pr::connect(leave.yesClickedEvent, &ClientApp::quit, &ClientApp::getInstance());
+    pr::connect(leave.noClickedEvent, &DialogManager::hideDialog, &pr::dialogManager(), leave.id());
 }
 
 void MenuState::draw(Renderer& renderer) const

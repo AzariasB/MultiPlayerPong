@@ -91,6 +91,12 @@ public:
 private:
 
     /**
+     * @brief requestQuit shows a dialog asking
+     * if the user really wants to leave
+     */
+    void requestQuit();
+
+    /**
      * @brief ipEntered method called whenever the ip dialog is confirmed
      * @param entered
      */

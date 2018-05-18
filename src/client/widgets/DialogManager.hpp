@@ -92,7 +92,7 @@ public:
      * if the dialog does not exist or is already hidden/hiding,
      * will do nothing
      */
-    void hideDialog(const sf::Uint64 &dialogId);
+    void hideDialog(sf::Uint64 dialogId);
 
     /**
      * @brief input creates an input dialog (a dialog with a simple text input)
