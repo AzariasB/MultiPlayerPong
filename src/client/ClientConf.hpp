@@ -65,13 +65,15 @@ namespace mp
         };
 
         namespace colors {
-            const sf::Color backgroundColor = sf::Color(0,10, 30);
-            const sf::Color dialogBackgroundColor = sf::Color(0,20, 50);
-            const sf::Color dialogOutlineColor = sf::Color(220, 220, 220);
-            const sf::Color fontColor = sf::Color(220, 220, 220);
-            const sf::Color paddleColor = sf::Color(128, 255, 0);
-            const sf::Color ballColor = sf::Color(226, 88, 34);
-            const sf::Color wallColor = sf::Color(200,200,200);
+            const sf::Color backgroundColor(0,10, 30);
+            const sf::Color buttonColor(0, 20, 60);
+            const sf::Color dialogBackgroundColor(0,20, 50);
+            const sf::Color dialogOutlineColor(220, 220, 220);
+            const sf::Color fontColor(220, 220, 220);
+            const sf::Color higlithColor(255, 89, 84);
+            const sf::Color paddleColor(128, 255, 0);
+            const sf::Color ballColor(226, 88, 34);
+            const sf::Color wallColor(200,200,200);
         }
 
     }

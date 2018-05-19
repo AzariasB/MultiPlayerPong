@@ -90,7 +90,7 @@ public:
 	 * @brief isVisible wether the dialog is currently displayed
 	 * @return wether the dialog is currently displayed
 	 */
-	bool isVisible() const
+    bool isVisible() const
 	{
         return m_state == DIALOG_APPEARING || m_state == DIALOG_VISIBLE;
 	}

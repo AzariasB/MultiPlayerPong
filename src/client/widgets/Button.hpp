@@ -32,12 +32,14 @@
 #pragma once
 
 
+#include <SFML/System.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window/Event.hpp>
-#include "src/common/EventManager.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
+
 #include "Widget.hpp"
+#include "src/lib/twin.hpp"
+#include "src/common/EventManager.hpp"
 #include "src/client/ColorTweening.hpp"
 
 
@@ -170,9 +172,27 @@ private:
      */
     sf::Text m_text;
 
+    /**
+     * @brief m_icon icon of the button (optional)
+     */
     sf::Sprite m_icon;
 
+    /**
+     * @brief m_color text color of the button
+     */
     ColorTweening m_color;
+
+    /**
+     * @brief m_rectWidth tweening used
+     * to animate the button background
+     */
+    twin::Twin<float, float> m_rectWidth;
+
+    /**
+     * @brief m_background background
+     * color of the button
+     */
+    sf::RectangleShape m_background;
 
 public:
     const sf::Uint64 clickedEvent;

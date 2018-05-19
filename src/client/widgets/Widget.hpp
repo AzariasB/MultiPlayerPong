@@ -31,7 +31,10 @@
 
 #pragma once
 
-#include <SFML/Window/Event.hpp>
+namespace sf {
+    class Event;
+    class Time;
+}
 
 namespace mp {
 
@@ -75,6 +78,29 @@ public:
     {
 
     }
+
+    /**
+     * @brief isVisible
+     * @return the visibility of this widget
+     */
+    bool isVisible() const {return m_isVisible;}
+
+    /**
+     * @brief setVisible setter for the visibility of the widget
+     * @param visible
+     */
+    void setVisible(bool visible){m_isVisible = visible;}
+
+
+private:
+    /**
+     * @brief m_isVisible
+     * wether the widget must be
+     * displayed on screen, this must be handled
+     * by the sub-class of the widget
+     */
+    bool m_isVisible = true;
+
 };
 
 

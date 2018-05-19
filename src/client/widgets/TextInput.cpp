@@ -56,6 +56,8 @@ TextInput::TextInput(const sf::Vector2f &position) :
 
 void TextInput::draw(Renderer &renderer) const
 {
+    if(!isVisible())return;
+
     renderer.render(m_background);
     renderer.render(m_text);
 

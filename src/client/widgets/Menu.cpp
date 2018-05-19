@@ -111,6 +111,8 @@ std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureN
 
 void Menu::draw(Renderer &renderer) const
 {
+    if(!isVisible())return;
+
     for(auto &ptr : m_buttons)
         ptr->draw(renderer);
 

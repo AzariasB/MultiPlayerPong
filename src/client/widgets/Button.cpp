@@ -30,6 +30,7 @@
  */
 
 #include <SFML/Window.hpp>
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
@@ -47,6 +48,7 @@ Button::Button(const std::string &text) :
     selectdEvent(pr::nextEventCode()),
     m_color(cc::colors::fontColor)
 {
+    m_background.setFillColor(cc::colors::buttonColor);
     m_text.setFillColor(m_color.get());
 }
 
@@ -56,6 +58,7 @@ Button::Button(const std::string &text, float xPos, float yPos):
     selectdEvent(pr::nextEventCode()),
     m_color(cc::colors::fontColor)
 {
+    m_background.setFillColor(cc::colors::buttonColor);
     setPosition(sf::Vector2f(xPos, yPos));
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
@@ -65,12 +68,15 @@ Button::Button(const std::string &text, float xPos, float yPos):
 void Button::update(const sf::Time &elapsed)
 {
     m_color.update(elapsed.asSeconds());
+    m_rectWidth.step(elapsed.asSeconds());
     updateText();
 }
 
 void Button::setPosition(const sf::Vector2f& position)
 {
     m_text.setPosition(position);
+    //m_background.setPosition(position);
+    m_background.setPosition(position.x, position.y + 9);
 }
 
 void Button::handleEvent(const sf::Event& ev)
@@ -104,6 +110,9 @@ bool Button::isSelectionEvent(const sf::Event &ev) const
 
 void Button::draw(Renderer &renderer) const
 {
+    if(!isVisible())return;
+
+    renderer.render(m_background);
     renderer.render(m_text);
     renderer.render(m_icon);
 }
@@ -115,10 +124,14 @@ void Button::setText(const std::string &text)
 
 void Button::setSelected(bool selected)
 {
+    if(m_hilighted == selected)return;
+
     if(selected){
-        m_color = ColorTweening(m_color.get(), sf::Color::Red, 0.1, twin::easing::linear);
+        m_color = ColorTweening(m_color.get(), cc::colors::higlithColor, 0.1, twin::easing::linear);
+        m_rectWidth = twin::makeTwin(0.f, m_text.getGlobalBounds().width, 0.5f, twin::easing::quintOut);
     }else{
-        m_color = ColorTweening(m_color.get(), sf::Color::White, 0.1, twin::easing::linear);
+        m_color = ColorTweening(m_color.get(), cc::colors::fontColor, 0.1, twin::easing::linear);
+        m_rectWidth = twin::makeTwin(m_text.getGlobalBounds().width, 0.f, 0.5f, twin::easing::quintOut);
     }
     m_hilighted = selected;
     updateText();
@@ -154,6 +167,7 @@ void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
+    m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_text.getGlobalBounds().height));
 }
 
 Button::~Button()
