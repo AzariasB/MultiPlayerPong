@@ -46,7 +46,8 @@ Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
     selectdEvent(pr::nextEventCode()),
-    m_color(cc::colors::fontColor)
+    m_color(cc::colors::fontColor),
+    m_background()
 {
     m_background.setFillColor(cc::colors::buttonColor);
     m_text.setFillColor(m_color.get());
@@ -56,7 +57,8 @@ Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
     selectdEvent(pr::nextEventCode()),
-    m_color(cc::colors::fontColor)
+    m_color(cc::colors::fontColor),
+    m_background()
 {
     m_background.setFillColor(cc::colors::buttonColor);
     setPosition(sf::Vector2f(xPos, yPos));
@@ -167,7 +169,7 @@ void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
-    m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_text.getGlobalBounds().height));
+    m_background.setSize(sf::Vector2f(0, 0));
 }
 
 Button::~Button()

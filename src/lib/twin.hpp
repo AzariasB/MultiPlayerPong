@@ -531,7 +531,11 @@ enum easing{
         }
 
         Twin():
+            from(0),
+            to(0),
+            advance(0),
             finishCallback(noop),
+            totalTime(0),
             easingF(getEasing(linear))
         {
 
@@ -572,6 +576,11 @@ enum easing{
         float progress() const
         {
             return totalProgress;
+        }
+
+        virtual ~Twin()
+        {
+
         }
 
     private:

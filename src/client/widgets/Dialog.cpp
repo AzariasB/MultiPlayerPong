@@ -77,6 +77,7 @@ void Dialog::update(const sf::Time &elapsed)
     if(m_state != DIALOG_HIDDEN){
         m_yTransition.step(elapsed.asSeconds());
         m_yPosition = m_yTransition.get();
+        m_xButton.update(elapsed);
 
         if(m_yTransition.progress() == 1.f){
             if(m_state == DIALOG_APPEARING)
@@ -87,8 +88,6 @@ void Dialog::update(const sf::Time &elapsed)
             }
 
         }
-
-        m_xButton.update(elapsed);
     }
 }
 
@@ -182,10 +181,10 @@ void DialogInput::cancelClicked()
 
 void DialogInput::update(const sf::Time &elapsed)
 {
-    Dialog::update(elapsed);
     m_cancelButton.update(elapsed);
     m_confirmButton.update(elapsed);
     m_input.update(elapsed);
+    Dialog::update(elapsed);
 }
 
 void DialogInput::draw(Renderer &renderer) const
@@ -244,9 +243,9 @@ void DialogQuestion::setQuestion(const std::string &nwQuestion)
 
 void DialogQuestion::update(const sf::Time &elapsed)
 {
-    Dialog::update(elapsed);
     m_yesButton.update(elapsed);
     m_noButton.update(elapsed);
+    Dialog::update(elapsed);
 }
 
 void DialogQuestion::draw(Renderer &renderer) const
@@ -306,8 +305,8 @@ void DialogMessage::setMessage(const std::string &nwMessage)
 
 void DialogMessage::update(const sf::Time &elapsed)
 {
-    Dialog::update(elapsed);
     m_okButton.update(elapsed);
+    Dialog::update(elapsed);
 }
 
 void DialogMessage::draw(Renderer &renderer) const

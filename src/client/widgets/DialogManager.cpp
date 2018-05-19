@@ -56,8 +56,7 @@ void DialogManager::handleEvent(const sf::Event &ev)
 
 void DialogManager::update(const sf::Time &elapsed)
 {
-    for(auto &ptr : m_dialogs)
-        ptr.second->update(elapsed);
+    for(auto &ptr : m_dialogs) ptr.second->update(elapsed);
 }
 
 bool DialogManager::isActiveDialog(const sf::Uint64 &dialogId)
