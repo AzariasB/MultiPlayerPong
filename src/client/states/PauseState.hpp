@@ -77,10 +77,9 @@ private:
 
 
     /**
-     * @brief menu goes to the menu state
-     * and quits the current game
+     * @brief play goes to the play state
      */
-    void menu();
+    void play();
 };
 
 

@@ -60,8 +60,11 @@ OptionState::OptionState():
     startY += fullScreenButton.getHeight() + 50.f;
     pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
 
-    sf::Uint64 backClicked = m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH/2.f , startY )->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH/4.f , startY )->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
+
+    sf::Uint64 playClicked = m_menu.addCenteredButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY)->clickedEvent;
+    pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_RIGHT));
 }
 
 void OptionState::toggleSound()
