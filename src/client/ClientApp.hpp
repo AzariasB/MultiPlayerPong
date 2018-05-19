@@ -193,6 +193,12 @@ public:
      */
     void quit();
 
+    /**
+     * @brief toggleFullScreen toggles the
+     * fullscreen window
+     */
+    void toggleFullScreen();
+
     virtual ~ClientApp();
 
     ClientApp(const ClientApp &) = delete;
@@ -227,7 +233,13 @@ private:
      * @brief window window to use to get events
      * and render stuff
      */
-    sf::RenderWindow window;
+    sf::RenderWindow *window;
+
+    /**
+     * @brief m_isFullscreen wether the current window
+     * is fullscreen
+     */
+    bool m_isFullscreen = false;
 
     /**
      * @brief renderer Object to use to render the game objects,
@@ -282,6 +294,10 @@ private:
      */
     KeyBinding m_keyBinding;
 
+    /**
+     * @brief m_dialogManager the dialog manager
+     * used to create different types of dialogs
+     */
     DialogManager m_dialogManager;
 
 };

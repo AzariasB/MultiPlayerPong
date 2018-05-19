@@ -33,6 +33,7 @@
 #include "OptionState.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"
+#include "src/client/ClientApp.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/SoundEngine.hpp"
 #include "src/client/StateMachine.hpp"
@@ -48,14 +49,16 @@ OptionState::OptionState():
     m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
     sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture("sound_icons"), getCurrentSoundRect());
     m_muteButton->setIcon(sound);
-
     pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
-
     startY += m_muteButton->getHeight();
-    const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
 
-    startY += keyBindingButton.getHeight() + 50.f;
+    const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
+    startY += keyBindingButton.getHeight();
     pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
+
+    const Button &fullScreenButton = *m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY);
+    startY += fullScreenButton.getHeight() + 50.f;
+    pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
 
     sf::Uint64 backClicked = m_menu.addCenteredButton("Menu", SF_ARENA_WIDTH/2.f , startY )->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );

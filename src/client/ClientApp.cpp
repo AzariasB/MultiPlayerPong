@@ -55,11 +55,11 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+    window(new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
            "Pong",
            sf::Style::Default,
-           sf::ContextSettings(0,0,8)),
-    renderer(window),
+           sf::ContextSettings(0,0,8))),
+    renderer(*window),
     game(),
     stateMachine(),
     m_sEngine(rManager),
@@ -79,11 +79,12 @@ ClientApp::ClientApp() :
     m_sEngine.saveSound(SoundEngine::ROLLOVER, ":/sounds/rollover.wav");
     m_sEngine.saveSound(SoundEngine::NOMRAL_BIP, ":/sounds/normal_bip.ogg");
     m_sEngine.saveSound(SoundEngine::HIGH_BIP, ":/sounds/high_bip.wav");
-    window.setKeyRepeatEnabled(false);
+    window->setKeyRepeatEnabled(false);
 }
 
 ClientApp::~ClientApp()
 {
+    delete window;
 }
 
 void ClientApp::initStates()
@@ -103,13 +104,32 @@ void ClientApp::initStates()
 void ClientApp::handleEvent(const sf::Event& event)
 {
     if (event.type == sf::Event::Closed) {
-        window.close();
+        window->close();
     } else if(event.type == sf::Event::Resized){
         resizeEvent(event);
+    } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
+        toggleFullScreen();
     } else {
         stateMachine.getCurrentState().handleEvent(event);
         m_dialogManager.handleEvent(event);
     }
+}
+
+void ClientApp::toggleFullScreen()
+{
+    if(window)delete window;
+    if(m_isFullscreen){
+        window = new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+                                      "Pong",
+                                      sf::Style::Default,
+                                      sf::ContextSettings(0,0,8));
+    }else{
+        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),
+                                      "Pong",
+                                      sf::Style::Fullscreen);
+    }
+
+    m_isFullscreen = !m_isFullscreen;
 }
 
 void ClientApp::resizeEvent(const sf::Event &event)
@@ -118,7 +138,7 @@ void ClientApp::resizeEvent(const sf::Event &event)
     float height = event.size.height;
 
     if(height < SF_ARENA_HEIGHT || width < SF_ARENA_WIDTH){
-        window.setSize(sf::Vector2u(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+        window->setSize(sf::Vector2u(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
         return;//do not update the view
     }
 
@@ -132,7 +152,7 @@ void ClientApp::resizeEvent(const sf::Event &event)
 
     sf::View view(sf::FloatRect(0,0, SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
     view.setViewport(visibleArea);
-    window.setView(view);
+    window->setView(view);
 }
 
 void ClientApp::run(int argc, char** argv)
@@ -142,12 +162,12 @@ void ClientApp::run(int argc, char** argv)
 
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
-    while (window.isOpen()) {
+    while (window->isOpen()) {
         sf::Event ev;
-        while (window.pollEvent(ev))
+        while (window->pollEvent(ev))
             handleEvent(ev);
 
-        window.clear(cc::colors::backgroundColor);
+        window->clear(cc::colors::backgroundColor);
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);
@@ -156,14 +176,14 @@ void ClientApp::run(int argc, char** argv)
         stateMachine.getCurrentState().draw(renderer);
         m_dialogManager.draw(renderer);
 
-        window.display();
+        window->display();
     }
     socket.disconnect();
 }
 
 void ClientApp::quit()
 {
-    window.close();
+    window->close();
 }
 
 const Player& ClientApp::getPlayer() const
@@ -235,7 +255,7 @@ ParticleGenerator &ClientApp::getParticleGenerator()
 
 sf::RenderWindow &ClientApp::getWindow()
 {
-    return window;
+    return *window;
 }
 
 KeyBinding &ClientApp::getKeyBindings()
@@ -255,7 +275,7 @@ const ParticleGenerator &ClientApp::getParticleGenerator() const
 
 const sf::RenderWindow &ClientApp::getWindow() const
 {
-    return window;
+    return *window;
 }
 
 const ResourcesManager& ClientApp::getResourcesManager()
