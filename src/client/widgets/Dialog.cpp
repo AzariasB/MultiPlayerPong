@@ -56,8 +56,8 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
                               ));
 
     m_background.setPosition(originX, originY);
-    m_background.setFillColor(cc::colors::dialogBackgroundColor);
-    m_background.setOutlineColor(cc::colors::dialogOutlineColor);
+    m_background.setFillColor(cc::Colors::dialogBackgroundColor);
+    m_background.setOutlineColor(cc::Colors::dialogOutlineColor);
     m_background.setOutlineThickness(5);
     m_state = DIALOG_HIDDEN;
 }
@@ -225,10 +225,10 @@ DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, c
     noClickedEvent(pr::nextEventCode())
 {
     m_questionText.setPosition(originX + 10, originY  +SF_DIALOG_HEIGHT/2.f);
-
     pr::connect(m_yesButton.clickedEvent, &DialogQuestion::yesClicked, this);
     pr::connect(m_noButton.clickedEvent, &DialogQuestion::noClicked, this);
 
+    m_yesButton.setSelected(true);
 }
 
 const std::string &DialogQuestion::getQuestion() const
@@ -263,8 +263,21 @@ void DialogQuestion::draw(Renderer &renderer) const
 void DialogQuestion::handleEvent(const sf::Event &ev)
 {
     Dialog::handleEvent(ev);
-    m_yesButton.handleEvent(ev);
-    m_noButton.handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed &&
+            (ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
+        if(m_yesButton.isSelected()){
+            m_yesButton.setSelected(false);
+            m_noButton.setSelected(true);
+        }else{
+            m_yesButton.setSelected(true);
+            m_noButton.setSelected(false);
+        }
+
+    }else{
+        m_yesButton.handleEvent(ev);
+        m_noButton.handleEvent(ev);
+    }
+
 }
 
 void DialogQuestion::yesClicked()

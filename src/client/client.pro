@@ -11,7 +11,8 @@ SOURCES +=\
     $$PWD/KeyBinding.cpp \
     $$PWD/Animation.cpp \
     $$PWD/Provider.cpp \
-    $$PWD/ColorTweening.cpp
+    $$PWD/ColorTweening.cpp \
+    $$PWD/ClientConf.cpp
 
 HEADERS +=\
     $$PWD/ClientApp.hpp \

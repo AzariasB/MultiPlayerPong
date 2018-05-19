@@ -87,7 +87,7 @@ std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, fl
 std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize)
 {
     m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont(), charSize));
-    m_labels.back()->setFillColor(cc::colors::fontColor);
+    m_labels.back()->setFillColor(cc::Colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();
 }

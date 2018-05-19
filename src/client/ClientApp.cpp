@@ -110,8 +110,8 @@ void ClientApp::handleEvent(const sf::Event& event)
     } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
         toggleFullScreen();
     } else {
-        stateMachine.getCurrentState().handleEvent(event);
         m_dialogManager.handleEvent(event);
+        stateMachine.getCurrentState().handleEvent(event);
     }
 }
 
@@ -167,7 +167,7 @@ void ClientApp::run(int argc, char** argv)
         while (window->pollEvent(ev))
             handleEvent(ev);
 
-        window->clear(cc::colors::backgroundColor);
+        window->clear(cc::Colors::backgroundColor);
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);

@@ -64,17 +64,18 @@ namespace mp
             TRANSITION
         };
 
-        namespace colors {
-            const sf::Color backgroundColor(0,10, 30);
-            const sf::Color buttonColor(0, 20, 60);
-            const sf::Color dialogBackgroundColor(0,20, 50);
-            const sf::Color dialogOutlineColor(220, 220, 220);
-            const sf::Color fontColor(220, 220, 220);
-            const sf::Color higlithColor(255, 89, 84);
-            const sf::Color paddleColor(128, 255, 0);
-            const sf::Color ballColor(226, 88, 34);
-            const sf::Color wallColor(200,200,200);
-        }
+        class Colors {
+        public:
+            static const sf::Color backgroundColor;
+            static const sf::Color buttonColor;
+            static const sf::Color dialogBackgroundColor;
+            static const sf::Color dialogOutlineColor;
+            static const sf::Color fontColor;
+            static const sf::Color higlithColor;
+            static const sf::Color paddleColor;
+            static const sf::Color ballColor;
+            static const sf::Color wallColor;
+        };
 
     }
 

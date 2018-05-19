@@ -193,17 +193,17 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 
 void Renderer::renderPaddle(const Paddle& paddle)
 {
-    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::colors::paddleColor));
+    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
 }
 
 void Renderer::renderWall(const Wall &wall)
 {
-    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::colors::wallColor));
+    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
 }
 
 void Renderer::renderBall(const Ball& ball)
 {
-    render(*assertCircleExist(&ball, BALL_RADIUS, cc::colors::ballColor));
+    render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)

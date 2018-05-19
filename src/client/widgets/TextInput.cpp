@@ -46,8 +46,8 @@ TextInput::TextInput(const sf::Vector2f &position) :
     m_typed(""),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, 50))
 {
-    m_background.setOutlineColor(cc::colors::dialogOutlineColor);
-    m_background.setFillColor(cc::colors::backgroundColor);
+    m_background.setOutlineColor(cc::Colors::dialogOutlineColor);
+    m_background.setFillColor(cc::Colors::backgroundColor);
     m_background.setOutlineThickness(5);
     m_background.setPosition(position.x - 10, position.y);
     m_text.setPosition(position);

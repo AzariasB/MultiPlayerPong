@@ -46,10 +46,10 @@ Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
     selectdEvent(pr::nextEventCode()),
-    m_color(cc::colors::fontColor),
+    m_color(cc::Colors::fontColor),
     m_background()
 {
-    m_background.setFillColor(cc::colors::buttonColor);
+    m_background.setFillColor(cc::Colors::buttonColor);
     m_text.setFillColor(m_color.get());
 }
 
@@ -57,10 +57,10 @@ Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont()),
     clickedEvent(pr::nextEventCode()),
     selectdEvent(pr::nextEventCode()),
-    m_color(cc::colors::fontColor),
+    m_color(cc::Colors::fontColor),
     m_background()
 {
-    m_background.setFillColor(cc::colors::buttonColor);
+    m_background.setFillColor(cc::Colors::buttonColor);
     setPosition(sf::Vector2f(xPos, yPos));
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
@@ -129,10 +129,10 @@ void Button::setSelected(bool selected)
     if(m_hilighted == selected)return;
 
     if(selected){
-        m_color = ColorTweening(m_color.get(), cc::colors::higlithColor, 0.1, twin::easing::linear);
+        m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, 0.1, twin::easing::linear);
         m_rectWidth = twin::makeTwin(0.f, m_text.getGlobalBounds().width, 0.5f, twin::easing::quintOut);
     }else{
-        m_color = ColorTweening(m_color.get(), cc::colors::fontColor, 0.1, twin::easing::linear);
+        m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, 0.1, twin::easing::linear);
         m_rectWidth = twin::makeTwin(m_text.getGlobalBounds().width, 0.f, 0.5f, twin::easing::quintOut);
     }
     m_hilighted = selected;
@@ -169,7 +169,7 @@ void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
-    m_background.setSize(sf::Vector2f(0, 0));
+    m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_text.getGlobalBounds().height));
 }
 
 Button::~Button()
