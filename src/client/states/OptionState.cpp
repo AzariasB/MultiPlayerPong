@@ -102,7 +102,7 @@ void OptionState::update(const sf::Time &elapsed)
 void OptionState::handleEvent(const sf::Event &ev)
 {
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState((int)cc::MENU);
+        pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     }else{
         m_menu.handleEvent(ev);
     }

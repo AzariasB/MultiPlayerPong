@@ -157,7 +157,7 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
     Dialog(id, title),
     m_questionText(question, pr::resourceManager().getFont()),
     m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
-    m_confirmButton("Confirm",  originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    m_confirmButton("Confirm",  originX + 50, originY + SF_DIALOG_HEIGHT - 50),
     m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
     cancelClickedEvent(pr::nextEventCode()),
     confirmClickedEvent(pr::nextEventCode())
@@ -219,11 +219,13 @@ void DialogInput::handleEvent(const sf::Event &ev)
 DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
     Dialog(id, title),
     m_questionText(question, pr::resourceManager().getFont()),
-    m_yesButton("Yes", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    m_yesButton("Yes", originX + 30, originY + SF_DIALOG_HEIGHT - 50),
     m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
     yesClickedEvent(pr::nextEventCode()),
     noClickedEvent(pr::nextEventCode())
 {
+    m_yesButton.setWidth(50);
+    m_noButton.setWidth(50);
     m_questionText.setPosition(originX + 10, originY  +SF_DIALOG_HEIGHT/2.f);
     pr::connect(m_yesButton.clickedEvent, &DialogQuestion::yesClicked, this);
     pr::connect(m_noButton.clickedEvent, &DialogQuestion::noClicked, this);
