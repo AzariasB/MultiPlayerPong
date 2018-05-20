@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS  += -std=c++14
 
 win32:INCLUDEPATH += C:\SFML-2.5.0\include C:\Box2D\include
 win32:DEFINES += "SFML_STATIC"
-win32:LIBS += -LC:\SFML-2.5.0\lib ..\..\lib\Box2D.lib
+win32:LIBS += -LC:\SFML-2.5.0\lib ..\..\lib\libBox2D.a
 
 unix:INCLUDEPATH += /usr/local/include
 unix:LIBS +=  -L/usr/local/lib
