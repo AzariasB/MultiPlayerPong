@@ -49,6 +49,8 @@ PauseState::PauseState():
 
     const Button &menuBtn = *m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, 350);
     pr::connect(menuBtn.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::MENU, TransitionData::GO_DOWN));
+
+    m_menu.normalizeButtons();
 }
 
 

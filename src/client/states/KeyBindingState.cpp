@@ -68,6 +68,8 @@ KeyBindingState::KeyBindingState():
 
     sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100)->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
+
+    m_menu.normalizeButtons();
 }
 
 KeyBindingState::~KeyBindingState()

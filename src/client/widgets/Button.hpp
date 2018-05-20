@@ -217,6 +217,12 @@ private:
     float m_height;
 
     /**
+     * @brief m_position keep the position in memory
+     * to update it when changing the height/width
+     */
+    sf::Vector2f m_position = sf::Vector2f(0,0);
+
+    /**
      * @brief m_icon icon of the button (optional)
      */
     sf::Sprite m_icon;

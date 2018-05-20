@@ -65,6 +65,8 @@ OptionState::OptionState():
 
     sf::Uint64 playClicked = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY)->clickedEvent;
     pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_RIGHT));
+
+    m_menu.normalizeButtons();
 }
 
 void OptionState::toggleSound()

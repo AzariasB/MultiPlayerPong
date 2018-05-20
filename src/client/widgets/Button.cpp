@@ -102,9 +102,10 @@ void Button::update(const sf::Time &elapsed)
 
 void Button::setPosition(const sf::Vector2f& position)
 {
-    m_text.setPosition(position);
-    m_background.setPosition(position.x, position.y);
-    m_border.setPosition(position.x, position.y);
+    m_position = position;
+    m_text.setPosition(position.x - m_width / 2.f, position.y);
+    m_background.setPosition(position.x - m_width / 2.f, position.y);
+    m_border.setPosition(position.x - m_width / 2.f, position.y);
 }
 
 void Button::handleEvent(const sf::Event& ev)
@@ -114,14 +115,14 @@ void Button::handleEvent(const sf::Event& ev)
         sf::Vector2f realMovePos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
 
         bool was_hilighted = m_hilighted;
-        setSelected(m_text.getGlobalBounds().contains(realMovePos));
+        setSelected(m_border.getGlobalBounds().contains(realMovePos));
 
         if(was_hilighted != m_hilighted)
             pr::trigger(selectdEvent);
 
     } else if (ev.type == sf::Event::MouseButtonPressed) {
         sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
-        isClicked = ev.mouseButton.button == sf::Mouse::Left && m_text.getGlobalBounds().contains(realClickPos);
+        isClicked = ev.mouseButton.button == sf::Mouse::Left && m_border.getGlobalBounds().contains(realClickPos);
     } else if(isSelectionEvent(ev)){
         isClicked = true;
     }
@@ -140,14 +141,13 @@ void Button::draw(Renderer &renderer) const
 {
     if(!isVisible())return;
 
-    renderer.pushTranslate(sf::Vector2f(-m_width / 2, -m_height  / 2));
 
     renderer.render(m_border);
     renderer.render(m_background);
 
     switch (m_alignment) {
     case Alignment::Center:
-        renderer.translate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
+        renderer.pushTranslate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
     case Alignment::TopLeft :
     default:
         break;
@@ -206,8 +206,12 @@ void Button::setWidth(float width)
 
 void Button::updateSize()
 {
-    m_background.setSize(sf::Vector2f(m_width, m_height));
+    if(m_hilighted){
+        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
+    }
+
     m_border.setSize(sf::Vector2f(m_width, m_height));
+    setPosition(m_position);
 }
 
 void Button::updateIcon()
