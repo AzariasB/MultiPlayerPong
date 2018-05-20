@@ -47,6 +47,15 @@ class Renderer;
 class Widget {
 public:
 
+    enum Alignment{
+        TopLeft,
+        BottomLeft,
+        Center,
+        TopRight,
+        BottomRight
+    };
+
+
     /**
      * @brief Widget constructor
      * @param app a reference to the client's application

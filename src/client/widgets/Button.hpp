@@ -98,6 +98,24 @@ public:
     void handleEvent(const sf::Event &ev);
 
     /**
+     * @brief setAlignment setter for the alignment
+     * @param al
+     */
+    void setAlignment(Alignment al);
+
+    /**
+     * @brief setWidth setter for the width
+     * @param width
+     */
+    void setWidth(float width);
+
+    /**
+     * @brief setHeight setter for the height
+     * @param height
+     */
+    void setHeight(float height);
+
+    /**
      * @brief getPosition position of the button
      * @return position of the button
      */
@@ -123,19 +141,14 @@ public:
      * @brief getWidth the width of the button
      * @return the width of the button
      */
-    int getWidth() const
-    {
-        return m_text.getGlobalBounds().width + 10;
-    }
+    float getWidth() const;
 
     /**
      * @brief getHeight the height of the button
      * @return the height of the button
      */
-    int getHeight() const
-    {
-        return m_text.getGlobalBounds().height + 10;
-    }
+    float getHeight() const;
+
 
     bool isSelected() const
     {
@@ -157,11 +170,32 @@ public:
     virtual ~Button();
 
 private:
+
+    void init();
+
+    /**
+     * @brief updateText update the text properties
+     */
     void updateText();
 
+    /**
+     * @brief updateIcon update the icon properties
+     */
     void updateIcon();
 
+    /**
+     * @brief updateSize changes the size of the rectangles
+     */
+    void updateSize();
+
+    /**
+     * @brief isSelectionEvent if the given event is an event
+     * trigerred to select the button
+     * @param ev
+     * @return
+     */
     bool isSelectionEvent(const sf::Event &ev) const;
+
     /**
      * @brief m_hilighted wether the button is currently higlighted
      */
@@ -171,6 +205,16 @@ private:
      * @brief m_text the text for the button
      */
     sf::Text m_text;
+
+    /**
+     * @brief m_width width of the button
+     */
+    float m_width;
+
+    /**
+     * @brief m_height height of the button
+     */
+    float m_height;
 
     /**
      * @brief m_icon icon of the button (optional)
@@ -193,6 +237,17 @@ private:
      * color of the button
      */
     sf::RectangleShape m_background;
+
+    /**
+     * @brief m_border the border
+     * of the button
+     */
+    sf::RectangleShape m_border;
+
+    /**
+     * @brief m_alignment button alignment
+     */
+    Alignment m_alignment = Center;
 
 public:
     const sf::Uint64 clickedEvent;

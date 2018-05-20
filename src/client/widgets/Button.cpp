@@ -44,27 +44,53 @@ namespace mp {
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont()),
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode()),
+    m_width(m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 10),
     m_color(cc::Colors::fontColor),
-    m_background()
+    m_background(),
+    m_border(),
+    //Events
+    clickedEvent(pr::nextEventCode()),
+    selectdEvent(pr::nextEventCode())
 {
-    m_background.setFillColor(cc::Colors::buttonColor);
-    m_text.setFillColor(m_color.get());
+    init();
 }
 
 Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont()),
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode()),
+    m_width(m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 10),
     m_color(cc::Colors::fontColor),
-    m_background()
+    m_background(),
+    m_border(),
+    //Events
+    clickedEvent(pr::nextEventCode()),
+    selectdEvent(pr::nextEventCode())
+{
+    init();
+    setPosition(sf::Vector2f(xPos, yPos));
+    updateIcon();
+}
+
+void Button::init()
 {
     m_background.setFillColor(cc::Colors::buttonColor);
-    setPosition(sf::Vector2f(xPos, yPos));
+    m_border.setOutlineColor(cc::Colors::buttonBorderColor);
+    m_border.setFillColor(sf::Color::Transparent);
+    m_border.setOutlineThickness(SF_BUTTON_BORDER);
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
-    updateIcon();
+    updateSize();
+}
+
+float Button::getHeight() const
+{
+    return m_height + SF_BUTTON_BORDER * 2;
+}
+
+float Button::getWidth() const
+{
+    return m_width + SF_BUTTON_BORDER * 2;
 }
 
 void Button::update(const sf::Time &elapsed)
@@ -77,8 +103,8 @@ void Button::update(const sf::Time &elapsed)
 void Button::setPosition(const sf::Vector2f& position)
 {
     m_text.setPosition(position);
-    //m_background.setPosition(position);
-    m_background.setPosition(position.x, position.y + 9);
+    m_background.setPosition(position.x, position.y);
+    m_border.setPosition(position.x, position.y);
 }
 
 void Button::handleEvent(const sf::Event& ev)
@@ -114,9 +140,25 @@ void Button::draw(Renderer &renderer) const
 {
     if(!isVisible())return;
 
+    renderer.pushTranslate(sf::Vector2f(-m_width / 2, -m_height  / 2));
+
+    renderer.render(m_border);
     renderer.render(m_background);
+
+    switch (m_alignment) {
+    case Alignment::Center:
+        renderer.translate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
+    case Alignment::TopLeft :
+    default:
+        break;
+    }
+
     renderer.render(m_text);
     renderer.render(m_icon);
+
+
+
+    renderer.pop();
 }
 
 void Button::setText(const std::string &text)
@@ -130,10 +172,10 @@ void Button::setSelected(bool selected)
 
     if(selected){
         m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(0.f, m_text.getGlobalBounds().width, 0.5f, twin::easing::quintOut);
+        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
     }else{
         m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(m_text.getGlobalBounds().width, 0.f, 0.5f, twin::easing::quintOut);
+        m_rectWidth = twin::makeTwin(m_width, 0.f, 0.5f, twin::easing::quintOut);
     }
     m_hilighted = selected;
     updateText();
@@ -148,6 +190,24 @@ void Button::setIcon(const sf::Sprite &sprite)
 {
     m_icon = sprite;
     updateIcon();
+}
+
+void Button::setHeight(float height)
+{
+    m_height = height;
+    updateSize();
+}
+
+void Button::setWidth(float width)
+{
+    m_width = width;
+    updateSize();
+}
+
+void Button::updateSize()
+{
+    m_background.setSize(sf::Vector2f(m_width, m_height));
+    m_border.setSize(sf::Vector2f(m_width, m_height));
 }
 
 void Button::updateIcon()
@@ -165,12 +225,20 @@ void Button::updateIcon()
 
 }
 
+
+
 void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
-    m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_text.getGlobalBounds().height));
+    m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_height));
 }
+
+void Button::setAlignment(Alignment al)
+{
+    m_alignment = al;
+}
+
 
 Button::~Button()
 {

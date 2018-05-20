@@ -62,11 +62,11 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 50.f;
-    sf::Uint64 resetClicked  = m_menu.addCenteredButton("Reset", startX, startY)->clickedEvent;
+    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY)->clickedEvent;
     pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addCenteredButton("Back", startX, startY + 100)->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100)->clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 }
 

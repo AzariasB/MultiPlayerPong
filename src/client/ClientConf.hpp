@@ -44,6 +44,8 @@ namespace mp
     constexpr int SF_ARENA_WIDTH = 800;
     constexpr int SF_ARENA_HEIGHT = 600;
 
+    constexpr int SF_BUTTON_BORDER = 2;
+
 
     namespace cc//namespace client conf
     {
@@ -68,6 +70,7 @@ namespace mp
         public:
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;
+            static const sf::Color buttonBorderColor;
             static const sf::Color dialogBackgroundColor;
             static const sf::Color dialogOutlineColor;
             static const sf::Color fontColor;

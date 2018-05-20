@@ -66,15 +66,6 @@ std::unique_ptr<Button> &Menu::addButton(const std::string &content, float xPos,
     return inserted;
 }
 
-std::unique_ptr<Button> &Menu::addCenteredButton(const std::string &content, float xCenter, float yCenter)
-{
-    auto &btn = addButton(content, xCenter, yCenter);
-    sf::Vector2f btnPos(btn->getPosition().x - btn->getWidth() / 2.f, btn->getPosition().y  - btn->getHeight() / 2.f);
-    btn->setPosition(btnPos);
-    return btn;
-}
-
-
 std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)
 {
     auto &label = addLabel(content, xCenter, yCenter, charSize);
@@ -107,6 +98,16 @@ std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureN
                         sprite->getPosition().y - sprite->getGlobalBounds().height/2.f);
     sprite->setPosition(center);
     return sprite;
+}
+
+void Menu::normalizeButtons()
+{
+    float max = (*std::max_element(m_buttons.begin(), m_buttons.end(), [](const auto &p1, const auto &p2){
+        return p1->getWidth() < p2->getWidth();
+    }))->getWidth();
+
+    for(auto &it : m_buttons)
+        it->setWidth(max);
 }
 
 void Menu::draw(Renderer &renderer) const

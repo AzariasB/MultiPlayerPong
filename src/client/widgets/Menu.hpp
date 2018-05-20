@@ -85,17 +85,6 @@ public:
     std::unique_ptr<Button> &addButton(const std::string &content, float xPos, float yPos);
 
     /**
-     * @brief addCenteredButton adds the button to the menu, with the given text, and
-     * centers it at the given position (instead of placing its top left corner at the
-     * given position)
-     * @param content text of the button
-     * @param xCenter x coordinate of the button
-     * @param yCenter y coordinate of the button
-     * @return
-     */
-    std::unique_ptr<Button> &addCenteredButton(const std::string &content, float xCenter, float yCenter);
-
-    /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result
      * @param content the string to display
      * @param xpOs the X position of the text
@@ -132,6 +121,12 @@ public:
      * @return
      */
     std::unique_ptr<sf::Sprite> &addCenteredSprite(const std::string &textureName, const sf::Vector2f &centerPos, const sf::IntRect &textureRect);
+
+    /**
+     * @brief normalizeButtons finds the largest button
+     * and sets all the buttons to its width
+     */
+    void normalizeButtons();
 
 private:
     /**
