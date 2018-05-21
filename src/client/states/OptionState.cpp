@@ -64,7 +64,7 @@ OptionState::OptionState():
     pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 
     sf::Uint64 playClicked = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY)->clickedEvent;
-    pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_RIGHT));
+    pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
 
     m_menu.normalizeButtons();
 }

@@ -78,6 +78,8 @@ void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 
 void PlayState::update(const sf::Time &elapsed)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
+
     if (pr::game().playerWon())
         pr::stateMachine().setCurrentState(cc::FINISHED);
     else

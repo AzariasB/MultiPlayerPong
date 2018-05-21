@@ -62,11 +62,8 @@ void TransitionState::update(const sf::Time &elapsed)
         }
         pr::stateMachine().getStateAt(mExitingStateLabel).onAfterLeaving();
     }else{
-        if(m_tickExistingState)
-            pr::stateMachine().getStateAt(mExitingStateLabel).update(elapsed);
-
-        if(m_tickEnteringState)
-            pr::stateMachine().getStateAt(mEnteringStateLabel).update(elapsed);
+        pr::stateMachine().getStateAt(mExitingStateLabel).update(elapsed);
+        pr::stateMachine().getStateAt(mEnteringStateLabel).update(elapsed);
         updateCenters();
     }
 
