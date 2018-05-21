@@ -32,6 +32,7 @@
 
 #include "MenuState.hpp"
 #include "src/client/Provider.hpp"
+#include "src/client/Assets.hpp"
 #include "src/client/ClientApp.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/widgets/Button.hpp"
@@ -55,23 +56,23 @@ MenuState::MenuState() :
 
     Button &soloButton = *m_menu.addButton("Solo",halfWay ,currentHeight);
     currentHeight += soloButton.getHeight() + margin;
-    soloButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("singleplayer")));
+    soloButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Singleplayer)));
 
 
     Button &multiPlayerButton = *m_menu.addButton("Multiplayer", halfWay, currentHeight);
     currentHeight += multiPlayerButton.getHeight() + margin;
-    multiPlayerButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("multiplayer")));
+    multiPlayerButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Multiplayer)));
 
     Button &optionButton = *m_menu.addButton("Options", halfWay,currentHeight);
     currentHeight += optionButton.getHeight() + margin;
-    optionButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("gear")));
+    optionButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Gear)));
 
     Button &creditsButton = *m_menu.addButton("Credits", halfWay, currentHeight);
     currentHeight += creditsButton.getHeight() + margin;
-    creditsButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("information")));
+    creditsButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Information)));
 
     Button &quitButton = *m_menu.addButton("Quit", halfWay, currentHeight);
-    quitButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("power")));
+    quitButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Power)));
 
     m_menu.normalizeButtons(margin);
 

@@ -29,6 +29,7 @@
  * Created on 9 octobre 2017, 19:19
  */
 
+#include "Assets.hpp"
 #include "Renderer.hpp"
 #include "src/common/Config.hpp"
 #include "src/common/Ball.hpp"
@@ -168,15 +169,15 @@ const sf::Texture &Renderer::powerupTexture(const Powerup::POWERUP_TYPE &powerup
 {
     switch(powerupType){
     case Powerup::BALL_EXTEND:
-        return pr::resourceManager().getTexture("ball_extend");
+        return pr::resourceManager().getTexture(Assets::Animations::BallExtend );
     case Powerup::BALL_RETRACT:
-        return pr::resourceManager().getTexture("ball_retract");
+        return pr::resourceManager().getTexture(Assets::Animations::BallRetract );
     case Powerup::PADDLE_EXTEND:
-        return pr::resourceManager().getTexture("paddle_extend");
+        return pr::resourceManager().getTexture(Assets::Animations::PaddleExtend);
     case Powerup::PADDLE_RETRACT:
-        return pr::resourceManager().getTexture("paddle_retract");
+        return pr::resourceManager().getTexture(Assets::Animations::PaddleRetract);
     default:
-        return pr::resourceManager().getTexture("empty_texture");
+        return pr::resourceManager().getTexture(0);
     }
 }
 

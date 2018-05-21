@@ -45,6 +45,7 @@
 #include "states/TransitionState.hpp"
 #include "states/CreditsState.hpp"
 #include "ClientConf.hpp"
+#include "Assets.hpp"
 
 namespace mp {
 
@@ -66,27 +67,13 @@ ClientApp::ClientApp() :
     m_keyBinding(),
     m_dialogManager()
 {
-    //Textures
-    rManager.registerTexture(":/sound_icons.png","sound_icons");
-    rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
-    rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
-    rManager.registerTexture(":/animations/ball_extend","ball_extend");
-    rManager.registerTexture(":/animations/ball_retract","ball_retract");
+    for(const auto &p: Assets::animations) rManager.registerTexture(p.second, p.first);
 
-    rManager.registerTexture(":/icons/gear.png","gear");
-    rManager.registerTexture(":/icons/information.png", "information");
-    rManager.registerTexture(":/icons/power.png", "power");
-    rManager.registerTexture(":/icons/singleplayer.png","singleplayer");
-    rManager.registerTexture(":/icons/multiplayer.png", "multiplayer");
-    rManager.registerTexture(":/icons/wrench.png" ,"wrench");
-    rManager.registerTexture(":/icons/exitLeft.png","exitLeft");
+    for(const auto &p: Assets::icons) rManager.registerTexture(p.second, p.first);
+
+    for(const auto &p: Assets::sounds)rManager.registerSound(p.second, p.first);
 
     socket.setBlocking(false);
-    m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
-    m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
-    m_sEngine.saveSound(SoundEngine::ROLLOVER, ":/sounds/rollover.wav");
-    m_sEngine.saveSound(SoundEngine::NOMRAL_BIP, ":/sounds/normal_bip.ogg");
-    m_sEngine.saveSound(SoundEngine::HIGH_BIP, ":/sounds/high_bip.wav");
     window->setKeyRepeatEnabled(false);
 }
 

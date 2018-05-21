@@ -12,7 +12,8 @@ SOURCES +=\
     $$PWD/Animation.cpp \
     $$PWD/Provider.cpp \
     $$PWD/ColorTweening.cpp \
-    $$PWD/ClientConf.cpp
+    $$PWD/ClientConf.cpp \
+    $$PWD/Assets.cpp
 
 HEADERS +=\
     $$PWD/ClientApp.hpp \
@@ -26,4 +27,5 @@ HEADERS +=\
     $$PWD/Provider.hpp \
     $$PWD/State.hpp \
     $$PWD/ClientConf.hpp \
-    $$PWD/ColorTweening.hpp
+    $$PWD/ColorTweening.hpp \
+    $$PWD/Assets.hpp

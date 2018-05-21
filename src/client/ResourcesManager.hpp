@@ -60,14 +60,14 @@ public:
      * @param filename name of the file to read from
      * @param soundName the name of the sound to register, so it can be retrieved later
      */
-    void registerSound(const std::string &filename, const std::string &soundName);
+    void registerSound(const std::string &filename, const sf::Uint64 &soundId);
 
     /**
      * @brief regsiterTexture saves a texture to the memroy
      * @param filename the name of the file where the texture is located
      * @param textureName name of the texture, to retreive it later
      */
-    void registerTexture(const std::string &filename, const std::string &textureName);
+    void registerTexture(const std::string &filename, const sf::Uint64 &textureID);
 
     /**
      * @brief registerShader saves the shader in memory, making it available at runtime
@@ -82,7 +82,7 @@ public:
      * @param soundName name of the sound
      * @return sound associated with the name, reference to the empty_sound object if not found
      */
-    sf::Sound &getSound(const std::string &soundName);
+    sf::Sound &getSound(const sf::Uint64 &soundID);
 
     /**
      * @brief getTexture the texture with the given name
@@ -90,7 +90,7 @@ public:
      * @return a reference to the texture reserved with
      * the given name
      */
-    const sf::Texture &getTexture(const std::string &textureName) const;
+    const sf::Texture &getTexture(const sf::Uint64 &textureID) const;
 
     /**
      * @brief getShader access to the shader with the given name
@@ -138,12 +138,12 @@ private:
     /**
      * @brief m_sounds keep all the soundbuffer and their sound in memory
      */
-    std::unordered_map<std::string, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
+    std::unordered_map<sf::Uint64, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
 
     /**
      * @brief m_textures keep all the texture in memory
      */
-    std::unordered_map<std::string, std::unique_ptr<sf::Texture>> m_textures;
+    std::unordered_map<sf::Uint64, std::unique_ptr<sf::Texture>> m_textures;
 
     std::unordered_map<std::string, sf::Shader> m_shaders;
 };

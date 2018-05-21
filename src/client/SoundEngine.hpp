@@ -31,7 +31,7 @@
 
 #pragma once
 
-
+#include "Assets.hpp"
 #include "ResourcesManager.hpp"
 
 namespace mp {
@@ -45,18 +45,6 @@ class ResourcesManager;
  */
 class SoundEngine {
 public:
-
-    /**
-     * @brief The SOUND_TYPE enum all the possible sound the soundEngine can play
-     */
-    enum SOUND_TYPE {
-        BOUNCE,
-        CLICK,
-        ROLLOVER,
-        NOMRAL_BIP,
-        HIGH_BIP
-    };
-
     /**
      * @brief SoundEngine constructor
      * @param sManager a reference to the resourceManager in order to save the sound resources
@@ -64,17 +52,10 @@ public:
     SoundEngine(ResourcesManager &sManager);
 
     /**
-     * @brief saveSound saves the sound of the given type, with the given filename to read from
-     * @param s the type of the sound to save
-     * @param filename the filename to use for this sound type
-     */
-    void saveSound(SOUND_TYPE s, const std::string &filename);
-
-    /**
      * @brief playSound plays the given sound's type
      * @param s the type of the sound to play
      */
-    void playSound(SOUND_TYPE s, const sf::Vector3f &position = {0,0,0});
+    void playSound(Assets::Sounds s, const sf::Vector3f &position = {0,0,0});
 
 
     void mute()
@@ -94,12 +75,6 @@ public:
 
     virtual ~SoundEngine();
 private:
-    /**
-     * @brief toSoundName turns the given sound type into a string in order to save it in the resource manager
-     * @param st sound type to turn into a string
-     * @return the sound type turned into a string
-     */
-    std::string toSoundName(SOUND_TYPE st);
 
 
     /**

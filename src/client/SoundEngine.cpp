@@ -41,10 +41,10 @@ SoundEngine::SoundEngine(ResourcesManager& sManager) :
 
 }
 
-void SoundEngine::playSound(SOUND_TYPE s, const sf::Vector3f &position)
+void SoundEngine::playSound(Assets::Sounds s, const sf::Vector3f &position)
 {
     if(m_isMuted)return;
-    sf::Sound &sound = m_manager.getSound(toSoundName(s));
+    sf::Sound &sound = m_manager.getSound(s);
 
 
     sound.setRelativeToListener(math::length(position) != 0);
@@ -53,16 +53,6 @@ void SoundEngine::playSound(SOUND_TYPE s, const sf::Vector3f &position)
     sound.play();
 }
 
-void SoundEngine::saveSound(SOUND_TYPE s, const std::string& filename)
-{
-    m_manager.registerSound(filename, toSoundName(s));
-}
-
-
-std::string SoundEngine::toSoundName(SOUND_TYPE st)
-{
-    return "sound_" + std::to_string(static_cast<int> (st));
-}
 
 SoundEngine::~SoundEngine()
 {

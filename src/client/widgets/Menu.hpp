@@ -104,25 +104,6 @@ public:
     std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 30);
 
     /**
-     * @brief addSprite adds a sprite to the menu, using the given texture, and the texture rectangle
-     * returns the created sprite, in order to modify it more if needed
-     * @param textureName the name of the texture in the resource manager
-     * @param pos the position of the sprite
-     * @param textureRect the rectangle texture
-     * @return the newly created sprite
-     */
-    std::unique_ptr<sf::Sprite> &addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect);
-
-    /**
-     * @brief addCenteredSprite add the sprite to the menu, centered at the given location
-     * @param textureName name of the texture
-     * @param centerPos center of the sprite
-     * @param textureRect texture rectangle of the sprite
-     * @return
-     */
-    std::unique_ptr<sf::Sprite> &addCenteredSprite(const std::string &textureName, const sf::Vector2f &centerPos, const sf::IntRect &textureRect);
-
-    /**
      * @brief normalizeButtons finds the largest button
      * and sets all the buttons to its width
      */

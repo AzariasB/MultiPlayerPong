@@ -62,7 +62,7 @@ PlayState::PlayState():
 void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 {
     Q_UNUSED(pNum);
-    pr::soundEngine().playSound(SoundEngine::BOUNCE, {position.x * 10, 0, position.y * 10});
+    pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
 
     sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
     if(pNum == 2){
@@ -100,12 +100,12 @@ void PlayState::update(const sf::Time &elapsed)
         if( m_lastCountdownValue != (int)pr::game().getCountdownTime().asSeconds()){
             m_lastCountdownValue = (int)pr::game().getCountdownTime().asSeconds();
             pr::particleGenerator().countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
-            pr::soundEngine().playSound(SoundEngine::NOMRAL_BIP);
+            pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
         }
     }else if(m_lastCountdownValue == 0){
         m_lastCountdownValue = -1;
         pr::particleGenerator().countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
-        pr::soundEngine().playSound(SoundEngine::HIGH_BIP);
+        pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
     }
 }
 

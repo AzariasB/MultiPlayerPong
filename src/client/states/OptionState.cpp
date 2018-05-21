@@ -33,6 +33,7 @@
 #include "OptionState.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"
+#include "src/client/Assets.hpp"
 #include "src/client/ClientApp.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/SoundEngine.hpp"
@@ -47,7 +48,7 @@ OptionState::OptionState():
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
 
     m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
-    sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture("sound_icons"), getCurrentSoundRect());
+    sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Sound ), getCurrentSoundRect());
     m_muteButton->setIcon(sound);
     pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
     startY += m_muteButton->getHeight();

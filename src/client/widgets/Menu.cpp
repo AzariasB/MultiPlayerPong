@@ -83,23 +83,6 @@ std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs
     return m_labels.back();
 }
 
-std::unique_ptr<sf::Sprite> &Menu::addSprite(const std::string &textureName, const sf::Vector2f &pos, const sf::IntRect &textureRect)
-{
-    const sf::Texture &texture = pr::resourceManager().getTexture(textureName);
-    m_sprites.emplace_back(std::unique_ptr<sf::Sprite>(new sf::Sprite(texture, textureRect)));
-    m_sprites.back()->setPosition(pos);
-    return m_sprites.back();
-}
-
-std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureName, const sf::Vector2f &centerPos, const sf::IntRect &textureRect)
-{
-    auto &sprite = addSprite(textureName, centerPos, textureRect);
-    sf::Vector2f center(sprite->getPosition().x - sprite->getGlobalBounds().width/2.f,
-                        sprite->getPosition().y - sprite->getGlobalBounds().height/2.f);
-    sprite->setPosition(center);
-    return sprite;
-}
-
 void Menu::normalizeButtons(float additionalWidth)
 {
     float max = (*std::max_element(m_buttons.begin(), m_buttons.end(), [](const auto &p1, const auto &p2){
@@ -142,7 +125,7 @@ void Menu::setSeletedIndex(int nwIndex)
         m_buttons[m_selectedButton]->setSelected(false);
         m_selectedButton = nwIndex;
         m_buttons[m_selectedButton]->setSelected(true);
-        pr::soundEngine().playSound(SoundEngine::CLICK);
+        pr::soundEngine().playSound(Assets::Sounds::Click1);
     }
 }
 

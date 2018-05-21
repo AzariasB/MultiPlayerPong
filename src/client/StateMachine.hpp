@@ -85,7 +85,7 @@ public:
         td.direction = dir;
         td.enteringData = std::make_unique<StateData<T>>(data);
         setCurrentState(cc::TRANSITION, &td);
-        pr::soundEngine().playSound(SoundEngine::ROLLOVER);
+        pr::soundEngine().playSound(Assets::Sounds::Rollover1);
     }
 
     /**
