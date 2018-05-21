@@ -49,19 +49,20 @@ MenuState::MenuState() :
 
     m_menu.addCenteredLabel("MultiPlayerPong", SF_ARENA_WIDTH/2.f, 100, 50);
 
+    const float margin = 10;
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
     const Button &soloButton = *m_menu.addButton("Solo",halfWay ,currentHeight);
-    currentHeight += soloButton.getHeight();
+    currentHeight += soloButton.getHeight() + margin;
     const Button &multiPlayerButton = *m_menu.addButton("Multiplayer", halfWay, currentHeight);
-    currentHeight += multiPlayerButton.getHeight();
+    currentHeight += multiPlayerButton.getHeight() + margin;
     const Button &optionButton = *m_menu.addButton("Options", halfWay,currentHeight);
-    currentHeight += optionButton.getHeight();
+    currentHeight += optionButton.getHeight() + margin;
     const Button &creditsButton = *m_menu.addButton("Credits", halfWay, currentHeight);
-    currentHeight += creditsButton.getHeight();
+    currentHeight += creditsButton.getHeight() + margin;
     const Button &quitButton = *m_menu.addButton("Quit", halfWay, currentHeight);
 
-    m_menu.normalizeButtons();
+    m_menu.normalizeButtons(margin);
 
     pr::connect(soloButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::PLAY_SOLO, TransitionData::GO_UP) );
     pr::connect(multiPlayerButton.clickedEvent, &MenuState::showInputDialog, this);

@@ -100,14 +100,14 @@ std::unique_ptr<sf::Sprite> &Menu::addCenteredSprite(const std::string &textureN
     return sprite;
 }
 
-void Menu::normalizeButtons()
+void Menu::normalizeButtons(float additionalWidth)
 {
     float max = (*std::max_element(m_buttons.begin(), m_buttons.end(), [](const auto &p1, const auto &p2){
         return p1->getWidth() < p2->getWidth();
     }))->getWidth();
 
     for(auto &it : m_buttons)
-        it->setWidth(max);
+        it->setWidth(max + additionalWidth);
 }
 
 void Menu::draw(Renderer &renderer) const

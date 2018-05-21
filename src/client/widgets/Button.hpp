@@ -131,6 +131,12 @@ public:
     const sf::Sprite &getIcon() const;
 
     /**
+     * @brief setIconTextureRect changes the texture rect
+     * of the icon
+     */
+    void setIconTextureRect(const sf::IntRect &rect);
+
+    /**
      * @brief setIcon sets the icon
      * @param sprite
      */

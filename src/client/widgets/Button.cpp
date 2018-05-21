@@ -69,7 +69,6 @@ Button::Button(const std::string &text, float xPos, float yPos):
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
-    updateIcon();
 }
 
 void Button::init()
@@ -148,8 +147,10 @@ void Button::draw(Renderer &renderer) const
     switch (m_alignment) {
     case Alignment::Center:
         renderer.pushTranslate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
+        break;
     case Alignment::TopLeft :
     default:
+        renderer.push();
         break;
     }
 
@@ -189,6 +190,7 @@ const sf::Sprite &Button::getIcon() const
 void Button::setIcon(const sf::Sprite &sprite)
 {
     m_icon = sprite;
+    m_alignment = Alignment::TopLeft;
     updateIcon();
 }
 
@@ -214,19 +216,24 @@ void Button::updateSize()
     setPosition(m_position);
 }
 
+void Button::setIconTextureRect(const sf::IntRect &rect)
+{
+    m_icon.setTextureRect(rect);
+}
+
 void Button::updateIcon()
 {
-    //At the right of the text
-    sf::FloatRect fr = m_text.getGlobalBounds();
-    sf::Vector2f iconPosition(m_text.getPosition().x + fr.width + 10, m_text.getPosition().y + fr.height * 0.3);
-
-    m_icon.setPosition(iconPosition);
-
     //Same height as the text
     sf::FloatRect iFr = m_icon.getLocalBounds();
-    float scale = fr.height / iFr.height;
+
+    float scale = (m_height - SF_BUTTON_BORDER * 5) / iFr.height;
     m_icon.setScale(scale, scale);
 
+
+    sf::Vector2f iconPosition(m_position.x + m_width - iFr.width, m_position.y -  (m_height - iFr.height) / 2 );
+    m_icon.setPosition(iconPosition);
+
+    setWidth(m_width + iFr.width);
 }
 
 

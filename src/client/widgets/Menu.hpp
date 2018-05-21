@@ -126,7 +126,7 @@ public:
      * @brief normalizeButtons finds the largest button
      * and sets all the buttons to its width
      */
-    void normalizeButtons();
+    void normalizeButtons(float additionalWidth = 0.f);
 
 private:
     /**

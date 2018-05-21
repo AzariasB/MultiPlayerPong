@@ -74,9 +74,7 @@ void OptionState::toggleSound()
     pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
                                   pr::soundEngine().mute();
 
-    sf::Sprite buttonSprite= m_muteButton->getIcon();
-    buttonSprite.setTextureRect(getCurrentSoundRect());
-    m_muteButton->setIcon(buttonSprite);
+    m_muteButton->setIconTextureRect(getCurrentSoundRect());
 }
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const
