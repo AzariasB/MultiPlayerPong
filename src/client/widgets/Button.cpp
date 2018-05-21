@@ -143,21 +143,21 @@ void Button::draw(Renderer &renderer) const
 
     renderer.render(m_border);
     renderer.render(m_background);
+    renderer.render(m_icon);
 
     switch (m_alignment) {
     case Alignment::Center:
         renderer.pushTranslate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
         break;
     case Alignment::TopLeft :
+        renderer.pushTranslate(sf::Vector2f(10, 0));
+        break;
     default:
         renderer.push();
         break;
     }
 
     renderer.render(m_text);
-    renderer.render(m_icon);
-
-
 
     renderer.pop();
 }
@@ -213,6 +213,9 @@ void Button::updateSize()
     }
 
     m_border.setSize(sf::Vector2f(m_width, m_height));
+    sf::FloatRect nwSize = m_icon.getGlobalBounds();
+    sf::Vector2f iconPosition(m_position.x + (m_width / 2) - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
+    m_icon.setPosition(iconPosition);
     setPosition(m_position);
 }
 
@@ -226,11 +229,12 @@ void Button::updateIcon()
     //Same height as the text
     sf::FloatRect iFr = m_icon.getLocalBounds();
 
-    float scale = (m_height - SF_BUTTON_BORDER * 5) / iFr.height;
+    float scale = m_height / iFr.height;
     m_icon.setScale(scale, scale);
 
 
-    sf::Vector2f iconPosition(m_position.x + m_width - iFr.width, m_position.y -  (m_height - iFr.height) / 2 );
+    sf::FloatRect nwSize = m_icon.getGlobalBounds();
+    sf::Vector2f iconPosition(m_position.x + m_width - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
     m_icon.setPosition(iconPosition);
 
     setWidth(m_width + iFr.width);

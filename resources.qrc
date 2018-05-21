@@ -21,4 +21,11 @@
         <file alias="normal_bip.ogg">res/ping_pong_8bit_beeep.ogg</file>
         <file alias="high_bip.wav" >res/ping_pong_8bit_biiip.wav</file>
     </qresource>
+    <qresource prefix="icons" >
+        <file alias="gear.png">res/icons/gear.png</file>
+        <file alias="information.png">res/icons/information.png</file>
+        <file alias="multiplayer.png">res/icons/multiplayer.png</file>
+        <file alias="power.png">res/icons/power.png</file>
+        <file alias="singleplayer.png">res/icons/singleplayer.png</file>
+    </qresource>
 </RCC>

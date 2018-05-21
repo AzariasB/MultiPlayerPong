@@ -52,15 +52,26 @@ MenuState::MenuState() :
     const float margin = 10;
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
-    const Button &soloButton = *m_menu.addButton("Solo",halfWay ,currentHeight);
+
+    Button &soloButton = *m_menu.addButton("Solo",halfWay ,currentHeight);
     currentHeight += soloButton.getHeight() + margin;
-    const Button &multiPlayerButton = *m_menu.addButton("Multiplayer", halfWay, currentHeight);
+    soloButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("singleplayer")));
+
+
+    Button &multiPlayerButton = *m_menu.addButton("Multiplayer", halfWay, currentHeight);
     currentHeight += multiPlayerButton.getHeight() + margin;
-    const Button &optionButton = *m_menu.addButton("Options", halfWay,currentHeight);
+    multiPlayerButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("multiplayer")));
+
+    Button &optionButton = *m_menu.addButton("Options", halfWay,currentHeight);
     currentHeight += optionButton.getHeight() + margin;
-    const Button &creditsButton = *m_menu.addButton("Credits", halfWay, currentHeight);
+    optionButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("gear")));
+
+    Button &creditsButton = *m_menu.addButton("Credits", halfWay, currentHeight);
     currentHeight += creditsButton.getHeight() + margin;
-    const Button &quitButton = *m_menu.addButton("Quit", halfWay, currentHeight);
+    creditsButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("information")));
+
+    Button &quitButton = *m_menu.addButton("Quit", halfWay, currentHeight);
+    quitButton.setIcon(sf::Sprite(pr::resourceManager().getTexture("power")));
 
     m_menu.normalizeButtons(margin);
 

@@ -97,7 +97,13 @@ void ResourcesManager::registerTexture(const std::string &filename, const std::s
 {
     QResource res(filename.c_str());
     m_textures[textureName] = std::make_unique<sf::Texture>();
-    m_textures[textureName]->loadFromMemory(res.data(), res.size());
+
+    if(res.isCompressed()){
+        QByteArray arr = qUncompress(res.data(), res.size());
+        m_textures[textureName]->loadFromMemory(arr.data(), arr.size());
+    }else{
+         m_textures[textureName]->loadFromMemory(res.data(), res.size());
+    }
 }
 
 ResourcesManager::~ResourcesManager() {

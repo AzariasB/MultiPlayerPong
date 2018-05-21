@@ -73,6 +73,12 @@ ClientApp::ClientApp() :
     rManager.registerTexture(":/animations/ball_extend","ball_extend");
     rManager.registerTexture(":/animations/ball_retract","ball_retract");
 
+    rManager.registerTexture(":/icons/gear.png","gear");
+    rManager.registerTexture(":/icons/information.png", "information");
+    rManager.registerTexture(":/icons/power.png", "power");
+    rManager.registerTexture(":/icons/singleplayer.png","singleplayer");
+    rManager.registerTexture(":/icons/multiplayer.png", "multiplayer");
+
     socket.setBlocking(false);
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
     m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
