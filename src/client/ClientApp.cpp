@@ -78,6 +78,8 @@ ClientApp::ClientApp() :
     rManager.registerTexture(":/icons/power.png", "power");
     rManager.registerTexture(":/icons/singleplayer.png","singleplayer");
     rManager.registerTexture(":/icons/multiplayer.png", "multiplayer");
+    rManager.registerTexture(":/icons/wrench.png" ,"wrench");
+    rManager.registerTexture(":/icons/exitLeft.png","exitLeft");
 
     socket.setBlocking(false);
     m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
