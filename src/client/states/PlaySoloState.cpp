@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,9 @@
 #include "src/client/ClientApp.hpp"
 
 
+namespace mp {
+
+
 PlaySoloState::PlaySoloState():
     PlayState()
 {
@@ -48,6 +51,9 @@ PlaySoloState::PlaySoloState():
 void PlaySoloState::handleEvent(const sf::Event &ev)
 {
     PlayState::handleEvent(ev);
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
+        pr::stateMachine().setCurrentState(cc::PAUSE);
+    }
 }
 
 void PlaySoloState::handleLoss(int looser)
@@ -66,5 +72,7 @@ void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
 
 PlaySoloState::~PlaySoloState()
 {
+
+}
 
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,8 @@
  */
 #include "Animation.hpp"
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <QDebug>
+
+namespace mp {
 
 Animation::Animation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop):
     m_sprite(texture),
@@ -90,5 +91,8 @@ void Animation::nextFrame()
 
 Animation::~Animation()
 {
+
+}
+
 
 }

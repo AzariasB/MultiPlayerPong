@@ -4,10 +4,10 @@ The pong game, in multiplayer, using sfml
 
 Dependencies
 ---
-- SFML (2.4.2)
-- Qmake
-- QtCore
-- Box2D
+- SFML (2.5.0)
+- Qmake (3.1)
+- QtCore (5.10.1)
+- Box2D (2.3.1)
 
 Compiling
 ---

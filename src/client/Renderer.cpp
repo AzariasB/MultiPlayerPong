@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +29,20 @@
  * Created on 9 octobre 2017, 19:19
  */
 
+#include "Assets.hpp"
 #include "Renderer.hpp"
-#include "src/Config.hpp"
-#include "src/Ball.hpp"
-#include "src/Paddle.hpp"
-#include "src/Wall.hpp"
+#include "src/common/Config.hpp"
+#include "src/common/Ball.hpp"
+#include "src/common/Paddle.hpp"
+#include "src/common/Wall.hpp"
 
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
 #include "ClientConf.hpp"
 
 #include <math.h>
+
+namespace mp {
 
 Renderer::Renderer(sf::RenderTarget &target) :
     target(target)
@@ -67,15 +70,20 @@ Renderer &Renderer::push()
     return *this;
 }
 
+Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
+{
+    push();
+    translate(translation);
+}
 
 void Renderer::shake()
 {
- //   m_shakeTimeout = sf::seconds(1.f);
+    //   m_shakeTimeout = sf::seconds(1.f);
 }
 
 void Renderer::update(sf::Time elapsed)
 {
-  /*  if(m_shakeTimeout > sf::Time::Zero){
+    /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
         float randAngle = (std::rand() % 360);
         float radius = m_shakeTimeout.asSeconds();
@@ -94,14 +102,6 @@ void Renderer::update(sf::Time elapsed)
 sf::RenderStates &Renderer::top()
 {
     return m_stack.top();
-}
-
-void Renderer::renderBall(const Ball& ball)
-{
-    sf::CircleShape circle(BALL_RADIUS, 30);
-    circle.setFillColor(cc::colors::ballColor);
-    circle.setPosition(ball.topLeftPosition());
-    render(circle);
 }
 
 Renderer &Renderer::scale(float nwScale)
@@ -153,9 +153,9 @@ Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
     const sf::Texture &texture = powerupTexture(powerup.getType());
     sf::Vector2i sprites = powerupSprites(powerup.getType());
     auto pair = m_powerupAnimations.emplace(std::piecewise_construct,
-                                   std::forward_as_tuple(powerup.getId()),
-                                   std::forward_as_tuple(texture, sprites, sf::seconds(1))
-                                   );
+                                            std::forward_as_tuple(powerup.getId()),
+                                            std::forward_as_tuple(texture, sprites, sf::seconds(1))
+                                            );
     pr::connect(powerup.powerupDestroyed, &Renderer::destroyAnimation, this, powerup.getId());
     return pair.first->second;
 }
@@ -169,15 +169,15 @@ const sf::Texture &Renderer::powerupTexture(const Powerup::POWERUP_TYPE &powerup
 {
     switch(powerupType){
     case Powerup::BALL_EXTEND:
-        return pr::resourceManager().getTexture("ball_extend");
+        return pr::resourceManager().getTexture(Assets::Animations::BallExtend );
     case Powerup::BALL_RETRACT:
-        return pr::resourceManager().getTexture("ball_retract");
+        return pr::resourceManager().getTexture(Assets::Animations::BallRetract );
     case Powerup::PADDLE_EXTEND:
-        return pr::resourceManager().getTexture("paddle_extend");
+        return pr::resourceManager().getTexture(Assets::Animations::PaddleExtend);
     case Powerup::PADDLE_RETRACT:
-        return pr::resourceManager().getTexture("paddle_retract");
+        return pr::resourceManager().getTexture(Assets::Animations::PaddleRetract);
     default:
-        return pr::resourceManager().getTexture("empty_texture");
+        return pr::resourceManager().getTexture(0);
     }
 }
 
@@ -194,26 +194,53 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 
 void Renderer::renderPaddle(const Paddle& paddle)
 {
-    sf::RectangleShape rectangle(sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT));
-
-    rectangle.setFillColor(cc::colors::paddleColor);
-
-    rectangle.setPosition(paddle.topLeftPosition());
-
-    render(rectangle);
+    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
 }
 
 void Renderer::renderWall(const Wall &wall)
 {
-    sf::RectangleShape rect( sf::Vector2f(WALL_WITDH, WALL_HEIGHT));
-    rect.setFillColor(cc::colors::wallColor);
-    rect.setPosition(wall.topLeftPosition());
-    render(rect);
+    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
 }
 
+void Renderer::renderBall(const Ball& ball)
+{
+    render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+}
+
+std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
+{
+    if(m_shapes.find(obj) == m_shapes.end()){
+        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::CircleShape>(radius));
+        target->setOrigin(radius, radius);
+        target->setFillColor(fillColor);
+        const b2Vec2 &pos = obj->getPosition();
+        target->setPosition(pos.x, pos.y);
+    }else if(!obj->isStatic()){
+        const b2Vec2 &pos = obj->getPosition();
+        m_shapes[obj]->setPosition(pos.x, pos.y);
+    }
+    return m_shapes[obj];
+}
+
+
+std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, float width, float height, const sf::Color &fillColor)
+{
+    if(m_shapes.find(obj) == m_shapes.end()){//not found
+        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::RectangleShape>(sf::Vector2f(width, height)));
+        target->setOrigin(width/2, height/2);
+        target->setFillColor(fillColor);
+        const b2Vec2 &pos = obj->getPosition();
+        target->setPosition(pos.x, pos.y);
+    }else if(!obj->isStatic()){//object can move
+        const b2Vec2 &pos = obj->getPosition();
+        m_shapes[obj]->setPosition(pos.x, pos.y);
+    }
+    return m_shapes[obj];
+}
 
 void Renderer::render(const sf::Drawable& drawable)
 {
     target.draw(drawable, m_stack.top());
 }
 
+}

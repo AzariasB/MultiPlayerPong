@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,13 @@
 
 #include "TransitionState.hpp"
 
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"
+
+
+namespace mp {
 
 const sf::Int32 TransitionState::mTransitionDuration = 500;
 
@@ -39,13 +42,11 @@ TransitionState::TransitionState()
 
 void TransitionState::draw(Renderer &renderer) const
 {
-    renderer.push();
-    renderer.translate(mExitingTranslate);
+    renderer.pushTranslate(mExitingTranslate);
     pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
     renderer.pop();
 
-    renderer.push();
-    renderer.translate(mEnteringTranslate);
+    renderer.pushTranslate(mEnteringTranslate);
     pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
     renderer.pop();
 }
@@ -61,11 +62,8 @@ void TransitionState::update(const sf::Time &elapsed)
         }
         pr::stateMachine().getStateAt(mExitingStateLabel).onAfterLeaving();
     }else{
-        if(m_tickExistingState)
-            pr::stateMachine().getStateAt(mExitingStateLabel).update(elapsed);
-
-        if(m_tickEnteringState)
-            pr::stateMachine().getStateAt(mEnteringStateLabel).update(elapsed);
+        pr::stateMachine().getStateAt(mExitingStateLabel).update(elapsed);
+        pr::stateMachine().getStateAt(mEnteringStateLabel).update(elapsed);
         updateCenters();
     }
 
@@ -126,4 +124,7 @@ void TransitionState::handleEvent(const sf::Event &ev)
 {
     if(mEnteringStateLabel != -1)
         pr::stateMachine().getStateAt(mEnteringStateLabel).handleEvent(ev);
+}
+
+
 }

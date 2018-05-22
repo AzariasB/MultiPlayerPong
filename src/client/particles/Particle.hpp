@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,32 +28,64 @@
  *
  * Created on 13/3/2018
  */
-#ifndef PARTICLE_HPP
-#define PARTICLE_HPP
+#pragma once
 
-class Renderer;
 namespace sf {
     class Time;
 }
 
+namespace mp {
+
+class Renderer;
+
+
+/**
+ * @brief The Particle class
+ * abstract class to represent a particle
+ * a particle must have the 'update' function,
+ * the 'render' function and the 'isFinished' function
+ */
 class Particle
 {
 public:
+    /**
+     * @brief Particle empty constructor
+     */
     Particle()
     {
 
     }
 
+    /**
+     * @brief update called to update the position and the
+     * animation of the particle
+     * @param elapsed the time elapsed since the last frame
+     */
     virtual void update(const sf::Time &elapsed) = 0;
 
+    /**
+     * @brief render renders the particle
+     * @param renderer the renderer to use to draw the particle
+     */
     virtual void render(Renderer &renderer) const = 0;
 
+    /**
+     * @brief isFinished helper to tell the particle manager whenever
+     * this particle is finished, and can be destroyed
+     * @return
+     */
     virtual bool isFinished() const = 0;
 
+    /**
+     * @brief ~Particle virtual destructor
+     */
     virtual ~Particle()
     {
 
     }
 };
 
-#endif // PARTICLE_HPP
+
+
+}
+

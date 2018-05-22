@@ -1,7 +1,6 @@
-/*
- * The MIT License
+/* * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,36 +36,34 @@
 #include "src/client/ClientConf.hpp"
 #include "WaitingState.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/Dialog.hpp"
+#include "src/client/widgets/Dialog.hpp"
 
+
+namespace mp {
 
 WaitingState::~WaitingState()
 {
-	delete m_messageDialog;
 }
 
 
 WaitingState::WaitingState() :
     State(),
-    m_messageDialog(Dialog::message("","Connecting..."))
+    m_menu(),
+    m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
-	m_messageDialog->setOkButtonTitle("Cancel");
-
-    pr::connect(m_messageDialog->okEvent, &WaitingState::cancelClicked, this);
-    pr::connect(m_messageDialog->cancelEvent, &WaitingState::cancelClicked, this);
-
-	m_messageDialog->show();
+    Button &btn =  *m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f);
+    pr::connect(btn.clickedEvent, &WaitingState::cancelClicked, this);
 }
 
 
 void WaitingState::draw(Renderer& renderer) const
 {
-    m_messageDialog->draw(renderer);
+    m_menu.draw(renderer);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)
 {
-	m_messageDialog->handleEvent(ev);
+    m_menu.handleEvent(ev);
 }
 
 
@@ -78,15 +75,14 @@ void WaitingState::cancelClicked()
 
 void WaitingState::update(const sf::Time &elapsed)
 {
-    Q_UNUSED(elapsed);
-    m_messageDialog->update(elapsed);
+    m_menu.update(elapsed);
 
-	//Blinking point
+    //Blinking point
     bool startGame = false;
     sf::Packet rcvPacket;
     sf::Socket::Status rcvStatus = pr::socket().receive(rcvPacket);
     sf::String text = c_state == PENDING ? "Connecting..." :
-                      c_state == CONNECTED ? "Waiting for player ..." : "Disconnected :(";
+                                           c_state == CONNECTED ? "Waiting for player ..." : "Disconnected :(";
 
 
     if(rcvStatus == sf::Socket::Done){
@@ -102,29 +98,30 @@ void WaitingState::update(const sf::Time &elapsed)
         c_state = DISCONNECTED;
     }
 
-	m_messageDialog->setTitle(text.toAnsiString());
-
-	if (startGame)
+    if (startGame)
         pr::stateMachine().goToState(cc::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
 
 }
 
 void WaitingState::onEnter(BaseStateData *data)
 {
-	c_state = CONNECTION_STATE::PENDING;
+    c_state = CONNECTION_STATE::PENDING;
 
-	StateData<std::string> *ipData = 0;
-	if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
+    StateData<std::string> *ipData = 0;
+    if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
 
     sf::IpAddress serverAddr(ipData->data());
 
     pr::socket().setBlocking(true);
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
     pr::socket().setBlocking(false);
-	if (status != sf::Socket::Done) {
-        std::cerr << "Failed to connect" << std::endl;
-		m_messageDialog->setTitle("Failed to connect");
-	} else {
-        std::cout << "Successfully connected to server" << std::endl;
-	}
+    if (status != sf::Socket::Done) {
+        pr::dialogManager().message("Error","Failed to connect to the server");
+        pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
+    } else {
+        m_content.setString("Waiting for player...");
+    }
 }
+
+}
+

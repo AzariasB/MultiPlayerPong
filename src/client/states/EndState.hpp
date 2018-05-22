@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,14 @@
  * Created on 16 octobre 2017, 22:50
  */
 
-#ifndef ENDSTATE_H
-#define ENDSTATE_H
+#pragma once
 
 #include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
+
+
+namespace mp {
+
 
 class Dialog;
 
@@ -44,56 +48,59 @@ class Dialog;
  */
 class EndState : public State {
 public:
-	/**
-	 * @brief EndState constructor
-	 * @param app reference to the application
-	 */
+    /**
+     * @brief EndState constructor
+     * @param app reference to the application
+     */
     EndState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer& renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param dtS
+     */
+    void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data
-	 */
-	void onEnter(BaseStateData *data) override;
+    /**
+     * @brief onEnter inherited function
+     * @param data
+     */
+    void onEnter(BaseStateData *data) override;
 
-	/**
-	 * @brief onLeave inherited function
-	 */
-	void onBeforeLeaving() override;
-
-	/**
-	 * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
-	 * goes back to the main menu
-	 */
+    /**
+     * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
+     * goes back to the main menu
+     */
     void goToMenu();
 
-	virtual ~EndState();
-private:
-	/**
-	 * @brief m_messageDialog the dialog used to show the result
-	 * of the game
-	 */
-	Dialog *m_messageDialog;
+    virtual ~EndState();
 
+private:
+    /**
+     * @brief m_menu the menu of the state, to show
+     * the texts and the "back" button menu
+     */
+    Menu m_menu;
+
+    /**
+     * @brief m_content reference
+     * to the "content" text, to show the text "win"
+     * or "loose"
+     */
+    sf::Text &m_content;
 };
 
-#endif /* ENDSTATE_H */
 
+
+}

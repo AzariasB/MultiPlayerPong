@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@
  * Created on 16 octobre 2017, 22:08
  */
 
-#ifndef RESOURCESMANAGER_H
-#define RESOURCESMANAGER_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -41,31 +41,33 @@
 #include <memory>
 #include <QResource>
 
+
+namespace mp {
 /**
  * @brief The ResourcesManager class contains all the resources
  * necessary for the client (texture, sound, font)
  */
 class ResourcesManager : public sf::NonCopyable {
 public:
-	/**
-	 * @brief ResourcesManager constructor
-	 */
-	ResourcesManager();
-	virtual ~ResourcesManager();
+    /**
+     * @brief ResourcesManager constructor
+     */
+    ResourcesManager();
+    virtual ~ResourcesManager();
 
-	/**
-	 * @brief registerSound creates the soundbuffer and keep it in memory
-	 * @param filename name of the file to read from
-	 * @param soundName the name of the sound to register, so it can be retrieved later
-	 */
-	void registerSound(const std::string &filename, const std::string &soundName);
+    /**
+     * @brief registerSound creates the soundbuffer and keep it in memory
+     * @param filename name of the file to read from
+     * @param soundName the name of the sound to register, so it can be retrieved later
+     */
+    void registerSound(const std::string &filename, const sf::Uint64 &soundId);
 
-	/**
-	 * @brief regsiterTexture saves a texture to the memroy
-	 * @param filename the name of the file where the texture is located
-	 * @param textureName name of the texture, to retreive it later
-	 */
-	void registerTexture(const std::string &filename, const std::string &textureName);
+    /**
+     * @brief regsiterTexture saves a texture to the memroy
+     * @param filename the name of the file where the texture is located
+     * @param textureName name of the texture, to retreive it later
+     */
+    void registerTexture(const std::string &filename, const sf::Uint64 &textureID);
 
     /**
      * @brief registerShader saves the shader in memory, making it available at runtime
@@ -75,12 +77,12 @@ public:
      */
     sf::Shader &registerShader(const std::string &filename, const std::string &shaderName);
 
-	/**
-	 * @brief getSound returns the sound associated with the name given when registered
-	 * @param soundName name of the sound
-	 * @return sound associated with the name, reference to the empty_sound object if not found
-	 */
-	sf::Sound &getSound(const std::string &soundName);
+    /**
+     * @brief getSound returns the sound associated with the name given when registered
+     * @param soundName name of the sound
+     * @return sound associated with the name, reference to the empty_sound object if not found
+     */
+    sf::Sound &getSound(const sf::Uint64 &soundID);
 
     /**
      * @brief getTexture the texture with the given name
@@ -88,7 +90,7 @@ public:
      * @return a reference to the texture reserved with
      * the given name
      */
-	const sf::Texture &getTexture(const std::string &textureName) const;
+    const sf::Texture &getTexture(const sf::Uint64 &textureID) const;
 
     /**
      * @brief getShader access to the shader with the given name
@@ -97,14 +99,14 @@ public:
      */
     sf::Shader &getShader(const std::string &shaderName);
 
-	/**
-	 * @brief getFont the font for the game
-	 * @return the game's font
-	 */
-	const sf::Font &getFont() const
-	{
+    /**
+     * @brief getFont the font for the game
+     * @return the game's font
+     */
+    const sf::Font &getFont() const
+    {
         return mQuicksandFont;
-	}
+    }
 
 private:
     /**
@@ -117,34 +119,34 @@ private:
      * @brief m_uncompressedQuicksandFont uncompressed quicksand font
      */
     QResource m_uncompressedQuicksandFont;
-	
-	/**
-	 * @brief m_emptySound empty sound used when an unkonw sound is requested
-	 */
-	sf::Sound m_emptySound;
+
+    /**
+     * @brief m_emptySound empty sound used when an unkonw sound is requested
+     */
+    sf::Sound m_emptySound;
 
     /**
      * @brief m_emptyShader empty shader used when an unknwon shader is requested
      */
     sf::Shader m_emptyShader;
 
-	/**
-	 * @brief m_emptyTexture empty texture used when an unknown texture is requested
-	 */
-	const sf::Texture m_emptyTexture;
+    /**
+     * @brief m_emptyTexture empty texture used when an unknown texture is requested
+     */
+    const sf::Texture m_emptyTexture;
 
-	/**
-	 * @brief m_sounds keep all the soundbuffer and their sound in memory
-	 */
-	std::unordered_map<std::string, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
+    /**
+     * @brief m_sounds keep all the soundbuffer and their sound in memory
+     */
+    std::unordered_map<sf::Uint64, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
 
     /**
      * @brief m_textures keep all the texture in memory
      */
-	std::unordered_map<std::string, std::unique_ptr<sf::Texture>> m_textures;
+    std::unordered_map<sf::Uint64, std::unique_ptr<sf::Texture>> m_textures;
 
     std::unordered_map<std::string, sf::Shader> m_shaders;
 };
 
-#endif /* RESOURCESMANAGER_H */
 
+}

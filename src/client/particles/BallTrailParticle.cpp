@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,8 @@
 #include "BallTrailParticle.hpp"
 
 #include <iostream>
+
+namespace mp {
 
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
     Particle(),
@@ -79,3 +81,6 @@ void BallTrailParticle::render(Renderer &renderer) const
     renderer.rotateAround(center, -m_angle);
 
 }
+
+}
+

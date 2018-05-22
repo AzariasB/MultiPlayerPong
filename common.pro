@@ -8,42 +8,40 @@ QT              -= gui
 CONFIG          += c++14
 QMAKE_CXXFLAGS  += -std=c++14
 
-win32:INCLUDEPATH += C:\SFML-2.4.2\include C:\Box2D\include
+win32:INCLUDEPATH += C:\SFML-2.5.0\include C:\Box2D\include
 win32:DEFINES += "SFML_STATIC"
-win32:LIBS += -LC:\SFML-2.4.2\lib  -lsfml-network-s-d -lsfml-system-s-d \
-            -lws2_32 -lwinmm
+win32:LIBS += -LC:\SFML-2.5.0\lib ..\..\lib\libBox2D.a
 
 unix:INCLUDEPATH += /usr/local/include
-unix:LIBS +=  -L/usr/local/lib -lsfml-network -lsfml-system ../../lib/libenet.a
-
-LIBS += ../../lib/libBox2D.a
+unix:LIBS +=  -L/usr/local/lib
+unix:LIBS += ../../lib/libBox2D.a
 
 SOURCES +=\
     src/main.cpp \
-    src/Application.cpp \
-    src/Ball.cpp \
-    src/Paddle.cpp \
-    src/EventManager.cpp \
-    src/Game.cpp \
-    src/Player.cpp \
-    src/Powerup.cpp \
-    src/Wall.cpp \
-    src/ContactListener.cpp \
-    src/PhysicObject.cpp \
-    src/Math.cpp
+    src/common/Application.cpp \
+    src/common/Ball.cpp \
+    src/common/Paddle.cpp \
+    src/common/EventManager.cpp \
+    src/common/Game.cpp \
+    src/common/Player.cpp \
+    src/common/Powerup.cpp \
+    src/common/Wall.cpp \
+    src/common/ContactListener.cpp \
+    src/common/PhysicObject.cpp \
+    src/common/Math.cpp
 
 HEADERS +=\
-    src/Application.hpp \
-    src/Ball.hpp \
-    src/Paddle.hpp \
-    src/EventManager.hpp \
-    src/Game.hpp \
-    src/Math.hpp \
-    src/Player.hpp \
-    src/VectorsUtils.hpp \
-    src/Config.hpp \
-    src/Powerup.hpp \
+    src/common/Application.hpp \
+    src/common/Ball.hpp \
+    src/common/Paddle.hpp \
+    src/common/EventManager.hpp \
+    src/common/Game.hpp \
+    src/common/Math.hpp \
+    src/common/Player.hpp \
+    src/common/VectorsUtils.hpp \
+    src/common/Config.hpp \
+    src/common/Powerup.hpp \
     src/lib/twin.hpp \
-    src/Wall.hpp \
-    src/ContactListener.hpp \
-    src/PhysicObject.hpp
+    src/common/Wall.hpp \
+    src/common/ContactListener.hpp \
+    src/common/PhysicObject.hpp

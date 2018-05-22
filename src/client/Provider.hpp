@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,14 +28,15 @@
  *
  * Created on 18/11/2017
  */
-#ifndef PROVIDER_HPP
-#define PROVIDER_HPP
+#pragma once
 
 #include <SFML/Config.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "src/EventManager.hpp"
+#include "src/common/EventManager.hpp"
+
+namespace mp {
 
 class Game;
 class StateMachine;
@@ -46,57 +47,68 @@ class ParticleGenerator;
 class Renderer;
 class Player;
 class ResourcesManager;
+class DialogManager;
 
 
 namespace pr {
-    Game &game();
+Game &game();
 
-    StateMachine &stateMachine();
+StateMachine &stateMachine();
 
-    const ResourcesManager &resourceManager();
+const ResourcesManager &resourceManager();
 
-    EventManager &eventManager();
+EventManager &eventManager();
 
-    sf::Uint64 nextEventCode();
+sf::Uint64 nextEventCode();
 
-    sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
+sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
 
-    KeyBinding &keyBinding();
+KeyBinding &keyBinding();
 
-    SoundEngine &soundEngine();
+SoundEngine &soundEngine();
 
-    ParticleGenerator &particleGenerator();
+ParticleGenerator &particleGenerator();
 
-    Renderer &renderer();
+Renderer &renderer();
 
-    sf::TcpSocket &socket();
+sf::TcpSocket &socket();
 
-    Player &player();
+Player &player();
+
+DialogManager &dialogManager();
 
 
-    template<typename T, typename ...Args>
-    const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
-    {
-        return eventManager().declareListener(evCode, func, obj);
-    }
-
-    template<typename T, typename ...Args>
-    const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
-    {
-        return eventManager().declareListener(evCode, func, obj, args...);
-    }
-
-    template<typename ...Args>
-    const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
-    {
-        return eventManager().declareListener(evCode, func, args...);
-    }
-
-    template<typename ...Args>
-    void trigger(sf::Uint64 evCode, Args... argp)
-    {
-        eventManager().trigger(evCode, argp...);
-    }
+template<typename T, typename ...Args>
+const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
+{
+    return eventManager().declareListener(evCode, func, obj);
 }
 
-#endif // PROVIDER_HPP
+template<typename T, typename ...Args>
+const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
+{
+    return eventManager().declareListener(evCode, func, obj, args...);
+}
+
+template<typename T, typename A, typename ...Args>
+const std::string &connect(sf::Uint64 evCode, void (T::*func)(A, Args...), T *obj, A val)
+{
+    return eventManager().declareListener(evCode, func, obj, val);
+}
+
+template<typename ...Args>
+const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
+{
+    return eventManager().declareListener(evCode, func, args...);
+}
+
+template<typename ...Args>
+void trigger(sf::Uint64 evCode, Args... argp)
+{
+    eventManager().trigger(evCode, argp...);
+}
+
+}//namespace pr
+
+
+}//namespace mp

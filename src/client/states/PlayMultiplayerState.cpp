@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,12 @@
 #include "PlayMultiplayerState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
-#include "src/EventManager.hpp"
+#include "src/common/EventManager.hpp"
 
 #include <iostream>
+
+namespace mp {
+
 
 PlayMultiplayerState::PlayMultiplayerState() :
     PlayState()
@@ -75,4 +78,7 @@ void PlayMultiplayerState::onEnter(BaseStateData *data)
 
 void PlayMultiplayerState::onBeforeLeaving()
 {
+}
+
+
 }

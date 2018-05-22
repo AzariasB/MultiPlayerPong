@@ -1,5 +1,5 @@
-#ifndef TWIN_HPP
-#define TWIN_HPP
+
+#pragma once
 
 #include <cmath>
 #include <type_traits>
@@ -531,7 +531,11 @@ enum easing{
         }
 
         Twin():
+            from(0),
+            to(0),
+            advance(0),
             finishCallback(noop),
+            totalTime(0),
             easingF(getEasing(linear))
         {
 
@@ -572,6 +576,11 @@ enum easing{
         float progress() const
         {
             return totalProgress;
+        }
+
+        virtual ~Twin()
+        {
+
         }
 
     private:
@@ -678,5 +687,3 @@ enum easing{
     }
 }
 
-
-#endif // TWIN_HPP

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,14 @@
  */
 #include <algorithm>
 
-#include "src/Config.hpp"
+#include "src/common/Config.hpp"
 #include "ParticleGenerator.hpp"
 #include "ExplosionParticle.hpp"
 #include "BallTrailParticle.hpp"
 #include "GainPointParticle.hpp"
+#include "CountdownParticle.hpp"
+
+namespace mp {
 
 ParticleGenerator::ParticleGenerator()
 {
@@ -63,6 +66,13 @@ void ParticleGenerator::gainPoint(const sf::Vector2f &position)
     );
 }
 
+void ParticleGenerator::countdown(const std::string & countdownValue, const sf::Vector2f &position)
+{
+    m_particles.emplace_back(
+        std::make_unique<CountdownParticle>(countdownValue, position)
+    );
+}
+
 void ParticleGenerator::draw(Renderer &renderer) const
 {
     for(const auto&part : m_particles){
@@ -80,4 +90,7 @@ void ParticleGenerator::update(const sf::Time &elapsed)
             ++it;
         }
     }
+}
+
+
 }

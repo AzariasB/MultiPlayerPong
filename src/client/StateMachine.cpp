@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,14 @@
 /* 
  * File:   StateMachine.cpp
  * Author: azarias
- * 
+ *
  * Created on 16 octobre 2017, 19:04
  */
 
 #include "StateMachine.hpp"
 #include "SoundEngine.hpp"
+
+namespace mp {
 
 StateMachine::StateMachine()
 {
@@ -44,7 +46,7 @@ StateMachine::~StateMachine()
 void StateMachine::setCurrentState(int stateLabel)
 {
     if (currentStateIndex > -1)
-    states[currentStateIndex]->onBeforeLeaving();
+        states[currentStateIndex]->onBeforeLeaving();
     currentStateIndex = stateLabel;
 
     BaseStateData dat;
@@ -65,5 +67,7 @@ void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
     td.exitingStateLabel = currentStateIndex;
     td.direction = dir;
     setCurrentState(cc::TRANSITION, &td);
-    pr::soundEngine().playSound(SoundEngine::ROLLOVER);
+    pr::soundEngine().playSound(Assets::Sounds::Rollover1);
+}
+
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,33 +31,24 @@
 #include "EndState.hpp"
 #include "src/client/ClientApp.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/Dialog.hpp"
+#include "src/client/widgets/Dialog.hpp"
 #include "src/client/ClientConf.hpp"
 
+namespace mp {
 
-EndState::EndState() :
-    m_messageDialog(Dialog::message( "",""))
+EndState::EndState():
+    m_menu(),
+    m_content(*m_menu.addLabel("",0,0))
 {
-    m_messageDialog->setOkButtonTitle("Menu");
+    m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
 
-    pr::connect(
-                m_messageDialog->okEvent,
-                &EndState::goToMenu,
-                this
-                );
-
-    pr::connect(
-                m_messageDialog->cancelEvent,
-                &EndState::goToMenu,
-                this
-                );
-
-    m_messageDialog->show();
+    Button &btn = *m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4);
+    pr::connect(btn.clickedEvent, &EndState::goToMenu, this);
 }
 
 EndState::~EndState()
 {
-    delete m_messageDialog;
+
 }
 
 
@@ -68,7 +59,8 @@ void EndState::goToMenu()
 
 void EndState::draw(Renderer& renderer) const
 {
-    m_messageDialog->draw(renderer);
+    //m_messageDialog->draw(renderer);
+    m_menu.draw(renderer);
 }
 
 
@@ -78,26 +70,24 @@ void EndState::handleEvent(const sf::Event& ev)
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
         goToMenu();
     }else{
-        m_messageDialog->handleEvent(ev);
+        m_menu.handleEvent(ev);
     }
 }
 
 void EndState::onEnter(BaseStateData *data)
 {
-    Q_UNUSED(data);
-    m_messageDialog->setMessage("Your score :" + std::to_string(pr::player().getScore()));
-    m_messageDialog->setTitle(ClientApp::getInstance().isWinner() ? "You won ! " : "You lost");
-    pr::game().reset();
-}
+    m_content.setString(ClientApp::getInstance().isWinner() ? "You won !" : "You lost !");
+    m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
+    m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
 
-void EndState::onBeforeLeaving()
-{
-    //Disconnect the sockets and "null" them
+    pr::game().reset();
     pr::socket().disconnect();
-    m_messageDialog->hide();
 }
 
 void EndState::update(const sf::Time &elapsed)
 {
-    m_messageDialog->update(elapsed);
+    m_menu.update(elapsed);
 }
+
+}
+

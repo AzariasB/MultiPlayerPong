@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,8 @@
  * Created on 2/11/2017
  */
 #include "KeyBinding.hpp"
+
+namespace mp {
 
 const std::array<KeyBinding::KEY_ACTION, 2> KeyBinding::allActions = {KeyBinding::GO_UP, KeyBinding::GO_DOWN};
 
@@ -196,5 +198,7 @@ void KeyBinding::initKeyMap()
     MAP_KEY(F14);
     MAP_KEY(F15);
     MAP_KEY(Pause);
+
+}
 
 }

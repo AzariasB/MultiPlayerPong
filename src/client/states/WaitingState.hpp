@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,21 +29,26 @@
  * Created on 16 octobre 2017, 17:48
  */
 
-#ifndef WAITINGSTATE_H
-#define WAITINGSTATE_H
+#pragma once
+
 
 #include "src/client/State.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 namespace sf {
-    class Event;
-    class Time;
+class Event;
+class Time;
 }
+
+
+namespace mp {
+
 class Dialog;
 
 enum CONNECTION_STATE {
-	PENDING,
-	CONNECTED,
-	DISCONNECTED,
+    PENDING,
+    CONNECTED,
+    DISCONNECTED,
 };
 
 /**
@@ -53,54 +58,63 @@ enum CONNECTION_STATE {
  */
 class WaitingState : public State {
 public:
-	/**
-	 * @brief WaitingState constructor
-	 * @param client reference to the client's app
-	 */
+    /**
+     * @brief WaitingState constructor
+     * @param client reference to the client's app
+     */
     WaitingState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer& renderer) const override;
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param dtS
+     */
+    void update(const sf::Time &elapsed) override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief onEnter inherited function
-	 * @param data inherited function
-	 */
-	void onEnter(BaseStateData *data) override;
+    /**
+     * @brief onEnter inherited function
+     * @param data inherited function
+     */
+    void onEnter(BaseStateData *data) override;
 
-	/**
-	 * @brief cancelClicked function called when the button "cancel" is clicked
-	 */
-	void cancelClicked();
+    /**
+     * @brief cancelClicked function called when the button "cancel" is clicked
+     */
+    void cancelClicked();
 
-	virtual ~WaitingState();
+    virtual ~WaitingState();
 private:
-	/**
-	 * @brief m_messageDialog the dialog to display, to show the state
-	 * of the application
-	 */
-	Dialog *m_messageDialog;
 
-	/**
-	 * @brief c_state state current connection state
-	 */
-	CONNECTION_STATE c_state;
+    /**
+     * @brief c_state state current connection state
+     */
+    CONNECTION_STATE c_state;
+
+    /**
+     * @brief m_menu Menu to show the texts
+     * and the "menu" button
+     */
+    Menu m_menu;
+
+    /**
+     * @brief m_content text containing
+     */
+    sf::Text &m_content;
 };
 
-#endif /* WAITINGSTATE_H */
+
+
+}
+
 

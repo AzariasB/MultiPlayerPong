@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,9 +32,6 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include "Ball.hpp"
-#include "Paddle.hpp"
-#include "Application.hpp"
 
 #ifdef CLIENT
 #include "client/ClientApp.hpp"
@@ -50,10 +47,10 @@ int main(int argc, char** argv)
 {
     srand(time(NULL));
 #ifdef CLIENT
-    ClientApp &app = ClientApp::getInstance();
+    mp::ClientApp &app = mp::ClientApp::getInstance();
     app.initStates();
 #elif SERVER
-	ServerApp app;
+    mp::ServerApp app;
 #else
 #error "Found neither 'client' nor 'server' configuration"
 #endif

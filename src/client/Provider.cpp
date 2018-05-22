@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,12 +32,12 @@
 #include "ClientApp.hpp"
 #include "particles/ParticleGenerator.hpp"
 #include "Renderer.hpp"
-#include "src/Game.hpp"
-#include "src/Player.hpp"
-#include "StateMachine.hpp"
+#include "src/common/Game.hpp"
+#include "src/common/Player.hpp"
 #include "KeyBinding.hpp"
-#include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
+
+namespace mp {
 
 Game &pr::game()
 {
@@ -98,4 +98,11 @@ sf::TcpSocket &pr::socket()
 Player &pr::player()
 {
     return ClientApp::getInstance().getPlayer();
+}
+
+DialogManager &pr::dialogManager()
+{
+    return ClientApp::getInstance().getDialogManager();
+}
+
 }

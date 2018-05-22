@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,8 @@
 #include "GainPointParticle.hpp"
 
 
+namespace mp {
+
 GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
     Particle(),
     m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime.asMilliseconds(), twin::linear)),
@@ -67,4 +69,7 @@ void GainPointParticle::update(const sf::Time &elapsed)
     textColor.a = m_alphaTwin.get();
     m_text.setFillColor(textColor);
     m_text.setPosition(m_text.getPosition().x, m_positionTwin.get());
+}
+
+
 }

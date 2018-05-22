@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +28,18 @@
  * Created on 9 octobre 2017, 18:06
  */
 
-#ifndef SERVERAPP_H
-#define SERVERAPP_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/Socket.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "../Application.hpp"
-#include "../Game.hpp"
+#include "src/common/Application.hpp"
+#include "src/common/Game.hpp"
 #include "Lobby.hpp"
+
+namespace mp {
 
 /**
  * @brief The ServerApp class the application run
@@ -71,4 +73,5 @@ private:
 	std::vector<std::unique_ptr<LobbyThread>> lobbies;
 };
 
-#endif /* SERVERAPP_H */
+
+}

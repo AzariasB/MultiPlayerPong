@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,25 +29,47 @@
  * Created on 12/03/2018
  */
 
-#ifndef PLAYSTATE_HPP
-#define PLAYSTATE_HPP
+#pragma once
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Time.hpp>
 #include "src/client/State.hpp"
 
+namespace mp {
+
 class Player;
 
+/**
+ * @brief The PlayState class
+ * abstract class used by multiplayer and solo states
+ * performs all the commons parts of rendering, handling
+ * events, state switching and point managment
+ */
 class PlayState : public State
 {
 public:
+    /**
+     * @brief PlayState constructor
+     */
     PlayState();
 
+    /**
+     * @brief draw draws all the entity of the stage
+     * @param renderer
+     */
     virtual void draw(Renderer &renderer) const override;
 
+    /**
+     * @brief update updates all the entities of the stage
+     * @param elapsed
+     */
     virtual void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief handleEvent handles the player event
+     * @param ev sfml event
+     */
     virtual void handleEvent(const sf::Event &ev) override;
 
     virtual ~PlayState();
@@ -65,10 +87,9 @@ private:
     sf::Text m_p2ScoreText;
 
     /**
-     * @brief m_countdownText text displayed for
-     * the countdown
+     * @brief lastCountdownValue last countdown displayed value
      */
-    sf::Text m_countdownText;
+    int m_lastCountdownValue = -1;
 
     /**
      * @brief m_nextParticle time until next particle spawn
@@ -81,4 +102,6 @@ private:
     bool gameFinisehd = false;
 };
 
-#endif // PLAYSTATE_HPP
+
+}
+

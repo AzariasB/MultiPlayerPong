@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,36 +28,61 @@
  *
  * Created on 20/3/2018
  */
-#ifndef CLIENTCONF_HPP
-#define CLIENTCONF_HPP
+#pragma once
 
 #include <SFML/Graphics/Color.hpp>
 
-namespace cc//namespace client conf
+
+namespace mp
 {
-/**
+
+    constexpr int SF_DIALOG_WIDTH = 700;
+    constexpr int SF_DIALOG_HEIGHT = 200;
+
+    //Dimensions (all in meters)
+    //Arena
+    constexpr int SF_ARENA_WIDTH = 800;
+    constexpr int SF_ARENA_HEIGHT = 600;
+
+    constexpr int SF_BUTTON_BORDER = 2;
+
+
+    namespace cc//namespace client conf
+    {
+        /**
  * @brief The STATE_TYPE enum associate with each state, an int (enum)
  * to store these in the state machine, and retrieve them later
  */
-enum STATE_TYPE {
-    MENU,//First state
-    PLAY_MULTIPLAYER,
-    PLAY_SOLO,
-    OPTIONS,
-    KEY_BINDINGS,
-    WAITING,
-    FINISHED,
-    TRANSITION
-};
+        enum STATE_TYPE {
+            MENU,//First state
+            PLAY_MULTIPLAYER,
+            PLAY_SOLO,
+            PAUSE,
+            CREDITS,
+            OPTIONS,
+            KEY_BINDINGS,
+            WAITING,
+            FINISHED,
+            TRANSITION
+        };
 
-namespace colors {
-    const sf::Color backgroundColor = sf::Color(0,10, 30);
-    const sf::Color fontColor = sf::Color(220, 220, 220);
-    const sf::Color paddleColor = sf::Color(128, 255, 0);
-    const sf::Color ballColor = sf::Color(226, 88, 34);
-    const sf::Color wallColor = sf::Color(200,200,200);
+        class Colors {
+        public:
+            static const sf::Color backgroundColor;
+            static const sf::Color buttonColor;
+            static const sf::Color buttonBorderColor;
+            static const sf::Color dialogBackgroundColor;
+            static const sf::Color dialogOutlineColor;
+            static const sf::Color fontColor;
+            static const sf::Color higlithColor;
+            static const sf::Color paddleColor;
+            static const sf::Color ballColor;
+            static const sf::Color wallColor;
+        };
+
+    }
+
+
 }
 
-}
 
-#endif // CLIENTCONF_HPP

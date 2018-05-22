@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,28 +32,30 @@
 #include <algorithm>
 #include <math.h>
 #include <iostream>
-#include "src/VectorsUtils.hpp"
+#include "src/common/VectorsUtils.hpp"
 #include "src/client/Renderer.hpp"
 
 
+namespace mp {
+
 ExplosionParticle::ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime):
-m_maxLifeTime(maxLifeTime),
-m_vertices(sf::PrimitiveType::Lines, particleNumber*2),
-m_particles(particleNumber)
+    m_maxLifeTime(maxLifeTime),
+    m_vertices(sf::PrimitiveType::Lines, particleNumber*2),
+    m_particles(particleNumber)
 {
-	createParticles(origin, particleNumber);
+    createParticles(origin, particleNumber);
 }
 
 void ExplosionParticle::createParticles(const sf::Vector2f &origin, std::size_t particleNumber)
 {
     for(std::size_t i = 0; i < particleNumber;i++){
-		float angle = (std::rand() % 360) * 3.14f / 180.f;
+        float angle = (std::rand() % 360) * 3.14f / 180.f;
         float speed = (std::rand() % 100) * 0.01f;
-		m_particles[i].velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
-		m_particles[i].lifeTime = sf::milliseconds(std::rand()%m_maxLifeTime.asMilliseconds() + (m_maxLifeTime.asMilliseconds()/2));
+        m_particles[i].velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
+        m_particles[i].lifeTime = sf::milliseconds(std::rand()%m_maxLifeTime.asMilliseconds() + (m_maxLifeTime.asMilliseconds()/2));
         m_vertices[(i*2)].position = origin;
         m_vertices[(i*2)+1].position = origin + m_particles[i].velocity;
-	}
+    }
 }
 
 bool ExplosionParticle::isFinished() const
@@ -64,25 +66,28 @@ bool ExplosionParticle::isFinished() const
 
 void ExplosionParticle::update(const sf::Time &elapsed)
 {
-	for(std::size_t i = 0; i < m_particles.size(); i++){
+    for(std::size_t i = 0; i < m_particles.size(); i++){
         Line &p = m_particles[i];
-		p.lifeTime -= elapsed;
+        p.lifeTime -= elapsed;
 
-		if(p.lifeTime <= sf::Time::Zero)continue;
+        if(p.lifeTime <= sf::Time::Zero)continue;
 
         sf::Vector2f increment = p.velocity * elapsed.asSeconds();
         m_vertices[(i*2)].position += increment;
         m_vertices[(i*2)+1].position += increment;
 
-		float ratio = p.lifeTime.asSeconds() / m_maxLifeTime.asSeconds();
+        float ratio = p.lifeTime.asSeconds() / m_maxLifeTime.asSeconds();
         sf::Uint8 alpha = static_cast<sf::Uint8>(ratio * 255);
 
         m_vertices[(i*2)].color.a = alpha;
         m_vertices[(i*2)+1].color.a = alpha;
-	}
+    }
 }
 
 void ExplosionParticle::render(Renderer &renderer) const
 {
     renderer.render(m_vertices);
 }
+
+}
+

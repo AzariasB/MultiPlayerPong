@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,8 @@
 
 #include "PlayState.hpp"
 
-#include "src/Game.hpp"
-#include "src/Config.hpp"
+#include "src/common/Game.hpp"
+#include "src/common/Config.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/KeyBinding.hpp"
@@ -43,29 +43,26 @@
 #include "src/client/particles/ParticleGenerator.hpp"
 
 
+namespace mp {
+
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
-    m_p2ScoreText("0", pr::resourceManager().getFont()),
-    m_countdownText("3", pr::resourceManager().getFont())
+    m_p2ScoreText("0", pr::resourceManager().getFont())
 {
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
-    m_countdownText.setPosition(
-                SF_ARENA_WIDTH / 2  - m_countdownText.getGlobalBounds().width,
-                SF_ARENA_HEIGHT / 2 - m_countdownText.getGlobalBounds().height
-                );
 
     pr::connect(
-                     pr::game().hitPaddleEvent,
-                     &PlayState::bounced,
-                     this
-                     );  //Subscribe to bounce event
+                pr::game().hitPaddleEvent,
+                &PlayState::bounced,
+                this
+                );  //Subscribe to bounce event
 }
 
 void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 {
     Q_UNUSED(pNum);
-    pr::soundEngine().playSound(SoundEngine::BOUNCE);
+    pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
 
     sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
     if(pNum == 2){
@@ -81,6 +78,8 @@ void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
 
 void PlayState::update(const sf::Time &elapsed)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
+
     if (pr::game().playerWon())
         pr::stateMachine().setCurrentState(cc::FINISHED);
     else
@@ -97,26 +96,30 @@ void PlayState::update(const sf::Time &elapsed)
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
 
-    if(pr::game().isCountingDown())
-        m_countdownText.setString(std::to_string(1 + (int)pr::game().getCountdownTime().asSeconds()));
+    if(pr::game().isCountingDown()){
+        if( m_lastCountdownValue != (int)pr::game().getCountdownTime().asSeconds()){
+            m_lastCountdownValue = (int)pr::game().getCountdownTime().asSeconds();
+            pr::particleGenerator().countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+            pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
+        }
+    }else if(m_lastCountdownValue == 0){
+        m_lastCountdownValue = -1;
+        pr::particleGenerator().countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+        pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
+    }
 }
 
 void PlayState::draw(Renderer &renderer) const
 {
-    if(pr::game().isCountingDown()){
-        renderer.render(m_countdownText);
-    }
-
-    const sf::Texture &txt = pr::resourceManager().getTexture("sketchy");
     renderer.push()
-            .scale(M_TO_P)
-            .setTexture(&txt);
-        pr::particleGenerator().draw(renderer);
-        renderer.renderBall(pr::game().getBall());
-        renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
-        renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
-        renderer.renderWall(pr::game().upperWall());
-        renderer.renderWall(pr::game().lowerWall());
+            .scale(M_TO_P);
+
+    pr::particleGenerator().draw(renderer);
+    renderer.renderBall(pr::game().getBall());
+    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
+    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
+    renderer.renderWall(pr::game().upperWall());
+    renderer.renderWall(pr::game().lowerWall());
     renderer.pop();
 
     renderer.render(m_p1ScoreText);
@@ -137,4 +140,7 @@ void PlayState::handleEvent(const sf::Event &ev)
 {
     sf::Event realEv = pr::keyBinding().toGameEvent(ev);
     pr::game().handleEvent(realEv, pr::player());
+}
+
+
 }

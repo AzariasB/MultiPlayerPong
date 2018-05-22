@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,12 +28,14 @@
  *
  * Created on 3/11/2017
  */
-#ifndef KEYOPTIONS_HPP
-#define KEYOPTIONS_HPP
+#pragma once
 
-#include "src/client/Menu.hpp"
+#include "src/client/widgets/Menu.hpp"
 #include "src/client/KeyBinding.hpp"
 #include "src/client/State.hpp"
+
+
+namespace mp {
 
 class Dialog;
 
@@ -45,27 +47,27 @@ class Dialog;
 class KeyBindingState : public State
 {
 public:
-	/**
-	 * @brief KeyOptions constructor
-	 * @param app reference to the app's object
-	 * @param startX the starting X point of the menu
-	 * @param startY the starting Y point of the menu
-	 */
+    /**
+     * @brief KeyOptions constructor
+     * @param app reference to the app's object
+     * @param startX the starting X point of the menu
+     * @param startY the starting Y point of the menu
+     */
     KeyBindingState();
 
     virtual ~KeyBindingState();
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event &ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event &ev) override;
 
-	/**
-	 * @brief draw inherited function
-	 * @param target
-	 * @param states
-	 */
+    /**
+     * @brief draw inherited function
+     * @param target
+     * @param states
+     */
     void draw(Renderer &renderer) const override;
 
     /**
@@ -75,75 +77,73 @@ public:
     void update(const sf::Time &elapsed) override;
 
 private:
-	/**
-	 * @brief The ActionsButton struct
-	 * struct used internally to associate every
-	 * button with it's action
-	 */
-	struct ActionsButton{
-		/**
-		 * @brief ActionsButton constructor
-		 * @param b a pointer to the button
-		 * @param ka the action
-		 */
-		ActionsButton(Button *b, KeyBinding::KEY_ACTION ka):
-			button(b),
-			action(ka)
-		{
+    /**
+     * @brief The ActionsButton struct
+     * struct used internally to associate every
+     * button with it's action
+     */
+    struct ActionsButton{
+        /**
+         * @brief ActionsButton constructor
+         * @param b a pointer to the button
+         * @param ka the action
+         */
+        ActionsButton(Button *b, KeyBinding::KEY_ACTION ka):
+            button(b),
+            action(ka)
+        {
 
-		}
+        }
 
-		/**
-		 * @brief button the button
-		 */
-		Button *button;
+        /**
+         * @brief button the button
+         */
+        Button *button;
 
-		/**
-		 * @brief action the action associated with the button
-		 */
-		KeyBinding::KEY_ACTION action;
-	};
+        /**
+         * @brief action the action associated with the button
+         */
+        KeyBinding::KEY_ACTION action;
+    };
 
-	/**
-	 * @brief buttonClicked whenever a button is clicked, to change the binding
-	 * of a key
-	 * @param ab the actionButton associated with the button clicked
-	 */
-	void buttonClicked(ActionsButton *ab);
+    /**
+     * @brief buttonClicked whenever a button is clicked, to change the binding
+     * of a key
+     * @param ab the actionButton associated with the button clicked
+     */
+    void buttonClicked(ActionsButton *ab);
 
-	/**
-	 * @brief cancelDialog when the dialog is canceled
-	 */
-	void cancelDialog();
+    /**
+     * @brief cancelDialog when the dialog is canceled
+     */
+    void cancelDialog();
 
-	/**
-	 * @brief resetKeys resets all the key bindings
-	 * and updates the view
-	 */
-	void resetKeys();
+    /**
+     * @brief resetKeys resets all the key bindings
+     * and updates the view
+     */
+    void resetKeys();
 
-	/**
-	 * @brief m_messageDialog the dialog used
-	 * to show the "press key" message when needed
-	 */
-	Dialog *m_messageDialog = 0;
+
+    sf::Uint64 m_messageDialogId = 0;
 
     /**
      * @brief m_menu the menu showing all the keys
      */
     Menu m_menu;
 
-	/**
-	 * @brief m_actions all the button with their associated actions
-	 */
-	std::vector<std::unique_ptr<ActionsButton>> m_actions;
+    /**
+     * @brief m_actions all the button with their associated actions
+     */
+    std::vector<std::unique_ptr<ActionsButton>> m_actions;
 
-	/**
-	 * @brief m_waitingAction the currently action
-	 * waiting to have a key binding
-	 */
-	ActionsButton *m_waitingAction = 0;
+    /**
+     * @brief m_waitingAction the currently action
+     * waiting to have a key binding
+     */
+    ActionsButton *m_waitingAction = 0;
 
 };
 
-#endif // KEYOPTIONS_HPP
+}
+

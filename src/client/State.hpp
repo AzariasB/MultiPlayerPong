@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +29,20 @@
  * Created on 16 octobre 2017, 17:20
  */
 
-#ifndef STATE_H
-#define STATE_H
+#pragma once
+
 
 #include <SFML/System/NonCopyable.hpp>
 #include <memory>
 #include <qglobal.h>
 
 namespace sf {
-    class Event;
-    class Time;
+class Event;
+class Time;
 }
+
+
+namespace mp {
 
 class Renderer;
 
@@ -89,7 +92,7 @@ private:
 struct TransitionData {
     int enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
-         updateExistingState = false;
+    updateExistingState = false;
 
     std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
 
@@ -174,4 +177,4 @@ public:
 
 };
 
-#endif /* STATE_H */
+}

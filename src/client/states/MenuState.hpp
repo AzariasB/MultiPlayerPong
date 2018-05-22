@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,17 @@
  * Created on 16 octobre 2017, 17:48
  */
 
-#ifndef MENUSTATE_H
-#define MENUSTATE_H
+#pragma once
+
 
 #include "src/client//State.hpp"
-#include "src/client/Menu.hpp"
+#include "src/client/widgets/Menu.hpp"
 
 namespace sf {
-    class Event;
+class Event;
 }
+
+namespace mp {
 
 class Dialog;
 
@@ -48,51 +50,75 @@ class Dialog;
  */
 class MenuState : public State {
 public:
-	/**
-	 * @brief MenuState constructor
-	 * @param client reference to the app
-	 */
+    /**
+     * @brief MenuState constructor
+     * @param client reference to the app
+     */
     MenuState();
 
-	/**
-	 * @brief draw inherited function
-	 * @param renderer
-	 */
-	void draw(Renderer& renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void draw(Renderer& renderer) const override;
 
-	/**
-	 * @brief handleEvent inherited function
-	 * @param ev
-	 */
-	void handleEvent(const sf::Event& ev) override;
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
+    void handleEvent(const sf::Event& ev) override;
 
-	/**
-	 * @brief dialogConfirmed when the dialog asking for the IP
-	 * is confirmed, checks if the IP adress is correct, and if
-	 * it is, goes to the Waiting state, otherwise, shows a dialog
-	 * saying the ip is a wrong one
-	 */
-	void dialogConfirmed();
+    /**
+     * @brief dialogConfirmed when the dialog asking for the IP
+     * is confirmed, checks if the IP adress is correct, and if
+     * it is, goes to the Waiting state, otherwise, shows a dialog
+     * saying the ip is a wrong one
+     */
+    void dialogConfirmed();
 
-	/**
-	 * @brief update inherited function
-	 * @param dtS
-	 */
-	void update(const sf::Time &elapsed) override;
+    /**
+     * @brief update inherited function
+     * @param dtS
+     */
+    void update(const sf::Time &elapsed) override;
 
     /**
      * @brief onAfterLeaving inherited function
      */
     void onAfterLeaving() override;
 
-	virtual ~MenuState();
-private :
-	/**
-	 * @brief isValidIp checks if the given string is a valid ip (using regexp)
-	 * @param enteredIp the ip entered by the user
-	 * @return wehter the given string is a valid ip
-	 */
-	bool isValidIp(const std::string &enteredIp) const;
+    virtual ~MenuState();
+private:
+
+    /**
+     * @brief requestQuit shows a dialog asking
+     * if the user really wants to leave
+     */
+    void requestQuit();
+
+    /**
+     * @brief ipEntered method called whenever the ip dialog is confirmed
+     * @param entered
+     */
+    void ipEntered(const std::string &entered);
+
+
+    /**
+     * @brief showInputDialog shows input dialog
+     */
+    void showInputDialog();
+
+    /**
+     * @brief inputDialogHidden when the input dialog is hidden
+     */
+    void inputDialogHidden();
+
+    /**
+     * @brief isValidIp checks if the given string is a valid ip (using regexp)
+     * @param enteredIp the ip entered by the user
+     * @return wehter the given string is a valid ip
+     */
+    bool isValidIp(const std::string &enteredIp) const;
 
     /**
      * @brief gotoOptionState
@@ -101,21 +127,19 @@ private :
      */
     void gotoOptionState();
 
-	/**
-	 * @brief m_menu Menu holding all the differents buttons
-	 */
-	Menu m_menu;
+    /**
+     * @brief m_menu Menu holding all the differents buttons
+     */
+    Menu m_menu;
 
-	/**
-	 * @brief m_inputDialog input dialog
-	 */
-	Dialog *m_inputDialog;
-
-	/**
-	 * @brief m_messageDialog the message dialog
-	 */
-	Dialog *m_messageDialog;
+    /**
+     * @brief m_inputDialog input dialog
+     */
+    sf::Uint64 m_inputDialiogId = 0;
 };
 
-#endif /* MENUSTATE_H */
+
+}
+
+
 

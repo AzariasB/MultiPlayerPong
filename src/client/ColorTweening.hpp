@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,63 +28,67 @@
  *
  * Created on 26/3/2018
  */
-#ifndef COLORTWEENING_HPP
-#define COLORTWEENING_HPP
+#pragma once
 
 #include <SFML/Graphics/Color.hpp>
 #include "src/lib/twin.hpp"
 
-class ColorTweening
-{
-public:
-    /**
+namespace mp {
+
+
+
+    class ColorTweening
+    {
+    public:
+        /**
      * @brief ColorTweening empty constructor
      */
-    ColorTweening();
+        ColorTweening();
 
-    /**
+        /**
      * @brief ColorTweening no tweening, just a color
      * @param defaultColor
      */
-    ColorTweening(const sf::Color &defaultColor);
+        ColorTweening(const sf::Color &defaultColor);
 
 
-    /**
+        /**
      * @brief ColorTweening constructor
      * @param from the original color
      * @param to the color to reach
      * @param duration the duration of the transition
      * @param easing the easing to use
      */
-    ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing);
+        ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing);
 
-    /**
+        /**
      * @brief get the current color depending on the progress
      * @return
      */
-    const sf::Color &get() const;
+        const sf::Color &get() const;
 
-    void update(float deltaTime);
+        void update(float deltaTime);
 
-    bool isFinished() const;
+        bool isFinished() const;
 
-private:
+    private:
 
-    /**
+        /**
      * @brief running wether we actually need to update the colors
      */
-    bool m_running;
+        bool m_running;
 
-    sf::Color m_color;
+        sf::Color m_color;
 
-    /**
+        /**
      * @brief m_colorsTwin array of 4 tweening, in order, it contains:
      *  - the red value tweening
      *  - the green value tweening
      *  - the blue value tweening
      *  - the alpha value tweening
      */
-    std::array<twin::Twin<sf::Uint8, float>, 4> m_colorsTwin;
-};
+        std::array<twin::Twin<sf::Uint8, float>, 4> m_colorsTwin;
+    };
 
-#endif // COLORTWEENING_HPP
+
+}

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,11 +39,15 @@
 #include "states/WaitingState.hpp"
 #include "states/EndState.hpp"
 #include "states/MenuState.hpp"
+#include "states/PauseState.hpp"
 #include "states/OptionState.hpp"
 #include "states/KeyBindingState.hpp"
 #include "states/TransitionState.hpp"
+#include "states/CreditsState.hpp"
 #include "ClientConf.hpp"
+#include "Assets.hpp"
 
+namespace mp {
 
 ClientApp &ClientApp::getInstance()
 {
@@ -52,35 +56,30 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+    window(new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
            "Pong",
            sf::Style::Default,
-           sf::ContextSettings(0,0,8)),
-    renderer(window),
+           sf::ContextSettings(0,0,8))),
+    renderer(*window),
     game(),
     stateMachine(),
     m_sEngine(rManager),
-    m_keyBinding()
+    m_keyBinding(),
+    m_dialogManager()
 {
-    //Textures
-    rManager.registerTexture(":/icons.png", "icons");
-    rManager.registerTexture(":/sketchy.jpg","sketchy");
-    rManager.registerTexture(":/sound_icons.png","sound_icons");
-    //rManager.registerShader(":/shaders/wobble.frag","main"); /* shader not working on me computer :( */
-    rManager.registerTexture(":/animations/paddle_extend","paddle_extend");
-    rManager.registerTexture(":/animations/paddle_retract","paddle_retract");
-    rManager.registerTexture(":/animations/ball_extend","ball_extend");
-    rManager.registerTexture(":/animations/ball_retract","ball_retract");
+    for(const auto &p: Assets::animations) rManager.registerTexture(p.second, p.first);
+
+    for(const auto &p: Assets::icons) rManager.registerTexture(p.second, p.first);
+
+    for(const auto &p: Assets::sounds)rManager.registerSound(p.second, p.first);
 
     socket.setBlocking(false);
-    m_sEngine.saveSound(SoundEngine::BOUNCE, ":/sounds/bounce.wav");
-    m_sEngine.saveSound(SoundEngine::CLICK, ":/sounds/click3.wav");
-    m_sEngine.saveSound(SoundEngine::ROLLOVER, ":/sounds/rollover.wav");
-    window.setKeyRepeatEnabled(false);
+    window->setKeyRepeatEnabled(false);
 }
 
 ClientApp::~ClientApp()
 {
+    delete window;
 }
 
 void ClientApp::initStates()
@@ -93,42 +92,62 @@ void ClientApp::initStates()
     stateMachine.addState<KeyBindingState>(cc::KEY_BINDINGS);
     stateMachine.addState<TransitionState>(cc::TRANSITION);
     stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
+    stateMachine.addState<PauseState>(cc::PAUSE);
+    stateMachine.addState<CreditsState>(cc::CREDITS);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)
 {
     if (event.type == sf::Event::Closed) {
-        window.close();
+        window->close();
     } else if(event.type == sf::Event::Resized){
         resizeEvent(event);
+    } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
+        toggleFullScreen();
     } else {
+        m_dialogManager.handleEvent(event);
         stateMachine.getCurrentState().handleEvent(event);
     }
+}
+
+void ClientApp::toggleFullScreen()
+{
+    if(window)delete window;
+    if(m_isFullscreen){
+        window = new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+                                      "Pong",
+                                      sf::Style::Default,
+                                      sf::ContextSettings(0,0,8));
+    }else{
+        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),
+                                      "Pong",
+                                      sf::Style::Fullscreen);
+    }
+
+    m_isFullscreen = !m_isFullscreen;
 }
 
 void ClientApp::resizeEvent(const sf::Event &event)
 {
     float width = event.size.width;
     float height = event.size.height;
-    sf::Vector2u minSize(width, height);
-    if(width < SF_ARENA_WIDTH)
-        minSize.x = SF_ARENA_WIDTH;
-    if(height < SF_ARENA_HEIGHT)
-        minSize.y = SF_ARENA_HEIGHT;
 
-    window.setSize(minSize);
-
+    if(height < SF_ARENA_HEIGHT || width < SF_ARENA_WIDTH){
+        window->setSize(sf::Vector2u(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+        return;//do not update the view
+    }
 
     float nwX = (width - SF_ARENA_WIDTH) /2.f;
     float nwY = (height - SF_ARENA_HEIGHT)/2.f;
 
     float nwXRatio = nwX / width;
     float nwYRatio = nwY / height;
-    sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 , 1 );
+    sf::FloatRect visibleArea(nwXRatio, nwYRatio, 1 - (nwXRatio * 2), 1 - (nwYRatio * 2));
 
-    sf::View view(sf::FloatRect(0,0, width, height));
+
+    sf::View view(sf::FloatRect(0,0, SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
     view.setViewport(visibleArea);
-    window.setView(view);
+    window->setView(view);
 }
 
 void ClientApp::run(int argc, char** argv)
@@ -138,27 +157,28 @@ void ClientApp::run(int argc, char** argv)
 
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
-    while (window.isOpen()) {
+    while (window->isOpen()) {
         sf::Event ev;
-        while (window.pollEvent(ev))
+        while (window->pollEvent(ev))
             handleEvent(ev);
 
-        window.clear(cc::colors::backgroundColor);
+        window->clear(cc::Colors::backgroundColor);
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);
+        m_dialogManager.update(elapsed);
         stateMachine.getCurrentState().update(elapsed);
         stateMachine.getCurrentState().draw(renderer);
+        m_dialogManager.draw(renderer);
 
-        window.display();
+        window->display();
     }
     socket.disconnect();
-    stateMachine.getCurrentState().onBeforeLeaving(); //Close last threads
 }
 
 void ClientApp::quit()
 {
-    window.close();
+    window->close();
 }
 
 const Player& ClientApp::getPlayer() const
@@ -230,12 +250,17 @@ ParticleGenerator &ClientApp::getParticleGenerator()
 
 sf::RenderWindow &ClientApp::getWindow()
 {
-    return window;
+    return *window;
 }
 
 KeyBinding &ClientApp::getKeyBindings()
 {
     return m_keyBinding;
+}
+
+DialogManager &ClientApp::getDialogManager()
+{
+    return m_dialogManager;
 }
 
 const ParticleGenerator &ClientApp::getParticleGenerator() const
@@ -245,7 +270,7 @@ const ParticleGenerator &ClientApp::getParticleGenerator() const
 
 const sf::RenderWindow &ClientApp::getWindow() const
 {
-    return window;
+    return *window;
 }
 
 const ResourcesManager& ClientApp::getResourcesManager()
@@ -258,3 +283,4 @@ const KeyBinding &ClientApp::getKeyBindings() const
     return m_keyBinding;
 }
 
+}

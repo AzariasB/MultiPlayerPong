@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,38 +25,37 @@
 /* 
  * File:   SoundEngine.cpp
  * Author: azarias
- * 
+ *
  * Created on 21 octobre 2017, 11:49
  */
 
 #include "SoundEngine.hpp"
+#include "src/common/Math.hpp"
 #include <iostream>
 
+namespace mp {
+
 SoundEngine::SoundEngine(ResourcesManager& sManager) :
-m_manager(sManager)
+    m_manager(sManager)
 {
 
 }
 
-void SoundEngine::playSound(SOUND_TYPE s)
+void SoundEngine::playSound(Assets::Sounds s, const sf::Vector3f &position)
 {
-	if(m_isMuted)return;
-	sf::Sound &sound = m_manager.getSound(toSoundName(s));
-	sound.play();
-}
-
-void SoundEngine::saveSound(SOUND_TYPE s, const std::string& filename)
-{
-	m_manager.registerSound(filename, toSoundName(s));
-}
+    if(m_isMuted)return;
+    sf::Sound &sound = m_manager.getSound(s);
 
 
-std::string SoundEngine::toSoundName(SOUND_TYPE st)
-{
-	return "sound_" + std::to_string(static_cast<int> (st));
+    sound.setRelativeToListener(math::length(position) != 0);
+    sound.setPosition(position);
+
+    sound.play();
 }
+
 
 SoundEngine::~SoundEngine()
 {
 }
 
+}
