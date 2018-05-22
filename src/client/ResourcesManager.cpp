@@ -37,7 +37,7 @@
 namespace mp {
 
 ResourcesManager::ResourcesManager():
-    m_uncompressedQuicksandFont(":/fonts/whateverittakes.ttf")
+    m_uncompressedQuicksandFont(":/fonts/whateverittakesbold.ttf")
 {
 
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){

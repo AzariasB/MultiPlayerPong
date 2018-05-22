@@ -51,8 +51,8 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_title.setPosition(originX + 5,originY + 5);
 
     m_xButton.setPosition(sf::Vector2f(
-                              originX + SF_DIALOG_WIDTH - m_xButton.getWidth() - 5,
-                              originY + 5
+                              originX + SF_DIALOG_WIDTH - m_xButton.getWidth() / 2,
+                              originY
                               ));
 
     m_background.setPosition(originX, originY);
@@ -166,6 +166,8 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
 
     pr::connect(m_confirmButton.clickedEvent, &DialogInput::confirmClicked, this);
     pr::connect(m_cancelButton.clickedEvent, &DialogInput::cancelClicked, this);
+
+    m_confirmButton.setSelected(true);
 }
 
 
@@ -202,8 +204,10 @@ void DialogInput::draw(Renderer &renderer) const
 void DialogInput::handleEvent(const sf::Event &ev)
 {
     Dialog::handleEvent(ev);
-    if(state() == DIALOG_VISIBLE && ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return){
-        confirmClicked();
+    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right) ){
+        bool yesWasSelected = m_confirmButton.isSelected();
+        m_cancelButton.setSelected(yesWasSelected);
+        m_confirmButton.setSelected(!yesWasSelected);
     }else{
         m_cancelButton.handleEvent(ev);
         m_confirmButton.handleEvent(ev);
@@ -300,10 +304,11 @@ void DialogQuestion::noClicked()
 DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
     Dialog(id, title),
     m_messageText(message, pr::resourceManager().getFont()),
-    m_okButton("Ok", originX + 10, originY + SF_DIALOG_HEIGHT - 50),
+    m_okButton("Ok", originX + 30, originY + SF_DIALOG_HEIGHT - 50),
     okClickedEvent(pr::nextEventCode())
 {
     m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
+    m_okButton.setSelected(true);
 
     pr::connect(m_okButton.clickedEvent, &DialogMessage::okClicked, this);
 }
