@@ -60,7 +60,7 @@ ClientApp::ClientApp() :
            "Pong",
            sf::Style::Default,
            sf::ContextSettings(0,0,8))),
-    renderer(*window),
+    renderer(window),
     game(),
     stateMachine(),
     m_sEngine(rManager),
@@ -123,6 +123,7 @@ void ClientApp::toggleFullScreen()
                                       "Pong",
                                       sf::Style::Fullscreen);
     }
+    renderer.updateRenderTarget(window);
 
     m_isFullscreen = !m_isFullscreen;
 }

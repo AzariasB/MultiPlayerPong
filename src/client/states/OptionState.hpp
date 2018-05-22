@@ -84,12 +84,17 @@ private:
      */
     const sf::IntRect &getCurrentSoundRect() const;
 
-    Button *m_muteButton = 0;
-
     /**
      * @brief m_menu the menu with all the options
      */
     Menu m_menu;
+
+    /**
+     * @brief m_muteButton keep a reference to the mute button
+     * to be able to change its icon
+     */
+    Button &m_muteButton;
+
     /**
      * @brief m_withSoundRect rect for the icon "with sound"
      */

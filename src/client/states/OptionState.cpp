@@ -42,30 +42,30 @@
 namespace mp {
 
 OptionState::OptionState():
-    m_menu()
+    m_menu(),
+    m_muteButton(m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, 90))
 {
     float startY = 50.f;
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
 
-    m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
     sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Sound ), getCurrentSoundRect());
-    m_muteButton->setIcon(sound);
-    pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
-    startY += m_muteButton->getHeight();
+    m_muteButton.setIcon(sound);
+    pr::connect(m_muteButton.clickedEvent, &OptionState::toggleSound, this);
+    startY += m_muteButton.getHeight() + 10;
 
-    const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
-    startY += keyBindingButton.getHeight();
+    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
+    startY += keyBindingButton.getHeight() + 10;
     pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
-    const Button &fullScreenButton = *m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY);
+    Button &fullScreenButton = m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::Icons::Larger);
     startY += fullScreenButton.getHeight() + 50.f;
     pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
 
-    sf::Uint64 backClicked = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY )->clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
+    Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::Icons::Exitleft );
+    pr::connect(backButton.clickedEvent, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 
-    sf::Uint64 playClicked = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY)->clickedEvent;
-    pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
+    Button &playButton = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::Icons::Forward);
+    pr::connect(playButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
 
     m_menu.normalizeButtons();
 }
@@ -75,7 +75,7 @@ void OptionState::toggleSound()
     pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
                                   pr::soundEngine().mute();
 
-    m_muteButton->setIconTextureRect(getCurrentSoundRect());
+    m_muteButton.setIconTextureRect(getCurrentSoundRect());
 }
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const

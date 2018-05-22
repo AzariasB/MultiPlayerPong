@@ -54,16 +54,18 @@ void Menu::update(const sf::Time &elapsed)
         it->update(elapsed);
 }
 
-std::unique_ptr<Button> &Menu::addButton(const std::string &content, float xPos, float yPos)
+Button &Menu::addButton(const std::string &content, float xPos, float yPos, int icon)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
     std::unique_ptr<Button> &inserted = m_buttons.back();
 
     int idx = m_buttons.size() -1;
     pr::connect(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
+    if(icon > -1)
+        inserted->setIcon(sf::Sprite(pr::resourceManager().getTexture(icon)));
 
     if(m_buttons.size() == 1) inserted->setSelected(true);
-    return inserted;
+    return *inserted;
 }
 
 std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)

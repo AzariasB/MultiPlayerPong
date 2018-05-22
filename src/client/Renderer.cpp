@@ -41,13 +41,19 @@
 #include "ClientConf.hpp"
 
 #include <math.h>
+#include <functional>
 
 namespace mp {
 
-Renderer::Renderer(sf::RenderTarget &target) :
-    target(target)
+Renderer::Renderer(sf::RenderTarget *target) :
+    m_target(target)
 {
     m_stack.push(sf::RenderStates::Default);
+}
+
+void Renderer::updateRenderTarget(sf::RenderTarget *target)
+{
+    m_target = target;
 }
 
 Renderer::~Renderer()
@@ -240,7 +246,7 @@ std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, f
 
 void Renderer::render(const sf::Drawable& drawable)
 {
-    target.draw(drawable, m_stack.top());
+    m_target->draw(drawable, m_stack.top());
 }
 
 }

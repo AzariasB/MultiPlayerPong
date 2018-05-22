@@ -59,7 +59,15 @@ public:
      * @brief Renderer constructor
      * @param target the target that will be used to render all the game's objects
      */
-    Renderer(sf::RenderTarget &target);
+    Renderer(sf::RenderTarget *target);
+
+    /**
+     * @brief updateRenderTarget whenever the client toggles
+     * the screen state, we create a new window
+     * thus, we need to be able to change the render target
+     * @param target
+     */
+    void updateRenderTarget(sf::RenderTarget *target);
 
     /**
      * @brief renderBall renders the game's ball (as a blue circle for now)
@@ -157,15 +165,6 @@ public:
      */
     Renderer &pop();
 
-    /**
-     * @brief getRenderTarget a reference to the renderTarget
-     * @return a reference to the renderTarget
-     */
-    sf::RenderTarget &getRenderTarget()
-    {
-        return target;
-    }
-
     virtual ~Renderer();
 private:
 
@@ -224,7 +223,7 @@ private:
     /**
      * @brief target the target to use to draw stuff on it
      */
-    sf::RenderTarget &target;
+    sf::RenderTarget *m_target;
 
     /**
      * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,

@@ -50,11 +50,11 @@ KeyBindingState::KeyBindingState():
     const int xSide = SF_ARENA_WIDTH / 4.f;
     for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
         std::string btnTitle = pr::keyBinding().toString(ka);
-        Button *b = m_menu.addButton(btnTitle ,xSide, startY).get();
-        startY += b->getHeight();
-        m_actions.emplace_back(std::make_unique<ActionsButton>(b, ka));
+        Button &b = m_menu.addButton(btnTitle ,xSide, startY);
+        startY += b.getHeight();
+        m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
         pr::connect(
-                    b->clickedEvent,
+                    b.clickedEvent,
                     &KeyBindingState::buttonClicked,
                     this,
                     m_actions.back().get()
@@ -62,11 +62,11 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 50.f;
-    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY)->clickedEvent;
+    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY).clickedEvent;
     pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100)->clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100).clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_menu.normalizeButtons();

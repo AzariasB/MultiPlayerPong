@@ -82,7 +82,7 @@ public:
      * @param yPos the Y position of the button
      * @return the button newly created
      */
-    std::unique_ptr<Button> &addButton(const std::string &content, float xPos, float yPos);
+    Button &addButton(const std::string &content, float xPos, float yPos, int icon = -1);
 
     /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result

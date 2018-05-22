@@ -42,7 +42,7 @@ EndState::EndState():
 {
     m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
 
-    Button &btn = *m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4);
+    Button &btn = m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::Icons::Exitleft);
     pr::connect(btn.clickedEvent, &EndState::goToMenu, this);
 }
 

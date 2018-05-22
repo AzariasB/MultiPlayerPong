@@ -53,7 +53,7 @@ public:
     enum Animations {BallRetract = 13, BallExtend = 14, PaddleExtend = 15, PaddleRetract = 16};
     static const std::unordered_map<Animations, std::string> animations;
 
-    enum Icons {Gear = 17, Information = 18, Sound = 19, Exitleft = 20, Wrench = 21, Singleplayer = 22, Power = 23, Multiplayer = 24};
+    enum Icons {Forward = 17, Gear = 18, Information = 19, Sound = 20, Exitleft = 21, Larger = 22, Wrench = 23, Cross = 24, Singleplayer = 25, Power = 26, Multiplayer = 27};
     static const std::unordered_map<Icons, std::string> icons;
 
 

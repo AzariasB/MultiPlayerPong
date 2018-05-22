@@ -54,25 +54,20 @@ MenuState::MenuState() :
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
 
-    Button &soloButton = *m_menu.addButton("Solo",halfWay ,currentHeight);
+    const Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::Icons::Singleplayer);
     currentHeight += soloButton.getHeight() + margin;
-    soloButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Singleplayer)));
 
 
-    Button &multiPlayerButton = *m_menu.addButton("Multiplayer", halfWay, currentHeight);
+    const Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::Icons::Multiplayer);
     currentHeight += multiPlayerButton.getHeight() + margin;
-    multiPlayerButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Multiplayer)));
 
-    Button &optionButton = *m_menu.addButton("Options", halfWay,currentHeight);
+    const Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::Icons::Gear);
     currentHeight += optionButton.getHeight() + margin;
-    optionButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Gear)));
 
-    Button &creditsButton = *m_menu.addButton("Credits", halfWay, currentHeight);
+    const Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::Icons::Information);
     currentHeight += creditsButton.getHeight() + margin;
-    creditsButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Information)));
 
-    Button &quitButton = *m_menu.addButton("Quit", halfWay, currentHeight);
-    quitButton.setIcon(sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Power)));
+    const Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::Icons::Power);
 
     m_menu.normalizeButtons(margin);
 

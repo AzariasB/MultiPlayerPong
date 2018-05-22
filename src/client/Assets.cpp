@@ -65,11 +65,14 @@ const std::unordered_map<Assets::Animations, std::string> Assets::animations = {
 };
 
 const std::unordered_map<Assets::Icons, std::string> Assets::icons = {
+{ Forward, ":/icons/forward.png" },
 { Gear, ":/icons/gear.png" },
 { Information, ":/icons/information.png" },
 { Sound, ":/icons/sound.png" },
 { Exitleft, ":/icons/exitleft.png" },
+{ Larger, ":/icons/larger.png" },
 { Wrench, ":/icons/wrench.png" },
+{ Cross, ":/icons/cross.png" },
 { Singleplayer, ":/icons/singleplayer.png" },
 { Power, ":/icons/power.png" },
 { Multiplayer, ":/icons/multiplayer.png" }

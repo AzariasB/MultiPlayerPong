@@ -41,13 +41,13 @@ PauseState::PauseState():
 {
     m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
-    const Button &resume = *m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , 250);
+    Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , 250, Assets::Icons::Forward);
     pr::connect(resume.clickedEvent, &PauseState::resume, this);
 
-    const Button &options = *m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , 300);
+    Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , 300, Assets::Icons::Gear);
     pr::connect(options.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
 
-    const Button &menuBtn = *m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, 350);
+    const Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, 350, Assets::Icons::Exitleft);
     pr::connect(menuBtn.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::MENU, TransitionData::GO_DOWN));
 
     m_menu.normalizeButtons();
