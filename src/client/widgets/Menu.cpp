@@ -56,14 +56,11 @@ void Menu::update(const sf::Time &elapsed)
 
 Button &Menu::addButton(const std::string &content, float xPos, float yPos, int icon)
 {    
-    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
+    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
     std::unique_ptr<Button> &inserted = m_buttons.back();
 
     int idx = m_buttons.size() -1;
     pr::connect(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
-    if(icon > -1)
-        inserted->setIcon(sf::Sprite(pr::resourceManager().getTexture(icon)));
-
     if(m_buttons.size() == 1) inserted->setSelected(true);
     return *inserted;
 }
@@ -103,9 +100,6 @@ void Menu::draw(Renderer &renderer) const
         ptr->draw(renderer);
 
     for(auto &ptr : m_labels)
-        renderer.render(*ptr);
-
-    for(auto &ptr : m_sprites)
         renderer.render(*ptr);
 }
 

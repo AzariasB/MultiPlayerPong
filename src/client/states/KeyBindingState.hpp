@@ -106,6 +106,8 @@ private:
         KeyBinding::KEY_ACTION action;
     };
 
+    int actionIcon(KeyBinding::KEY_ACTION action) const;
+
     /**
      * @brief buttonClicked whenever a button is clicked, to change the binding
      * of a key

@@ -56,7 +56,7 @@ Button::Button(const std::string &text) :
     init();
 }
 
-Button::Button(const std::string &text, float xPos, float yPos):
+Button::Button(const std::string &text, float xPos, float yPos, int iconId):
     m_text(text, pr::resourceManager().getFont()),
     m_width(m_text.getGlobalBounds().width),
     m_height(m_text.getGlobalBounds().height + 10),
@@ -69,6 +69,8 @@ Button::Button(const std::string &text, float xPos, float yPos):
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
+    if(iconId > -1)
+        setIcon(sf::Sprite(pr::resourceManager().getTexture(iconId)));
 }
 
 void Button::init()

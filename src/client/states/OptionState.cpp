@@ -53,7 +53,7 @@ OptionState::OptionState():
     pr::connect(m_muteButton.clickedEvent, &OptionState::toggleSound, this);
     startY += m_muteButton.getHeight() + 10;
 
-    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
+    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::Icons::Wrench);
     startY += keyBindingButton.getHeight() + 10;
     pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 

@@ -124,20 +124,21 @@ private:
 
     /**
      * @brief m_labels all the labels of the menu
+     * a pointer is used so that the reference that is
+     * returned can still be used whenever the size
+     * of the vector changes
      */
     std::vector<std::unique_ptr<sf::Text>> m_labels;
 
     /**
      * @brief m_buttons all the buttons of the menu
+     * a pointer is used so that the reference returned
+     * when creating the button is still valid whenever
+     * the vector is changing size
      */
     std::vector<std::unique_ptr<Button>> m_buttons;
 
     std::size_t m_selectedButton = 0;
-
-    /**
-     * @brief m_sprites all the sprites of the menu
-     */
-    std::vector<std::unique_ptr<sf::Sprite>> m_sprites;
 };
 
 

@@ -50,8 +50,8 @@ KeyBindingState::KeyBindingState():
     const int xSide = SF_ARENA_WIDTH / 4.f;
     for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
         std::string btnTitle = pr::keyBinding().toString(ka);
-        Button &b = m_menu.addButton(btnTitle ,xSide, startY);
-        startY += b.getHeight();
+        Button &b = m_menu.addButton(btnTitle ,xSide, startY, actionIcon(ka));
+        startY += b.getHeight() + 10;
         m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
         pr::connect(
                     b.clickedEvent,
@@ -62,11 +62,11 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 50.f;
-    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY).clickedEvent;
+    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY, Assets::Icons::Return).clickedEvent;
     pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100).clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 50, Assets::Icons::Exitleft).clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_menu.normalizeButtons();
@@ -100,6 +100,15 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
         }
     }else{
         m_menu.handleEvent(ev);
+    }
+}
+
+int KeyBindingState::actionIcon(KeyBinding::KEY_ACTION action) const
+{
+    switch (action) {
+    case KeyBinding::GO_DOWN: return Assets::Icons::Arrowdown;
+    case KeyBinding::GO_UP: return Assets::Icons::Arrowup;
+    default: return -1;
     }
 }
 

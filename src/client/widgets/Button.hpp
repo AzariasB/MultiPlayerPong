@@ -69,7 +69,7 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos);
+    Button(const std::string &text, float xPos, float yPos, int iconId = -1);
 
 
     /**
