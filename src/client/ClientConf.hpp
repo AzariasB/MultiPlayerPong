@@ -71,6 +71,7 @@ namespace mp
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;
             static const sf::Color buttonBorderColor;
+            static const sf::Color buttonClickedColor;
             static const sf::Color dialogBackgroundColor;
             static const sf::Color dialogOutlineColor;
             static const sf::Color fontColor;

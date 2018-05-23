@@ -245,6 +245,12 @@ private:
     twin::Twin<float, float> m_rectWidth;
 
     /**
+     * @brief m_clicWidth used for when a button
+     * is clicked, to create an animation
+     */
+    twin::Twin<float, float> m_clicWidth;
+
+    /**
      * @brief m_background background
      * color of the button
      */
@@ -255,6 +261,12 @@ private:
      * of the button
      */
     sf::RectangleShape m_border;
+
+    /**
+     * @brief m_clikRect rectangled drawn when
+     * the button is clicked on
+     */
+    sf::RectangleShape m_clikRect;
 
     /**
      * @brief m_alignment button alignment
