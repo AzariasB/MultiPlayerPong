@@ -503,7 +503,7 @@ enum easing{
          * @param finalCallback the function to call when the tweening
          * is over
          */
-        Twin(const T &from, const T& to, const U &time, easing ease, F finalCallback):
+        Twin(const T &from, const T& to, const U &time, easing ease, const F &finalCallback):
             from(from),
             to(to),
             totalTime(time),
@@ -547,12 +547,15 @@ enum easing{
          */
         void step(U progress)
         {
+            if(totalProgress == 1.f)return;
+
             advance += progress;
             totalProgress = advance/static_cast<float>(totalTime);
             if(advance >= totalTime){
                 advance = totalTime;
                 totalProgress = advance/static_cast<float>(totalTime);
-                finishCallback();
+
+                if(finishCallback) finishCallback();
             }
         }
 
@@ -666,7 +669,7 @@ enum easing{
     template<typename T,
              typename U,
              typename F>
-    Twin<T,U,F> makeTwin(const T &from, const T &to, const U &time, easing ez, F func)
+    Twin<T,U,F> makeTwin(const T &from, const T &to, const U &time, easing ez, const F &func)
     {
         return Twin<T,U,F>(from, to, time, ez, func);
     }

@@ -30,6 +30,7 @@
  */
 #pragma once
 
+#include <functional>
 #include <SFML/Graphics/Color.hpp>
 #include "src/lib/twin.hpp"
 
@@ -59,7 +60,7 @@ namespace mp {
      * @param duration the duration of the transition
      * @param easing the easing to use
      */
-        ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing);
+        ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing, const std::function<void()> &callback = {});
 
         /**
      * @brief get the current color depending on the progress

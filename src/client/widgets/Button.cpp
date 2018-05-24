@@ -76,11 +76,10 @@ Button::Button(const std::string &text, float xPos, float yPos, int iconId):
 
 void Button::init()
 {
-    m_clicWidth = twin::makeTwin(0.f,0.f,0.f, twin::linear);
+    m_rectColor = ColorTweening(cc::Colors::buttonColor);
 
-    m_background.setFillColor(cc::Colors::buttonColor);
+    m_background.setFillColor(m_rectColor.get());
     m_border.setOutlineColor(cc::Colors::buttonBorderColor);
-    m_clikRect.setFillColor(cc::Colors::buttonClickedColor);
     m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineThickness(SF_BUTTON_BORDER);
     m_text.setFillColor(m_color.get());
@@ -102,7 +101,7 @@ void Button::update(const sf::Time &elapsed)
 {
     m_color.update(elapsed.asSeconds());
     m_rectWidth.step(elapsed.asSeconds());
-    m_clicWidth.step(elapsed.asSeconds());
+    m_rectColor.update(elapsed.asSeconds());
     updateText();
 }
 
@@ -112,7 +111,6 @@ void Button::setPosition(const sf::Vector2f& position)
     m_text.setPosition(position.x - m_width / 2.f, position.y);
     m_background.setPosition(position.x - m_width / 2.f, position.y);
     m_border.setPosition(position.x - m_width / 2.f, position.y);
-    m_clikRect.setPosition(position.x - m_width / 2.f, position.y);
 }
 
 void Button::handleEvent(const sf::Event& ev)
@@ -134,13 +132,12 @@ void Button::handleEvent(const sf::Event& ev)
         isClicked = true;
     }
 
-    if (isClicked){
-
-        const std::function<void()> func = [this](){
-            m_clicWidth = twin::makeTwin(m_width, 0.f, 0.2f, twin::quintInOut);
+    if (isClicked){        
+        std::function<void()> callback = [this](){
+            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, 0.2, twin::quintIn);
         };
 
-        m_clicWidth = twin::makeTwin(0.f, m_width, 0.2f, twin::quintInOut, func);
+        m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, 0.2, twin::quintOut, callback);
         pr::trigger(clickedEvent);
     }
 
@@ -159,7 +156,6 @@ void Button::draw(Renderer &renderer) const
 
     renderer.render(m_border);
     renderer.render(m_background);
-    renderer.render(m_clikRect);
     renderer.render(m_icon);
 
     switch (m_alignment) {
@@ -263,8 +259,8 @@ void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
+    m_background.setFillColor(m_rectColor.get());
     m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_height));
-    m_clikRect.setSize(sf::Vector2f(m_clicWidth.get(), m_height));
 }
 
 void Button::setAlignment(Alignment al)
