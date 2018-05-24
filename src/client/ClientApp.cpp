@@ -63,9 +63,11 @@ ClientApp::ClientApp() :
     renderer(window),
     game(),
     stateMachine(),
+    rManager(),
     m_sEngine(rManager),
     m_keyBinding(),
-    m_dialogManager()
+    m_dialogManager(),
+    m_counter(rManager.getFont())
 {
     for(const auto &p: Assets::animations) rManager.registerTexture(p.second, p.first);
 
@@ -167,10 +169,12 @@ void ClientApp::run(int argc, char** argv)
 
         sf::Time elapsed = clock.restart();
         renderer.update(elapsed);
+        m_counter.update(elapsed);
         m_dialogManager.update(elapsed);
         stateMachine.getCurrentState().update(elapsed);
         stateMachine.getCurrentState().draw(renderer);
         m_dialogManager.draw(renderer);
+        m_counter.draw(renderer);
 
         window->display();
     }

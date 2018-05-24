@@ -45,6 +45,7 @@
 #include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
 #include "widgets/DialogManager.hpp"
+#include "widgets/FPSCounter.hpp"
 
 
 namespace mp {
@@ -299,6 +300,12 @@ private:
      * used to create different types of dialogs
      */
     DialogManager m_dialogManager;
+
+    /**
+     * @brief m_counter counter to show
+     * the game's fps
+     */
+    FPSCounter m_counter;
 
 };
 

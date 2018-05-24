@@ -134,7 +134,7 @@ void Button::handleEvent(const sf::Event& ev)
 
     if (isClicked){        
         std::function<void()> callback = [this](){
-            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, 0.2, twin::quintIn);
+            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, 0.2, twin::quintOut);
         };
 
         m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, 0.2, twin::quintOut, callback);
