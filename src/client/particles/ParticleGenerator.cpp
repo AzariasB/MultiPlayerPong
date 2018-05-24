@@ -55,7 +55,7 @@ void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 {
     m_particles.emplace_back(
-        std::make_unique<BallTrailParticle>(ballCenter, sf::milliseconds((std::rand() % 500) + 100), (float)BALL_RADIUS, sf::Color::White)
+        std::make_unique<BallTrailParticle>(ballCenter, sf::milliseconds(500), BALL_RADIUS, sf::Color::White)
     );
 }
 

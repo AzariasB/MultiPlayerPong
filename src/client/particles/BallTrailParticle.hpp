@@ -35,6 +35,7 @@
 
 #include "Particle.hpp"
 #include "src/lib/twin.hpp"
+#include "src/client/ColorTweening.hpp"
 
 namespace sf {
 class Time;
@@ -86,12 +87,11 @@ private:
     /**
      * @brief m_twin tweening for the radius
      */
-    twin::Twin<float, sf::Int32> m_twin;
+    twin::Twin<float, float> m_twin;
 
-    /**
-     * @brief m_alphaTwin tweening for the alpha color
-     */
-    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
+    ColorTweening m_alphaTwin;
+
+    sf::Time m_lifeTime;
 
     /**
      * @brief m_angle current rotating angle
