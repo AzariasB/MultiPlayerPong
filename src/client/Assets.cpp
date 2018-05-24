@@ -39,13 +39,13 @@
 
 namespace mp{
 
-const std::unordered_map<Assets::Fonts, std::string> Assets::fonts = {
+const std::unordered_map<sf::Uint64, std::string> Assets::fonts = {
 { Whateverittakes, ":/fonts/whateverittakes.ttf" },
 { Whateverittakesbold, ":/fonts/whateverittakesbold.ttf" },
 { Quicksand, ":/fonts/quicksand.otf" }
 };
 
-const std::unordered_map<Assets::Sounds, std::string> Assets::sounds = {
+const std::unordered_map<sf::Uint64, std::string> Assets::sounds = {
 { Bounce, ":/sounds/bounce.wav" },
 { Click1, ":/sounds/click1.wav" },
 { Rollover1, ":/sounds/rollover1.wav" },
@@ -57,14 +57,14 @@ const std::unordered_map<Assets::Sounds, std::string> Assets::sounds = {
 { Click5, ":/sounds/click5.wav" }
 };
 
-const std::unordered_map<Assets::Animations, std::string> Assets::animations = {
+const std::unordered_map<sf::Uint64, std::string> Assets::animations = {
 { BallRetract, ":/animations/ball_retract.png" },
 { BallExtend, ":/animations/ball_extend.png" },
 { PaddleExtend, ":/animations/paddle_extend.png" },
 { PaddleRetract, ":/animations/paddle_retract.png" }
 };
 
-const std::unordered_map<Assets::Icons, std::string> Assets::icons = {
+const std::unordered_map<sf::Uint64, std::string> Assets::icons = {
 { Forward, ":/icons/forward.png" },
 { Gear, ":/icons/gear.png" },
 { Information, ":/icons/information.png" },

@@ -37,6 +37,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <SFML/Config.hpp>
 
 namespace mp{
 
@@ -45,16 +46,16 @@ class Assets
 public:
   
     enum Fonts {Whateverittakes = 1, Whateverittakesbold = 2, Quicksand = 3};
-    static const std::unordered_map<Fonts, std::string> fonts;
+    static const std::unordered_map<sf::Uint64, std::string> fonts;
 
     enum Sounds {Bounce = 4, Click1 = 5, Rollover1 = 6, PingPong8bitBiiip = 7, Click3 = 8, Click4 = 9, Click2 = 10, PingPong8bitBeeep = 11, Click5 = 12};
-    static const std::unordered_map<Sounds, std::string> sounds;
+    static const std::unordered_map<sf::Uint64, std::string> sounds;
 
     enum Animations {BallRetract = 13, BallExtend = 14, PaddleExtend = 15, PaddleRetract = 16};
-    static const std::unordered_map<Animations, std::string> animations;
+    static const std::unordered_map<sf::Uint64, std::string> animations;
 
     enum Icons {Forward = 17, Gear = 18, Information = 19, Return = 20, Sound = 21, Arrowup = 22, Exitleft = 23, Larger = 24, Wrench = 25, Cross = 26, Arrowdown = 27, Singleplayer = 28, Power = 29, Multiplayer = 30};
-    static const std::unordered_map<Icons, std::string> icons;
+    static const std::unordered_map<sf::Uint64, std::string> icons;
 
 
 private:

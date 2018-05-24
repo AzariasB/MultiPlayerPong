@@ -40,6 +40,7 @@ HPP_TEMPLATE =  %{
 #pragma once
 
 #include <unordered_map>
+#include <SFML/Config.hpp>
 
 namespace mp{
 
@@ -151,7 +152,7 @@ def build_cpp(files)
     enum_val = v.map{|x| File.basename(x, ".*").camel_case + " = #{counter+=1}"}
     res += %{
     enum #{c_case} {#{enum_val*", "}};
-    static const std::unordered_map<#{c_case}, std::string> #{k};
+    static const std::unordered_map<sf::Uint64, std::string> #{k};
 }
     init = v.map{|x|
       name = File.basename(x, ".*").camel_case
@@ -159,7 +160,7 @@ def build_cpp(files)
     }
 
     content += %{
-const std::unordered_map<Assets::#{c_case}, std::string> Assets::#{k} = {\n#{init*",\n"}\n};
+const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"}\n};
 }
   end
   [res, content]
