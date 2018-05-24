@@ -34,13 +34,14 @@
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
+#include "src/client/Assets.hpp"
 
 namespace mp {
 
 // DIALOG BEGIN
 Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_xButton("X"),
-    m_title(sf::String(title), pr::resourceManager().getFont()),
+    m_title(sf::String(title), pr::resourceManager().getFont(), 50),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
     closeEvent(pr::nextEventCode()),
@@ -156,13 +157,15 @@ Dialog::DIALOG_STATE Dialog::state() const
 DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question):
     Dialog(id, title),
     m_questionText(question, pr::resourceManager().getFont()),
-    m_input(sf::Vector2f(originX + 10, originY + SF_DIALOG_HEIGHT/2)),
-    m_confirmButton("Confirm",  originX + 50, originY + SF_DIALOG_HEIGHT - 50),
-    m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+    m_input(sf::Vector2f(originX + 30, originY + SF_DIALOG_HEIGHT/2)),
+    m_confirmButton("Confirm",  originX + 90, originY + SF_DIALOG_HEIGHT - 70),
+    m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 70, Assets::Icons::Cross),
     cancelClickedEvent(pr::nextEventCode()),
     confirmClickedEvent(pr::nextEventCode())
 {
     m_questionText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT/4.f);
+    m_confirmButton.setWidth(m_confirmButton.getWidth() + 20);
+    m_cancelButton.setWidth(m_cancelButton.getWidth() + 20);
 
     pr::connect(m_confirmButton.clickedEvent, &DialogInput::confirmClicked, this);
     pr::connect(m_cancelButton.clickedEvent, &DialogInput::cancelClicked, this);
@@ -222,15 +225,18 @@ void DialogInput::handleEvent(const sf::Event &ev)
 
 DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
     Dialog(id, title),
-    m_questionText(question, pr::resourceManager().getFont()),
-    m_yesButton("Yes", originX + 30, originY + SF_DIALOG_HEIGHT - 50),
-    m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 50),
+    m_questionText(question, pr::resourceManager().getFont(), 40),
+    m_yesButton("Yes", originX + 50, originY + SF_DIALOG_HEIGHT - 70),
+    m_noButton("No", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 70),
     yesClickedEvent(pr::nextEventCode()),
     noClickedEvent(pr::nextEventCode())
 {
-    m_yesButton.setWidth(50);
-    m_noButton.setWidth(50);
-    m_questionText.setPosition(originX + 10, originY  +SF_DIALOG_HEIGHT/2.f);
+    float avgWidth = m_yesButton.getWidth() + 20;
+    m_yesButton.setWidth(avgWidth);
+    m_noButton.setWidth(avgWidth);
+    m_yesButton.setHeight(m_noButton.getHeight());
+
+    m_questionText.setPosition(originX + 20, originY + SF_DIALOG_HEIGHT / 2.f);
     pr::connect(m_yesButton.clickedEvent, &DialogQuestion::yesClicked, this);
     pr::connect(m_noButton.clickedEvent, &DialogQuestion::noClicked, this);
 
@@ -303,10 +309,12 @@ void DialogQuestion::noClicked()
 
 DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
     Dialog(id, title),
-    m_messageText(message, pr::resourceManager().getFont()),
-    m_okButton("Ok", originX + 30, originY + SF_DIALOG_HEIGHT - 50),
+    m_messageText(message, pr::resourceManager().getFont(), 40),
+    m_okButton("Ok", originX + 50, originY + SF_DIALOG_HEIGHT - 70),
     okClickedEvent(pr::nextEventCode())
 {
+    m_okButton.setWidth(m_okButton.getWidth() + 20);
+
     m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
     m_okButton.setSelected(true);
 

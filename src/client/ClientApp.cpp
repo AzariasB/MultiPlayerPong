@@ -56,10 +56,9 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH,  SF_ARENA_HEIGHT),
+    window(new sf::RenderWindow(sf::VideoMode::getFullscreenModes()[0],
            "Pong",
-           sf::Style::Default,
-           sf::ContextSettings(0,0,8))),
+           sf::Style::Fullscreen)),
     renderer(window),
     game(),
     stateMachine(),
@@ -121,9 +120,17 @@ void ClientApp::toggleFullScreen()
                                       sf::Style::Default,
                                       sf::ContextSettings(0,0,8));
     }else{
-        window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),
+        sf::VideoMode fsMode = sf::VideoMode::getFullscreenModes()[0];
+        window = new sf::RenderWindow(fsMode,
                                       "Pong",
                                       sf::Style::Fullscreen);
+        float widthRatio =  fsMode.width / static_cast<float>(SF_ARENA_WIDTH);
+        float heightRatio = fsMode.height / static_cast<float>(SF_ARENA_HEIGHT);
+        float minRatio = std::min(widthRatio, heightRatio);
+        float maxRatio = std::max(widthRatio, heightRatio);
+
+        sf::View v(sf::Vector2f(SF_ARENA_WIDTH / 2, SF_ARENA_HEIGHT / 2), sf::Vector2f(SF_ARENA_WIDTH + SF_ARENA_HEIGHT * (maxRatio -minRatio), SF_ARENA_HEIGHT));
+        window->setView(v);
     }
     renderer.updateRenderTarget(window);
 
@@ -160,6 +167,14 @@ void ClientApp::run(int argc, char** argv)
 
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
+
+    //temp rect
+    sf::RectangleShape rect(sf::Vector2f(SF_ARENA_WIDTH - 4 , SF_ARENA_HEIGHT - 4));
+    rect.setOutlineColor(sf::Color::White);
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineThickness(2);
+    rect.setPosition(2, 2);
+
     while (window->isOpen()) {
         sf::Event ev;
         while (window->pollEvent(ev))
@@ -175,6 +190,7 @@ void ClientApp::run(int argc, char** argv)
         stateMachine.getCurrentState().draw(renderer);
         m_dialogManager.draw(renderer);
         m_counter.draw(renderer);
+        renderer.render(rect);
 
         window->display();
     }

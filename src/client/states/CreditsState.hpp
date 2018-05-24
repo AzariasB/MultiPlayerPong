@@ -72,6 +72,14 @@ public:
 
 private:
 
+    std::string sfmlVersion() const;
+
+    std::string box2dVersion() const;
+
+    std::string qtVersion() const;
+
+    std::string toVersion(int major, int minor, int patch) const;
+
     /**
      * @brief menu transitions back to the menu
      */

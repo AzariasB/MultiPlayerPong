@@ -44,9 +44,9 @@
 namespace mp {
 
 Button::Button(const std::string &text) :
-    m_text(text,pr::resourceManager().getFont()),
+    m_text(text,pr::resourceManager().getFont(), 50),
     m_width(m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 10),
+    m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
@@ -58,9 +58,9 @@ Button::Button(const std::string &text) :
 }
 
 Button::Button(const std::string &text, float xPos, float yPos, int iconId):
-    m_text(text, pr::resourceManager().getFont()),
+    m_text(text, pr::resourceManager().getFont(), 50),
     m_width(m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 10),
+    m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),

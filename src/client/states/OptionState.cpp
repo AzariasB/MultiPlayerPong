@@ -43,10 +43,10 @@ namespace mp {
 
 OptionState::OptionState():
     m_menu(),
-    m_muteButton(m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, 90))
+    m_muteButton(m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, 160))
 {
     float startY = 50.f;
-    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
+    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50, 70)->getGlobalBounds().height + 50.f;
 
     sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Sound ), getCurrentSoundRect());
     m_muteButton.setIcon(sound);

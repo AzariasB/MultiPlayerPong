@@ -31,18 +31,18 @@
 #pragma once
 
 #include <SFML/Graphics/Color.hpp>
-
+#include "src/common/Config.hpp"
+#include "src/common/Math.hpp"
 
 namespace mp
 {
-
-    constexpr int SF_DIALOG_WIDTH = 700;
-    constexpr int SF_DIALOG_HEIGHT = 200;
-
     //Dimensions (all in meters)
     //Arena
-    constexpr int SF_ARENA_WIDTH = 800;
-    constexpr int SF_ARENA_HEIGHT = 600;
+    constexpr int SF_ARENA_WIDTH = ARENA_WIDTH * M_TO_P;
+    constexpr int SF_ARENA_HEIGHT = ARENA_HEIGHT * M_TO_P;
+
+    constexpr int SF_DIALOG_WIDTH =  4 * SF_ARENA_WIDTH / 5;
+    constexpr int SF_DIALOG_HEIGHT = SF_ARENA_HEIGHT / 3.f;
 
     constexpr int SF_BUTTON_BORDER = 2;
 

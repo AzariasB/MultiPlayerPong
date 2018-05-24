@@ -44,7 +44,7 @@ KeyBindingState::KeyBindingState():
 {
     const int startX = SF_ARENA_WIDTH/2.f;
     int startY = 100;
-    startY += m_menu.addCenteredLabel("Key bindings", startX, startY)->getGlobalBounds().height + 20;
+    startY += m_menu.addCenteredLabel("Key bindings", startX, startY, 70)->getGlobalBounds().height + 50;
 
 
     const int xSide = SF_ARENA_WIDTH / 4.f;
@@ -61,12 +61,13 @@ KeyBindingState::KeyBindingState():
                     );
     }
 
-    startY += 50.f;
-    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY, Assets::Icons::Return).clickedEvent;
-    pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
+    startY += 150.f;
+    const Button& resetbtn= m_menu.addButton("Reset", startX, startY, Assets::Icons::Return);
+    startY += resetbtn.getHeight();
+    pr::connect(resetbtn.clickedEvent, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 50, Assets::Icons::Exitleft).clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 10, Assets::Icons::Exitleft).clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_menu.normalizeButtons();

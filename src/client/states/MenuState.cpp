@@ -48,7 +48,7 @@ MenuState::MenuState() :
     m_menu()
 {
 
-    m_menu.addCenteredLabel("MultiPlayerPong", SF_ARENA_WIDTH/2.f, 100, 50);
+    m_menu.addCenteredLabel("MultiPlayerPong", SF_ARENA_WIDTH/2.f, 100, 70);
 
     const float margin = 10;
     const float halfWay = SF_ARENA_WIDTH/2.f;
