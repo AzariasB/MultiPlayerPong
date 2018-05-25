@@ -57,9 +57,9 @@ ClientApp &ClientApp::getInstance()
 }
 
 ClientApp::ClientApp() :
-    window(new sf::RenderWindow(sf::VideoMode::getFullscreenModes()[0],
+    window(new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH, SF_ARENA_HEIGHT),
            "Pong",
-           sf::Style::Fullscreen)),
+           sf::Style::Default)),
     renderer(window),
     game(),
     stateMachine(),
@@ -105,7 +105,7 @@ void ClientApp::handleEvent(const sf::Event& event)
     } else if(event.type == sf::Event::Resized){
         resizeEvent(event);
     } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
-        toggleFullScreen();
+        static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).toggleFullScreen();
     } else {
         m_dialogManager.handleEvent(event);
         stateMachine.getCurrentState().handleEvent(event);
@@ -228,6 +228,11 @@ void ClientApp::setPNumber(int pNumber)
 bool ClientApp::hasPNumber() const
 {
     return m_number == 1 || m_number == 2;
+}
+
+bool ClientApp::isFullScreen() const
+{
+    return m_isFullscreen;
 }
 
 Renderer& ClientApp::getRenderer()

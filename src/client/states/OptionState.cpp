@@ -55,9 +55,9 @@ OptionState::OptionState():
     startY += keyBindingButton.getHeight() + 10;
     pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
-    Button &fullScreenButton = m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
-    startY += fullScreenButton.getHeight() + 50.f;
-    pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
+    m_screenButton = &m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
+    startY += m_screenButton->getHeight() + 50.f;
+    pr::connect(m_screenButton->clickedEvent, &OptionState::toggleFullScreen, this);
 
     Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitIcon);
     pr::connect(backButton.clickedEvent, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
@@ -76,9 +76,20 @@ void OptionState::toggleSound()
     m_muteButton.setIconTextureRect(getCurrentSoundRect());
 }
 
+void OptionState::toggleFullScreen()
+{
+    ClientApp::getInstance().toggleFullScreen();
+    m_screenButton->setIconTextureRect(getCurrentScreenRect());
+}
+
 const sf::IntRect &OptionState::getCurrentSoundRect() const
 {
     return pr::soundEngine().isMuted() ? Assets::IconAtlas::audioOffIcon.bounds : Assets::IconAtlas::audioOnIcon.bounds;
+}
+
+const sf::IntRect &OptionState::getCurrentScreenRect() const
+{
+    return ClientApp::getInstance().isFullScreen() ? Assets::IconAtlas::smallerIcon.bounds : Assets::IconAtlas::largerIcon.bounds;
 }
 
 OptionState::~OptionState()

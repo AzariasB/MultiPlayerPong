@@ -190,6 +190,12 @@ public:
     bool isWinner() const;
 
     /**
+     * @brief isFullScreen if the window is fullscreen
+     * @return
+     */
+    bool isFullScreen() const;
+
+    /**
      * @brief quit closes the window to finish the main loop
      */
     void quit();

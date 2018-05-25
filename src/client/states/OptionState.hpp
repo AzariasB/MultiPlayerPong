@@ -74,6 +74,11 @@ public:
      */
     void toggleSound();
 
+    /**
+     * @brief toggleFullScreen toggles the fullscreen
+     */
+    void toggleFullScreen();
+
     virtual ~OptionState();
 
 private:
@@ -85,6 +90,13 @@ private:
     const sf::IntRect &getCurrentSoundRect() const;
 
     /**
+     * @brief getCurrentScreenRect texture rectangle corresponding to the
+     * current screen (fullscreen or not)
+     * @return
+     */
+    const sf::IntRect &getCurrentScreenRect() const;
+
+    /**
      * @brief m_menu the menu with all the options
      */
     Menu m_menu;
@@ -94,6 +106,12 @@ private:
      * to be able to change its icon
      */
     Button &m_muteButton;
+
+    /**
+     * @brief m_screeButton keep a reference to the screen button
+     * to be able to change its icon
+     */
+    Button *m_screenButton;
 };
 
 
