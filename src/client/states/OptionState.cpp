@@ -43,28 +43,26 @@ namespace mp {
 
 OptionState::OptionState():
     m_menu(),
-    m_muteButton(m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, 160))
+    m_muteButton(m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, 160, Assets::IconAtlas::audioOnIcon))
 {
     float startY = 50.f;
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50, 70)->getGlobalBounds().height + 50.f;
 
-    sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Sound ), getCurrentSoundRect());
-    m_muteButton.setIcon(sound);
     pr::connect(m_muteButton.clickedEvent, &OptionState::toggleSound, this);
     startY += m_muteButton.getHeight() + 10;
 
-    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::Icons::Wrench);
+    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
     startY += keyBindingButton.getHeight() + 10;
     pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
-    Button &fullScreenButton = m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::Icons::Larger);
+    Button &fullScreenButton = m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
     startY += fullScreenButton.getHeight() + 50.f;
     pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
 
-    Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::Icons::Exitleft );
+    Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitIcon);
     pr::connect(backButton.clickedEvent, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 
-    Button &playButton = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::Icons::Forward);
+    Button &playButton = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
     pr::connect(playButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
 
     m_menu.normalizeButtons();
@@ -80,7 +78,7 @@ void OptionState::toggleSound()
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const
 {
-    return pr::soundEngine().isMuted() ? m_withoutSoundRect : m_withSoundRect;
+    return pr::soundEngine().isMuted() ? Assets::IconAtlas::audioOffIcon.bounds : Assets::IconAtlas::audioOnIcon.bounds;
 }
 
 OptionState::~OptionState()

@@ -94,18 +94,6 @@ private:
      * to be able to change its icon
      */
     Button &m_muteButton;
-
-    /**
-     * @brief m_withSoundRect rect for the icon "with sound"
-     */
-    const sf::IntRect m_withSoundRect = sf::IntRect(65, 0, 64, 53);
-
-    /**
-     * @brief m_withoutSoundRect rect for the icon "without sound"
-     */
-    const sf::IntRect m_withoutSoundRect = sf::IntRect(0, 0, 64, 53);
-
-
 };
 
 

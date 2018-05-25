@@ -35,6 +35,7 @@
 
 #include "Widget.hpp"
 #include "Button.hpp"
+#include "src/client/Assets.hpp"
 
 namespace mp {
 
@@ -82,7 +83,7 @@ public:
      * @param yPos the Y position of the button
      * @return the button newly created
      */
-    Button &addButton(const std::string &content, float xPos, float yPos, int icon = -1);
+    Button &addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result

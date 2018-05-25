@@ -51,7 +51,7 @@ CreditsState::CreditsState():
     he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", 10, he)->getLocalBounds().height;
     he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", 10, he)->getLocalBounds().height;
 
-    Button &btn = mMenu.addButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::Icons::Exitleft);
+    Button &btn = mMenu.addButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::IconAtlas::exitLeftIcon);
     btn.setWidth(btn.getWidth() + 10);
     pr::connect(btn.clickedEvent, &CreditsState::menu, this);
 }

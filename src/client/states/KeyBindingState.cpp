@@ -62,12 +62,12 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 150.f;
-    const Button& resetbtn= m_menu.addButton("Reset", startX, startY, Assets::Icons::Return);
+    const Button& resetbtn= m_menu.addButton("Reset", startX, startY, Assets::IconAtlas::returnIcon);
     startY += resetbtn.getHeight();
     pr::connect(resetbtn.clickedEvent, &KeyBindingState::resetKeys, this);
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 10, Assets::Icons::Exitleft).clickedEvent;
+    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon).clickedEvent;
     pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
 
     m_menu.normalizeButtons();
@@ -104,12 +104,12 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
     }
 }
 
-int KeyBindingState::actionIcon(KeyBinding::KEY_ACTION action) const
+const Assets::IconAtlas::Holder &KeyBindingState::actionIcon(KeyBinding::KEY_ACTION action) const
 {
     switch (action) {
-    case KeyBinding::GO_DOWN: return Assets::Icons::Arrowdown;
-    case KeyBinding::GO_UP: return Assets::Icons::Arrowup;
-    default: return -1;
+    case KeyBinding::GO_DOWN: return Assets::IconAtlas::arrowDownIcon;
+    case KeyBinding::GO_UP: return Assets::IconAtlas::arrowUpIcon;
+    default: return Assets::IconAtlas::crossIcon;
     }
 }
 

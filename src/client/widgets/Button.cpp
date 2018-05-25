@@ -36,6 +36,7 @@
 #include <iostream>
 #include <functional>
 #include "Button.hpp"
+
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
@@ -57,7 +58,7 @@ Button::Button(const std::string &text) :
     init();
 }
 
-Button::Button(const std::string &text, float xPos, float yPos, int iconId):
+Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont(), 50),
     m_width(m_text.getGlobalBounds().width),
     m_height(m_text.getGlobalBounds().height + 30),
@@ -70,9 +71,24 @@ Button::Button(const std::string &text, float xPos, float yPos, int iconId):
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
-    if(iconId > -1)
-        setIcon(sf::Sprite(pr::resourceManager().getTexture(iconId)));
 }
+
+Button::Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
+    m_text(text, pr::resourceManager().getFont(), 50),
+    m_width(m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 30),
+    m_color(cc::Colors::fontColor),
+    m_background(),
+    m_border(),
+    //Events
+    clickedEvent(pr::nextEventCode()),
+    selectdEvent(pr::nextEventCode())
+{
+    init();
+    setPosition(sf::Vector2f(xPos, yPos));
+    setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
+}
+
 
 void Button::init()
 {

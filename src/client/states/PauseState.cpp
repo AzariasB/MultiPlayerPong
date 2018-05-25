@@ -43,15 +43,15 @@ PauseState::PauseState():
 
     float startY = 250.f;
 
-    const Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::Icons::Forward);
+    const Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
     startY += resume.getHeight() + 10.f;
     pr::connect(resume.clickedEvent, &PauseState::resume, this);
 
-    const Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::Icons::Gear);
+    const Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
     startY += options.getHeight() + 10.f;
     pr::connect(options.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
 
-    const Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::Icons::Exitleft);
+    const Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
     startY += menuBtn.getHeight() + 10.f;
     pr::connect(menuBtn.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::MENU, TransitionData::GO_DOWN));
 

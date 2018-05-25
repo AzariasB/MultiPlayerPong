@@ -40,48 +40,138 @@
 namespace mp{
 
 const std::unordered_map<sf::Uint64, std::string> Assets::fonts = {
-{ Whateverittakes, ":/fonts/whateverittakes.ttf" },
-{ Whateverittakesbold, ":/fonts/whateverittakesbold.ttf" },
-{ Quicksand, ":/fonts/quicksand.otf" }
+{ Assets::Fonts::Whateverittakes, ":/fonts/whateverittakes.ttf" },
+{ Assets::Fonts::Whateverittakesbold, ":/fonts/whateverittakesbold.ttf" },
+{ Assets::Fonts::Quicksand, ":/fonts/quicksand.otf" }
 };
 
 const std::unordered_map<sf::Uint64, std::string> Assets::sounds = {
-{ Bounce, ":/sounds/bounce.wav" },
-{ Click1, ":/sounds/click1.wav" },
-{ Rollover1, ":/sounds/rollover1.wav" },
-{ PingPong8bitBiiip, ":/sounds/ping_pong_8bit_biiip.wav" },
-{ Click3, ":/sounds/click3.wav" },
-{ Click4, ":/sounds/click4.wav" },
-{ Click2, ":/sounds/click2.wav" },
-{ PingPong8bitBeeep, ":/sounds/ping_pong_8bit_beeep.ogg" },
-{ Click5, ":/sounds/click5.wav" }
+{ Assets::Sounds::Bounce, ":/sounds/bounce.wav" },
+{ Assets::Sounds::Click1, ":/sounds/click1.wav" },
+{ Assets::Sounds::Rollover1, ":/sounds/rollover1.wav" },
+{ Assets::Sounds::PingPong8bitBiiip, ":/sounds/ping_pong_8bit_biiip.wav" },
+{ Assets::Sounds::Click3, ":/sounds/click3.wav" },
+{ Assets::Sounds::Click4, ":/sounds/click4.wav" },
+{ Assets::Sounds::Click2, ":/sounds/click2.wav" },
+{ Assets::Sounds::PingPong8bitBeeep, ":/sounds/ping_pong_8bit_beeep.ogg" },
+{ Assets::Sounds::Click5, ":/sounds/click5.wav" }
 };
 
 const std::unordered_map<sf::Uint64, std::string> Assets::animations = {
-{ BallRetract, ":/animations/ball_retract.png" },
-{ BallExtend, ":/animations/ball_extend.png" },
-{ PaddleExtend, ":/animations/paddle_extend.png" },
-{ PaddleRetract, ":/animations/paddle_retract.png" }
+{ Assets::Animations::BallRetract, ":/animations/ball_retract.png" },
+{ Assets::Animations::BallExtend, ":/animations/ball_extend.png" },
+{ Assets::Animations::PaddleExtend, ":/animations/paddle_extend.png" },
+{ Assets::Animations::PaddleRetract, ":/animations/paddle_retract.png" }
 };
 
-const std::unordered_map<sf::Uint64, std::string> Assets::icons = {
-{ Forward, ":/icons/forward.png" },
-{ Gear, ":/icons/gear.png" },
-{ Checkmark, ":/icons/checkmark.png" },
-{ Information, ":/icons/information.png" },
-{ Return, ":/icons/return.png" },
-{ Sound, ":/icons/sound.png" },
-{ Arrowup, ":/icons/arrowup.png" },
-{ Exitleft, ":/icons/exitleft.png" },
-{ Exit, ":/icons/exit.png" },
-{ Larger, ":/icons/larger.png" },
-{ Wrench, ":/icons/wrench.png" },
-{ Cross, ":/icons/cross.png" },
-{ Smaller, ":/icons/smaller.png" },
-{ Arrowdown, ":/icons/arrowdown.png" },
-{ Singleplayer, ":/icons/singleplayer.png" },
-{ Power, ":/icons/power.png" },
-{ Multiplayer, ":/icons/multiplayer.png" }
+const Assets::IconAtlas::Holder Assets::IconAtlas::arrowDownIcon = {17, sf::IntRect(0, 1200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::arrowLeftIcon = {17, sf::IntRect(0, 1100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::arrowRightIcon = {17, sf::IntRect(0, 1000, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::arrowUpIcon = {17, sf::IntRect(0, 900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::audioOffIcon = {17, sf::IntRect(0, 800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::audioOnIcon = {17, sf::IntRect(0, 700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::barsHorizontalIcon = {17, sf::IntRect(0, 600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::barsVerticalIcon = {17, sf::IntRect(0, 500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::button1Icon = {17, sf::IntRect(0, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::button2Icon = {17, sf::IntRect(0, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::button3Icon = {17, sf::IntRect(0, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonAIcon = {17, sf::IntRect(0, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonBIcon = {17, sf::IntRect(0, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonLIcon = {17, sf::IntRect(200, 1200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonL1Icon = {17, sf::IntRect(500, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonL2Icon = {17, sf::IntRect(500, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonRIcon = {17, sf::IntRect(500, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonR1Icon = {17, sf::IntRect(500, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonR2Icon = {17, sf::IntRect(400, 1900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonSelectIcon = {17, sf::IntRect(400, 1800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonStartIcon = {17, sf::IntRect(400, 1700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonXIcon = {17, sf::IntRect(400, 1600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::buttonYIcon = {17, sf::IntRect(400, 1500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::checkmarkIcon = {17, sf::IntRect(400, 1400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::contrastIcon = {17, sf::IntRect(400, 1300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::crossIcon = {17, sf::IntRect(400, 1200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::downIcon = {17, sf::IntRect(400, 1100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::downLeftIcon = {17, sf::IntRect(400, 1000, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::downRightIcon = {17, sf::IntRect(400, 900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::exclamationIcon = {17, sf::IntRect(400, 800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::exitIcon = {17, sf::IntRect(400, 700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::exitLeftIcon = {17, sf::IntRect(400, 600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::exitRightIcon = {17, sf::IntRect(400, 500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::exportIcon = {17, sf::IntRect(400, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::fastForwardIcon = {17, sf::IntRect(400, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gamepadIcon = {17, sf::IntRect(400, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gamepad1Icon = {17, sf::IntRect(400, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gamepad2Icon = {17, sf::IntRect(400, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gamepad3Icon = {17, sf::IntRect(300, 1900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gamepad4Icon = {17, sf::IntRect(300, 1800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::gearIcon = {17, sf::IntRect(300, 1700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::homeIcon = {17, sf::IntRect(300, 1600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::importIcon = {17, sf::IntRect(300, 1500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::informationIcon = {17, sf::IntRect(300, 1400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::joystickIcon = {17, sf::IntRect(300, 1300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::joystickLeftIcon = {17, sf::IntRect(300, 1200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::joystickRightIcon = {17, sf::IntRect(300, 1100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::joystickUpIcon = {17, sf::IntRect(300, 1000, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::largerIcon = {17, sf::IntRect(300, 900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::leaderboardsComplexIcon = {17, sf::IntRect(300, 800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::leaderboardsSimpleIcon = {17, sf::IntRect(300, 700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::leftIcon = {17, sf::IntRect(300, 600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::lockedIcon = {17, sf::IntRect(300, 500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::massiveMultiplayerIcon = {17, sf::IntRect(300, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::medal1Icon = {17, sf::IntRect(300, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::medal2Icon = {17, sf::IntRect(300, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::menuGridIcon = {17, sf::IntRect(300, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::menuListIcon = {17, sf::IntRect(300, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::minusIcon = {17, sf::IntRect(200, 1900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::mouseIcon = {17, sf::IntRect(200, 1800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::movieIcon = {17, sf::IntRect(200, 1700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::multiplayerIcon = {17, sf::IntRect(200, 1600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::musicOffIcon = {17, sf::IntRect(200, 1500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::musicOnIcon = {17, sf::IntRect(200, 1400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::nextIcon = {17, sf::IntRect(200, 1300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::openIcon = {17, sf::IntRect(500, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::pauseIcon = {17, sf::IntRect(200, 1100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::phoneIcon = {17, sf::IntRect(200, 1000, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::plusIcon = {17, sf::IntRect(200, 900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::powerIcon = {17, sf::IntRect(200, 800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::previousIcon = {17, sf::IntRect(200, 700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::questionIcon = {17, sf::IntRect(200, 600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::returnIcon = {17, sf::IntRect(200, 500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::rewindIcon = {17, sf::IntRect(200, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::rightIcon = {17, sf::IntRect(200, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::saveIcon = {17, sf::IntRect(200, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::scrollHorizontalIcon = {17, sf::IntRect(200, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::scrollVerticalIcon = {17, sf::IntRect(200, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::share1Icon = {17, sf::IntRect(100, 1900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::share2Icon = {17, sf::IntRect(100, 1800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::shoppingBasketIcon = {17, sf::IntRect(100, 1700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::shoppingCartIcon = {17, sf::IntRect(100, 1600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::siganl1Icon = {17, sf::IntRect(100, 1500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::signal2Icon = {17, sf::IntRect(100, 1400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::signal3Icon = {17, sf::IntRect(100, 1300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::singleplayerIcon = {17, sf::IntRect(100, 1200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::smallerIcon = {17, sf::IntRect(100, 1100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::starIcon = {17, sf::IntRect(100, 1000, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::stopIcon = {17, sf::IntRect(100, 900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::tabletIcon = {17, sf::IntRect(100, 800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::targetIcon = {17, sf::IntRect(100, 700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::trashcanIcon = {17, sf::IntRect(100, 600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::trashcanOpenIcon = {17, sf::IntRect(100, 500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::trophyIcon = {17, sf::IntRect(100, 400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::unlockedIcon = {17, sf::IntRect(100, 300, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::upIcon = {17, sf::IntRect(100, 200, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::upLeftIcon = {17, sf::IntRect(100, 100, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::upRightIcon = {17, sf::IntRect(100, 0, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::videoIcon = {17, sf::IntRect(0, 1900, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::warningIcon = {17, sf::IntRect(0, 1800, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::wrenchIcon = {17, sf::IntRect(0, 1700, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::zoomIcon = {17, sf::IntRect(0, 1600, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::zoomDefaultIcon = {17, sf::IntRect(0, 1500, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::zoomInIcon = {17, sf::IntRect(0, 1400, 100, 100) };
+const Assets::IconAtlas::Holder Assets::IconAtlas::zoomOutIcon = {17, sf::IntRect(0, 1300, 100, 100) };
+
+const std::unordered_map<sf::Uint64, std::string> Assets::atlases = {
+{ Assets::Atlases::Icon , ":/atlases/icon.png" }
 };
 
 }

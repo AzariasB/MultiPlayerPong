@@ -159,7 +159,7 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
     m_questionText(question, pr::resourceManager().getFont()),
     m_input(sf::Vector2f(originX + 30, originY + SF_DIALOG_HEIGHT/2)),
     m_confirmButton("Confirm",  originX + 90, originY + SF_DIALOG_HEIGHT - 70),
-    m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 70, Assets::Icons::Cross),
+    m_cancelButton("Cancel", originX + SF_DIALOG_WIDTH - 200, originY + SF_DIALOG_HEIGHT - 70, Assets::IconAtlas::crossIcon),
     cancelClickedEvent(pr::nextEventCode()),
     confirmClickedEvent(pr::nextEventCode())
 {

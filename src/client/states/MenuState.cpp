@@ -54,20 +54,20 @@ MenuState::MenuState() :
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
 
-    const Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::Icons::Singleplayer);
+    const Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
     currentHeight += soloButton.getHeight() + margin;
 
 
-    const Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::Icons::Multiplayer);
+    const Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
     currentHeight += multiPlayerButton.getHeight() + margin;
 
-    const Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::Icons::Gear);
+    const Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
     currentHeight += optionButton.getHeight() + margin;
 
-    const Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::Icons::Information);
+    const Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
     currentHeight += creditsButton.getHeight() + margin;
 
-    const Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::Icons::Power);
+    const Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
 
     m_menu.normalizeButtons(margin);
 

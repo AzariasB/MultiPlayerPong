@@ -1,5 +1,7 @@
-#! /usr/bin/ruby
+#! /usr/local/bin/ruby
+
 require 'builder'
+require 'nokogiri'
 
 HPP_TEMPLATE =  %{
 /*
@@ -41,6 +43,7 @@ HPP_TEMPLATE =  %{
 
 #include <unordered_map>
 #include <SFML/Config.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 namespace mp{
 
@@ -108,6 +111,28 @@ class String
   end
 end
 
+@atlases = {}
+
+def parse_atlases(folder, dic)
+  Dir[folder + "/*.xml"].each{|x|
+    doc = File.open(x){|x|Nokogiri::XML(x)}
+    image = doc.xpath("//TextureAtlas").attr("imagePath")
+    atlas_name = File.basename(image.to_s, ".*")
+    @atlases[atlas_name] = {:atlases => [], :path => "res/atlases/" + image.to_s}
+
+    doc.xpath("//SubTexture").each{|st|
+      @atlases[atlas_name][:atlases] << {:name => File.basename(st["name"].to_s, ".*") + atlas_name.camel_case,
+                   :x => st["x"].to_i,
+                   :y => st["y"].to_i,
+                   :height => st["height"].to_i,
+                   :width => st["width"].to_i
+      }
+    }
+
+  }
+
+end
+
 def parseFolder(folder, dic)
 
   Dir.foreach(folder) do |file|
@@ -117,12 +142,16 @@ def parseFolder(folder, dic)
 
     if File.file?(fullFile)
       short = File.basename(folder)
-
       dic[short] = [] if not dic[short]
 
       dic[short] << file
     elsif File.directory?(fullFile)
-      parseFolder(fullFile, dic)
+      if fullFile =~ /atlases$/
+        parse_atlases(fullFile, dic)
+      else
+        parseFolder(fullFile, dic)
+      end
+
     end
   end
 
@@ -140,11 +169,21 @@ def build_rcc(files)
         end
       end
     end
+    return if not @atlases.size
+    p.qresource("prefix" => "/atlases") do |res|
+      @atlases.each{|k,v|
+        p.file("res/atlases/#{k}.png", "alias" => "#{k}.png")
+      }
+    end
   end
 end
 
+def to_intrect(x)
+  return "sf::IntRect(#{x[:x]}, #{x[:y]}, #{x[:width]}, #{x[:height]})"
+end
+
 def build_cpp(files)
-  content = ""
+  cpp_content = ""
   res = ""
   counter = 0
   files.each do |k,v|
@@ -156,14 +195,62 @@ def build_cpp(files)
 }
     init = v.map{|x|
       name = File.basename(x, ".*").camel_case
-      "{ #{name}, \":/#{k}/#{x.downcase}\" }"
+      "{ Assets::#{c_case}::#{name}, \":/#{k}/#{x.downcase}\" }"
     }
 
-    content += %{
+    cpp_content += %{
 const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"}\n};
 }
   end
-  [res, content]
+  atlas_enum = []
+  atlas_files = {}
+
+  @atlases.each do |k,v|
+    at_name = k.camel_case
+    atlas_id = counter += 1
+    atlas_enum << at_name + " = #{atlas_id}"
+    atlas_files[at_name] = ":/atlases/#{k}.png"
+
+    atlases = v[:atlases].map{|x|
+        "static const Holder #{x[:name]};"
+    }
+
+    res += %{
+      class #{at_name}Atlas {
+        public:
+          struct Holder {
+            const int textureId = #{atlas_id};
+            const sf::IntRect bounds;
+          };
+
+          #{atlases*"\n          "}
+      };
+}
+
+    atlases = v[:atlases].map{|x|
+        "const Assets::#{at_name}Atlas::Holder Assets::#{at_name}Atlas::#{x[:name]} = {#{atlas_id}, #{to_intrect(x)} };"
+    }
+
+    cpp_content += "\n" + atlases*"\n" + "\n"
+
+  end
+
+  res += %{
+    enum Atlases {#{atlas_enum*", "}};
+    static const std::unordered_map<sf::Uint64, std::string> atlases;
+}
+
+
+  atlas_content = atlas_files.map{|k,v|
+    "{ Assets::Atlases::#{k} , \"#{v}\" }"
+  }*",\n"
+  cpp_content += %{
+const std::unordered_map<sf::Uint64, std::string> Assets::atlases = {
+#{atlas_content}
+};
+}
+
+  [res, cpp_content]
 end
 
 res = parseFolder("#{Dir.pwd}/res", {})

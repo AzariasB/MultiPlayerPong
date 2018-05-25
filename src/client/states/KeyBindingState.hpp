@@ -33,6 +33,7 @@
 #include "src/client/widgets/Menu.hpp"
 #include "src/client/KeyBinding.hpp"
 #include "src/client/State.hpp"
+#include "src/client/Assets.hpp"
 
 
 namespace mp {
@@ -106,7 +107,7 @@ private:
         KeyBinding::KEY_ACTION action;
     };
 
-    int actionIcon(KeyBinding::KEY_ACTION action) const;
+    const Assets::IconAtlas::Holder &actionIcon(KeyBinding::KEY_ACTION action) const;
 
     /**
      * @brief buttonClicked whenever a button is clicked, to change the binding

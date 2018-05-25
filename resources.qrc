@@ -22,23 +22,7 @@
     <file alias="paddle_extend.png">res/animations/paddle_extend.png</file>
     <file alias="paddle_retract.png">res/animations/paddle_retract.png</file>
   </qresource>
-  <qresource prefix="/icons">
-    <file alias="forward.png">res/icons/forward.png</file>
-    <file alias="gear.png">res/icons/gear.png</file>
-    <file alias="checkmark.png">res/icons/checkmark.png</file>
-    <file alias="information.png">res/icons/information.png</file>
-    <file alias="return.png">res/icons/return.png</file>
-    <file alias="sound.png">res/icons/sound.png</file>
-    <file alias="arrowup.png">res/icons/arrowUp.png</file>
-    <file alias="exitleft.png">res/icons/exitLeft.png</file>
-    <file alias="exit.png">res/icons/exit.png</file>
-    <file alias="larger.png">res/icons/larger.png</file>
-    <file alias="wrench.png">res/icons/wrench.png</file>
-    <file alias="cross.png">res/icons/cross.png</file>
-    <file alias="smaller.png">res/icons/smaller.png</file>
-    <file alias="arrowdown.png">res/icons/arrowDown.png</file>
-    <file alias="singleplayer.png">res/icons/singleplayer.png</file>
-    <file alias="power.png">res/icons/power.png</file>
-    <file alias="multiplayer.png">res/icons/multiplayer.png</file>
+  <qresource prefix="/atlases">
+    <file alias="icon.png">res/atlases/icon.png</file>
   </qresource>
 </RCC>

@@ -54,7 +54,7 @@ void Menu::update(const sf::Time &elapsed)
         it->update(elapsed);
 }
 
-Button &Menu::addButton(const std::string &content, float xPos, float yPos, int icon)
+Button &Menu::addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
     std::unique_ptr<Button> &inserted = m_buttons.back();

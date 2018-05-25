@@ -39,6 +39,7 @@
 
 #include "Widget.hpp"
 #include "src/lib/twin.hpp"
+#include "src/client/Assets.hpp"
 #include "src/common/EventManager.hpp"
 #include "src/client/ColorTweening.hpp"
 
@@ -69,7 +70,16 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos, int iconId = -1);
+    Button(const std::string &text, float xPos, float yPos);
+
+    /**
+     * @brief Button constructor
+     * @param app reference to the Client application
+     * @param text text to show
+     * @param xpos x position of the button
+     * @param yPos y position of the button
+     */
+    Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
 
     /**

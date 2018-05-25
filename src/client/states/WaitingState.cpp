@@ -51,7 +51,7 @@ WaitingState::WaitingState() :
     m_menu(),
     m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
-    const Button &btn =  m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::Icons::Cross);
+    const Button &btn =  m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon);
     pr::connect(btn.clickedEvent, &WaitingState::cancelClicked, this);
 }
 

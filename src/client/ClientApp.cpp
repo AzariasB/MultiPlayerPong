@@ -49,6 +49,7 @@
 
 namespace mp {
 
+
 ClientApp &ClientApp::getInstance()
 {
     static ClientApp instance;
@@ -70,7 +71,7 @@ ClientApp::ClientApp() :
 {
     for(const auto &p: Assets::animations) rManager.registerTexture(p.second, p.first);
 
-    for(const auto &p: Assets::icons) rManager.registerTexture(p.second, p.first);
+    for(const auto &p : Assets::atlases) rManager.registerTexture(p.second, p.first);
 
     for(const auto &p: Assets::sounds)rManager.registerSound(p.second, p.first);
 
