@@ -508,6 +508,7 @@ enum easing{
             to(to),
             totalTime(time),
             advance(0),
+            totalProgress(0.f),
             finishCallback(finalCallback),
             easingF(getEasing(ease))
         {
@@ -525,6 +526,7 @@ enum easing{
             to(to),
             totalTime(time),
             advance(0),
+            totalProgress(0.f),
             finishCallback(noop),
             easingF(getEasing(ease))
         {
@@ -666,16 +668,16 @@ enum easing{
      * @param func the callback function when the tweening is over
      * @return a twin object
      */
-    template<typename T,
-             typename U,
-             typename F>
-    Twin<T,U,F> makeTwin(const T &from, const T &to, const U &time, easing ez, const F &func)
+    template<typename BOUND,
+             typename STEP,
+             typename CALLBACK>
+    Twin<BOUND,STEP,CALLBACK> makeTwin(const BOUND &from, const BOUND &to, const STEP &time, easing ez, const CALLBACK &func)
     {
-        return Twin<T,U,F>(from, to, time, ez, func);
+        return Twin<BOUND,STEP,CALLBACK>(from, to, time, ez, func);
     }
 
-    template<typename T,
-             typename U>
+    template<typename BOUND,
+             typename STEP>
     /**
      * @brief makeTwin util function to create a twin object withe template type deduction
      * @param from the original value
@@ -684,9 +686,9 @@ enum easing{
      * @param ez the easing function to use
      * @return a twing object
      */
-    Twin<T,U> makeTwin(const T &from, const T &to, const U &time, easing ez)
+    Twin<BOUND,STEP> makeTwin(const BOUND &from, const BOUND &to, const STEP &time, easing ez)
     {
-        return Twin<T,U>(from,to, time, ez);
+        return Twin<BOUND,STEP>(from,to, time, ez);
     }
 }
 

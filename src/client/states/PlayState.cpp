@@ -91,8 +91,6 @@ void PlayState::update(const sf::Time &elapsed)
         m_nextParticle = sf::milliseconds(10);
         pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
     }
-
-    pr::particleGenerator().update(elapsed);
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
 
@@ -107,6 +105,7 @@ void PlayState::update(const sf::Time &elapsed)
         pr::particleGenerator().countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
         pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
     }
+    pr::particleGenerator().update(elapsed);
 }
 
 void PlayState::draw(Renderer &renderer) const

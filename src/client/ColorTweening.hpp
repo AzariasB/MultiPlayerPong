@@ -72,6 +72,8 @@ namespace mp {
 
         bool isFinished() const;
 
+        float progress() const;
+
     private:
 
         /**

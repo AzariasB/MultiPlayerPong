@@ -56,19 +56,19 @@ void BallTrailParticle::update(const sf::Time &elapsed)
 {
     float secs = elapsed.asSeconds();
     m_twin.step(secs);
-    m_alphaTwin.update(elapsed.asSeconds());
+    m_alphaTwin.update(secs);
     float radius = m_twin.get();
     m_lifeTime -= elapsed;
 
     m_angle += 5.f;
-    //m_shape.setRadius(radius);
+    m_shape.setRadius(radius);
     m_shape.setPosition(m_center.x - radius, m_center.y - radius);
     m_shape.setFillColor(m_alphaTwin.get());
 }
 
 bool BallTrailParticle::isFinished() const
 {
-    return m_lifeTime <= sf::Time::Zero;
+    return m_alphaTwin.isFinished();
 }
 
 void BallTrailParticle::render(Renderer &renderer) const
