@@ -135,10 +135,13 @@ void Button::handleEvent(const sf::Event& ev)
     if (ev.type == sf::Event::MouseMoved) {
         sf::Vector2f realMovePos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
 
-        bool was_hilighted = m_hilighted;
-        setSelected(m_border.getGlobalBounds().contains(realMovePos));
+        bool wasHilighted = m_hilighted;
+        bool isSelected = m_border.getGlobalBounds().contains(realMovePos);
 
-        if(was_hilighted != m_hilighted)
+        if(isSelected)
+            setSelected(true);
+
+        if(wasHilighted != m_hilighted)
             pr::trigger(selectdEvent);
 
     } else if (ev.type == sf::Event::MouseButtonPressed) {

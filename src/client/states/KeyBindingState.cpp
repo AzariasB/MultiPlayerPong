@@ -100,7 +100,11 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
-        m_menu.handleEvent(ev);
+        if(ev.type == sf::Event::KeyReleased && ev.key.code == sf::Keyboard::Escape){
+            pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
+        }else{
+            m_menu.handleEvent(ev);
+        }
     }
 }
 

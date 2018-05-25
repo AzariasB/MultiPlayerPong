@@ -105,7 +105,7 @@ private:
      * @brief m_muteButton keep a reference to the mute button
      * to be able to change its icon
      */
-    Button &m_muteButton;
+    Button *m_muteButton;
 
     /**
      * @brief m_screeButton keep a reference to the screen button
