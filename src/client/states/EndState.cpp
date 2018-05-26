@@ -105,6 +105,7 @@ void EndState::handleEvent(const sf::Event& ev)
 void EndState::onBeforeEnter()
 {
     bool winner = ClientApp::getInstance().isWinner();
+    pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
     updateVerticesColor(winner);
     m_content.setString(winner ? "You won !" : "You lost !");
     m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);

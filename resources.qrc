@@ -7,9 +7,11 @@
   </qresource>
   <qresource prefix="/sounds">
     <file alias="bounce.wav">res/sounds/bounce.wav</file>
+    <file alias="loose.wav">res/sounds/loose.wav</file>
     <file alias="click1.wav">res/sounds/click1.wav</file>
     <file alias="rollover1.wav">res/sounds/rollover1.wav</file>
     <file alias="ping_pong_8bit_biiip.wav">res/sounds/ping_pong_8bit_biiip.wav</file>
+    <file alias="win.wav">res/sounds/win.wav</file>
     <file alias="click3.wav">res/sounds/click3.wav</file>
     <file alias="click4.wav">res/sounds/click4.wav</file>
     <file alias="click2.wav">res/sounds/click2.wav</file>

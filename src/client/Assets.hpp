@@ -49,16 +49,16 @@ public:
     enum Fonts {Whateverittakes = 1, Whateverittakesbold = 2, Quicksand = 3};
     static const std::unordered_map<sf::Uint64, std::string> fonts;
 
-    enum Sounds {Bounce = 4, Click1 = 5, Rollover1 = 6, PingPong8bitBiiip = 7, Click3 = 8, Click4 = 9, Click2 = 10, PingPong8bitBeeep = 11, Click5 = 12};
+    enum Sounds {Bounce = 4, Loose = 5, Click1 = 6, Rollover1 = 7, PingPong8bitBiiip = 8, Win = 9, Click3 = 10, Click4 = 11, Click2 = 12, PingPong8bitBeeep = 13, Click5 = 14};
     static const std::unordered_map<sf::Uint64, std::string> sounds;
 
-    enum Animations {BallRetract = 13, BallExtend = 14, PaddleExtend = 15, PaddleRetract = 16};
+    enum Animations {BallRetract = 15, BallExtend = 16, PaddleExtend = 17, PaddleRetract = 18};
     static const std::unordered_map<sf::Uint64, std::string> animations;
 
       class IconAtlas {
         public:
           struct Holder {
-            const int textureId = 17;
+            const int textureId = 19;
             const sf::IntRect bounds;
           };
 
@@ -169,7 +169,7 @@ public:
           static const Holder zoomOutIcon;
       };
 
-    enum Atlases {Icon = 17};
+    enum Atlases {Icon = 19};
     static const std::unordered_map<sf::Uint64, std::string> atlases;
 
 
