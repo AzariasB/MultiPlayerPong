@@ -45,5 +45,7 @@ const sf::Color cc::Colors::paddleColor = sf::Color(128, 255, 0);
 const sf::Color cc::Colors::ballColor = sf::Color(226, 88, 34);
 const sf::Color cc::Colors::wallColor = sf::Color(200,200,200);
 
+const sf::Color cc::Colors::endWinColor[2] =  {sf::Color(108, 191, 46), sf::Color(72, 127, 31)};
+const sf::Color cc::Colors::endLoseColor[2] = {sf::Color(191, 63, 61), sf::Color(124, 42, 41) };
 
 }

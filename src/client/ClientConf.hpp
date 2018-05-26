@@ -79,6 +79,9 @@ namespace mp
             static const sf::Color paddleColor;
             static const sf::Color ballColor;
             static const sf::Color wallColor;
+
+            static const sf::Color endWinColor[2];
+            static const sf::Color endLoseColor[2];
         };
 
     }

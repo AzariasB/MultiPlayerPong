@@ -63,6 +63,7 @@ void WaitingState::draw(Renderer& renderer) const
 
 void WaitingState::handleEvent(const sf::Event& ev)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::WAITING)return;
     m_menu.handleEvent(ev);
 }
 
@@ -75,6 +76,8 @@ void WaitingState::cancelClicked()
 
 void WaitingState::update(const sf::Time &elapsed)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::WAITING)return;
+
     m_menu.update(elapsed);
 
     //Blinking point
@@ -116,7 +119,8 @@ void WaitingState::onEnter(BaseStateData *data)
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
     pr::socket().setBlocking(false);
     if (status != sf::Socket::Done) {
-        pr::dialogManager().message("Error","Failed to connect to the server");
+        DialogMessage& msg = pr::dialogManager().message("Error","Failed to connect to the server");
+        pr::connect(msg.okClickedEvent, &DialogManager::hideDialog, &pr::dialogManager(), msg.id());
         pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     } else {
         m_content.setString("Waiting for player...");

@@ -47,24 +47,10 @@ EndState::EndState():
     Button &btn = m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon);
     pr::connect(btn.clickedEvent, &EndState::goToMenu, this);
 
-    initVertices();
 }
 
 EndState::~EndState()
 {
-}
-
-void EndState::initVertices()
-{
-    sf::Vector2f center(SF_ARENA_WIDTH  / 2.f, SF_ARENA_HEIGHT / 2.f);
-    for(int i = 0; i < triangleNumber; ++i){
-        sf::Color centerColor = ( (i&1) == 1) ? sf::Color(74, 110, 191, 50) : sf::Color(49, 73, 127, 150);
-        sf::Color outColor = centerColor;
-        outColor.a = 0;
-        m_buffer.append({center, centerColor});
-        m_buffer.append({toVertexPosition(i), outColor});
-        m_buffer.append({toVertexPosition(i+1), outColor});
-    }
 }
 
 sf::Vector2f EndState::toVertexPosition(int index) const
@@ -76,6 +62,20 @@ sf::Vector2f EndState::toVertexPosition(int index) const
             );
 }
 
+void EndState::updateVerticesColor(bool win)
+{
+    m_buffer.clear();
+    sf::Vector2f center(SF_ARENA_WIDTH  / 2.f, SF_ARENA_HEIGHT / 2.f);
+    for(std::size_t i = 0; i < triangleNumber; ++i){
+        sf::Color centerColor = win ? cc::Colors::endWinColor[i&1] : cc::Colors::endLoseColor[i&1];
+        sf::Color outColor = centerColor;
+        outColor.a = 0;
+        m_buffer.append({center, centerColor});
+        m_buffer.append({toVertexPosition(i), outColor});
+        m_buffer.append({toVertexPosition(i+1), outColor});
+    }
+
+}
 
 void EndState::goToMenu()
 {
@@ -104,7 +104,9 @@ void EndState::handleEvent(const sf::Event& ev)
 
 void EndState::onEnter(BaseStateData *data)
 {
-    m_content.setString(ClientApp::getInstance().isWinner() ? "You won !" : "You lost !");
+    bool winner = ClientApp::getInstance().isWinner();
+    updateVerticesColor(winner);
+    m_content.setString(winner ? "You won !" : "You lost !");
     m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
     m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
 

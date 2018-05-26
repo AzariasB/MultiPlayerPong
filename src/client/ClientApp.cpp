@@ -166,7 +166,7 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    stateMachine.setCurrentState(cc::FINISHED);
+    stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
 
     //temp rect

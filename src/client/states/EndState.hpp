@@ -39,7 +39,7 @@
 
 namespace mp {
 
-constexpr int triangleNumber = 10;
+constexpr std::size_t triangleNumber = 10;
 
 class Dialog;
 
@@ -90,8 +90,7 @@ public:
     virtual ~EndState();
 
 private:
-
-    void initVertices();
+    void updateVerticesColor(bool win);
 
     sf::Vector2f toVertexPosition(int index) const;
 
