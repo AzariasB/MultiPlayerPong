@@ -79,13 +79,19 @@ ClientApp::ClientApp() :
     for(const auto &p : Assets::icons) rManager.registerTexture(p.second, p.first);
 
     socket.setBlocking(false);
-    window->setKeyRepeatEnabled(false);
 
     sf::Image img = rManager.getTexture(Assets::Icons::Cursor).copyToImage();
-
     m_cursor.loadFromPixels(img.getPixelsPtr(), img.getSize(), sf::Vector2u(img.getSize().x / 2, img.getSize().y / 2));
-    window->setMouseCursor(m_cursor);
+    configureWindow();
+}
 
+void ClientApp::configureWindow()
+{
+    window->setMouseCursor(m_cursor);
+    window->setKeyRepeatEnabled(false);
+
+    sf::Image img = rManager.getTexture(Assets::Icons::Sfml).copyToImage();
+    window->setIcon(img.getSize().x, img.getSize().y, img.getPixelsPtr());
 }
 
 ClientApp::~ClientApp()
@@ -142,6 +148,7 @@ void ClientApp::toggleFullScreen()
         sf::View v(sf::Vector2f(SF_ARENA_WIDTH / 2, SF_ARENA_HEIGHT / 2), sf::Vector2f(SF_ARENA_WIDTH + SF_ARENA_HEIGHT * (maxRatio -minRatio), SF_ARENA_HEIGHT));
         window->setView(v);
     }
+    configureWindow();
     renderer.updateRenderTarget(window);
 
     m_isFullscreen = !m_isFullscreen;

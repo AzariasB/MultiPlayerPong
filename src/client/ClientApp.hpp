@@ -199,6 +199,12 @@ public:
 
 private:
     /**
+     * @brief conifgureWindow sets the differents
+     * attributes of the window
+     */
+    void configureWindow();
+
+    /**
      * @brief ClientApp default constructor, no data to input
      */
     ClientApp();
