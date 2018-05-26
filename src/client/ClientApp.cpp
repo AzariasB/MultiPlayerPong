@@ -140,12 +140,12 @@ void ClientApp::toggleFullScreen()
         window = new sf::RenderWindow(fsMode,
                                       "Pong",
                                       sf::Style::Fullscreen);
-        float widthRatio =  fsMode.width / static_cast<float>(SF_ARENA_WIDTH);
-        float heightRatio = fsMode.height / static_cast<float>(SF_ARENA_HEIGHT);
-        float minRatio = std::min(widthRatio, heightRatio);
-        float maxRatio = std::max(widthRatio, heightRatio);
-
-        sf::View v(sf::Vector2f(SF_ARENA_WIDTH / 2, SF_ARENA_HEIGHT / 2), sf::Vector2f(SF_ARENA_WIDTH + SF_ARENA_HEIGHT * (maxRatio -minRatio), SF_ARENA_HEIGHT));
+        float left = ((fsMode.width - SF_ARENA_WIDTH) / 2.f) / fsMode.width;
+        float top = ((fsMode.height - SF_ARENA_HEIGHT) / 2.f) / fsMode.height;
+        float width = (static_cast<float>(SF_ARENA_WIDTH) / fsMode.width);
+        float height = (static_cast<float>(SF_ARENA_HEIGHT) / fsMode.height);
+        sf::View v(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+        v.setViewport(sf::FloatRect(left, top, width, height));
         window->setView(v);
     }
     configureWindow();
