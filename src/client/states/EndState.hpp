@@ -34,9 +34,12 @@
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 
+#include <SFML/Graphics/VertexBuffer.hpp>
+
 
 namespace mp {
 
+constexpr int triangleNumber = 10;
 
 class Dialog;
 
@@ -87,6 +90,11 @@ public:
     virtual ~EndState();
 
 private:
+
+    void initVertices();
+
+    sf::Vector2f toVertexPosition(int index) const;
+
     /**
      * @brief m_menu the menu of the state, to show
      * the texts and the "back" button menu
@@ -99,6 +107,13 @@ private:
      * or "loose"
      */
     sf::Text &m_content;
+
+    /**
+     * @brief m_buffer buffer for the animation
+     */
+    sf::VertexArray m_buffer;
+
+    float m_angle;
 };
 
 

@@ -244,9 +244,10 @@ std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, f
     return m_shapes[obj];
 }
 
-void Renderer::render(const sf::Drawable& drawable)
+Renderer &Renderer::render(const sf::Drawable& drawable)
 {
     m_target->draw(drawable, m_stack.top());
+    return *this;
 }
 
 }

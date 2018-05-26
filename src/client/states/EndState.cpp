@@ -38,17 +38,42 @@ namespace mp {
 
 EndState::EndState():
     m_menu(),
-    m_content(*m_menu.addLabel("",0,0))
+    m_content(*m_menu.addLabel("",0,0)),
+    m_buffer(sf::PrimitiveType::Triangles, triangleNumber * 3),
+    m_angle(0.f)
 {
     m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
 
     Button &btn = m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon);
     pr::connect(btn.clickedEvent, &EndState::goToMenu, this);
+
+    initVertices();
 }
 
 EndState::~EndState()
 {
+}
 
+void EndState::initVertices()
+{
+    sf::Vector2f center(SF_ARENA_WIDTH  / 2.f, SF_ARENA_HEIGHT / 2.f);
+    for(int i = 0; i < triangleNumber; ++i){
+        sf::Color centerColor = ( (i&1) == 1) ? sf::Color(74, 110, 191, 50) : sf::Color(49, 73, 127, 150);
+        sf::Color outColor = centerColor;
+        outColor.a = 0;
+        m_buffer.append({center, centerColor});
+        m_buffer.append({toVertexPosition(i), outColor});
+        m_buffer.append({toVertexPosition(i+1), outColor});
+    }
+}
+
+sf::Vector2f EndState::toVertexPosition(int index) const
+{
+    float angle = (2 * M_PI) * (index / (float)triangleNumber);
+    return sf::Vector2f(
+                std::cos(angle) * (SF_ARENA_WIDTH / 2.f) + (SF_ARENA_WIDTH / 2.f),
+                std::sin(angle) * (SF_ARENA_WIDTH  / 2.f) + (SF_ARENA_HEIGHT / 2.f)
+            );
 }
 
 
@@ -59,7 +84,10 @@ void EndState::goToMenu()
 
 void EndState::draw(Renderer& renderer) const
 {
-    //m_messageDialog->draw(renderer);
+    renderer.push()
+            .rotateAround(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), m_angle)
+            .render(m_buffer)
+            .pop();
     m_menu.draw(renderer);
 }
 
@@ -85,8 +113,9 @@ void EndState::onEnter(BaseStateData *data)
 }
 
 void EndState::update(const sf::Time &elapsed)
-{
+{    
     m_menu.update(elapsed);
+    m_angle += elapsed.asSeconds();
 }
 
 }

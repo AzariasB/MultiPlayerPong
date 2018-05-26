@@ -108,7 +108,7 @@ public:
      * @brief render renders any drawable components, using it's inner renderstate
      * @param drawable the drawable object to render
      */
-    void render(const sf::Drawable &drawable);
+    Renderer &render(const sf::Drawable &drawable);
 
     /**
      * @brief scale scales the next object to render

@@ -42,7 +42,6 @@ CreditsState::CreditsState():
 
     float he = 150;
 
-
     he += mMenu.addLabel("- Programming : Azarias Boutin", 10, he)->getLocalBounds().height;
     he += mMenu.addLabel("- Drawing : Azarias Boutin", 10, he)->getLocalBounds().height;
     he += mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, he)->getLocalBounds().height;
