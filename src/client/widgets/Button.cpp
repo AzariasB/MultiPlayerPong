@@ -46,7 +46,7 @@ namespace mp {
 
 Button::Button(const std::string &text) :
     m_text(text,pr::resourceManager().getFont(), 50),
-    m_width(m_text.getGlobalBounds().width),
+    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
     m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
@@ -60,7 +60,7 @@ Button::Button(const std::string &text) :
 
 Button::Button(const std::string &text, float xPos, float yPos):
     m_text(text, pr::resourceManager().getFont(), 50),
-    m_width(m_text.getGlobalBounds().width),
+    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
     m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
@@ -75,7 +75,7 @@ Button::Button(const std::string &text, float xPos, float yPos):
 
 Button::Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
     m_text(text, pr::resourceManager().getFont(), 50),
-    m_width(m_text.getGlobalBounds().width),
+    m_width(text == "" ? 0 :  m_text.getGlobalBounds().width),
     m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
@@ -269,7 +269,7 @@ void Button::updateIcon()
     sf::Vector2f iconPosition(m_position.x + m_width - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
     m_icon.setPosition(iconPosition);
 
-    setWidth(m_width + iFr.width);
+    setWidth(m_width + nwSize.width);
 }
 
 

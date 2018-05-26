@@ -105,8 +105,8 @@ void Menu::draw(Renderer &renderer) const
 
 void Menu::handleEvent(const sf::Event &ev)
 {
-    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down)){
-        changeSelection(ev.key.code == sf::Keyboard::Up ? -1 : 1);
+    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
+        changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
         changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
     }else{

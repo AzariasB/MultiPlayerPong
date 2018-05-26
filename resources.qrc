@@ -24,6 +24,9 @@
     <file alias="paddle_extend.png">res/animations/paddle_extend.png</file>
     <file alias="paddle_retract.png">res/animations/paddle_retract.png</file>
   </qresource>
+  <qresource prefix="/icons">
+    <file alias="cursor.png">res/icons/cursor.png</file>
+  </qresource>
   <qresource prefix="/atlases">
     <file alias="icon.png">res/atlases/icon.png</file>
   </qresource>

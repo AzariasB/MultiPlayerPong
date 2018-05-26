@@ -60,6 +60,7 @@ ClientApp::ClientApp() :
     window(new sf::RenderWindow(sf::VideoMode(SF_ARENA_WIDTH, SF_ARENA_HEIGHT),
            "Pong",
            sf::Style::Default)),
+    m_cursor(),
     renderer(window),
     game(),
     stateMachine(),
@@ -75,8 +76,16 @@ ClientApp::ClientApp() :
 
     for(const auto &p: Assets::sounds)rManager.registerSound(p.second, p.first);
 
+    for(const auto &p : Assets::icons) rManager.registerTexture(p.second, p.first);
+
     socket.setBlocking(false);
     window->setKeyRepeatEnabled(false);
+
+    sf::Image img = rManager.getTexture(Assets::Icons::Cursor).copyToImage();
+
+    m_cursor.loadFromPixels(img.getPixelsPtr(), img.getSize(), sf::Vector2u(img.getSize().x / 2, img.getSize().y / 2));
+    window->setMouseCursor(m_cursor);
+
 }
 
 ClientApp::~ClientApp()

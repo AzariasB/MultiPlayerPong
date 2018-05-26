@@ -55,6 +55,16 @@ EventManager::~EventManager()
     m_observers.clear();
 }
 
+const std::string &EventManager::declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger)
+{
+    assertEventCode(eventCode);
+    std::function<void()> func = [this,toTrigger](){
+        this->trigger(toTrigger);
+    };
+    m_observers[eventCode].emplace_back(new EventStdFunction(func));
+    return addIterator(eventCode, math::uuid());
+}
+
 const std::string &EventManager::addIterator(sf::Uint64 evCode, const std::string &uuid)
 {
     return (*m_tokens.insert(

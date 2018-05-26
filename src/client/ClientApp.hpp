@@ -229,6 +229,11 @@ private:
     sf::RenderWindow *window;
 
     /**
+     * @brief m_cursor mouse cursor
+     */
+    sf::Cursor m_cursor;
+
+    /**
      * @brief m_isFullscreen wether the current window
      * is fullscreen
      */

@@ -110,12 +110,12 @@ public:
      */
     void normalizeButtons(float additionalWidth = 0.f);
 
-private:
     /**
      * @brief changeSelection updates the selected button
      * @param dir
      */
     void changeSelection(int dir);
+private:
 
     /**
      * @brief setSeletedIndex changes the selected button index

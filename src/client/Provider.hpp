@@ -75,6 +75,7 @@ Player &player();
 
 DialogManager &dialogManager();
 
+const std::string &connect(sf::Uint64 evCode, sf::Uint64 cascade);
 
 template<typename T, typename ...Args>
 const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)

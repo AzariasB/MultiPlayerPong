@@ -79,6 +79,22 @@ struct EventFunc : BaseEvent {
     virtual void run(Args... argp) = 0;
 };
 
+struct EventStdFunction : EventFunc<>{
+
+    EventStdFunction(std::function<void()> callback):
+    m_callback(callback){
+
+    }
+
+    void run()
+    {
+        if(m_callback)m_callback();
+    }
+
+    std::function<void()> m_callback;
+
+};
+
 /**
  * @brief The EventFunctor struct contains only a simple function, this function
  * is called whenever the event is fired
@@ -233,6 +249,15 @@ public:
      * @param eventCode
      */
     sf::Uint64 nextEventCode();
+
+    /**
+     * @brief declareListener used to cascade signal, when the given event code
+     * is trigerred, the "toTrigger" event code will then be triggerred
+     * @param eventCode the event code to listen to
+     * @param toTrigger the event code to trigger when the first one is trigerred
+     * @return the UUID of the event listener
+     */
+    const std::string &declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger);
 
     /**
      * Just calls a function when an event is trigerred

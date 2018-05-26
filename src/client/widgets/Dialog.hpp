@@ -38,6 +38,7 @@
 #include "src/common/Config.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/lib/twin.hpp"
+#include "Menu.hpp"
 
 
 
@@ -128,6 +129,8 @@ protected:
      */
     void afterDraw(Renderer &renderer) const;
 
+    Menu &menu();
+
     /**
      * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
      */
@@ -143,11 +146,6 @@ protected:
 private:
 
     /**
-     * @brief closed when the 'x' button is pressed
-     */
-    void closed();
-
-    /**
      * @brief m_yPosition y position of this dialog
      */
     twin::Twin<float, float> m_yTransition;
@@ -158,10 +156,10 @@ private:
      */
     float m_yPosition;
 
-	/**
-	 * @brief m_xButton the top-right cross of the dialog
-	 */
-	Button m_xButton;
+    /**
+     * @brief m_menu menu containing all the buttons
+     */
+    Menu m_menu;
 
 	/**
 	 * @brief m_title title of the dialog
@@ -210,14 +208,6 @@ private:
 
     TextInput m_input;
 
-    Button m_confirmButton;
-
-    Button m_cancelButton;
-
-    void confirmClicked();
-
-    void cancelClicked();
-
 public:
     const sf::Uint64 confirmClickedEvent;
     const sf::Uint64 cancelClickedEvent;
@@ -235,23 +225,11 @@ public:
 
     void setQuestion(const std::string &nwQuestion);
 
-    void update(const sf::Time &elapsed) override;
-
     void draw(Renderer &renderer) const override;
-
-    void handleEvent(const sf::Event &ev) override;
 
 private:
 
     sf::Text m_questionText;
-
-    Button m_yesButton;
-
-    Button m_noButton;
-
-    void yesClicked();
-
-    void noClicked();
 
 public:
     const sf::Uint64 yesClickedEvent;
@@ -265,23 +243,14 @@ class DialogMessage : public Dialog
 public:
     DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message);
 
-    const std::string &getMessage() const;
+    std::string getMessage() const;
 
     void setMessage(const std::string &nwMessage);
 
-    void update(const sf::Time &elapsed) override;
-
     void draw(Renderer &renderer) const override;
 
-    void handleEvent(const sf::Event &ev) override;
-
 private:
-
-    void okClicked();
-
     sf::Text m_messageText;
-
-    Button m_okButton;
 
 public:
     const sf::Uint64 okClickedEvent;
