@@ -71,8 +71,8 @@ void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
     gainPointPos.x -= 30.f;
     gainPointPos.y += 30.f;
 
-    pr::particleGenerator().gainPoint(gainPointPos );
-    pr::particleGenerator().explode(position);//get position
+    m_particleGenerator.gainPoint(gainPointPos );
+    m_particleGenerator.explode(position);//get position
     pr::renderer().shake();
 }
 
@@ -80,16 +80,18 @@ void PlayState::update(const sf::Time &elapsed)
 {
     if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
 
-    if (pr::game().playerWon())
-        pr::stateMachine().setCurrentState(cc::FINISHED);
-    else
-        pr::game().update(elapsed);
+    if (pr::game().playerWon()){
+        pr::stateMachine().goToState(cc::FINISHED, TransitionData::GO_UP);
+        return;
+    }
 
+
+    pr::game().update(elapsed);
 
     m_nextParticle -= elapsed;
     if(m_nextParticle <= sf::Time::Zero){
         m_nextParticle = sf::milliseconds(10);
-        pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
     }
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
@@ -97,15 +99,20 @@ void PlayState::update(const sf::Time &elapsed)
     if(pr::game().isCountingDown()){
         if( m_lastCountdownValue != (int)pr::game().getCountdownTime().asSeconds()){
             m_lastCountdownValue = (int)pr::game().getCountdownTime().asSeconds();
-            pr::particleGenerator().countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+            m_particleGenerator.countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
             pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
         }
     }else if(m_lastCountdownValue == 0){
         m_lastCountdownValue = -1;
-        pr::particleGenerator().countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+        m_particleGenerator.countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
         pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
     }
-    pr::particleGenerator().update(elapsed);
+    m_particleGenerator.update(elapsed);
+}
+
+void PlayState::onAfterLeaving()
+{
+    m_particleGenerator.clear();
 }
 
 void PlayState::draw(Renderer &renderer) const
@@ -113,7 +120,7 @@ void PlayState::draw(Renderer &renderer) const
     renderer.push()
             .scale(M_TO_P);
 
-    pr::particleGenerator().draw(renderer);
+    m_particleGenerator.draw(renderer);
     renderer.renderBall(pr::game().getBall());
     renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
     renderer.renderPaddle(pr::game().getPlayer2().getPaddle());

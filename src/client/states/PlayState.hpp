@@ -35,6 +35,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Time.hpp>
 #include "src/client/State.hpp"
+#include "src/client/particles/ParticleGenerator.hpp"
 
 namespace mp {
 
@@ -72,6 +73,12 @@ public:
      */
     virtual void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief onAfterLeaving inherited function
+     * clears out the particles
+     */
+    virtual void onAfterLeaving() override;
+
     virtual ~PlayState();
 
 private:
@@ -95,6 +102,13 @@ private:
      * @brief m_nextParticle time until next particle spawn
      */
     sf::Time m_nextParticle;
+
+    /**
+     * @brief m_particleGenerator used to generate
+     * all the particles
+     * related to the game
+     */
+    ParticleGenerator m_particleGenerator;
 
     /**
      * @brief gameFinisehd wether the game ended

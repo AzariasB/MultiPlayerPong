@@ -141,6 +141,12 @@ public:
      */
     virtual void draw(Renderer &renderer) const = 0;
 
+    virtual void onBeforeEnter()
+    {
+
+    }
+
+
     /**
      * @brief onEnter function called when the state becomes the current state of the application,
      * is used to init some data

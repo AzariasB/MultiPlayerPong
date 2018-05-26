@@ -90,6 +90,11 @@ public:
      */
     void update(const sf::Time &elapsed);
 
+    /**
+     * @brief clear removes all the particles of this generator
+     */
+    void clear();
+
 private:
     /**
      * @brief m_particles all the particles

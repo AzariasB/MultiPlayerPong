@@ -80,11 +80,6 @@ SoundEngine &pr::soundEngine()
     return ClientApp::getInstance().getSoundEngine();
 }
 
-ParticleGenerator &pr::particleGenerator()
-{
-    return ClientApp::getInstance().getParticleGenerator();
-}
-
 Renderer &pr::renderer()
 {
     return ClientApp::getInstance().getRenderer();

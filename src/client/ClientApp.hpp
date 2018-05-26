@@ -42,7 +42,6 @@
 #include "StateMachine.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
-#include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
 #include "widgets/DialogManager.hpp"
 #include "widgets/FPSCounter.hpp"
@@ -135,19 +134,6 @@ public:
      * @return const reference to const sound engine
      */
     const SoundEngine &getSoundEngine() const;
-
-    /**
-     * @brief getParticleGenerator reference to the particle generator
-     * @return a reference to the particle generator
-     */
-    ParticleGenerator &getParticleGenerator();
-
-    /**
-     * @brief getParticleGenerator const reference to the particle generator
-     * @return a const reference to the particle generator
-     */
-    const ParticleGenerator &getParticleGenerator() const;
-
 
     sf::RenderWindow &getWindow();
 
@@ -288,12 +274,6 @@ private:
      * access to play sounds
      */
     SoundEngine m_sEngine;
-
-    /**
-     * @brief m_particleGenerator particle generator
-     * used to create explosions effects an such
-     */
-    ParticleGenerator m_particleGenerator;
 
     /**
      * @brief m_keyBinding the objects that contains all

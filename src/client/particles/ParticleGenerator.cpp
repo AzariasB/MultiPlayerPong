@@ -80,6 +80,11 @@ void ParticleGenerator::draw(Renderer &renderer) const
     }
 }
 
+void ParticleGenerator::clear()
+{
+    m_particles.clear();
+}
+
 void ParticleGenerator::update(const sf::Time &elapsed)
 {
     for(auto it = m_particles.begin(); it != m_particles.end();){

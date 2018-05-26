@@ -270,11 +270,6 @@ const SoundEngine& ClientApp::getSoundEngine() const
     return m_sEngine;
 }
 
-ParticleGenerator &ClientApp::getParticleGenerator()
-{
-    return m_particleGenerator;
-}
-
 sf::RenderWindow &ClientApp::getWindow()
 {
     return *window;
@@ -288,11 +283,6 @@ KeyBinding &ClientApp::getKeyBindings()
 DialogManager &ClientApp::getDialogManager()
 {
     return m_dialogManager;
-}
-
-const ParticleGenerator &ClientApp::getParticleGenerator() const
-{
-    return m_particleGenerator;
 }
 
 const sf::RenderWindow &ClientApp::getWindow() const

@@ -67,8 +67,6 @@ KeyBinding &keyBinding();
 
 SoundEngine &soundEngine();
 
-ParticleGenerator &particleGenerator();
-
 Renderer &renderer();
 
 sf::TcpSocket &socket();

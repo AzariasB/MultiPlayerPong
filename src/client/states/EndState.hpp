@@ -82,6 +82,12 @@ public:
     void onEnter(BaseStateData *data) override;
 
     /**
+     * @brief onBeforeEnter inherited function
+     * intialize all the drawing stuff
+     */
+    void onBeforeEnter() override;
+
+    /**
      * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
      * goes back to the main menu
      */

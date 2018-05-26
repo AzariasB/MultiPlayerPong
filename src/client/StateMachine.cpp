@@ -62,6 +62,7 @@ void StateMachine::goToState(std::pair<int, TransitionData::DIRECTION> dir)
 
 void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
 {
+    getStateAt(statelabel).onBeforeEnter();
     TransitionData td;
     td.enteringStateLabel = statelabel;
     td.exitingStateLabel = currentStateIndex;

@@ -102,14 +102,17 @@ void EndState::handleEvent(const sf::Event& ev)
     }
 }
 
-void EndState::onEnter(BaseStateData *data)
+void EndState::onBeforeEnter()
 {
     bool winner = ClientApp::getInstance().isWinner();
     updateVerticesColor(winner);
     m_content.setString(winner ? "You won !" : "You lost !");
     m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
     m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
+}
 
+void EndState::onEnter(BaseStateData *data)
+{
     pr::game().reset();
     pr::socket().disconnect();
 }
