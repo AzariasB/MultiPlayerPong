@@ -140,7 +140,7 @@ Renderer &Renderer::rotate(float angle)
     return *this;
 }
 
-void Renderer::renderPowerup(const Powerup &powerup)
+Renderer &Renderer::renderPowerup(const Powerup &powerup)
 {
     if(powerup.isHidden())return;
 
@@ -151,7 +151,7 @@ void Renderer::renderPowerup(const Powerup &powerup)
 
     sf::Vector2f position(powerup.getHitbox().left, powerup.getHitbox().top);
     anim.setPosition(position);
-    render(anim);
+    return render(anim);
 }
 
 Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
@@ -198,19 +198,19 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
     }
 }
 
-void Renderer::renderPaddle(const Paddle& paddle)
+Renderer &Renderer::renderPaddle(const Paddle& paddle)
 {
-    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
+    return render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
 }
 
-void Renderer::renderWall(const Wall &wall)
+Renderer &Renderer::renderWall(const Wall &wall)
 {
-    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
+    return render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
 }
 
-void Renderer::renderBall(const Ball& ball)
+Renderer &Renderer::renderBall(const Ball& ball)
 {
-    render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+    return render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)

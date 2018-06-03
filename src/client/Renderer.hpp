@@ -73,25 +73,25 @@ public:
      * @brief renderBall renders the game's ball (as a blue circle for now)
      * @param ball the ball to render
      */
-    void renderBall(const Ball &ball);
+    Renderer &renderBall(const Ball &ball);
 
     /**
      * @brief renderPaddle renders one paddle. (as a yellow rectangle for now)
      * @param paddle a const reference to the paddle to render
      */
-    void renderPaddle(const Paddle &paddle);
+    Renderer &renderPaddle(const Paddle &paddle);
 
     /**
      * @brief renderWall renders a wall
      * @param wall
      */
-    void renderWall(const Wall &wall);
+    Renderer &renderWall(const Wall &wall);
 
     /**
      * @brief renderPowerup renders one powerup
      * @param powerup const reference to the powerup to render
      */
-    void renderPowerup(const Powerup &powerup);
+    Renderer &renderPowerup(const Powerup &powerup);
 
     /**
      * @brief shake triggers a slight screen shaking for one second

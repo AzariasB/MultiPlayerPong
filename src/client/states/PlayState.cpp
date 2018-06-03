@@ -47,7 +47,8 @@ namespace mp {
 
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
-    m_p2ScoreText("0", pr::resourceManager().getFont())
+    m_p2ScoreText("0", pr::resourceManager().getFont()),
+    m_nextParticle(sf::milliseconds(10), {}, true)
 {
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
@@ -67,6 +68,10 @@ PlayState::PlayState():
         m_particleGenerator.explode(position);
         pr::renderer().shake();
     });
+
+    m_nextParticle.setCallback([this](){
+        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    });
 }
 
 void PlayState::update(const sf::Time &elapsed)
@@ -81,11 +86,7 @@ void PlayState::update(const sf::Time &elapsed)
 
     pr::game().update(elapsed);
 
-    m_nextParticle -= elapsed;
-    if(m_nextParticle <= sf::Time::Zero){
-        m_nextParticle = sf::milliseconds(10);
-        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
-    }
+    m_nextParticle.update(elapsed);
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
 
@@ -114,15 +115,14 @@ void PlayState::draw(Renderer &renderer) const
             .scale(M_TO_P);
 
     m_particleGenerator.draw(renderer);
-    renderer.renderBall(pr::game().getBall());
-    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
-    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
-    renderer.renderWall(pr::game().upperWall());
-    renderer.renderWall(pr::game().lowerWall());
-    renderer.pop();
-
-    renderer.render(m_p1ScoreText);
-    renderer.render(m_p2ScoreText);
+    renderer.renderBall(pr::game().getBall())
+            .renderPaddle(pr::game().getPlayer1().getPaddle())
+            .renderPaddle(pr::game().getPlayer2().getPaddle())
+            .renderWall(pr::game().upperWall())
+            .renderWall(pr::game().lowerWall())
+            .pop()
+            .render(m_p1ScoreText)
+            .render(m_p2ScoreText);
 
     const std::unordered_map<sf::Uint64, Powerup> &powerups = pr::game().getPowerups();
     for(auto it = powerups.begin(); it != powerups.end(); ++it){

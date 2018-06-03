@@ -33,9 +33,10 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Time.hpp>
+
 #include "src/client/State.hpp"
 #include "src/client/particles/ParticleGenerator.hpp"
+#include "src/common/Timer.hpp"
 
 namespace mp {
 
@@ -99,7 +100,7 @@ private:
     /**
      * @brief m_nextParticle time until next particle spawn
      */
-    sf::Time m_nextParticle;
+    Timer m_nextParticle;
 
     /**
      * @brief m_particleGenerator used to generate
