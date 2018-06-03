@@ -32,6 +32,8 @@
 #pragma once
 
 #include "Widget.hpp"
+#include "src/common/Timer.hpp"
+
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -65,7 +67,7 @@ public:
 private:
     sf::Text m_text;
 
-    sf::Time m_second;
+    Timer m_timer;
 
     int m_calls = 0;
 };

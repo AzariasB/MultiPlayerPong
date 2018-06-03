@@ -28,7 +28,8 @@ SOURCES +=\
     src/common/Wall.cpp \
     src/common/ContactListener.cpp \
     src/common/PhysicObject.cpp \
-    src/common/Math.cpp
+    src/common/Math.cpp \
+    src/common/Timer.cpp
 
 HEADERS +=\
     src/common/Application.hpp \
@@ -44,4 +45,6 @@ HEADERS +=\
     src/lib/twin.hpp \
     src/common/Wall.hpp \
     src/common/ContactListener.hpp \
-    src/common/PhysicObject.hpp
+    src/common/PhysicObject.hpp \
+    src/common/Timer.hpp \
+    src/common/FunctionalUtils.hpp

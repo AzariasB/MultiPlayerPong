@@ -233,8 +233,6 @@ private:
      */
     void updatePlaying(const sf::Time &elapsed);
 
-    void paddleHit(std::size_t pNum, b2Vec2 position);
-
     /**
      * @brief gravity world gravity
      */

@@ -23,46 +23,38 @@
  */
 
 /*
- * File:   FPSCounter.cpp
+ * File:   FunctionalUtils.hpp
  * Author: azarias
  *
- * Created on 24/5/2018
+ * Created on 3/6/2018
  */
-#include "FPSCounter.hpp"
-#include "src/client/Provider.hpp"
-#include "src/client/ResourcesManager.hpp"
-#include "src/client/Renderer.hpp"
+#pragma once
 
-namespace mp {
+#include <functional>
+#include <type_traits>
 
-
-FPSCounter::FPSCounter(const sf::Font &font):
-    m_text("0", font, 20),
-    m_timer(sf::seconds(1), {}, true)
+namespace  mp
 {
-    m_text.setPosition(10, 10);
-    m_timer.setCallback([this](){
-        m_text.setString(std::to_string(m_calls));
-        m_calls = 0;
-    });
+/**
+ * used to turn a labmda function
+ * into a std::function
+ */
+namespace detail
+{
+    template < typename T > struct deduce_type ;
+
+    template < typename RETURN_TYPE, typename CLASS_TYPE, typename... ARGS >
+    struct deduce_type< RETURN_TYPE(CLASS_TYPE::*)(ARGS...) const >
+    {
+        using type = std::function< RETURN_TYPE(ARGS...) > ;
+    };
 }
 
-void FPSCounter::update(const sf::Time &elapsed)
+template < typename CLOSURE >
+auto to_f( const CLOSURE& fn )
 {
-    m_timer.update(elapsed);
-    m_calls++;
+    return typename detail::deduce_type< decltype( &CLOSURE::operator() ) >::type(fn) ;
 }
-
-void FPSCounter::draw(Renderer &renderer) const
-{
-    renderer.render(m_text);
-}
-
-void FPSCounter::handleEvent(const sf::Event &ev)
-{
-
-}
-
 
 
 }

@@ -32,35 +32,17 @@
 #pragma once
 
 
-#include <functional>
-#include <type_traits>
 #include <unordered_map>
 #include <list>
 #include <memory>
 #include <iostream>
 #include <SFML/Config.hpp>
+
 #include "Math.hpp"
+#include "FunctionalUtils.hpp"
 
 
 namespace mp {
-
-namespace detail
-{
-    template < typename T > struct deduce_type ;
-
-    template < typename RETURN_TYPE, typename CLASS_TYPE, typename... ARGS >
-    struct deduce_type< RETURN_TYPE(CLASS_TYPE::*)(ARGS...) const >
-    {
-        using type = std::function< RETURN_TYPE(ARGS...) > ;
-    };
-}
-
-template < typename CLOSURE >
-auto to_f( const CLOSURE& fn )
-{
-    return typename detail::deduce_type< decltype( &CLOSURE::operator() ) >::type(fn) ;
-}
-
 /**
  * @brief The BaseEvent struct base object for an event, (used to
  * store it in an array)

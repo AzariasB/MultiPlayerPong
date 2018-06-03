@@ -57,11 +57,6 @@ Game::~Game()
 {
 }
 
-void Game::paddleHit(std::size_t pNum, b2Vec2 position)
-{
-    m_evManager.trigger(hitPaddleEvent, pNum, position);
-}
-
 void Game::handleEvent(const sf::Event& ev, Player &player)
 {
     if (ev.type == sf::Event::KeyPressed) {

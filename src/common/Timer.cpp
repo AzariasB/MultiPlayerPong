@@ -23,46 +23,58 @@
  */
 
 /*
- * File:   FPSCounter.cpp
+ * File:   Timer.cpp
  * Author: azarias
  *
- * Created on 24/5/2018
+ * Created on 3/6/2018
  */
-#include "FPSCounter.hpp"
-#include "src/client/Provider.hpp"
-#include "src/client/ResourcesManager.hpp"
-#include "src/client/Renderer.hpp"
+#include "Timer.hpp"
 
-namespace mp {
-
-
-FPSCounter::FPSCounter(const sf::Font &font):
-    m_text("0", font, 20),
-    m_timer(sf::seconds(1), {}, true)
-{
-    m_text.setPosition(10, 10);
-    m_timer.setCallback([this](){
-        m_text.setString(std::to_string(m_calls));
-        m_calls = 0;
-    });
-}
-
-void FPSCounter::update(const sf::Time &elapsed)
-{
-    m_timer.update(elapsed);
-    m_calls++;
-}
-
-void FPSCounter::draw(Renderer &renderer) const
-{
-    renderer.render(m_text);
-}
-
-void FPSCounter::handleEvent(const sf::Event &ev)
+namespace mp
 {
 
+Timer::Timer(const sf::Time &totalTime, const std::function<void()> callback, bool repeat):
+    m_time(totalTime),
+    m_totalTime(totalTime),
+    m_callback(callback),
+    m_repeat(repeat)
+{
 }
 
+void Timer::update(const sf::Time &delta)
+{
+    if(m_time <= sf::Time::Zero)return;
 
+    m_time -= delta;
+    if(m_time <= sf::Time::Zero){
+        if(m_callback) m_callback();
+        if(m_repeat) m_time += m_totalTime;
+    }
+}
+
+void Timer::setCallback(const std::function<void ()> callback)
+{
+    m_callback = callback;
+}
+
+void Timer::setRepeat(bool repeat)
+{
+    m_repeat = repeat;
+}
+
+bool Timer::isRepeat() const
+{
+    return m_repeat;
+}
+
+const sf::Time &Timer::remaining() const
+{
+    return m_time;
+}
+
+const sf::Time &Timer::totalTime() const
+{
+    return m_totalTime;
+}
 
 }
