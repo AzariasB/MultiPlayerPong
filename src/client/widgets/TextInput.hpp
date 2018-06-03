@@ -37,6 +37,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Widget.hpp"
+#include "src/common/Timer.hpp"
 
 namespace mp {
 
@@ -66,6 +67,13 @@ public:
      * @param ev
      */
     void handleEvent(const sf::Event& ev) override;
+
+    /**
+     * @brief update inherited function (used to update the
+     * blinking pipe at the end)
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
 
     /**
      * @brief setText sets the text inside the text input
@@ -109,8 +117,7 @@ private:
     /**
      * @brief m_clock a mutable object in order to make the pipe blink
      */
-    mutable sf::Clock m_clock;
-
+    Timer m_timer;
 };
 
 }

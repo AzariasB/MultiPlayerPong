@@ -66,6 +66,7 @@ public:
      * @brief Game constructor
      */
     Game();
+
     virtual ~Game();
 
     /**

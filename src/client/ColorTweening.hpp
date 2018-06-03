@@ -38,22 +38,22 @@ namespace mp {
 
 
 
-    class ColorTweening
-    {
-    public:
-        /**
+class ColorTweening
+{
+public:
+    /**
      * @brief ColorTweening empty constructor
      */
-        ColorTweening();
+    ColorTweening();
 
-        /**
+    /**
      * @brief ColorTweening no tweening, just a color
      * @param defaultColor
      */
-        ColorTweening(const sf::Color &defaultColor);
+    ColorTweening(const sf::Color &defaultColor);
 
 
-        /**
+    /**
      * @brief ColorTweening constructor
      * @param from the original color
      * @param to the color to reach
@@ -62,36 +62,48 @@ namespace mp {
      */
     ColorTweening(const sf::Color &from, const sf::Color &to, const sf::Time &duration, twin::easing easing, const std::function<void()> &callback = {});
 
-        /**
-     * @brief get the current color depending on the progress
+    /**
+    * @brief get the current color depending on the progress
+    * @return
+    */
+    const sf::Color &get() const;
+
+    /**
+     * @brief update updates all the colors of this object
+     * @param deltaTime time since last update
+     */
+    void update(const sf::Time &deltaTime);
+
+    /**
+     * @brief isFinished if the transition is done
      * @return
      */
-        const sf::Color &get() const;
+    bool isFinished() const;
 
-        void update(const sf::Time &deltaTime);
+    /**
+     * @brief progress current progress of the tweening
+     * @return
+     */
+    float progress() const;
 
-        bool isFinished() const;
+private:
 
-        float progress() const;
-
-    private:
-
-        /**
+    /**
      * @brief running wether we actually need to update the colors
      */
-        bool m_running;
+    bool m_running;
 
-        sf::Color m_color;
+    sf::Color m_color;
 
-        /**
+    /**
      * @brief m_colorsTwin array of 4 tweening, in order, it contains:
      *  - the red value tweening
      *  - the green value tweening
      *  - the blue value tweening
      *  - the alpha value tweening
      */
-        std::array<twin::Twin<sf::Uint8>, 4> m_colorsTwin;
-    };
+    std::array<twin::Twin<sf::Uint8>, 4> m_colorsTwin;
+};
 
 
 }

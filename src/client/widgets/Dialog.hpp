@@ -68,6 +68,8 @@ public:
      */
     Dialog(const sf::Uint64 id, const std::string &title);
 
+    virtual ~Dialog();
+
 	/**
 	 * @brief draw draws the dialog and all its sub-components
 	 * @param target the target in which to draw
@@ -189,23 +191,61 @@ public:
 //END DIALOG
 
 //BEGIN INPUT DIALOG
+
+/**
+ * @brief The DialogInput class dialog inputs are here
+ * to ask a question to the user, and have a textbox to
+ * answer this question
+ * he can either cancel or confirm the text he typed
+ */
 class DialogInput : public Dialog
 {
 public:
+    /**
+     * @brief DialogInput constructor
+     * @param id id of this dialog
+     * @param title title of the dialog
+     * @param question question to ask to the user
+     */
     DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question);
 
+    virtual ~DialogInput();
+
+    /**
+     * @brief getValue gets the value typed by the user
+     * @return a string containing the value typed by the user
+     */
     const std::string &getValue() const;
 
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
     void draw(Renderer &renderer) const override;
 
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
     void handleEvent(const sf::Event &ev) override;
 
 private:
-
+    /**
+     * @brief m_questionText text containing the question
+     * asked to the user
+     */
     sf::Text m_questionText;
 
+    /**
+     * @brief m_input text input where the user can type
+     * the answer
+     */
     TextInput m_input;
 
 public:
@@ -216,19 +256,47 @@ public:
 
 
 //BEGIN QUESTION DIALOG
+
+/**
+ * @brief The DialogQuestion class used to ask
+ * a yes-no question to the user
+ */
 class DialogQuestion : public Dialog
 {
 public:
+    /**
+     * @brief DialogQuestion constructor
+     * @param id id of this dialog
+     * @param title title of the dialog
+     * @param question question to ask to the user
+     */
     DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question);
 
+    virtual ~DialogQuestion();
+
+    /**
+     * @brief getQuestion getter for the question asked
+     * to the user
+     * @return
+     */
     const std::string &getQuestion() const;
 
+    /**
+     * @brief setQuestion changes the question asked to the user
+     * @param nwQuestion the new question to ask the user
+     */
     void setQuestion(const std::string &nwQuestion);
 
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
     void draw(Renderer &renderer) const override;
 
 private:
-
+    /**
+     * @brief m_questionText text asking the user a question
+     */
     sf::Text m_questionText;
 
 public:
@@ -238,18 +306,46 @@ public:
 //END QUESTION DIALOG
 
 //BEGIN MESSAGE DIALOG
+
+/**
+ * @brief The DialogMessage class dialog showing
+ * a message to the user, with only a "ok" button
+ */
 class DialogMessage : public Dialog
 {
 public:
+    /**
+     * @brief DialogMessage constructor
+     * @param id dialog id
+     * @param title
+     * @param message message to show the user
+     */
     DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message);
 
+    virtual ~DialogMessage();
+
+    /**
+     * @brief getMessage returns the message shown to the user
+     * @return
+     */
     std::string getMessage() const;
 
+    /**
+     * @brief setMessage changes the message shown to the user
+     * @param nwMessage
+     */
     void setMessage(const std::string &nwMessage);
 
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
     void draw(Renderer &renderer) const override;
 
 private:
+    /**
+     * @brief m_messageText the message shown to the user
+     */
     sf::Text m_messageText;
 
 public:

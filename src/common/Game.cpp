@@ -48,13 +48,16 @@ Game::Game() :
     mContactListener(m_evManager)
 {
     mPhysicWorld.SetContactListener(&mContactListener);
-    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, [this](const std::size_t &pNum, const b2Vec2 &position){
+    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, [this](std::size_t pNum, b2Vec2 position){
         m_evManager.trigger(hitPaddleEvent, pNum, position);
     });
 }
 
 Game::~Game()
 {
+    m_evManager.removeEvent(hitPaddleEvent);
+    m_evManager.removeEvent(lostEvent);
+    m_evManager.removeEvent(countdownEndedEvent);
 }
 
 void Game::handleEvent(const sf::Event& ev, Player &player)

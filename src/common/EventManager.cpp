@@ -41,55 +41,65 @@ EventManager::EventManager():
 
 sf::Uint64 EventManager::nextEventCode()
 {
-    m_observers.insert(std::make_pair(++m_evCounter, std::list<BaseEvent*>()));
+    m_observers[++m_evCounter] = {};
     return m_evCounter;
 }
 
 EventManager::~EventManager()
 {
     for(auto &lst : m_observers){
-        for(auto *ptr: lst.second){
-            delete ptr;
+        for(auto &pair : lst.second){
+            delete pair.second;
+            pair.second = 0;
         }
     }
     m_observers.clear();
 }
 
-const std::string &EventManager::declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger)
+std::string EventManager::declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger)
 {
     assertEventCode(eventCode);
     std::function<void()> func = [this,toTrigger](){
         this->trigger(toTrigger);
     };
-    m_observers[eventCode].emplace_back(new EventStdFunction<>(func));
-    return addIterator(eventCode, math::uuid());
-}
 
-const std::string &EventManager::addIterator(sf::Uint64 evCode, const std::string &uuid)
-{
-    return (*m_tokens.insert(
-                std::make_pair(uuid, std::prev(m_observers[evCode].end()))
-                ).first/* iterator to pair */).first /* key */;
+    std::string uuid = math::uuid();
+
+    m_observers[eventCode].emplace(uuid, new EventStdFunction<>(func));
+    return uuid;
 }
 
 void EventManager::assertEventCode(sf::Uint64 evCode)
 {
-    if (evCode <= 0 || evCode > m_evCounter)
-        throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") is out of range");
+    if (evCode <= 0 || evCode > m_evCounter || m_observers.find(evCode) == m_observers.end())
+        throw std::out_of_range("The given event code (" + std::to_string(evCode) + ") does not exist");
+}
+
+void EventManager::removeEvent(const sf::Uint64 &eventCode)
+{
+    assertEventCode(eventCode);
+    for(auto &it : m_observers[eventCode]){
+        delete it.second;
+        it.second = 0;
+    }
+    m_observers.erase(eventCode);
 }
 
 void EventManager::removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode)
 {
-    if(m_tokens.find(tokenUUID) != m_tokens.end() &&
-            m_observers.find(eventCode) != m_observers.end() &&
-            m_observers[eventCode].size() > 0){
-        std::list<BaseEvent*>::iterator listIt = m_tokens[tokenUUID];
-        delete (*listIt);
-        m_observers[eventCode].erase(listIt);
-        m_tokens.erase(tokenUUID);
-    }else{
-        std::out_of_range("The given uuid (" + tokenUUID + ") does not exist");
+    auto observers = m_observers.find(eventCode);
+    if(observers == m_observers.end()){
+        std::out_of_range("The given event code (" + std::to_string(eventCode) + ") does not exist");
+        return;
     }
+
+    auto &map = (*observers).second;
+    auto val = map.find(tokenUUID);
+    if(val == map.end()){
+        std::out_of_range("The given token uuid (" + tokenUUID + ") does not exist");
+        return;
+    }
+    map.erase(val);
 }
 
 }

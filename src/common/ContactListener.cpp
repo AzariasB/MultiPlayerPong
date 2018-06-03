@@ -47,6 +47,12 @@ ContactListener::ContactListener(EventManager &evManager):
 
 }
 
+ContactListener::~ContactListener()
+{
+    m_evManager.removeEvent(ballHitPaddleEvent);
+    m_evManager.removeEvent(ballHitWallEvent);
+}
+
 bool ContactListener::userDataIsBall(PhysicObject &objA, PhysicObject &objB) const
 {
     if(objA.type == PhysicObject::BALL){

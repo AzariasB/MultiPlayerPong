@@ -84,7 +84,7 @@ MenuState::MenuState() :
         pr::connect(ip.cancelClickedEvent, inputDialogHidden);
         pr::connect(ip.closeEvent, inputDialogHidden);
 
-        pr::connect(ip.confirmClickedEvent, [this, &ip](const std::string &entered){
+        pr::connect(ip.confirmClickedEvent, [this, &ip](std::string entered){
             if(isValidIp(entered)){
                 pr::dialogManager().hideDialog(ip.id());
                 pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);

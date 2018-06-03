@@ -12,4 +12,4 @@ HEADERS += $$PWD/TextInput.hpp \
     $$PWD/Button.hpp \
     $$PWD/Widget.hpp \
     $$PWD/DialogManager.hpp \
-    $$PWD/FPSCounter.cpp
+    $$PWD/FPSCounter.hpp

@@ -75,7 +75,9 @@ Player &player();
 
 DialogManager &dialogManager();
 
-const std::string &connect(sf::Uint64 evCode, sf::Uint64 cascade);
+std::string connect(sf::Uint64 evCode, sf::Uint64 cascade);
+
+void removeEvent(const sf::Uint64 &evCode);
 
 template<typename CLOSURE>
 const std::string &connect(sf::Uint64 evCode, const CLOSURE &callback)

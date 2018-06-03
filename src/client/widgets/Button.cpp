@@ -290,7 +290,8 @@ void Button::setAlignment(Alignment al)
 
 Button::~Button()
 {
-
+    pr::removeEvent(clickedEvent);
+    pr::removeEvent(selectdEvent);
 }
 
 }

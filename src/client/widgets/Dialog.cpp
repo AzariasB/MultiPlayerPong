@@ -58,6 +58,12 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_state = DIALOG_HIDDEN;
 }
 
+Dialog::~Dialog()
+{
+    pr::removeEvent(closeEvent);
+    pr::removeEvent(hiddenEvent);
+}
+
 const sf::Uint64 &Dialog::id() const
 {
     return m_id;
@@ -163,8 +169,14 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
 
     m_questionText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT/4.f);
 
-    pr::connect(confirclick, confirmClickedEvent);
+    pr::connect(confirclick, [this](){pr::trigger(confirmClickedEvent, m_input.getText()); });
     pr::connect(cancelClick, cancelClickedEvent);
+}
+
+DialogInput::~DialogInput()
+{
+    pr::removeEvent(cancelClickedEvent);
+    pr::removeEvent(confirmClickedEvent);
 }
 
 void DialogInput::update(const sf::Time &elapsed)
@@ -212,6 +224,12 @@ DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, c
     pr::connect(noClick, noClickedEvent);
 }
 
+DialogQuestion::~DialogQuestion()
+{
+    pr::removeEvent(yesClickedEvent);
+    pr::removeEvent(noClickedEvent);
+}
+
 const std::string &DialogQuestion::getQuestion() const
 {
     return m_questionText.getString().toAnsiString();
@@ -248,6 +266,11 @@ DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, con
     m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
 
     pr::connect(okClick, okClickedEvent);
+}
+
+DialogMessage::~DialogMessage()
+{
+    pr::removeEvent(okClickedEvent);
 }
 
 std::string DialogMessage::getMessage() const

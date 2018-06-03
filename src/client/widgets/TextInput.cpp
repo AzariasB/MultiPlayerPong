@@ -44,7 +44,8 @@ TextInput::TextInput(const sf::Vector2f &position) :
     m_text("", pr::resourceManager().getFont()),
     m_pipe("|", pr::resourceManager().getFont()),
     m_typed(""),
-    m_background(sf::Vector2f(9 * SF_DIALOG_WIDTH / 10.f, 50))
+    m_background(sf::Vector2f(9 * SF_DIALOG_WIDTH / 10.f, 50)),
+    m_timer(sf::milliseconds(700),{}, true)
 {
     m_background.setOutlineColor(cc::Colors::dialogOutlineColor);
     m_background.setFillColor(cc::Colors::backgroundColor);
@@ -52,20 +53,26 @@ TextInput::TextInput(const sf::Vector2f &position) :
     m_background.setPosition(position.x - 10, position.y);
     m_text.setPosition(position);
     updatePipePos();
+
+    m_timer.setCallback([this](){
+        sf::Color txtColor = m_pipe.getColor();
+        txtColor.a = 255 - txtColor.a;
+        m_pipe.setColor(txtColor);
+    });
 }
 
 void TextInput::draw(Renderer &renderer) const
 {
     if(!isVisible())return;
 
-    renderer.render(m_background);
-    renderer.render(m_text);
+    renderer.render(m_background)
+            .render(m_text)
+            .render(m_pipe);
+}
 
-    if(m_clock.getElapsedTime().asSeconds() < 0.7){
-        renderer.render(m_pipe);
-    }else if(m_clock.getElapsedTime().asSeconds() > 1.4){
-        m_clock.restart();
-    }
+void TextInput::update(const sf::Time &elapsed)
+{
+    m_timer.update(elapsed);
 }
 
 void TextInput::handleEvent(const sf::Event& ev)

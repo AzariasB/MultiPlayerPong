@@ -100,7 +100,12 @@ DialogManager &pr::dialogManager()
     return ClientApp::getInstance().getDialogManager();
 }
 
-const std::string &pr::connect(sf::Uint64 evCode, sf::Uint64 cascade)
+void pr::removeEvent(const sf::Uint64 &evCode)
+{
+    eventManager().removeEvent(evCode);
+}
+
+std::string pr::connect(sf::Uint64 evCode, sf::Uint64 cascade)
 {
     return eventManager().declareListener(evCode, cascade);
 }

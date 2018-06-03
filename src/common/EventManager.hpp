@@ -125,7 +125,7 @@ public:
      * @param toTrigger the event code to trigger when the first one is trigerred
      * @return the UUID of the event listener
      */
-    const std::string &declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger);
+    std::string declareListener(sf::Uint64 eventCode, sf::Uint64 toTrigger);
 
     /**
      * Just calls a function when an event is trigerred
@@ -134,13 +134,14 @@ public:
      * @param trigger the function to call when the event is fired
      */
     template<typename CLOSURE>
-    const std::string &declareListener(sf::Uint64 eventCode, const CLOSURE &lambda)
+    std::string declareListener(sf::Uint64 eventCode, const CLOSURE &lambda)
     {
         auto func = to_f(lambda);
         assertEventCode(eventCode);
 
-        m_observers[eventCode].emplace_back(makeStdFunction(func));
-        return addIterator(eventCode, math::uuid());
+        const std::string uuid = math::uuid();
+        m_observers[eventCode].emplace(uuid, makeStdFunction(func));
+        return uuid;
     }
 
     /**
@@ -150,6 +151,12 @@ public:
      * @param iter the token given when creating the listener
      */
     void removeListener(const std::string &tokenUUID, const sf::Uint64 &eventCode);
+
+    /**
+     * @brief removeEvent removes the event listener of the given event id
+     * @param eventCode
+     */
+    void removeEvent(const sf::Uint64 &eventCode);
 
     /**
      * @brief trigger calls all the method listening for the given evCode,
@@ -162,8 +169,16 @@ public:
     void trigger(sf::Uint64 evCode, Args... argp)
     {
         assertEventCode(evCode);
-        for(auto &it : m_observers[evCode]){
-            EventFunc<Args...> &ef = static_cast<EventFunc<Args...>&>(*it);
+        /*
+         * Copy the map to avoid crash when the event is removed
+         * while looping over the map
+         */
+        auto copy = m_observers[evCode];
+
+        for(auto it : copy){
+            auto ptr = it.second;
+            if(!ptr)continue;
+            EventFunc<Args...> &ef = static_cast<EventFunc<Args...>&>(*ptr);
             ef.run(argp...);
         }
     }
@@ -177,13 +192,6 @@ private:
     void assertEventCode(sf::Uint64 evCode);
 
     /**
-     * @brief last returns the last inserted element of the given observer list
-     * @param evCode the event containing the list of events
-     * @return the last element of the list
-     */
-    const std::string &addIterator(sf::Uint64 evCode, const std::string &uuid);
-
-    /**
      * @brief m_evCounter each event has it's own code, for each new
      * request of event code, the event counter is incremented
      */
@@ -192,14 +200,7 @@ private:
     /**
      * @brief m_observers all the observers
      */
-    std::unordered_map<sf::Uint64, std::list<BaseEvent*> > m_observers;
-
-    /**
-     * @brief m_tokens when creating an event listener, we create a UUID
-     * and returns it, so the listener can later be removed using the given
-     * token
-     */
-    std::unordered_map<std::string, std::list<BaseEvent*>::iterator> m_tokens;
+    std::unordered_map<sf::Uint64, std::unordered_map<std::string, BaseEvent*>> m_observers;
 };
 
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,10 @@ namespace mp {
 
 class Renderer;
 
+/**
+ * @brief The FPSCounter class utility widget
+ * to show the application's FPS
+ */
 class FPSCounter : public Widget
 {
 public:
@@ -65,10 +69,20 @@ public:
     void handleEvent(const sf::Event &ev);
 
 private:
+    /**
+     * @brief m_text text to show the fps
+     */
     sf::Text m_text;
 
+    /**
+     * @brief m_timer timer to update the fps
+     */
     Timer m_timer;
 
+    /**
+     * @brief m_calls number of calls
+     * since last timer reset
+     */
     int m_calls = 0;
 };
 

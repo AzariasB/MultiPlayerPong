@@ -63,6 +63,8 @@ public:
      */
     void BeginContact(b2Contact *contact) override;
 
+    virtual ~ContactListener();
+
 private:
     /**
      * @brief m_evManager event manager used to trigger
