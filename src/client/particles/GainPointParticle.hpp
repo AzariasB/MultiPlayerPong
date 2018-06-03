@@ -79,12 +79,12 @@ private:
     /**
      * @brief m_positionTwin tweening for the position
      */
-    twin::Twin<float, sf::Int32> m_positionTwin;
+    twin::Twin<float> m_positionTwin;
 
     /**
      * @brief m_alphaTwin tweening for the alpha color
      */
-    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
+    twin::Twin<sf::Uint8> m_alphaTwin;
 
     /**
      * @brief m_text "+1" text

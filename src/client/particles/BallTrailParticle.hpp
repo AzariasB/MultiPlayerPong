@@ -87,7 +87,7 @@ private:
     /**
      * @brief m_twin tweening for the radius
      */
-    twin::Twin<float, float> m_twin;
+    twin::Twin<float> m_twin;
 
     ColorTweening m_alphaTwin;
 

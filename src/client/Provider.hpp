@@ -77,28 +77,10 @@ DialogManager &dialogManager();
 
 const std::string &connect(sf::Uint64 evCode, sf::Uint64 cascade);
 
-template<typename T, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
+template<typename CLOSURE>
+const std::string &connect(sf::Uint64 evCode, const CLOSURE &callback)
 {
-    return eventManager().declareListener(evCode, func, obj);
-}
-
-template<typename T, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
-{
-    return eventManager().declareListener(evCode, func, obj, args...);
-}
-
-template<typename T, typename A, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(A, Args...), T *obj, A val)
-{
-    return eventManager().declareListener(evCode, func, obj, val);
-}
-
-template<typename ...Args>
-const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
-{
-    return eventManager().declareListener(evCode, func, args...);
+    return eventManager().declareListener(evCode, callback);
 }
 
 template<typename ...Args>

@@ -88,11 +88,6 @@ public:
      */
     void onEnter(BaseStateData *data) override;
 
-    /**
-     * @brief cancelClicked function called when the button "cancel" is clicked
-     */
-    void cancelClicked();
-
     virtual ~WaitingState();
 private:
 

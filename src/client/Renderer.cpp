@@ -162,7 +162,7 @@ Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
                                             std::forward_as_tuple(powerup.getId()),
                                             std::forward_as_tuple(texture, sprites, sf::seconds(1))
                                             );
-    pr::connect(powerup.powerupDestroyed, &Renderer::destroyAnimation, this, powerup.getId());
+    pr::connect(powerup.powerupDestroyed, [this, &powerup](){ destroyAnimation(powerup.getId()); });
     return pair.first->second;
 }
 

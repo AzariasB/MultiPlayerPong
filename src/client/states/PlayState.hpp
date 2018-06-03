@@ -82,8 +82,6 @@ public:
     virtual ~PlayState();
 
 private:
-    void bounced(std::size_t pNum, sf::Vector2f position);
-
     /**
      * @brief m_p1ScoreText score of the player1
      */

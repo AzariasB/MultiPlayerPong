@@ -53,22 +53,18 @@ KeyBindingState::KeyBindingState():
         Button &b = m_menu.addButton(btnTitle ,xSide, startY, actionIcon(ka));
         startY += b.getHeight() + 10;
         m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
-        pr::connect(
-                    b.clickedEvent,
-                    &KeyBindingState::buttonClicked,
-                    this,
-                    m_actions.back().get()
-                    );
+        auto action = m_actions.back().get();
+        pr::connect(b.clickedEvent, [this, action](){buttonClicked(action);});
     }
 
     startY += 150.f;
     const Button& resetbtn= m_menu.addButton("Reset", startX, startY, Assets::IconAtlas::returnIcon);
     startY += resetbtn.getHeight();
-    pr::connect(resetbtn.clickedEvent, &KeyBindingState::resetKeys, this);
+    pr::connect(resetbtn.clickedEvent, [this](){resetKeys();});
 
 
     sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon).clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
+    pr::connect(backClicked, [](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);});
 
     m_menu.normalizeButtons();
 }
@@ -134,8 +130,9 @@ void KeyBindingState::buttonClicked(ActionsButton *ab)
     m_waitingAction = ab;
     DialogMessage &dm = pr::dialogManager().message("Change key binding","Press a key");
     m_messageDialogId = dm.id();
-    pr::connect(dm.okClickedEvent, &KeyBindingState::cancelDialog, this);
-    pr::connect(dm.closeEvent, &KeyBindingState::cancelDialog, this);
+    auto cancel = [this](){cancelDialog();};
+    pr::connect(dm.okClickedEvent, cancel);// &KeyBindingState::cancelDialog, this);
+    pr::connect(dm.closeEvent, cancel);
 }
 
 

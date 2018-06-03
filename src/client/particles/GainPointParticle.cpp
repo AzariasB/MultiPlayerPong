@@ -40,8 +40,8 @@ namespace mp {
 
 GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
     Particle(),
-    m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime.asMilliseconds(), twin::linear)),
-    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifeTime.asMilliseconds(), twin::linear )),
+    m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime, twin::linear)),
+    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifeTime, twin::linear )),
     m_text("+1",pr::resourceManager().getFont(), 20)
 {
     m_text.setPosition(position);
@@ -62,8 +62,8 @@ void GainPointParticle::render(Renderer &renderer) const
 
 void GainPointParticle::update(const sf::Time &elapsed)
 {
-    m_positionTwin.step(elapsed.asMilliseconds());
-    m_alphaTwin.step(elapsed.asMilliseconds());
+    m_positionTwin.step(elapsed);
+    m_alphaTwin.step(elapsed);
 
     sf::Color textColor = m_text.getFillColor();
     textColor.a = m_alphaTwin.get();

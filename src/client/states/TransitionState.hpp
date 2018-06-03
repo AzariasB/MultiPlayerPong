@@ -124,18 +124,12 @@ private:
      * @brief mTweening tweening for the
      * center position of the states
      */
-    twin::Twin<float, sf::Int32> mTweening;
+    twin::Twin<float> mTweening;
 
     /**
       * data to pass to the entering state
       */
     std::unique_ptr<BaseStateData> mEnteringData = {};
-
-    /**
-     * @brief mTransitionDuration duration of a transition
-     * between two state
-     */
-    static const sf::Int32 mTransitionDuration;
 };
 
 

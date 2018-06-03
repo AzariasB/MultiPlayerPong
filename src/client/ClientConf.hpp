@@ -31,6 +31,7 @@
 #pragma once
 
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Time.hpp>
 #include "src/common/Config.hpp"
 #include "src/common/Math.hpp"
 
@@ -66,8 +67,7 @@ namespace mp
             TRANSITION
         };
 
-        class Colors {
-        public:
+        struct Colors {
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;
             static const sf::Color buttonBorderColor;
@@ -82,6 +82,14 @@ namespace mp
 
             static const sf::Color endWinColor[2];
             static const sf::Color endLoseColor[2];
+        };
+
+        struct Times {
+            static const sf::Time transitionTime;
+            static const sf::Time gainPointLifeTime;
+            static const sf::Time explosionLifeTime;
+            static const sf::Time trailLifeTime;
+            static const sf::Time trailCountdownTime;
         };
 
     }

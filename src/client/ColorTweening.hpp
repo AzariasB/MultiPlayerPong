@@ -60,7 +60,7 @@ namespace mp {
      * @param duration the duration of the transition
      * @param easing the easing to use
      */
-        ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing, const std::function<void()> &callback = {});
+    ColorTweening(const sf::Color &from, const sf::Color &to, const sf::Time &duration, twin::easing easing, const std::function<void()> &callback = {});
 
         /**
      * @brief get the current color depending on the progress
@@ -68,7 +68,7 @@ namespace mp {
      */
         const sf::Color &get() const;
 
-        void update(float deltaTime);
+        void update(const sf::Time &deltaTime);
 
         bool isFinished() const;
 
@@ -90,7 +90,7 @@ namespace mp {
      *  - the blue value tweening
      *  - the alpha value tweening
      */
-        std::array<twin::Twin<sf::Uint8, float>, 4> m_colorsTwin;
+        std::array<twin::Twin<sf::Uint8>, 4> m_colorsTwin;
     };
 
 

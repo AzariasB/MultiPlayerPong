@@ -32,9 +32,6 @@
 
 namespace mp {
 
-const sf::Int32 TransitionState::mTransitionDuration = 500;
-
-
 TransitionState::TransitionState()
 {
 }
@@ -53,7 +50,7 @@ void TransitionState::draw(Renderer &renderer) const
 
 void TransitionState::update(const sf::Time &elapsed)
 {
-    mTweening.step(elapsed.asMilliseconds());
+    mTweening.step(elapsed);
     if(mTweening.progress() == 1.f){
         if(mEnteringData){
             pr::stateMachine().setCurrentState(mEnteringStateLabel, *mEnteringData);
@@ -102,7 +99,7 @@ void TransitionState::onEnter(BaseStateData *data)
         tweening.second = SF_ARENA_HEIGHT;
     }
 
-    mTweening = twin::makeTwin(tweening.first, tweening.second, mTransitionDuration, twin::easing::backInOut);
+    mTweening = twin::makeTwin(tweening.first, tweening.second, cc::Times::transitionTime, twin::easing::backInOut);
 
     TransitionData &td = *stData->data();
 

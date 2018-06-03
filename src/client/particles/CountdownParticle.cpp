@@ -34,13 +34,15 @@
 #include "src/client/Renderer.hpp"
 #include "src/client/ResourcesManager.hpp"
 
+#include "src/common/VectorsUtils.hpp"
+
 namespace mp {
 
-CountdownParticle::CountdownParticle(const std::string &text, const sf::Vector2f &positon):
+CountdownParticle::CountdownParticle(const std::string &text, const sf::Vector2f &positon, const sf::Time &lifetime):
     Particle(),
-    m_textSize(twin::makeTwin(10, 50, 1000.f, twin::linear)),
-    m_textAlpha(twin::makeTwin(255, 0, 1000.f, twin::linear)),
-    m_text(text, pr::resourceManager().getFont())
+    m_textScale(twin::makeTwin(0.1f, 1.f, lifetime, twin::linear)),
+    m_textAlpha(twin::makeTwin((sf::Uint8)255, (sf::Uint8)0, lifetime, twin::linear)),
+    m_text(text, pr::resourceManager().getFont(), 60)
 {
     m_text.setOrigin(m_text.getLocalBounds().width / 2.f, m_text.getLocalBounds().height / 2.f);
     m_text.setPosition(positon);
@@ -49,23 +51,27 @@ CountdownParticle::CountdownParticle(const std::string &text, const sf::Vector2f
 
 void CountdownParticle::update(const sf::Time &elapsed)
 {
-    m_textSize.step(elapsed.asMilliseconds());
-    m_textAlpha.step(elapsed.asMilliseconds());
-    m_text.setCharacterSize(m_textSize.get());
+    m_textScale.step(elapsed);
+    m_textAlpha.step(elapsed);
     m_textColor.a = m_textAlpha.get();
     m_text.setColor(m_textColor);
 }
 
 void CountdownParticle::render(Renderer &renderer) const
 {
-    renderer.scale(P_TO_M);
-    renderer.render(m_text);
-    renderer.scale(M_TO_P);
+    renderer
+            .push()
+            .scale(P_TO_M)
+            .translate(m_text.getPosition())
+            .scale(m_textScale.get())
+            .translate(-m_text.getPosition())
+            .render(m_text)
+            .pop();
 }
 
 bool CountdownParticle::isFinished() const
 {
-    return m_textSize.progress() == 1.f;
+    return m_textScale.progress() == 1.f;
 }
 
 }

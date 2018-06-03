@@ -4,6 +4,7 @@
 #include <cmath>
 #include <type_traits>
 #include <functional>
+#include <SFML/System/Time.hpp>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -488,7 +489,6 @@ enum easing{
      * 1 means finished
      */
     template<typename BOUND,//type of bounds
-             typename STEP,//type of steps
              typename F = std::function<void()>>//type of callbak function
     class Twin
     {
@@ -503,11 +503,11 @@ enum easing{
          * @param finalCallback the function to call when the tweening
          * is over
          */
-        Twin(const BOUND &from, const BOUND& to, const STEP &time, easing ease, const F &finalCallback):
+        Twin(const BOUND &from, const BOUND& to, const sf::Time &time, easing ease, const F &finalCallback):
             from(from),
             to(to),
             totalTime(time),
-            advance(0),
+            advance(),
             totalProgress(0.f),
             finishCallback(finalCallback),
             easingF(getEasing(ease))
@@ -521,11 +521,11 @@ enum easing{
          * @param time the time it takes to go from 'from' to 'to'
          * @param ease the easing function
          */
-        Twin(const BOUND &from, const BOUND &to, const STEP &time, easing ease):
+        Twin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ease):
             from(from),
             to(to),
             totalTime(time),
-            advance(0),
+            advance(),
             totalProgress(0.f),
             finishCallback(noop),
             easingF(getEasing(ease))
@@ -535,9 +535,9 @@ enum easing{
         Twin():
             from(0),
             to(0),
-            advance(0),
+            advance(),
             finishCallback(noop),
-            totalTime(0),
+            totalTime(),
             easingF(getEasing(linear))
         {
 
@@ -547,15 +547,15 @@ enum easing{
          * @brief step steps of the given progress
          * @param progress the progress made since the last step
          */
-        void step(STEP progress)
+        void step(const sf::Time &progress)
         {
             if(totalProgress == 1.f)return;
 
             advance += progress;
-            totalProgress = advance/static_cast<float>(totalTime);
+            totalProgress = advance/totalTime;
             if(advance >= totalTime){
                 advance = totalTime;
-                totalProgress = advance/static_cast<float>(totalTime);
+                totalProgress = advance/totalTime;
 
                 if(finishCallback) finishCallback();
             }
@@ -647,10 +647,10 @@ enum easing{
         float totalProgress;//total progress  0 = begin, 1 = finished
 
         //The time it must take to reach the value
-        STEP totalTime;
+        sf::Time totalTime;
 
         //The current time value
-        STEP advance;
+        sf::Time advance;
 
         //the function to call whenever the tweening is over
         F finishCallback;
@@ -669,15 +669,12 @@ enum easing{
      * @return a twin object
      */
     template<typename BOUND,
-             typename STEP,
              typename CALLBACK>
-    Twin<BOUND,STEP,CALLBACK> makeTwin(const BOUND &from, const BOUND &to, const STEP &time, easing ez, const CALLBACK &func)
+    Twin<BOUND,CALLBACK> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez, const CALLBACK &func)
     {
-        return Twin<BOUND,STEP,CALLBACK>(from, to, time, ez, func);
+        return Twin<BOUND,CALLBACK>(from, to, time, ez, func);
     }
 
-    template<typename BOUND,
-             typename STEP>
     /**
      * @brief makeTwin util function to create a twin object withe template type deduction
      * @param from the original value
@@ -686,9 +683,10 @@ enum easing{
      * @param ez the easing function to use
      * @return a twing object
      */
-    Twin<BOUND,STEP> makeTwin(const BOUND &from, const BOUND &to, const STEP &time, easing ez)
+    template<typename BOUND>
+    Twin<BOUND> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez)
     {
-        return Twin<BOUND,STEP>(from,to, time, ez);
+        return Twin<BOUND>(from,to, time, ez);
     }
 }
 

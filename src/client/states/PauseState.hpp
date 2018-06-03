@@ -68,18 +68,6 @@ public:
 private:
 
     Menu m_menu;
-
-    /**
-     * @brief resume resumes the game
-     * returns to the game state
-     */
-    void resume();
-
-
-    /**
-     * @brief play goes to the play state
-     */
-    void play();
 };
 
 

@@ -48,24 +48,27 @@ OptionState::OptionState():
     startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50, 70)->getGlobalBounds().height + 50.f;
 
     m_muteButton = &m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::audioOnIcon);
-    pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
+
     startY += m_muteButton->getHeight() + 10;
 
     const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
     startY += keyBindingButton.getHeight() + 10;
-    pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
 
     m_screenButton = &m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
     startY += m_screenButton->getHeight() + 50.f;
-    pr::connect(m_screenButton->clickedEvent, &OptionState::toggleFullScreen, this);
 
     Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitLeftIcon);
-    pr::connect(backButton.clickedEvent, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
 
     Button &playButton = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
-    pr::connect(playButton.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
 
     m_menu.normalizeButtons();
+
+    pr::connect(keyBindingButton.clickedEvent, [](){pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT);});
+    pr::connect(backButton.clickedEvent, [](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});
+    pr::connect(playButton.clickedEvent, [](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
+
+    pr::connect(m_muteButton->clickedEvent, [this](){toggleSound();});
+    pr::connect(m_screenButton->clickedEvent, [this](){toggleFullScreen();});
 }
 
 void OptionState::toggleSound()

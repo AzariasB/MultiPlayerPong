@@ -61,7 +61,7 @@ const std::string &EventManager::declareListener(sf::Uint64 eventCode, sf::Uint6
     std::function<void()> func = [this,toTrigger](){
         this->trigger(toTrigger);
     };
-    m_observers[eventCode].emplace_back(new EventStdFunction(func));
+    m_observers[eventCode].emplace_back(new EventStdFunction<>(func));
     return addIterator(eventCode, math::uuid());
 }
 

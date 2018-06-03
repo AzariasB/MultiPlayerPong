@@ -166,8 +166,8 @@ private:
 
         std::unique_ptr<T> nwDialog = std::make_unique<T>(m_activeDialogId, args...);
 
-        pr::connect(nwDialog->closeEvent, &DialogManager::closeDialog, this, m_activeDialogId);
-        pr::connect(nwDialog->hiddenEvent, &DialogManager::removeDialog, this, m_activeDialogId);
+        pr::connect(nwDialog->closeEvent, [this](){closeDialog(m_activeDialogId); });
+        pr::connect(nwDialog->hiddenEvent, [this](){removeDialog(m_activeDialogId);});
         nwDialog->show(true);
         m_dialogs[m_activeDialogId] = std::move(nwDialog);
         return static_cast<T&>(*m_dialogs[m_activeDialogId]);

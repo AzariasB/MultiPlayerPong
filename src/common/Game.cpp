@@ -48,7 +48,9 @@ Game::Game() :
     mContactListener(m_evManager)
 {
     mPhysicWorld.SetContactListener(&mContactListener);
-    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, &Game::paddleHit, this);
+    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, [this](const std::size_t &pNum, const b2Vec2 &position){
+        m_evManager.trigger(hitPaddleEvent, pNum, position);
+    });
 }
 
 Game::~Game()
@@ -174,7 +176,7 @@ void Game::powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum)
     }
     powerup.startTimer();
     auto pair = std::make_pair(powerUpId, paddleNum);
-    getEventManager().declareListener(powerup.effectFinished, &Game::powerupEffectFinished, this, pair);
+    //getEventManager().declareListener(powerup.effectFinished, &Game::powerupEffectFinished, this, pair);
     //stop rendering the powerup (but keep it in memory ...)
 }
 

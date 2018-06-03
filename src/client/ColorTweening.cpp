@@ -43,7 +43,7 @@ ColorTweening::ColorTweening(const sf::Color &defaultColor):
     m_running = false;
 }
 
-ColorTweening::ColorTweening(const sf::Color &from, const sf::Color &to, float duration, twin::easing easing, const std::function<void()> &callback):
+ColorTweening::ColorTweening(const sf::Color &from, const sf::Color &to, const sf::Time &duration, twin::easing easing, const std::function<void()> &callback):
     m_color(from)
 {
     m_colorsTwin[0] = twin::makeTwin(from.r, to.r, duration, easing);
@@ -70,7 +70,7 @@ const sf::Color &ColorTweening::get() const
     return m_color;
 }
 
-void ColorTweening::update(float deltaTime)
+void ColorTweening::update(const sf::Time &deltaTime)
 {
     if(!m_running)return;
 

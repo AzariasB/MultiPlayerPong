@@ -46,8 +46,8 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_id(id),
     closeEvent(pr::nextEventCode()),
     hiddenEvent(pr::nextEventCode())
-{    m_title.setPosition(originX + 5,originY + 5);
-
+{
+    m_title.setPosition(originX + 5,originY + 5);
     sf::Uint64 xClicked = m_menu.addButton("", originX + SF_DIALOG_WIDTH - 15, originY, Assets::IconAtlas::crossIcon).clickedEvent;
     pr::connect(xClicked, closeEvent);
 
@@ -66,7 +66,7 @@ const sf::Uint64 &Dialog::id() const
 void Dialog::update(const sf::Time &elapsed)
 {
     if(m_state != DIALOG_HIDDEN){
-        m_yTransition.step(elapsed.asSeconds());
+        m_yTransition.step(elapsed);
         m_yPosition = m_yTransition.get();
 
         if(m_yTransition.progress() == 1.f){
@@ -121,7 +121,7 @@ void Dialog::show(bool animate)
     m_state = DIALOG_APPEARING;
 
     if(animate){
-        m_yTransition = twin::makeTwin(-(float)SF_ARENA_HEIGHT, 0.f, 0.5f, twin::backInOut);
+        m_yTransition = twin::makeTwin(-(float)SF_ARENA_HEIGHT, 0.f, sf::milliseconds(500), twin::backInOut);
     }else{
         m_yPosition = 0;
     }
@@ -133,7 +133,7 @@ void Dialog::hide()
 
     m_state = DIALOG_HIDING;
 
-    m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, 0.5f, twin::backInOut);
+    m_yTransition = twin::makeTwin(0.f, -(float)SF_ARENA_HEIGHT, sf::milliseconds(500), twin::backInOut);
 }
 
 Menu &Dialog::menu()

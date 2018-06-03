@@ -259,7 +259,7 @@ private:
      * @brief m_rectWidth tweening used
      * to animate the button background
      */
-    twin::Twin<float, float> m_rectWidth;
+    twin::Twin<float> m_rectWidth;
 
     /**
      * @brief m_background background

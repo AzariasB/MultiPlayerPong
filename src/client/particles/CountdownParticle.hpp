@@ -49,7 +49,7 @@ namespace mp {
 class CountdownParticle : public Particle
 {
 public:
-    CountdownParticle(const std::string &text, const sf::Vector2f &positon);
+    CountdownParticle(const std::string &text, const sf::Vector2f &positon, const sf::Time &lifetime);
 
     void update(const sf::Time &elapsed) override;
 
@@ -59,8 +59,8 @@ public:
 
 private:
 
-    twin::Twin<int, float> m_textSize;
-    twin::Twin<int, float> m_textAlpha;
+    twin::Twin<float> m_textScale;
+    twin::Twin<sf::Uint8> m_textAlpha;
 
     sf::Text m_text;
     sf::Color m_textColor;

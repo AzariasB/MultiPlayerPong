@@ -43,8 +43,8 @@ namespace mp {
 BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
     Particle(),
     m_center(center),
-    m_twin(twin::makeTwin(startRadius, 0.f, lifeTime.asSeconds(), twin::cubicOut)),
-    m_alphaTwin(sf::Color::White, sf::Color(255, 255, 255, 0), lifeTime.asSeconds(), twin::expoOut),
+    m_twin(twin::makeTwin(startRadius, 0.f, lifeTime, twin::cubicOut)),
+    m_alphaTwin(sf::Color::White, sf::Color(255, 255, 255, 0), lifeTime, twin::expoOut),
     m_lifeTime(lifeTime),
     m_shape(startRadius, 5)
 {
@@ -54,9 +54,8 @@ BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time 
 
 void BallTrailParticle::update(const sf::Time &elapsed)
 {
-    float secs = elapsed.asSeconds();
-    m_twin.step(secs);
-    m_alphaTwin.update(secs);
+    m_twin.step(elapsed);
+    m_alphaTwin.update(elapsed);
     float radius = m_twin.get();
     m_lifeTime -= elapsed;
 

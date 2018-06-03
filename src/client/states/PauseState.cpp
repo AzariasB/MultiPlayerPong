@@ -45,17 +45,18 @@ PauseState::PauseState():
 
     const Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
     startY += resume.getHeight() + 10.f;
-    pr::connect(resume.clickedEvent, &PauseState::resume, this);
 
     const Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
     startY += options.getHeight() + 10.f;
-    pr::connect(options.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
 
     const Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
     startY += menuBtn.getHeight() + 10.f;
-    pr::connect(menuBtn.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::MENU, TransitionData::GO_DOWN));
 
     m_menu.normalizeButtons(10);
+
+    pr::connect(resume.clickedEvent, [](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
+    pr::connect(options.clickedEvent, [](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
+    pr::connect(menuBtn.clickedEvent, [](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
 }
 
 
@@ -74,12 +75,7 @@ void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        resume();
-}
-
-void PauseState::resume()
-{
-    pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
 }
 
 

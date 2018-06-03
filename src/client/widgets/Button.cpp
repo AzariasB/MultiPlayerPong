@@ -115,9 +115,9 @@ float Button::getWidth() const
 
 void Button::update(const sf::Time &elapsed)
 {
-    m_color.update(elapsed.asSeconds());
-    m_rectWidth.step(elapsed.asSeconds());
-    m_rectColor.update(elapsed.asSeconds());
+    m_color.update(elapsed);
+    m_rectWidth.step(elapsed);
+    m_rectColor.update(elapsed);
     updateText();
 }
 
@@ -153,10 +153,10 @@ void Button::handleEvent(const sf::Event& ev)
 
     if (isClicked){        
         std::function<void()> callback = [this](){
-            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, 0.2, twin::quintOut);
+            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, sf::milliseconds(200), twin::quintOut);
         };
 
-        m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, 0.2, twin::quintOut, callback);
+        m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, sf::milliseconds(200), twin::quintOut, callback);
         pr::trigger(clickedEvent);
     }
 
@@ -204,11 +204,11 @@ void Button::setSelected(bool selected)
     if(m_hilighted == selected)return;
 
     if(selected){
-        m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
+        m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, sf::milliseconds(100), twin::easing::linear);
+        m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }else{
-        m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(m_width, 0.f, 0.5f, twin::easing::quintOut);
+        m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, sf::milliseconds(100), twin::easing::linear);
+        m_rectWidth = twin::makeTwin(m_width, 0.f, sf::milliseconds(500), twin::easing::quintOut);
     }
     m_hilighted = selected;
     updateText();
@@ -241,7 +241,7 @@ void Button::setWidth(float width)
 void Button::updateSize()
 {
     if(m_hilighted){
-        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
+        m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }
 
     m_border.setSize(sf::Vector2f(m_width, m_height));

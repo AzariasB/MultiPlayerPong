@@ -52,28 +52,21 @@ PlayState::PlayState():
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
 
-    pr::connect(
-                pr::game().hitPaddleEvent,
-                &PlayState::bounced,
-                this
-                );  //Subscribe to bounce event
-}
+    pr::connect(pr::game().hitPaddleEvent, [this](std::size_t pNum, sf::Vector2f position){
+        Q_UNUSED(pNum);
+        pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
 
-void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
-{
-    Q_UNUSED(pNum);
-    pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
+        sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
+        if(pNum == 2){
+            gainPointPos = m_p2ScoreText.getPosition();
+        }
+        gainPointPos.x -= 30.f;
+        gainPointPos.y += 30.f;
 
-    sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
-    if(pNum == 2){
-        gainPointPos = m_p2ScoreText.getPosition();
-    }
-    gainPointPos.x -= 30.f;
-    gainPointPos.y += 30.f;
-
-    m_particleGenerator.gainPoint(gainPointPos );
-    m_particleGenerator.explode(position);//get position
-    pr::renderer().shake();
+        m_particleGenerator.gainPoint(gainPointPos );
+        m_particleGenerator.explode(position);
+        pr::renderer().shake();
+    });
 }
 
 void PlayState::update(const sf::Time &elapsed)

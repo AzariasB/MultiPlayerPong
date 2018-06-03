@@ -37,6 +37,8 @@
 #include "GainPointParticle.hpp"
 #include "CountdownParticle.hpp"
 
+#include "src/client/ClientConf.hpp"
+
 namespace mp {
 
 ParticleGenerator::ParticleGenerator()
@@ -47,7 +49,7 @@ ParticleGenerator::ParticleGenerator()
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 {
     m_particles.emplace_back(
-         std::make_unique<ExplosionParticle>(explosionPosition, (std::rand()%10) + 10 , sf::milliseconds(500))
+         std::make_unique<ExplosionParticle>(explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime)
     );
 }
 
@@ -55,21 +57,21 @@ void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 {
     m_particles.emplace_back(
-        std::make_unique<BallTrailParticle>(ballCenter, sf::milliseconds(500), BALL_RADIUS, sf::Color::White)
+        std::make_unique<BallTrailParticle>(ballCenter, cc::Times::trailLifeTime, BALL_RADIUS, sf::Color::White)
     );
 }
 
 void ParticleGenerator::gainPoint(const sf::Vector2f &position)
 {
     m_particles.emplace_back(
-        std::make_unique<GainPointParticle>(position, sf::milliseconds(500))
+        std::make_unique<GainPointParticle>(position, cc::Times::gainPointLifeTime)
     );
 }
 
 void ParticleGenerator::countdown(const std::string & countdownValue, const sf::Vector2f &position)
 {
     m_particles.emplace_back(
-        std::make_unique<CountdownParticle>(countdownValue, position)
+        std::make_unique<CountdownParticle>(countdownValue, position, sf::seconds(1))
     );
 }
 

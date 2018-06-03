@@ -148,7 +148,7 @@ private:
     /**
      * @brief m_yPosition y position of this dialog
      */
-    twin::Twin<float, float> m_yTransition;
+    twin::Twin<float> m_yTransition;
 
     /**
      * @brief m_yPosition Y position of the dialog

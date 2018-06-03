@@ -60,22 +60,6 @@ public:
     void handleEvent(const sf::Event &ev) override;
 
     virtual ~PlaySoloState();
-
-private:
-    /**
-     * @brief handleLoss whenever the player looses
-     * (because for now, he can't win)
-     * @param looser looser id
-     */
-    void handleLoss(int looser);
-
-    /**
-     * @brief hitPaddleEvent whenever the paddle hits the ball
-     * @param pNum number of the paddle
-     * @param position hitting position
-     */
-    void hitPaddleEvent(std::size_t pNum, b2Vec2 position);
-
 };
 
 }
