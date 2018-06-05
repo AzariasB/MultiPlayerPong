@@ -142,7 +142,7 @@ Renderer &Renderer::rotate(float angle)
 
 Renderer &Renderer::renderPowerup(const Powerup &powerup)
 {
-    if(powerup.isHidden())return;
+    if(powerup.isHidden())return *this;
 
     if(m_powerupAnimations.count(powerup.getId()) == 0){
         addPowerUpAnimation(powerup);
