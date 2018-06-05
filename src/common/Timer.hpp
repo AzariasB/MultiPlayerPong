@@ -45,13 +45,19 @@ public:
      * @param callback the function to call once this timer is over
      * @param repeat wether the timer must repeat itself once it ended (default = false)
      */
-    Timer(const sf::Time &totalTime, const std::function<void()> callback = {}, bool repeat = false);
+    Timer(const sf::Time &totalTime, bool repeat = false, const std::function<void()> callback = {});
 
     /**
      * @brief update updates the timer
      * @param delta the time passed since last time
      */
     void update(const sf::Time &delta);
+
+    /**
+     * @brief restart restarts the timer to its
+     * starting point
+     */
+    void restart();
 
     /**
      * @brief setRepeat changes the repeat option of the timer

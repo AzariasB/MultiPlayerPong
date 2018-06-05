@@ -38,7 +38,7 @@ namespace mp {
 
 FPSCounter::FPSCounter(const sf::Font &font):
     m_text("0", font, 20),
-    m_timer(sf::seconds(1), {}, true)
+    m_timer(sf::seconds(1), true)
 {
     m_text.setPosition(10, 10);
     m_timer.setCallback([this](){

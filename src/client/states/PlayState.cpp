@@ -48,7 +48,7 @@ namespace mp {
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
     m_p2ScoreText("0", pr::resourceManager().getFont()),
-    m_nextParticle(sf::milliseconds(10), {}, true)
+    m_nextParticle(sf::milliseconds(10), true)
 {
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);

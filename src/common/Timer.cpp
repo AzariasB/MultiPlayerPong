@@ -33,12 +33,17 @@
 namespace mp
 {
 
-Timer::Timer(const sf::Time &totalTime, const std::function<void()> callback, bool repeat):
+Timer::Timer(const sf::Time &totalTime, bool repeat, const std::function<void()> callback):
     m_time(totalTime),
     m_totalTime(totalTime),
     m_callback(callback),
     m_repeat(repeat)
 {
+}
+
+void Timer::restart()
+{
+    m_time = m_totalTime;
 }
 
 void Timer::update(const sf::Time &delta)
