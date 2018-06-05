@@ -53,9 +53,9 @@ void FPSCounter::update(const sf::Time &elapsed)
     m_calls++;
 }
 
-void FPSCounter::draw(Renderer &renderer) const
+void FPSCounter::render(Renderer &renderer) const
 {
-    renderer.render(m_text);
+    renderer.draw(m_text);
 }
 
 void FPSCounter::handleEvent(const sf::Event &ev)

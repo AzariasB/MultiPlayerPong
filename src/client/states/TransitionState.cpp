@@ -37,15 +37,15 @@ TransitionState::TransitionState()
 }
 
 
-void TransitionState::draw(Renderer &renderer) const
+void TransitionState::render(Renderer &renderer) const
 {
-    renderer.pushTranslate(mExitingTranslate);
-    pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
-    renderer.pop();
-
-    renderer.pushTranslate(mEnteringTranslate);
-    pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
-    renderer.pop();
+    renderer
+            .pushTranslate(mExitingTranslate)
+            .render(pr::stateMachine().getStateAt(mExitingStateLabel))
+            .pop()
+            .pushTranslate(mEnteringTranslate)
+            .render(pr::stateMachine().getStateAt(mEnteringStateLabel))
+            .pop();
 }
 
 void TransitionState::update(const sf::Time &elapsed)

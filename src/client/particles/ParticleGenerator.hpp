@@ -36,6 +36,7 @@
 #include <memory>
 
 #include "Particle.hpp"
+#include "src/client/Renderable.hpp"
 
 namespace mp {
 class Renderer;
@@ -45,7 +46,7 @@ class Renderer;
  * the entry point for the particles
  * can create different types of particles
  */
-class ParticleGenerator
+class ParticleGenerator : public Renderable
 {
 public:
     /**
@@ -82,7 +83,7 @@ public:
      * @brief draw draws all the particles of the generator
      * @param renderer renderer to use
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief update updates all the sub-particles of this generator

@@ -61,7 +61,7 @@ public:
      * @param target
      * @param states
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const;
 
     /**
      * @brief handleEvent inherited function

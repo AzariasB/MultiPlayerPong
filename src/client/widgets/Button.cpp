@@ -168,14 +168,14 @@ bool Button::isSelectionEvent(const sf::Event &ev) const
             ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
 }
 
-void Button::draw(Renderer &renderer) const
+void Button::render(Renderer &renderer) const
 {
     if(!isVisible())return;
 
 
-    renderer.render(m_border);
-    renderer.render(m_background);
-    renderer.render(m_icon);
+    renderer.draw(m_border);
+    renderer.draw(m_background);
+    renderer.draw(m_icon);
 
     switch (m_alignment) {
     case Alignment::Center:
@@ -189,7 +189,7 @@ void Button::draw(Renderer &renderer) const
         break;
     }
 
-    renderer.render(m_text);
+    renderer.draw(m_text);
 
     renderer.pop();
 }

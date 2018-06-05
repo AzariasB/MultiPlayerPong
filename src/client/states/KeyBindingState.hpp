@@ -69,7 +69,7 @@ public:
      * @param target
      * @param states
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief update inherited function

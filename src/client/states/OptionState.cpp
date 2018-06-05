@@ -100,9 +100,9 @@ OptionState::~OptionState()
 
 }
 
-void OptionState::draw(Renderer &renderer) const
+void OptionState::render(Renderer &renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void OptionState::update(const sf::Time &elapsed)

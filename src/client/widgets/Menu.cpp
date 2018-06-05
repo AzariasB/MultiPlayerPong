@@ -92,15 +92,15 @@ void Menu::normalizeButtons(float additionalWidth)
         it->setWidth(max + additionalWidth);
 }
 
-void Menu::draw(Renderer &renderer) const
+void Menu::render(Renderer &renderer) const
 {
     if(!isVisible())return;
 
     for(auto &ptr : m_buttons)
-        ptr->draw(renderer);
+        ptr->render(renderer);
 
     for(auto &ptr : m_labels)
-        renderer.render(*ptr);
+        renderer.draw(*ptr);
 }
 
 void Menu::handleEvent(const sf::Event &ev)

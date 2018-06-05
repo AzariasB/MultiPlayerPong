@@ -86,7 +86,7 @@ void ExplosionParticle::update(const sf::Time &elapsed)
 
 void ExplosionParticle::render(Renderer &renderer) const
 {
-    renderer.render(m_vertices);
+    renderer.draw(m_vertices);
 }
 
 }

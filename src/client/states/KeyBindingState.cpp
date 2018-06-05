@@ -80,9 +80,9 @@ void KeyBindingState::resetKeys()
         it->button->setText(pr::keyBinding().toString(it->action));
 }
 
-void KeyBindingState::draw(Renderer &renderer) const
+void KeyBindingState::render(Renderer &renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void KeyBindingState::handleEvent(const sf::Event &ev)

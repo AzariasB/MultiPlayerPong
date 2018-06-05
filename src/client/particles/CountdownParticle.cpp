@@ -65,7 +65,7 @@ void CountdownParticle::render(Renderer &renderer) const
             .translate(m_text.getPosition())
             .scale(m_textScale.get())
             .translate(-m_text.getPosition())
-            .render(m_text)
+            .draw(m_text)
             .pop();
 }
 

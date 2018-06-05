@@ -60,7 +60,7 @@ public:
      * @brief draw draws all the entity of the stage
      * @param renderer
      */
-    virtual void draw(Renderer &renderer) const override;
+    virtual void render(Renderer &renderer) const override;
 
     /**
      * @brief update updates all the entities of the stage

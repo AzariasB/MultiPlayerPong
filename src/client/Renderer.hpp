@@ -46,6 +46,7 @@ class Ball;
 class Paddle;
 class Wall;
 class PhysicObject;
+class Renderable;
 
 /**
  * @brief The Renderer class used to render every objects of the game
@@ -105,10 +106,17 @@ public:
     void update(sf::Time elapsed);
 
     /**
-     * @brief render renders any drawable components, using it's inner renderstate
+     * @brief render renders any sfml drawable components, using it's inner renderstate
      * @param drawable the drawable object to render
      */
-    Renderer &render(const sf::Drawable &drawable);
+    Renderer &draw(const sf::Drawable &drawable);
+
+    /**
+     * @brief render renders any custom object with the "render" method
+     * @param renderable the object to render
+     * @return itself
+     */
+    Renderer &render(const Renderable &renderable);
 
     /**
      * @brief scale scales the next object to render

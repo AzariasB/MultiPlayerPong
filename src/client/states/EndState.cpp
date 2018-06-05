@@ -82,13 +82,13 @@ void EndState::goToMenu()
     pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
-void EndState::draw(Renderer& renderer) const
+void EndState::render(Renderer& renderer) const
 {
     renderer.push()
             .rotateAround(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), m_angle)
-            .render(m_buffer)
-            .pop();
-    m_menu.draw(renderer);
+            .draw(m_buffer)
+            .pop()
+            .render(m_menu);
 }
 
 

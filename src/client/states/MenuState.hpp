@@ -60,7 +60,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer& renderer) const override;
+    void render(Renderer& renderer) const override;
 
     /**
      * @brief handleEvent inherited function

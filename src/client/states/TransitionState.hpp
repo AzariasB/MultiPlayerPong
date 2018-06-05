@@ -50,7 +50,7 @@ public:
      * @brief draw draws the two currently transitioning states
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief update updates the current transition

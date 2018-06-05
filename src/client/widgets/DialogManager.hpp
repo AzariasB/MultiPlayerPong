@@ -59,7 +59,7 @@ public:
      * @brief draw draws all the visible dialogs
      * @param renderer renderer to use
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief handleEvent perform the event on the current dialog

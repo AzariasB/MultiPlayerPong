@@ -60,10 +60,12 @@ PauseState::PauseState():
 }
 
 
-void PauseState::draw(Renderer &renderer) const
+void PauseState::render(Renderer &renderer) const
 {
-    pr::stateMachine().getStateAt(cc::PLAY_SOLO).draw(renderer);
-    m_menu.draw(renderer);
+    pr::stateMachine()
+            .getStateAt(cc::PLAY_SOLO)
+            .render(renderer);
+    m_menu.render(renderer);
 }
 
 void PauseState::update(const sf::Time &elapsed)

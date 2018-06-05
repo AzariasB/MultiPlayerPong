@@ -23,67 +23,31 @@
  */
 
 /*
- * File:   FPSCounter.hpp
+ * File:   Renderable.hpp
  * Author: azarias
  *
- * Created on 24/5/2018
+ * Created on 5/6/2018
  */
-
 #pragma once
 
-#include "Widget.hpp"
-#include "src/common/Timer.hpp"
-
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Time.hpp>
-
-namespace mp {
+namespace mp
+{
 
 class Renderer;
 
-/**
- * @brief The FPSCounter class utility widget
- * to show the application's FPS
- */
-class FPSCounter : public Widget
-{
+class Renderable {
 public:
-    FPSCounter(const sf::Font &font);
+    Renderable()
+    {
 
-    /**
-     * @brief update inherited function
-     * @param elapsed
-     */
-    void update(const sf::Time &elapsed);
+    }
 
-    /**
-     * @brief draw inherited function
-     * @param renderer
-     */
-    void render(Renderer &renderer) const;
+    virtual ~Renderable()
+    {
+    }
 
-    /**
-     * @brief handleEvent inherited function
-     * @param ev
-     */
-    void handleEvent(const sf::Event &ev);
 
-private:
-    /**
-     * @brief m_text text to show the fps
-     */
-    sf::Text m_text;
-
-    /**
-     * @brief m_timer timer to update the fps
-     */
-    Timer m_timer;
-
-    /**
-     * @brief m_calls number of calls
-     * since last timer reset
-     */
-    int m_calls = 0;
+    virtual void render(Renderer &renderer) const = 0;
 };
 
 }

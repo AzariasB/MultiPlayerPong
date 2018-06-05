@@ -204,10 +204,12 @@ void ClientApp::run(int argc, char** argv)
         m_counter.update(elapsed);
         m_dialogManager.update(elapsed);
         stateMachine.getCurrentState().update(elapsed);
-        stateMachine.getCurrentState().draw(renderer);
-        m_dialogManager.draw(renderer);
-        m_counter.draw(renderer);
-        renderer.render(rect);
+
+        renderer
+                .render(stateMachine.getCurrentState())
+                .render(m_dialogManager)
+                .render(m_counter)
+                .draw(rect);
 
         window->display();
     }

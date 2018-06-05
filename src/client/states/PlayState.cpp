@@ -109,20 +109,19 @@ void PlayState::onAfterLeaving()
     m_particleGenerator.clear();
 }
 
-void PlayState::draw(Renderer &renderer) const
+void PlayState::render(Renderer &renderer) const
 {
     renderer.push()
-            .scale(M_TO_P);
-
-    m_particleGenerator.draw(renderer);
-    renderer.renderBall(pr::game().getBall())
+            .scale(M_TO_P)
+            .render(m_particleGenerator)
+            .renderBall(pr::game().getBall())
             .renderPaddle(pr::game().getPlayer1().getPaddle())
             .renderPaddle(pr::game().getPlayer2().getPaddle())
             .renderWall(pr::game().upperWall())
             .renderWall(pr::game().lowerWall())
             .pop()
-            .render(m_p1ScoreText)
-            .render(m_p2ScoreText);
+            .draw(m_p1ScoreText)
+            .draw(m_p2ScoreText);
 
     const std::unordered_map<sf::Uint64, Powerup> &powerups = pr::game().getPowerups();
     for(auto it = powerups.begin(); it != powerups.end(); ++it){

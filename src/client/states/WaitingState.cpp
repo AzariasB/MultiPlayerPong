@@ -59,9 +59,9 @@ WaitingState::WaitingState() :
 }
 
 
-void WaitingState::draw(Renderer& renderer) const
+void WaitingState::render(Renderer& renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)

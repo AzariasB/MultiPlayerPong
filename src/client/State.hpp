@@ -35,6 +35,7 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <memory>
 #include <qglobal.h>
+#include "Renderable.hpp"
 
 namespace sf {
 class Event;
@@ -110,7 +111,7 @@ struct TransitionData {
  * It introduces several virtual functions that must be overriden
  * by the subclasses.
  */
-class State : public sf::NonCopyable{
+class State : public sf::NonCopyable, public Renderable {
 public:
 
     /**
@@ -128,18 +129,14 @@ public:
      */
     virtual void update(const sf::Time &elapsed) = 0;
 
+    virtual void render(Renderer &renderer) const override = 0;
+
     /**
      * @brief handleEvent handles the event sent by the renderwindow (mouse move, key pressed, ...)
      * @param ev the sfml object for the event
      */
     virtual void handleEvent(const sf::Event &ev) = 0;
 
-    /**
-     * @brief draw draws the data, using the given renderer, the draw function must not mofiy the intern state, only draw stuff
-     * in order to modify the intern states, one must use the "update" function
-     * @param renderer the renderer to use to draw the objects on the screen
-     */
-    virtual void draw(Renderer &renderer) const = 0;
 
     virtual void onBeforeEnter()
     {

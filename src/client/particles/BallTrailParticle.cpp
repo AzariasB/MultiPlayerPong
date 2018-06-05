@@ -77,7 +77,7 @@ void BallTrailParticle::render(Renderer &renderer) const
     center.y += m_shape.getRadius();
 
     renderer.rotateAround(center, m_angle);
-    renderer.render(m_shape);
+    renderer.draw(m_shape);
     renderer.rotateAround(center, -m_angle);
 
 }

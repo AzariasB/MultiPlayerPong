@@ -91,9 +91,9 @@ std::string CreditsState::toVersion(int major, int minor, int patch) const
             std::to_string(patch) + ".";
 }
 
-void CreditsState::draw(Renderer &renderer) const
+void CreditsState::render(Renderer &renderer) const
 {
-    mMenu.draw(renderer);
+    mMenu.render(renderer);
 }
 
 void CreditsState::menu()

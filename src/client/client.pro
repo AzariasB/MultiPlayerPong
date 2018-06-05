@@ -28,4 +28,5 @@ HEADERS +=\
     $$PWD/State.hpp \
     $$PWD/ClientConf.hpp \
     $$PWD/ColorTweening.hpp \
-    $$PWD/Assets.hpp
+    $$PWD/Assets.hpp \
+    Renderable.hpp

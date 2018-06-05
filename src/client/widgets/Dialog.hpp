@@ -75,7 +75,7 @@ public:
 	 * @param target the target in which to draw
 	 * @param states the states to use to draw
 	 */
-    virtual void draw(Renderer &renderer) const;
+    virtual void render(Renderer &renderer) const;
 	/**
 	 * @brief handleEvent inherited function
 	 * @param ev
@@ -227,7 +227,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief handleEvent inherited function
@@ -288,10 +288,10 @@ public:
     void setQuestion(const std::string &nwQuestion);
 
     /**
-     * @brief draw inherited function
+     * @brief render inherited function
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
 private:
     /**
@@ -337,10 +337,10 @@ public:
     void setMessage(const std::string &nwMessage);
 
     /**
-     * @brief draw inherited function
+     * @brief render inherited function
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
 private:
     /**

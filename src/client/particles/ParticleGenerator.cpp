@@ -75,7 +75,7 @@ void ParticleGenerator::countdown(const std::string & countdownValue, const sf::
     );
 }
 
-void ParticleGenerator::draw(Renderer &renderer) const
+void ParticleGenerator::render(Renderer &renderer) const
 {
     for(const auto&part : m_particles){
         part->render(renderer);

@@ -39,6 +39,7 @@
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
 #include "ClientConf.hpp"
+#include "Renderable.hpp"
 
 #include <math.h>
 #include <functional>
@@ -151,7 +152,7 @@ Renderer &Renderer::renderPowerup(const Powerup &powerup)
 
     sf::Vector2f position(powerup.getHitbox().left, powerup.getHitbox().top);
     anim.setPosition(position);
-    return render(anim);
+    return draw(anim);
 }
 
 Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
@@ -200,17 +201,17 @@ sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) 
 
 Renderer &Renderer::renderPaddle(const Paddle& paddle)
 {
-    return render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
+    return draw(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
 }
 
 Renderer &Renderer::renderWall(const Wall &wall)
 {
-    return render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
+    return draw(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
 }
 
 Renderer &Renderer::renderBall(const Ball& ball)
 {
-    return render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+    return draw(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
@@ -244,7 +245,13 @@ std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, f
     return m_shapes[obj];
 }
 
-Renderer &Renderer::render(const sf::Drawable& drawable)
+Renderer &Renderer::render(const Renderable &renderable)
+{
+    renderable.render(*this);
+    return *this;
+}
+
+Renderer &Renderer::draw(const sf::Drawable& drawable)
 {
     m_target->draw(drawable, m_stack.top());
     return *this;

@@ -93,7 +93,7 @@ public:
      * @param target the target to use to draw the shapes
      * @param states the states to use when rendering
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const;
 
     /**
      * @brief setPosition sets the position of the button

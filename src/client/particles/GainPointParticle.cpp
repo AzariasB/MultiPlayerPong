@@ -56,7 +56,7 @@ bool GainPointParticle::isFinished() const
 void GainPointParticle::render(Renderer &renderer) const
 {
     renderer.scale(P_TO_M);
-    renderer.render(m_text);
+    renderer.draw(m_text);
     renderer.scale(M_TO_P);
 }
 

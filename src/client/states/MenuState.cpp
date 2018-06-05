@@ -102,9 +102,9 @@ MenuState::MenuState() :
     });
 }
 
-void MenuState::draw(Renderer& renderer) const
+void MenuState::render(Renderer& renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void MenuState::handleEvent(const sf::Event& ev)

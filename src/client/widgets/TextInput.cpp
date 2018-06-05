@@ -61,13 +61,13 @@ TextInput::TextInput(const sf::Vector2f &position) :
     });
 }
 
-void TextInput::draw(Renderer &renderer) const
+void TextInput::render(Renderer &renderer) const
 {
     if(!isVisible())return;
 
-    renderer.render(m_background)
-            .render(m_text)
-            .render(m_pipe);
+    renderer.draw(m_background)
+            .draw(m_text)
+            .draw(m_pipe);
 }
 
 void TextInput::update(const sf::Time &elapsed)

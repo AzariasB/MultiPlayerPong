@@ -89,11 +89,12 @@ void Dialog::update(const sf::Time &elapsed)
     m_menu.update(elapsed);
 }
 
-void Dialog::draw(Renderer &renderer) const
+void Dialog::render(Renderer &renderer) const
 {
-    renderer.render(m_background);
-    renderer.render(m_title);
-    m_menu.draw(renderer);
+    renderer
+            .draw(m_background)
+            .draw(m_title)
+            .render(m_menu);
 }
 
 void Dialog::beforeDraw(Renderer &renderer) const
@@ -185,14 +186,11 @@ void DialogInput::update(const sf::Time &elapsed)
     Dialog::update(elapsed);
 }
 
-void DialogInput::draw(Renderer &renderer) const
+void DialogInput::render(Renderer &renderer) const
 {
     beforeDraw(renderer);
-
-    Dialog::draw(renderer);
-    m_input.draw(renderer);
-
-    afterDraw(renderer);
+    Dialog::render(renderer);
+    afterDraw(renderer.render(m_input));
 }
 
 void DialogInput::handleEvent(const sf::Event &ev)
@@ -240,14 +238,13 @@ void DialogQuestion::setQuestion(const std::string &nwQuestion)
     m_questionText.setString(nwQuestion);
 }
 
-void DialogQuestion::draw(Renderer &renderer) const
+void DialogQuestion::render(Renderer &renderer) const
 {
     beforeDraw(renderer);
 
-    Dialog::draw(renderer);
-    renderer.render(m_questionText);
+    Dialog::render(renderer);
 
-    afterDraw(renderer);
+    afterDraw(renderer.draw(m_questionText));
 }
 
 // QUESTION END
@@ -283,14 +280,13 @@ void DialogMessage::setMessage(const std::string &nwMessage)
     m_messageText.setString(nwMessage);
 }
 
-void DialogMessage::draw(Renderer &renderer) const
+void DialogMessage::render(Renderer &renderer) const
 {
     beforeDraw(renderer);
 
-    Dialog::draw(renderer);
-    renderer.render(m_messageText);
+    Dialog::render(renderer);
 
-    afterDraw(renderer);
+    afterDraw(renderer.draw(m_messageText));
 }
 
 
