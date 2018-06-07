@@ -52,9 +52,22 @@ Lobby::Lobby() :
     listeningThread(&Lobby::listenSockets, this),
     m_nextPowerup(sf::seconds(3))
 {
-    game.getEventManager().declareListener(game.hitPaddleEvent, &Lobby::ballBounce, this);
-    game.getEventManager().declareListener(game.lostEvent, &Lobby::handleLoss, this);
-    game.getEventManager().declareListener(game.countdownEndedEvent, &Game::setGameState, &game, GAMESTATE::PLAYING);
+    game.getEventManager().declareListener(game.hitPaddleEvent, [this](std::size_t pNumber, b2Vec2 pos){
+        if (pNumber == 1)
+            game.getPlayer1().gainPoint();
+        else if (pNumber == 2)
+            game.getPlayer2().gainPoint();
+    });
+
+    game.getEventManager().declareListener(game.lostEvent, [this](int pLooser){
+        bool p1Looser = pLooser == 1;
+        game.getPlayer1().setIsWinner(!p1Looser);
+        game.getPlayer2().setIsWinner(p1Looser);
+    });
+
+    game.getEventManager().declareListener(game.countdownEndedEvent, [this](){
+        game.setGameState(GAMESTATE::PLAYING);
+    });
 }
 
 Lobby::~Lobby()
@@ -173,21 +186,6 @@ bool Lobby::tryAddPowerup(const sf::Time &elapsed)
     game.addPowerUp(pt,sf::Vector2f(SF_ARENA_WIDTH/2, SF_ARENA_HEIGHT/2), math::normalize(sf::Vector2f(dirLeft, dirUp)));
     */
     return true;
-}
-
-void Lobby::ballBounce(std::size_t pNumber, b2Vec2 &pos)
-{
-    if (pNumber == 1)
-        game.getPlayer1().gainPoint();
-    else if (pNumber == 2)
-        game.getPlayer2().gainPoint();
-}
-
-void Lobby::handleLoss(int pLooser)
-{
-    bool p1Looser = pLooser == 1;
-    game.getPlayer1().setIsWinner(!p1Looser);
-    game.getPlayer2().setIsWinner(p1Looser);
 }
 
 void Lobby::earlyWinner()

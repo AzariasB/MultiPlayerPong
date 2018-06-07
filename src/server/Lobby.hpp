@@ -112,19 +112,6 @@ public:
      */
     bool isFinished() const;
 
-    /**
-     * @brief ballBounce called when the bounce event is triggered
-     * handles the ball bouncing
-     * @param pNumber the player's number who's hitting the ball
-     */
-    void ballBounce(std::size_t pNumber, b2Vec2 &pos);
-
-    /**
-     * @brief handleLoss call when the event "playerLost" is fired
-     * @param pLooser the number of the player who lost
-     */
-    void handleLoss(int pLooser);
-
 
     virtual ~Lobby();
 private:
