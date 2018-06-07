@@ -63,7 +63,7 @@ void Timer::update(const sf::Time &delta)
     m_time -= delta;
     if(m_time <= sf::Time::Zero){
         if(m_callback) m_callback();
-        if(m_repeat) m_time += m_totalTime;
+        if(m_repeat) m_time = m_totalTime;
     }
 }
 

@@ -53,8 +53,8 @@ const sf::Color cc::Colors::endLoseColor[2] = {sf::Color(191, 63, 61), sf::Color
 //Times
 const sf::Time cc::Times::transitionTime = sf::milliseconds(500);
 const sf::Time cc::Times::gainPointLifeTime = sf::seconds(2);
-const sf::Time cc::Times::explosionLifeTime = sf::milliseconds(200);
-const sf::Time cc::Times::trailLifeTime = sf::milliseconds(500);
+const sf::Time cc::Times::explosionLifeTime = sf::milliseconds(500);
+const sf::Time cc::Times::trailLifeTime = sf::milliseconds(1000);
 const sf::Time cc::Times::trailCountdownTime = sf::milliseconds(10);
 
 }
