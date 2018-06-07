@@ -47,7 +47,8 @@
 namespace mp {
 
 Renderer::Renderer(sf::RenderTarget *target) :
-    m_target(target)
+    m_target(target),
+    m_stack()
 {
     m_stack.push(sf::RenderStates::Default);
 }
@@ -81,6 +82,7 @@ Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
 {
     push();
     translate(translation);
+    return *this;
 }
 
 void Renderer::shake()

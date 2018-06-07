@@ -535,9 +535,10 @@ enum easing{
         Twin():
             from(0),
             to(0),
-            advance(),
-            finishCallback(noop),
             totalTime(),
+            advance(),
+            totalProgress(0.f),
+            finishCallback(noop),
             easingF(getEasing(linear))
         {
 

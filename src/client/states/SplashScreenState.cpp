@@ -86,6 +86,8 @@ sf::Sprite &SplashScreenState::insertSprite(const sf::Uint64 &id, float xCenter)
 
 void SplashScreenState::update(const sf::Time &elapsed)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::SPLASH_SCREEN)return;
+
     m_timer.update(elapsed);
     m_emaPos.step(elapsed);
     m_ema.setPosition(m_ema.getPosition().x, m_emaPos.get());
@@ -104,9 +106,9 @@ void SplashScreenState::render(Renderer &renderer) const
 }
 
 void SplashScreenState::handleEvent(const sf::Event &ev)
-{
+{    
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        m_timer.trigger();
+        pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
     }
 }
 

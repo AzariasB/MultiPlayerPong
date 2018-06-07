@@ -197,22 +197,20 @@ void ClientApp::run(int argc, char** argv)
 
     while (window->isOpen()) {
         sf::Event ev;
-        while (window->pollEvent(ev))
-            handleEvent(ev);
+        while (window->pollEvent(ev)) handleEvent(ev);
 
         window->clear(cc::Colors::backgroundColor);
 
         sf::Time elapsed = clock.restart();
-        renderer.update(elapsed);
         m_counter.update(elapsed);
         m_dialogManager.update(elapsed);
+
         stateMachine.getCurrentState().update(elapsed);
 
-        renderer
-                .render(stateMachine.getCurrentState())
-                .render(m_dialogManager)
-                .render(m_counter)
-                .draw(rect);
+        renderer.render(stateMachine.getCurrentState());
+        renderer.render(m_dialogManager);
+        renderer.render(m_counter);
+        renderer.draw(rect);
 
         window->display();
     }

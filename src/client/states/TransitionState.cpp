@@ -29,6 +29,7 @@
 #include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"
 
+#include "src/common/VectorsUtils.hpp"
 
 namespace mp {
 
@@ -39,8 +40,7 @@ TransitionState::TransitionState()
 
 void TransitionState::render(Renderer &renderer) const
 {
-    renderer
-            .pushTranslate(mExitingTranslate)
+    renderer.pushTranslate(mExitingTranslate)
             .render(pr::stateMachine().getStateAt(mExitingStateLabel))
             .pop()
             .pushTranslate(mEnteringTranslate)
@@ -101,13 +101,11 @@ void TransitionState::onEnter(BaseStateData *data)
 
     mTweening = twin::makeTwin(tweening.first, tweening.second, cc::Times::transitionTime, twin::easing::backInOut);
 
-    TransitionData &td = *stData->data();
-
-    mEnteringStateLabel = td.enteringStateLabel;
-    mExitingStateLabel = td.exitingStateLabel;
-    m_tickEnteringState = td.updateEnteringState;
-    m_tickExistingState = td.updateExistingState;
-    mEnteringData.swap(td.enteringData);
+    mEnteringStateLabel = transition.enteringStateLabel;
+    mExitingStateLabel = transition.exitingStateLabel;
+    m_tickEnteringState = transition.updateEnteringState;
+    m_tickExistingState = transition.updateExistingState;
+    mEnteringData.swap(transition.enteringData);
     mDirection = dir;
     updateCenters();
 }

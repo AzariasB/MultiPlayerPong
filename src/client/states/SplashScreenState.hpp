@@ -56,7 +56,7 @@ private:
 
     Timer m_timer;
 
-    std::vector<sf::Sprite> m_sprites;
+    std::vector<sf::Sprite> m_sprites = {};
 
     sf::Text m_games;
 
