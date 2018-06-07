@@ -45,6 +45,9 @@ namespace mp
     constexpr int SF_DIALOG_WIDTH =  4 * SF_ARENA_WIDTH / 5;
     constexpr int SF_DIALOG_HEIGHT = SF_ARENA_HEIGHT / 3.f;
 
+    constexpr float MAX_ICON_WIDTH = 70.f;
+    constexpr float MAX_ICON_HEIGHT = 70.f;
+
     constexpr int SF_BUTTON_BORDER = 2;
 
 
@@ -64,7 +67,8 @@ namespace mp
             KEY_BINDINGS,
             WAITING,
             FINISHED,
-            TRANSITION
+            TRANSITION,
+            SPLASH_SCREEN
         };
 
         struct Colors {

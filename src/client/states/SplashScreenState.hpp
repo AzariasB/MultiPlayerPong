@@ -22,46 +22,50 @@
  * THE SOFTWARE.
  */
 
-/* 
- * File:   StateMachine.cpp
+/*
+ * File:   SplashScreenState.hpp
  * Author: azarias
  *
- * Created on 16 octobre 2017, 19:04
+ * Created on 5/6/2018
  */
+#pragma once
 
-#include "StateMachine.hpp"
-#include "SoundEngine.hpp"
+#include "src/client/State.hpp"
+#include "src/common/Timer.hpp"
+#include "src/lib/twin.hpp"
+
+#include <vector>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 namespace mp {
 
-StateMachine::StateMachine()
+class SplashScreenState : public State
 {
+public:
+    SplashScreenState();
 
-}
+    void update(const sf::Time &elapsed);
 
-StateMachine::~StateMachine()
-{
-}
+    void render(Renderer &renderer) const;
 
-void StateMachine::setCurrentState(int stateLabel)
-{
-    if (currentStateIndex > -1)
-        states[currentStateIndex]->onBeforeLeaving();
-    currentStateIndex = stateLabel;
+    void handleEvent(const sf::Event &ev);
 
-    BaseStateData dat;
-    states[currentStateIndex]->onEnter(&dat);
-}
+private:
+    sf::Sprite &insertSprite(const sf::Uint64 &id, float xCenter);
 
-void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
-{
-    getStateAt(statelabel).onBeforeEnter();
-    TransitionData td;
-    td.enteringStateLabel = statelabel;
-    td.exitingStateLabel = currentStateIndex;
-    td.direction = dir;
-    setCurrentState(cc::TRANSITION, &td);
-    pr::soundEngine().playSound(Assets::Sounds::Rollover1);
-}
+    Timer m_timer;
+
+    std::vector<sf::Sprite> m_sprites;
+
+    sf::Text m_games;
+
+    sf::Text m_ema;
+
+    twin::Twin<float> m_emaPos;
+
+    twin::Twin<float> m_emaScale;
+};
+
 
 }

@@ -55,13 +55,13 @@ public:
     enum Animations {BallRetract = 15, BallExtend = 16, PaddleExtend = 17, PaddleRetract = 18};
     static const std::unordered_map<sf::Uint64, std::string> animations;
 
-    enum Icons {Sfml = 19, Cursor = 20};
+    enum Icons {Qt = 19, Box2d = 20, Sfml32x32 = 21, Sfml = 22, Cursor = 23};
     static const std::unordered_map<sf::Uint64, std::string> icons;
 
       class IconAtlas {
         public:
           struct Holder {
-            const int textureId = 21;
+            const int textureId = 24;
             const sf::IntRect bounds;
           };
 
@@ -172,7 +172,7 @@ public:
           static const Holder zoomOutIcon;
       };
 
-    enum Atlases {Icon = 21};
+    enum Atlases {Icon = 24};
     static const std::unordered_map<sf::Uint64, std::string> atlases;
 
 

@@ -60,10 +60,22 @@ public:
     void restart();
 
     /**
+     * @brief trigger triggers this timer's callback
+     * without checking the remaining time
+     */
+    void trigger();
+
+    /**
      * @brief setRepeat changes the repeat option of the timer
      * @param repeat wether the timer must repeats when finished
      */
     void setRepeat(bool repeat);
+
+    /**
+     * @brief setTime changes the time it takes for the timer to execute
+     * @param time
+     */
+    void setTime(const sf::Time &time);
 
     /**
      * @brief setCallback changes the callback of thetimer

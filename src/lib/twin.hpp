@@ -503,7 +503,7 @@ enum easing{
          * @param finalCallback the function to call when the tweening
          * is over
          */
-        Twin(const BOUND &from, const BOUND& to, const sf::Time &time, easing ease, const F &finalCallback):
+        Twin(const BOUND &from, const BOUND& to, const sf::Time &time, easing ease, const F finalCallback):
             from(from),
             to(to),
             totalTime(time),
@@ -581,6 +581,11 @@ enum easing{
         float progress() const
         {
             return totalProgress;
+        }
+
+        void setCallback(const F cb)
+        {
+            finishCallback = cb;
         }
 
         virtual ~Twin()
@@ -684,9 +689,9 @@ enum easing{
      * @return a twing object
      */
     template<typename BOUND>
-    Twin<BOUND> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez)
+    Twin<BOUND> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez, const std::function<void()> callback = {})
     {
-        return Twin<BOUND>(from,to, time, ez);
+        return Twin<BOUND>(from,to, time, ez, callback);
     }
 }
 

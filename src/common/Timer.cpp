@@ -41,6 +41,16 @@ Timer::Timer(const sf::Time &totalTime, bool repeat, const std::function<void()>
 {
 }
 
+void Timer::setTime(const sf::Time &time)
+{
+    m_totalTime = time;
+}
+
+void Timer::trigger()
+{
+    if(m_callback)m_callback();
+}
+
 void Timer::restart()
 {
     m_time = m_totalTime;

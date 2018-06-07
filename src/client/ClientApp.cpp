@@ -34,6 +34,9 @@
 #include <QDebug>
 
 #include "ClientApp.hpp"
+#include "ClientConf.hpp"
+#include "Assets.hpp"
+
 #include "states/PlayMultiplayerState.hpp"
 #include "states/PlaySoloState.hpp"
 #include "states/WaitingState.hpp"
@@ -44,8 +47,7 @@
 #include "states/KeyBindingState.hpp"
 #include "states/TransitionState.hpp"
 #include "states/CreditsState.hpp"
-#include "ClientConf.hpp"
-#include "Assets.hpp"
+#include "states/SplashScreenState.hpp"
 
 namespace mp {
 
@@ -90,7 +92,7 @@ void ClientApp::configureWindow()
     window->setMouseCursor(m_cursor);
     window->setKeyRepeatEnabled(false);
 
-    sf::Image img = rManager.getTexture(Assets::Icons::Sfml).copyToImage();
+    sf::Image img = rManager.getTexture(Assets::Icons::Sfml32x32).copyToImage();
     window->setIcon(img.getSize().x, img.getSize().y, img.getPixelsPtr());
 }
 
@@ -111,6 +113,7 @@ void ClientApp::initStates()
     stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
     stateMachine.addState<PauseState>(cc::PAUSE);
     stateMachine.addState<CreditsState>(cc::CREDITS);
+    stateMachine.addState<SplashScreenState>(cc::SPLASH_SCREEN);
 }
 
 void ClientApp::handleEvent(const sf::Event& event)
@@ -182,7 +185,7 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    stateMachine.setCurrentState(cc::MENU);
+    stateMachine.setCurrentState(cc::SPLASH_SCREEN);
     sf::Clock clock;
 
     //temp rect

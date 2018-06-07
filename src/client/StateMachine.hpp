@@ -55,14 +55,6 @@ public:
      */
     StateMachine();
 
-
-    /**
-     * @brief goToState goes toe the given state, in the given direction (using a pair)
-     * @param dir the pair, containing the statelabel as first argument
-     * and the direction to use when doing the transition
-     */
-    void goToState(std::pair<int , TransitionData::DIRECTION> dir);
-
     /**
      * @brief goToState expanded version of the previous method
      * @param statelabel
