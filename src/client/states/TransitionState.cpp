@@ -40,10 +40,12 @@ TransitionState::TransitionState()
 
 void TransitionState::render(Renderer &renderer) const
 {
-    renderer.pushTranslate(mExitingTranslate)
+    renderer.push()
+            .translate(mExitingTranslate)
             .render(pr::stateMachine().getStateAt(mExitingStateLabel))
             .pop()
-            .pushTranslate(mEnteringTranslate)
+            .push()
+            .translate(mEnteringTranslate)
             .render(pr::stateMachine().getStateAt(mEnteringStateLabel))
             .pop();
 }

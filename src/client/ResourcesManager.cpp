@@ -48,7 +48,7 @@ ResourcesManager::ResourcesManager():
 
 sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
     if (m_sounds.find(soundID) != m_sounds.end()) {
-        return m_sounds[soundID]->second;
+        return m_sounds[soundID].second;
     } else {
         std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
         return m_emptySound;
@@ -79,32 +79,31 @@ sf::Shader &ResourcesManager::getShader(const std::string &shaderName)
 const sf::Texture &ResourcesManager::getTexture(const sf::Uint64 &textureID) const
 {
     if(m_textures.find(textureID) != m_textures.end()){
-        return *m_textures.find(textureID)->second;
+        return m_textures.find(textureID)->second;
     }else{
         std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
         return m_emptyTexture;
     }
 }
 
-void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId) {
+void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId)
+{
     QResource res(filename.c_str());
-    m_sounds[soundId] = std::make_unique<std::pair < sf::SoundBuffer, sf::Sound >> ();
-    m_sounds[soundId]->first.loadFromMemory(res.data(), res.size());
-    m_sounds[soundId]->second.setBuffer(m_sounds[soundId]->first);
+    m_sounds[soundId].first.loadFromMemory(res.data(), res.size());
+    m_sounds[soundId].second.setBuffer(m_sounds[soundId].first);
 }
 
 void ResourcesManager::registerTexture(const std::string &filename, const sf::Uint64 &textureID)
 {
     QResource res(filename.c_str());
-    m_textures[textureID] = std::make_unique<sf::Texture>();
 
     if(res.isCompressed()){
         QByteArray arr = qUncompress(res.data(), res.size());
-        if(!m_textures[textureID]->loadFromMemory(arr.data(), arr.size())){
+        if(!m_textures[textureID].loadFromMemory(arr.data(), arr.size())){
             std::cerr << "Failed to load texture " << textureID << "\n";
         }
     }else{
-        if(!m_textures[textureID]->loadFromMemory(res.data(), res.size())){
+        if(!m_textures[textureID].loadFromMemory(res.data(), res.size())){
             std::cerr << "Failed to load texture " << textureID << "\n";
         }
     }

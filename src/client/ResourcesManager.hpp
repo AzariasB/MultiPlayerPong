@@ -138,12 +138,12 @@ private:
     /**
      * @brief m_sounds keep all the soundbuffer and their sound in memory
      */
-    std::unordered_map<sf::Uint64, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
+    std::unordered_map<sf::Uint64, std::pair<sf::SoundBuffer, sf::Sound> >m_sounds;
 
     /**
      * @brief m_textures keep all the texture in memory
      */
-    std::unordered_map<sf::Uint64, std::unique_ptr<sf::Texture>> m_textures;
+    std::unordered_map<sf::Uint64, sf::Texture> m_textures;
 
     std::unordered_map<std::string, sf::Shader> m_shaders;
 };

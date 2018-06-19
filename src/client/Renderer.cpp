@@ -78,13 +78,6 @@ Renderer &Renderer::push()
     return *this;
 }
 
-Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
-{
-    push();
-    translate(translation);
-    return *this;
-}
-
 void Renderer::shake()
 {
     //   m_shakeTimeout = sf::seconds(1.f);

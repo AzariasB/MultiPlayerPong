@@ -179,10 +179,12 @@ void Button::render(Renderer &renderer) const
 
     switch (m_alignment) {
     case Alignment::Center:
-        renderer.pushTranslate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
+        renderer.push()
+                .translate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
         break;
     case Alignment::TopLeft :
-        renderer.pushTranslate(sf::Vector2f(10, 0));
+        renderer.push()
+                .translate(sf::Vector2f(10, 0));
         break;
     default:
         renderer.push();
