@@ -33,6 +33,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
+#include "src/lib/twin.hpp"
 
 namespace mp {
 

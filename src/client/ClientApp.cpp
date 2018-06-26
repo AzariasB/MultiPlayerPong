@@ -63,23 +63,15 @@ ClientApp::ClientApp() :
            "Pong",
            sf::Style::Default)),
     m_cursor(),
+    rManager(),
     renderer(window),
     game(),
     stateMachine(),
-    rManager(),
     m_sEngine(rManager),
     m_keyBinding(),
     m_dialogManager(),
     m_counter(rManager.getFont())
 {
-    for(const auto &p: Assets::animations) rManager.registerTexture(p.second, p.first);
-
-    for(const auto &p : Assets::atlases) rManager.registerTexture(p.second, p.first);
-
-    for(const auto &p: Assets::sounds)rManager.registerSound(p.second, p.first);
-
-    for(const auto &p : Assets::icons) rManager.registerTexture(p.second, p.first);
-
     socket.setBlocking(false);
 
     sf::Image img = rManager.getTexture(Assets::Icons::Cursor).copyToImage();
@@ -185,7 +177,7 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    stateMachine.setCurrentState(cc::SPLASH_SCREEN);
+    stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
 
     //temp rect

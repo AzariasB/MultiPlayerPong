@@ -31,14 +31,26 @@
 
 #include <iostream>
 #include "ResourcesManager.hpp"
+#include "Assets.hpp"
 #include <QResource>
 #include <SFML/System/MemoryInputStream.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 namespace mp {
 
 ResourcesManager::ResourcesManager():
     m_uncompressedQuicksandFont(":/fonts/whateverittakesbold.ttf")
 {
+
+    for(const auto &p: Assets::animations) registerTexture(p.second, p.first);
+
+    for(const auto &p : Assets::atlases) registerTexture(p.second, p.first);
+
+    for(const auto &p: Assets::sounds)registerSound(p.second, p.first);
+
+    for(const auto &p : Assets::icons) registerTexture(p.second, p.first);
+
+    for(const auto &s : Assets::shaders) registerShader(s.second, s.first);
 
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
         std::cerr << "Fail to load Whatever it takes font\n";
@@ -55,24 +67,24 @@ sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
     }
 }
 
-sf::Shader &ResourcesManager::registerShader(const std::string &filename, const std::string &shaderName)
+void ResourcesManager::registerShader(const std::string &filename, const sf::Uint64 &shaderId)
 {
     QResource sRes(filename.c_str());
 
     sf::MemoryInputStream mis;
     mis.open(sRes.data(), sRes.size());
-
-    sf::Shader &s = m_shaders[shaderName];
-    s.loadFromStream(mis, sf::Shader::Fragment);
-    return s;
+    m_shadersContent[shaderId] = mis;
 }
 
-sf::Shader &ResourcesManager::getShader(const std::string &shaderName)
+sf::Shader *ResourcesManager::createShader(const sf::Uint64 &shaderId) const
 {
-    if(m_shaders.find(shaderName) != m_shaders.end()){
-        return m_shaders[shaderName];
+    if(m_shadersContent.find(shaderId) != m_shadersContent.end()){
+        sf::Shader *shader = new sf::Shader;
+        sf::MemoryInputStream mis = m_shadersContent.find(shaderId)->second;
+        shader->loadFromStream(mis, sf::Shader::Fragment);
+        return shader;
     }
-    return m_emptyShader;
+    return nullptr;
 }
 
 

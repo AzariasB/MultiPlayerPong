@@ -30,6 +30,7 @@
  */
 #include "PauseState.hpp"
 #include "src/common/Config.hpp"
+#include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/StateMachine.hpp"
@@ -65,7 +66,10 @@ void PauseState::render(Renderer &renderer) const
     pr::stateMachine()
             .getStateAt(cc::PLAY_SOLO)
             .render(renderer);
-    m_menu.render(renderer);
+
+    renderer.push()
+            .render(m_menu)
+            .pop();
 }
 
 void PauseState::update(const sf::Time &elapsed)

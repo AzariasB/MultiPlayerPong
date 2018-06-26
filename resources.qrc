@@ -18,6 +18,9 @@
     <file alias="ping_pong_8bit_beeep.ogg">res/sounds/ping_pong_8bit_beeep.ogg</file>
     <file alias="click5.wav">res/sounds/click5.wav</file>
   </qresource>
+  <qresource prefix="/shaders">
+    <file alias="alpha.frag">res/shaders/alpha.frag</file>
+  </qresource>
   <qresource prefix="/animations">
     <file alias="ball_retract.png">res/animations/ball_retract.png</file>
     <file alias="ball_extend.png">res/animations/ball_extend.png</file>

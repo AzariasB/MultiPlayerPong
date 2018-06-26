@@ -52,16 +52,19 @@ public:
     enum Sounds {Bounce = 4, Loose = 5, Click1 = 6, Rollover1 = 7, PingPong8bitBiiip = 8, Win = 9, Click3 = 10, Click4 = 11, Click2 = 12, PingPong8bitBeeep = 13, Click5 = 14};
     static const std::unordered_map<sf::Uint64, std::string> sounds;
 
-    enum Animations {BallRetract = 15, BallExtend = 16, PaddleExtend = 17, PaddleRetract = 18};
+    enum Shaders {Alpha = 15};
+    static const std::unordered_map<sf::Uint64, std::string> shaders;
+
+    enum Animations {BallRetract = 16, BallExtend = 17, PaddleExtend = 18, PaddleRetract = 19};
     static const std::unordered_map<sf::Uint64, std::string> animations;
 
-    enum Icons {Qt = 19, Box2d = 20, Sfml32x32 = 21, Sfml = 22, Cursor = 23};
+    enum Icons {Qt = 20, Box2d = 21, Sfml32x32 = 22, Sfml = 23, Cursor = 24};
     static const std::unordered_map<sf::Uint64, std::string> icons;
 
       class IconAtlas {
         public:
           struct Holder {
-            const int textureId = 24;
+            const int textureId = 25;
             const sf::IntRect bounds;
           };
 
@@ -172,7 +175,7 @@ public:
           static const Holder zoomOutIcon;
       };
 
-    enum Atlases {Icon = 24};
+    enum Atlases {Icon = 25};
     static const std::unordered_map<sf::Uint64, std::string> atlases;
 
 

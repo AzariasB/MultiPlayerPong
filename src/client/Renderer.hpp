@@ -103,7 +103,7 @@ public:
      * @brief update updates the inner state of this object
      * @param elapsed the time elapsed since the last update
      */
-    void update(sf::Time elapsed);
+    void update(const sf::Time &elapsed);
 
     /**
      * @brief render renders any sfml drawable components, using it's inner renderstate
@@ -116,7 +116,7 @@ public:
      * @param renderable the object to render
      * @return itself
      */
-    Renderer &render(const Renderable &renderable);
+    Renderer &render(const Renderable& renderable);
 
     /**
      * @brief scale scales the next object to render
@@ -149,6 +149,15 @@ public:
      * @param angle the angle of rotation
      */
     Renderer &rotate(float angle);
+
+    /**
+     * @brief alpha changes the alpha value of the rendering
+     * @param alpha the new alpha value
+     * @return the renderer itself
+     * uses a shader to change the alpha value of the items to render
+     * if the
+     */
+    Renderer &alpha(sf::Uint8 alpha);
 
     /**
      * @brief push pushes the current renderstate

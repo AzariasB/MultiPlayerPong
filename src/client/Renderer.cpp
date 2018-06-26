@@ -64,8 +64,8 @@ Renderer::~Renderer()
 
 Renderer &Renderer::pop()
 {
-    if(m_stack.size() == 0){
-        std::out_of_range("The contains only one element");
+    if(m_stack.size() == 1){
+        std::out_of_range("The stack contains only one element");
     }
     m_stack.pop();
 
@@ -83,7 +83,7 @@ void Renderer::shake()
     //   m_shakeTimeout = sf::seconds(1.f);
 }
 
-void Renderer::update(sf::Time elapsed)
+void Renderer::update(const sf::Time &elapsed)
 {
     /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
@@ -240,15 +240,15 @@ std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, f
     return m_shapes[obj];
 }
 
-Renderer &Renderer::render(const Renderable &renderable)
+Renderer &Renderer::draw(const sf::Drawable &drawable)
 {
-    renderable.render(*this);
+    m_target->draw(drawable, m_stack.top());
     return *this;
 }
 
-Renderer &Renderer::draw(const sf::Drawable& drawable)
+Renderer &Renderer::render(const Renderable &renderable)
 {
-    m_target->draw(drawable, m_stack.top());
+    renderable.render(*this);
     return *this;
 }
 
