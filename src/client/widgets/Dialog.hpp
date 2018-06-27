@@ -184,8 +184,8 @@ private:
     const sf::Uint64 m_id;
 
 public:
-    const sf::Uint64 closeEvent;
-    const sf::Uint64 hiddenEvent;
+    Signal<> closeSignal;
+    Signal<> hiddenSignal;
 };
 
 //END DIALOG
@@ -249,8 +249,8 @@ private:
     TextInput m_input;
 
 public:
-    const sf::Uint64 confirmClickedEvent;
-    const sf::Uint64 cancelClickedEvent;
+    Signal<std::string> confirmedSignal;
+    Signal<> canceledSignal;
 };
 //END INPUT DIALOG
 
@@ -300,8 +300,8 @@ private:
     sf::Text m_questionText;
 
 public:
-    const sf::Uint64 yesClickedEvent;
-    const sf::Uint64 noClickedEvent;
+    Signal<> yesClickedSignal;
+    Signal<> noClickedSignal;
 };
 //END QUESTION DIALOG
 
@@ -349,7 +349,7 @@ private:
     sf::Text m_messageText;
 
 public:
-    const sf::Uint64 okClickedEvent;
+    Signal<> okClickedSignal;
 };
 //END MESSAGE DIALOG
 

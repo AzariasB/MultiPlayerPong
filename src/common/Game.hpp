@@ -33,15 +33,19 @@
 
 
 #include <SFML/Network/Packet.hpp>
+#include <SFML/System/Time.hpp>
 #include <Box2D/Box2D.h>
 
+#include "Wall.hpp"
 #include "Config.hpp"
 #include "Paddle.hpp"
 #include "Player.hpp"
-#include "EventManager.hpp"
-#include "Powerup.hpp"
-#include "Wall.hpp"
+#include "Signal.hpp"
 #include "ContactListener.hpp"
+
+namespace sf {
+class Event;
+}
 
 namespace mp {
 
@@ -118,13 +122,6 @@ public:
      */
     const Wall &lowerWall() const;
 
-
-    /**
-     * @brief getEventManager reference to the event manager
-     * @return a reference to the event manager
-     */
-    EventManager &getEventManager();
-
     /**
      * @brief getPlayer2 const reference to the second player
      * @return const reference to the second player
@@ -142,11 +139,6 @@ public:
      */
     void reset();
 
-    /**
-     * @brief addPowerUp creates a powerup
-     * @param type
-     */
-    const Powerup &addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction);
 
     /**
      * @brief operator << serialize the game to a sf::Packet
@@ -194,12 +186,6 @@ public:
      * @return
      */
     b2World &world() const;
-
-    /**
-     * @brief getPowerups ref to the powerups
-     * @return
-     */
-    const std::unordered_map<sf::Uint64, Powerup> &getPowerups() const;
 
     /**
      * @brief clearNewPowerUps clears the list of newly added powerups
@@ -251,11 +237,6 @@ private:
     Ball mainBall;
 
     /**
-     * @brief m_evManager THE event manager for the game
-     */
-    EventManager m_evManager;
-
-    /**
      * @brief p1 the first player
      */
     Player p1;
@@ -286,17 +267,6 @@ private:
     GAMESTATE m_state;
 
     /**
-     * @brief m_powerups all the game's powerups
-     */
-    std::unordered_map<sf::Uint64, Powerup> m_powerups;
-
-    /**
-     * @brief mw_nwPowerups list of all the powerups created
-     * before sending them to the client
-     */
-    std::vector<Powerup*> mw_nwPowerups;
-
-    /**
      * @brief mContactListener
      * listens at the contacts between
      * the bodies in the world
@@ -305,9 +275,9 @@ private:
 
     //"signals"
 public:
-    const sf::Uint64 hitPaddleEvent = m_evManager.nextEventCode();
-    const sf::Uint64 lostEvent = m_evManager.nextEventCode();
-    const sf::Uint64 countdownEndedEvent = m_evManager.nextEventCode();
+    Signal<std::size_t, b2Vec2> hitPaddleSignal;
+    Signal<int> lostSignal;
+    Signal<> countdownEndedSignal;
 };
 
 }

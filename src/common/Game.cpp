@@ -30,6 +30,7 @@
  */
 
 #include <iostream>
+#include <SFML/Window/Event.hpp>
 #include "Game.hpp"
 #include "Application.hpp"
 
@@ -45,19 +46,15 @@ Game::Game() :
     mLowerWall(*this, b2Vec2(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
     m_countDownTime(sf::seconds(3)),
     m_state(GAMESTATE::COUNTDOWN),
-    mContactListener(m_evManager)
+    mContactListener()
 {
     mPhysicWorld.SetContactListener(&mContactListener);
-    m_evManager.declareListener(mContactListener.ballHitPaddleEvent, [this](std::size_t pNum, b2Vec2 position){
-        m_evManager.trigger(hitPaddleEvent, pNum, position);
-    });
+
+    mContactListener.ballHitPaddleSignal.add(hitPaddleSignal);
 }
 
 Game::~Game()
 {
-    m_evManager.removeEvent(hitPaddleEvent);
-    m_evManager.removeEvent(lostEvent);
-    m_evManager.removeEvent(countdownEndedEvent);
 }
 
 void Game::handleEvent(const sf::Event& ev, Player &player)
@@ -88,7 +85,7 @@ void Game::updateCountdown(const sf::Time &elapsed)
 {
     m_countDownTime -= elapsed;
     if(m_countDownTime <= sf::Time::Zero){
-        m_evManager.trigger(countdownEndedEvent);
+        countdownEndedSignal.trigger();
     }
 }
 
@@ -111,95 +108,10 @@ void Game::updatePlaying(const sf::Time &elapsed)
     mainBall.update(elapsed);
 
     if (mainBall.getPosition().x < -BALL_RADIUS) {
-        m_evManager.trigger(lostEvent, 1);//Player 1 lost
+        lostSignal.trigger(1);
     } else if (mainBall.getPosition().x > ARENA_WIDTH) {
-        m_evManager.trigger(lostEvent, 2);
+        lostSignal.trigger(2);
     }
-
-    for(auto it = m_powerups.begin(); it != m_powerups.end();){
-        Powerup &powerup = it->second;
-        if(powerup.isHidden())
-            continue;
-        powerup.update(elapsed);
-        if(powerup.isOut() && !powerup.timerStarted()){
-            it = m_powerups.erase(it);
-        }else{
-            ++it;
-        }
-    }
-}
-
-const Powerup &Game::addPowerUp(Powerup::POWERUP_TYPE type, const sf::Vector2f &startPos, const sf::Vector2f &direction)
-{
-    sf::Uint64 key = Powerup::nextId();
-    auto pair = m_powerups.emplace(std::piecewise_construct,
-                                   std::forward_as_tuple(key),
-                                   std::forward_as_tuple(*this, type, startPos, direction)
-                                   );
-#ifdef SERVER
-    if(pair.second){
-        mw_nwPowerups.emplace_back(&pair.first->second);
-        //m_evManager.declareListener(pair.first->second.hitPaddle, &Game::powerupHitPaddle, this, pair.first->first);
-    }
-#endif
-    return m_powerups.find(key)->second;
-}
-
-void Game::clearNewPowerUps()
-{
-    mw_nwPowerups.clear();;
-}
-
-
-void Game::powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum)
-{
-    auto it = m_powerups.find(powerUpId);
-    if(it == m_powerups.end())return;
-
-    Powerup &   powerup = (*it).second;
-    Player &affected = paddleNum == 1 ? p1 : p2;
-    switch(powerup.getType()){
-    case Powerup::BALL_EXTEND:
-        mainBall.extend();
-        break;
-    case Powerup::BALL_RETRACT:
-        mainBall.retract();
-        break;
-    case Powerup::PADDLE_EXTEND:
-        affected.getPaddle().extend();
-        break;
-    case Powerup::PADDLE_RETRACT:
-        affected.getPaddle().retract();
-        break;
-    }
-    powerup.startTimer();
-    auto pair = std::make_pair(powerUpId, paddleNum);
-    //getEventManager().declareListener(powerup.effectFinished, &Game::powerupEffectFinished, this, pair);
-    //stop rendering the powerup (but keep it in memory ...)
-}
-
-void Game::powerupEffectFinished(std::pair<sf::Uint64, int> data)
-{
-    sf::Uint64 powerupId = data.first;
-    int paddleNum = data.second;
-
-    auto it = m_powerups.find(powerupId);
-    if(it == m_powerups.end())return;
-
-    Powerup &powerup = (*it).second;
-    switch(powerup.getType()){
-    case Powerup::BALL_EXTEND:
-    case Powerup::BALL_RETRACT:
-        mainBall.resetPowerup(powerup.getType());
-        break;
-    case Powerup::PADDLE_EXTEND:
-    case Powerup::PADDLE_RETRACT:
-        Player &affected = paddleNum == 1 ? p1 : p2;
-        affected.getPaddle().resetPowerupEffect(powerup.getType());
-        break;
-    }
-
-    m_powerups.erase(powerupId);
 }
 
 void Game::reset()
@@ -209,17 +121,11 @@ void Game::reset()
     p2.reset();
     m_state = GAMESTATE::COUNTDOWN;
     m_countDownTime = sf::seconds(3);
-    m_powerups.clear();
-    mw_nwPowerups.clear();
 }
 
 sf::Packet &operator<<(sf::Packet &packet, Game &game)
 {
     packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds();
-    packet <<(sf::Uint32) game.mw_nwPowerups.size();
-    for(size_t i = 0; i < game.mw_nwPowerups.size(); ++i){
-        packet << *game.mw_nwPowerups[i];
-    }
     return packet;
 }
 
@@ -228,7 +134,6 @@ sf::Packet &operator>>(sf::Packet &packet, Game &game)
     sf::Int8 gameState;
     sf::Int64 microSeconds;
     packet >> game.mainBall >> game.p1 >> game.p2 >> gameState >> microSeconds;
-    deserialize(packet, game.m_powerups, game);
     game.m_state = static_cast<GAMESTATE>(gameState);
     game.m_countDownTime = sf::microseconds(microSeconds);
     return packet;
@@ -298,15 +203,4 @@ b2World &Game::world() const
 {
     return mPhysicWorld;
 }
-
-EventManager& Game::getEventManager()
-{
-    return m_evManager;
-}
-
-const std::unordered_map<sf::Uint64, Powerup> &Game::getPowerups() const
-{
-    return m_powerups;
-}
-
 }

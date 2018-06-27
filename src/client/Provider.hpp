@@ -34,8 +34,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "src/common/EventManager.hpp"
-
 namespace mp {
 
 class Game;
@@ -57,10 +55,6 @@ StateMachine &stateMachine();
 
 const ResourcesManager &resourceManager();
 
-EventManager &eventManager();
-
-sf::Uint64 nextEventCode();
-
 sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
 
 KeyBinding &keyBinding();
@@ -74,22 +68,6 @@ sf::TcpSocket &socket();
 Player &player();
 
 DialogManager &dialogManager();
-
-std::string connect(sf::Uint64 evCode, sf::Uint64 cascade);
-
-void removeEvent(const sf::Uint64 &evCode);
-
-template<typename CLOSURE>
-const std::string &connect(sf::Uint64 evCode, const CLOSURE &callback)
-{
-    return eventManager().declareListener(evCode, callback);
-}
-
-template<typename ...Args>
-void trigger(sf::Uint64 evCode, Args... argp)
-{
-    eventManager().trigger(evCode, argp...);
-}
 
 }//namespace pr
 

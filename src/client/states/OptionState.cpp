@@ -51,7 +51,7 @@ OptionState::OptionState():
 
     startY += m_muteButton->getHeight() + 10;
 
-    const Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
+    Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
     startY += keyBindingButton.getHeight() + 10;
 
     m_screenButton = &m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
@@ -63,25 +63,22 @@ OptionState::OptionState():
 
     m_menu.normalizeButtons();
 
-    pr::connect(keyBindingButton.clickedEvent, [](){pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT);});
-    pr::connect(backButton.clickedEvent, [](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});
-    pr::connect(playButton.clickedEvent, [](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
-
-    pr::connect(m_muteButton->clickedEvent, [this](){toggleSound();});
-    pr::connect(m_screenButton->clickedEvent, [this](){toggleFullScreen();});
+    keyBindingButton.clickedSignal.add([](){ pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT); });
+    backButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});
+    playButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
+    m_muteButton->clickedSignal.add([this](){toggleSound();});
+    m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
 }
 
 void OptionState::toggleSound()
 {
-    pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
-                                  pr::soundEngine().mute();
-
+    soundSignal.trigger();
     m_muteButton->setIconTextureRect(getCurrentSoundRect());
 }
 
 void OptionState::toggleFullScreen()
 {
-    ClientApp::getInstance().toggleFullScreen();
+    fullScreenSignal.trigger();
     m_screenButton->setIconTextureRect(getCurrentScreenRect());
 }
 

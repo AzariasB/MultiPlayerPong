@@ -28,6 +28,8 @@
  *
  * Created on 9 octobre 2017, 19:19
  */
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Assets.hpp"
 #include "Renderer.hpp"
@@ -134,64 +136,6 @@ Renderer &Renderer::rotate(float angle)
 {
     top().transform.rotate(angle);
     return *this;
-}
-
-Renderer &Renderer::renderPowerup(const Powerup &powerup)
-{
-    if(powerup.isHidden())return *this;
-
-    if(m_powerupAnimations.count(powerup.getId()) == 0){
-        addPowerUpAnimation(powerup);
-    }
-    Animation &anim = m_powerupAnimations.find(powerup.getId())->second;
-
-    sf::Vector2f position(powerup.getHitbox().left, powerup.getHitbox().top);
-    anim.setPosition(position);
-    return draw(anim);
-}
-
-Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
-{
-    const sf::Texture &texture = powerupTexture(powerup.getType());
-    sf::Vector2i sprites = powerupSprites(powerup.getType());
-    auto pair = m_powerupAnimations.emplace(std::piecewise_construct,
-                                            std::forward_as_tuple(powerup.getId()),
-                                            std::forward_as_tuple(texture, sprites, sf::seconds(1))
-                                            );
-    pr::connect(powerup.powerupDestroyed, [this, &powerup](){ destroyAnimation(powerup.getId()); });
-    return pair.first->second;
-}
-
-void Renderer::destroyAnimation(sf::Uint64 animationId)
-{
-    m_powerupAnimations.erase(animationId);
-}
-
-const sf::Texture &Renderer::powerupTexture(const Powerup::POWERUP_TYPE &powerupType) const
-{
-    switch(powerupType){
-    case Powerup::BALL_EXTEND:
-        return pr::resourceManager().getTexture(Assets::Animations::BallExtend );
-    case Powerup::BALL_RETRACT:
-        return pr::resourceManager().getTexture(Assets::Animations::BallRetract );
-    case Powerup::PADDLE_EXTEND:
-        return pr::resourceManager().getTexture(Assets::Animations::PaddleExtend);
-    case Powerup::PADDLE_RETRACT:
-        return pr::resourceManager().getTexture(Assets::Animations::PaddleRetract);
-    default:
-        return pr::resourceManager().getTexture(0);
-    }
-}
-
-sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) const
-{
-    switch(powerupType){
-    case Powerup::PADDLE_EXTEND:
-    case Powerup::PADDLE_RETRACT:
-        return sf::Vector2i(6,1);
-    default:
-        return sf::Vector2i(4,1);
-    }
 }
 
 Renderer &Renderer::renderPaddle(const Paddle& paddle)

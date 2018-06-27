@@ -38,7 +38,6 @@
 #include <stack>
 
 #include "Animation.hpp"
-#include "src/common/Powerup.hpp"
 
 namespace mp {
 
@@ -87,12 +86,6 @@ public:
      * @param wall
      */
     Renderer &renderWall(const Wall &wall);
-
-    /**
-     * @brief renderPowerup renders one powerup
-     * @param powerup const reference to the powerup to render
-     */
-    Renderer &renderPowerup(const Powerup &powerup);
 
     /**
      * @brief shake triggers a slight screen shaking for one second
@@ -182,26 +175,6 @@ private:
      * @return
      */
     sf::RenderStates &top();
-
-    /**
-     * @brief addPowerUpAnimation adds the animations for the given powerup to the map
-     * @param powerup the new powerup
-     */
-    Animation &addPowerUpAnimation(const Powerup &powerup);
-
-    /**
-     * @brief powerupTexture returns the texture for the type of powerup
-     * @param powerup
-     * @return
-     */
-    const sf::Texture &powerupTexture(const Powerup::POWERUP_TYPE &powerupType) const;
-
-    /**
-     * @brief powerupSprites return the sprites dimensions depending on the powerup type
-     * @param powerupType the powerup to use to find the dimensions
-     * @return
-     */
-    sf::Vector2i powerupSprites(const Powerup::POWERUP_TYPE &powerupType) const;
 
     /**
      * @brief destroyAnimation when a powerup is destroyed, destroys the animtaion linked to it

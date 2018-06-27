@@ -106,6 +106,12 @@ void ClientApp::initStates()
     stateMachine.addState<PauseState>(cc::PAUSE);
     stateMachine.addState<CreditsState>(cc::CREDITS);
     stateMachine.addState<SplashScreenState>(cc::SPLASH_SCREEN);
+
+    OptionState &os = static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS));
+    os.fullScreenSignal.add([this](){this->toggleFullScreen();});
+    os.soundSignal.add([this](){
+        m_sEngine.isMuted() ? m_sEngine.unmute() : m_sEngine.mute();
+    });
 }
 
 void ClientApp::handleEvent(const sf::Event& event)

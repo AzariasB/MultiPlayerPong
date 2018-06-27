@@ -60,7 +60,7 @@ Button &Menu::addButton(const std::string &content, float xPos, float yPos, cons
     std::unique_ptr<Button> &inserted = m_buttons.back();
 
     int idx = m_buttons.size() -1;
-    pr::connect(inserted->selectdEvent, [this, idx](){ setSeletedIndex(idx);});
+    inserted->selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
     if(m_buttons.size() == 1) inserted->setSelected(true);
     return *inserted;
 }

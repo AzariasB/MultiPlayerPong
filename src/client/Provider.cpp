@@ -44,11 +44,6 @@ Game &pr::game()
     return ClientApp::getInstance().getGame();
 }
 
-EventManager &pr::eventManager()
-{
-    return game().getEventManager();
-}
-
 const ResourcesManager &pr::resourceManager()
 {
     return ClientApp::getInstance().getResourcesManager();
@@ -58,12 +53,6 @@ StateMachine &pr::stateMachine()
 {
     return ClientApp::getInstance().getStateMachine();
 }
-
-sf::Uint64 pr::nextEventCode()
-{
-    return eventManager().nextEventCode();
-}
-
 
 sf::Vector2f pr::mapPixelToCoords(const sf::Vector2i &coords)
 {
@@ -98,16 +87,6 @@ Player &pr::player()
 DialogManager &pr::dialogManager()
 {
     return ClientApp::getInstance().getDialogManager();
-}
-
-void pr::removeEvent(const sf::Uint64 &evCode)
-{
-    eventManager().removeEvent(evCode);
-}
-
-std::string pr::connect(sf::Uint64 evCode, sf::Uint64 cascade)
-{
-    return eventManager().declareListener(evCode, cascade);
 }
 
 }

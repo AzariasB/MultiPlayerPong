@@ -116,12 +116,6 @@ void Paddle::setIsAI(bool isAI)
     m_isAI = isAI;
 }
 
-void Paddle::resetPowerupEffect(Powerup::POWERUP_TYPE type)
-{
-    if(type == Powerup::PADDLE_EXTEND || type == Powerup::PADDLE_RETRACT){
-        m_widthBoost = 0;
-    }
-}
 
 void Paddle::update(const sf::Time &elapsed)
 {

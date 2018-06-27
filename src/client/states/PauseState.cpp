@@ -44,20 +44,20 @@ PauseState::PauseState():
 
     float startY = 250.f;
 
-    const Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
+    Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
     startY += resume.getHeight() + 10.f;
 
-    const Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
+    Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
     startY += options.getHeight() + 10.f;
 
-    const Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
+    Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
     startY += menuBtn.getHeight() + 10.f;
 
     m_menu.normalizeButtons(10);
 
-    pr::connect(resume.clickedEvent, [](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
-    pr::connect(options.clickedEvent, [](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
-    pr::connect(menuBtn.clickedEvent, [](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
+    resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
+    options.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
+    menuBtn.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
 }
 
 

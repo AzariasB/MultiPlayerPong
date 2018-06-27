@@ -32,6 +32,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
+#include "src/common/Signal.hpp"
 
 
 namespace mp {
@@ -112,6 +113,10 @@ private:
      * to be able to change its icon
      */
     Button *m_screenButton;
+
+public:
+    Signal<> fullScreenSignal;
+    Signal<> soundSignal;
 };
 
 

@@ -53,9 +53,9 @@ PlayState::PlayState():
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
 
-    pr::connect(pr::game().hitPaddleEvent, [this](std::size_t pNum, sf::Vector2f position){
+    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
         Q_UNUSED(pNum);
-        pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
+        pr::soundEngine().playSound(Assets::Sounds::Bounce);
 
         sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
         if(pNum == 2){
@@ -65,7 +65,7 @@ PlayState::PlayState():
         gainPointPos.y += 30.f;
 
         m_particleGenerator.gainPoint(gainPointPos );
-        m_particleGenerator.explode(position);
+        m_particleGenerator.explode(b2VecToSfVect(position));
         pr::renderer().shake();
     });
 
@@ -122,11 +122,6 @@ void PlayState::render(Renderer &renderer) const
             .pop()
             .draw(m_p1ScoreText)
             .draw(m_p2ScoreText);
-
-    const std::unordered_map<sf::Uint64, Powerup> &powerups = pr::game().getPowerups();
-    for(auto it = powerups.begin(); it != powerups.end(); ++it){
-        renderer.renderPowerup(it->second);
-    }
 }
 
 PlayState::~PlayState()

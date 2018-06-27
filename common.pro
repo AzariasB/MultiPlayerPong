@@ -21,10 +21,8 @@ SOURCES +=\
     src/common/Application.cpp \
     src/common/Ball.cpp \
     src/common/Paddle.cpp \
-    src/common/EventManager.cpp \
     src/common/Game.cpp \
     src/common/Player.cpp \
-    src/common/Powerup.cpp \
     src/common/Wall.cpp \
     src/common/ContactListener.cpp \
     src/common/PhysicObject.cpp \
@@ -35,16 +33,15 @@ HEADERS +=\
     src/common/Application.hpp \
     src/common/Ball.hpp \
     src/common/Paddle.hpp \
-    src/common/EventManager.hpp \
     src/common/Game.hpp \
     src/common/Math.hpp \
     src/common/Player.hpp \
     src/common/VectorsUtils.hpp \
     src/common/Config.hpp \
-    src/common/Powerup.hpp \
     src/lib/twin.hpp \
     src/common/Wall.hpp \
     src/common/ContactListener.hpp \
     src/common/PhysicObject.hpp \
     src/common/Timer.hpp \
-    src/common/FunctionalUtils.hpp
+    src/common/FunctionalUtils.hpp \
+    src/common/Signal.hpp

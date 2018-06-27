@@ -54,51 +54,51 @@ MenuState::MenuState() :
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
 
-    const Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
+    Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
     currentHeight += soloButton.getHeight() + margin;
 
 
-    const Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
+    Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
     currentHeight += multiPlayerButton.getHeight() + margin;
 
-    const Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
+    Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
     currentHeight += optionButton.getHeight() + margin;
 
-    const Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
+    Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
     currentHeight += creditsButton.getHeight() + margin;
 
-    const Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
+    Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
 
     m_menu.normalizeButtons(margin);
 
-    pr::connect(soloButton.clickedEvent, [](){pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);});
-    pr::connect(optionButton.clickedEvent, [](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
-    pr::connect(creditsButton.clickedEvent, [](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
+    soloButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);});
+    optionButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
+    creditsButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
 
-    pr::connect(multiPlayerButton.clickedEvent, [this](){
+    multiPlayerButton.clickedSignal.add([this](){
         DialogInput &ip = pr::dialogManager().input("Ip","Enter server ip");
         auto inputDialogHidden = [&ip](){
             pr::dialogManager().hideDialog(ip.id());
         };
 
-        pr::connect(ip.cancelClickedEvent, inputDialogHidden);
-        pr::connect(ip.closeEvent, inputDialogHidden);
+        ip.canceledSignal.add(inputDialogHidden);
+        ip.closeSignal.add(inputDialogHidden);
 
-        pr::connect(ip.confirmClickedEvent, [this, &ip](std::string entered){
+        ip.confirmedSignal.add([this, &ip](std::string entered){
             if(isValidIp(entered)){
                 pr::dialogManager().hideDialog(ip.id());
                 pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
             }else{
                 DialogMessage &msg = pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
-                pr::connect(msg.okClickedEvent, [&msg](){pr::dialogManager().hideDialog(msg.id());});
+                msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
             }
         });
     });
 
-    pr::connect(quitButton.clickedEvent, [this](){
+    quitButton.clickedSignal.add([this](){
         DialogQuestion &leave = pr::dialogManager().question("Quit","Do you really want to quit ?");
-        pr::connect(leave.yesClickedEvent, [](){ ClientApp::getInstance().quit(); });
-        pr::connect(leave.noClickedEvent, [&leave](){pr::dialogManager().hideDialog(leave.id()); });
+        leave.yesClickedSignal.add([](){ ClientApp::getInstance().quit(); });
+        leave.noClickedSignal.add([&leave](){pr::dialogManager().hideDialog(leave.id()); });
     });
 }
 

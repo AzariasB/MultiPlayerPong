@@ -40,7 +40,7 @@
 #include "Widget.hpp"
 #include "src/lib/twin.hpp"
 #include "src/client/Assets.hpp"
-#include "src/common/EventManager.hpp"
+#include "src/common/Signal.hpp"
 #include "src/client/ColorTweening.hpp"
 
 
@@ -279,8 +279,8 @@ private:
     Alignment m_alignment = Center;
 
 public:
-    const sf::Uint64 clickedEvent;
-    const sf::Uint64 selectdEvent;
+    Signal<> clickedSignal;
+    Signal<> selectedSignal;
 };
 
 

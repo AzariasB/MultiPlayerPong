@@ -28,8 +28,9 @@
  *
  * Created on 5/6/2018
  */
-#include "SplashScreenState.hpp"
+#include <SFML/Window/Event.hpp>
 
+#include "SplashScreenState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/StateMachine.hpp"
 #include "src/client/Renderer.hpp"

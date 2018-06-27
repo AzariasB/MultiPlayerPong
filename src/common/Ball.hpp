@@ -37,12 +37,12 @@
 #include "Config.hpp"
 #include "Math.hpp"
 #include "VectorsUtils.hpp"
-#include "Powerup.hpp"
 #include "PhysicObject.hpp"
 
 class Game;
 namespace sf {
 class Packet;
+class Time;
 }
 
 
@@ -83,11 +83,6 @@ public:
      * @brief retract when the powerup 'retract' is caught
      */
     void retract();
-
-    /**
-     * @brief resetPowerup resets the given poweruptype
-     */
-    void resetPowerup(Powerup::POWERUP_TYPE type);
 
     /**
      * @brief operator << seraializes the ball into a sf::Packet

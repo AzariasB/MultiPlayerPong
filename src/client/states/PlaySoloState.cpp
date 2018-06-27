@@ -43,14 +43,17 @@ PlaySoloState::PlaySoloState():
     ClientApp::getInstance().setPNumber(1);
     pr::game().getPlayer2().getPaddle().setIsAI(true);
 
-    pr::connect(pr::game().countdownEndedEvent, [](){pr::game().setGameState(GAMESTATE::PLAYING);});
-    pr::connect(pr::game().lostEvent, [this](int looser){
+
+
+    pr::game().countdownEndedSignal.add([](){pr::game().setGameState(GAMESTATE::PLAYING);});
+
+    pr::game().lostSignal.add([this](int looser){
         bool amWinner = looser == 2;
         pr::game().getPlayer1().setIsWinner(amWinner);
         pr::game().getPlayer2().setIsWinner(!amWinner);
     });
 
-    pr::connect(pr::game().hitPaddleEvent, [this](std::size_t pNum, b2Vec2 position){
+    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
         B2_NOT_USED(position);
         (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer1()).gainPoint();
     });

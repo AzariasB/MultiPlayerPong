@@ -30,6 +30,7 @@
  */
 #include <SFML/System/Time.hpp>
 
+#include "src/common/Math.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/Renderer.hpp"

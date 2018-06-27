@@ -52,7 +52,7 @@ CreditsState::CreditsState():
 
     Button &btn = mMenu.addButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::IconAtlas::exitLeftIcon);
     btn.setWidth(btn.getWidth() + 10);
-    pr::connect(btn.clickedEvent, [this](){menu();});
+    btn.clickedSignal.add([this](){ menu(); });
 }
 
 

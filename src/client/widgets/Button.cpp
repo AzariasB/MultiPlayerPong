@@ -52,8 +52,8 @@ Button::Button(const std::string &text) :
     m_background(),
     m_border(),
     //Events
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    clickedSignal(),
+    selectedSignal()
 {
     init();
 }
@@ -66,8 +66,8 @@ Button::Button(const std::string &text, float xPos, float yPos):
     m_background(),
     m_border(),
     //Events
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    clickedSignal(),
+    selectedSignal()
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
@@ -81,8 +81,8 @@ Button::Button(const std::string &text, float xPos, float yPos, const Assets::Ic
     m_background(),
     m_border(),
     //Events
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    clickedSignal(),
+    selectedSignal()
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
@@ -142,7 +142,7 @@ void Button::handleEvent(const sf::Event& ev)
             setSelected(true);
 
         if(wasHilighted != m_hilighted)
-            pr::trigger(selectdEvent);
+            selectedSignal.trigger();
 
     } else if (ev.type == sf::Event::MouseButtonPressed) {
         sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
@@ -157,7 +157,7 @@ void Button::handleEvent(const sf::Event& ev)
         };
 
         m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, sf::milliseconds(200), twin::quintOut, callback);
-        pr::trigger(clickedEvent);
+        clickedSignal.trigger();
     }
 
 }
@@ -292,8 +292,6 @@ void Button::setAlignment(Alignment al)
 
 Button::~Button()
 {
-    pr::removeEvent(clickedEvent);
-    pr::removeEvent(selectdEvent);
 }
 
 }

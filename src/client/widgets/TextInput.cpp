@@ -30,6 +30,7 @@
  */
 
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Window/Event.hpp>
 #include "TextInput.hpp"
 
 #include "src/client/Provider.hpp"

@@ -44,12 +44,13 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
     m_title(sf::String(title), pr::resourceManager().getFont(), 50),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
-    closeEvent(pr::nextEventCode()),
-    hiddenEvent(pr::nextEventCode())
+    closeSignal(),
+    hiddenSignal()
 {
     m_title.setPosition(originX + 5,originY + 5);
-    sf::Uint64 xClicked = m_menu.addButton("", originX + SF_DIALOG_WIDTH - 15, originY, Assets::IconAtlas::crossIcon).clickedEvent;
-    pr::connect(xClicked, closeEvent);
+    m_menu.addButton("", originX + SF_DIALOG_WIDTH - 15, originY, Assets::IconAtlas::crossIcon)
+            .clickedSignal
+            .add(closeSignal);
 
     m_background.setPosition(originX, originY);
     m_background.setFillColor(cc::Colors::dialogBackgroundColor);
@@ -60,8 +61,6 @@ Dialog::Dialog(const sf::Uint64 id, const std::string &title):
 
 Dialog::~Dialog()
 {
-    pr::removeEvent(closeEvent);
-    pr::removeEvent(hiddenEvent);
 }
 
 const sf::Uint64 &Dialog::id() const
@@ -80,7 +79,7 @@ void Dialog::update(const sf::Time &elapsed)
                 m_state = DIALOG_VISIBLE;
             else if(m_state == DIALOG_HIDING){
                 m_state = DIALOG_HIDDEN;
-                pr::trigger(hiddenEvent);
+                hiddenSignal.trigger();
                 return;
             }
 
@@ -112,7 +111,7 @@ void Dialog::handleEvent(const sf::Event &ev)
 {
     if(!isVisible())return;
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::trigger(closeEvent);
+        closeSignal.trigger();
     }else{
         m_menu.handleEvent(ev);
     }
@@ -162,23 +161,29 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
     Dialog(id, title),
     m_questionText(question, pr::resourceManager().getFont()),
     m_input(sf::Vector2f(originX + 30, originY + SF_DIALOG_HEIGHT/2)),
-    cancelClickedEvent(pr::nextEventCode()),
-    confirmClickedEvent(pr::nextEventCode())
+    canceledSignal(),
+    confirmedSignal()
 {
-    sf::Uint64 confirclick = menu().addButton("Confirm ", originX + 102, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon).clickedEvent;
-    sf::Uint64 cancelClick = menu().addButton("Cancel ", originX + SF_DIALOG_WIDTH - 90, originY + SF_DIALOG_HEIGHT - 62, Assets::IconAtlas::crossIcon).clickedEvent;
+    menu().
+            addButton("Confirm ", originX + 102, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
+            .clickedSignal
+            .add([this](){
+                confirmedSignal.trigger(m_input.getText());
+            });
+
+    menu()
+            .addButton("Cancel ", originX + SF_DIALOG_WIDTH - 90, originY + SF_DIALOG_HEIGHT - 62, Assets::IconAtlas::crossIcon)
+            .clickedSignal
+            .add(canceledSignal);
+
     menu().changeSelection(1);
 
     m_questionText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT/4.f);
 
-    pr::connect(confirclick, [this](){pr::trigger(confirmClickedEvent, m_input.getText()); });
-    pr::connect(cancelClick, cancelClickedEvent);
 }
 
 DialogInput::~DialogInput()
 {
-    pr::removeEvent(cancelClickedEvent);
-    pr::removeEvent(confirmClickedEvent);
 }
 
 void DialogInput::update(const sf::Time &elapsed)
@@ -208,25 +213,27 @@ void DialogInput::handleEvent(const sf::Event &ev)
 DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
     Dialog(id, title),
     m_questionText(question, pr::resourceManager().getFont(), 40),
-    yesClickedEvent(pr::nextEventCode()),
-    noClickedEvent(pr::nextEventCode())
+    yesClickedSignal(),
+    noClickedSignal()
 {
     m_questionText.setPosition(originX + 20, originY + SF_DIALOG_HEIGHT / 2.f);
 
 
-    sf::Uint64 yesClick = menu().addButton("Yes ", originX + 70, originY + SF_DIALOG_HEIGHT - 72, Assets::IconAtlas::checkmarkIcon).clickedEvent;
+    menu()
+            .addButton("Yes ", originX + 70, originY + SF_DIALOG_HEIGHT - 72, Assets::IconAtlas::checkmarkIcon)
+            .clickedSignal
+            .add(yesClickedSignal);
+
     menu().changeSelection(1);
-    sf::Uint64 noClick = menu().addButton("No ", originX + SF_DIALOG_WIDTH - 60, originY + SF_DIALOG_HEIGHT - 63, Assets::IconAtlas::crossIcon).clickedEvent;
 
-
-    pr::connect(yesClick, yesClickedEvent);
-    pr::connect(noClick, noClickedEvent);
+    menu()
+            .addButton("No ", originX + SF_DIALOG_WIDTH - 60, originY + SF_DIALOG_HEIGHT - 63, Assets::IconAtlas::crossIcon)
+            .clickedSignal
+            .add(noClickedSignal);
 }
 
 DialogQuestion::~DialogQuestion()
 {
-    pr::removeEvent(yesClickedEvent);
-    pr::removeEvent(noClickedEvent);
 }
 
 const std::string &DialogQuestion::getQuestion() const
@@ -256,19 +263,21 @@ void DialogQuestion::render(Renderer &renderer) const
 DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
     Dialog(id, title),
     m_messageText(message, pr::resourceManager().getFont(), 40),
-    okClickedEvent(pr::nextEventCode())
+    okClickedSignal()
 {
-    sf::Uint64 okClick = menu().addButton("Ok ", originX + 65, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon).clickedEvent;
+    menu()
+            .addButton("Ok ", originX + 65, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
+            .clickedSignal
+            .add(okClickedSignal);
+
     menu().changeSelection(1);
 
     m_messageText.setPosition(originX + 10, originY + SF_DIALOG_HEIGHT / 2.f);
 
-    pr::connect(okClick, okClickedEvent);
 }
 
 DialogMessage::~DialogMessage()
 {
-    pr::removeEvent(okClickedEvent);
 }
 
 std::string DialogMessage::getMessage() const
