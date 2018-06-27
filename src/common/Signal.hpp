@@ -37,6 +37,14 @@
 
 namespace  mp {
 
+/**
+ * @brief The Signal class used as an observer
+ * must be stored in the class that will emit an event
+ * the classes that wants to listen for any events from this
+ * signal must call the 'add' function
+ * when the owner class triggers this signal, all the
+ * listening classes will be trigerred
+ */
 template<typename ...Args>
 class Signal
 {
@@ -44,6 +52,13 @@ public:
     Signal()
     {}
 
+    /**
+     * @brief trigger function that will call all the listener of this signal
+     * each listener has a number of listening, if this number is -1,
+     * the number of listening is considered as inifinite, otherwise, this number
+     * is decremented, and when it reaches 0 the listener is not notified anymore
+     * @param argp all the argument to provide to the listeners
+     */
     void trigger(Args ...argp)
     {
         for(auto it = m_listeners.begin(); it != m_listeners.end();){
@@ -57,25 +72,56 @@ public:
         }
     }
 
-    void add(Signal<Args...> &other, sf::Int64 listens = -1)
+    /**
+     * @brief add adds a signal with the same arguments needed to the list
+     * of listeners
+     * @param other the signal to trigger when this signal is triggered
+     * @param listens the max number of listens for this signal
+     * @return itself
+     */
+    Signal &add(Signal<Args...> &other, sf::Int64 listens = -1)
     {
         std::function<void(Args...)> listener = [&other](Args ...argp){
               other.trigger(argp...);
         };
         m_listeners.emplace_back(listener, listens);
+
+        return *this;
     }
 
-    void add(const std::function<void(Args...)> listener, sf::Int64 listens = -1)
+    /**
+     * @brief add adds a function to the list of listeners, with the given
+     * number of listens (defaults = -1)
+     * @param listener function to call when the signal is trigerred
+     * @param listens the number max of listens
+     * @return itself
+     */
+    Signal &add(const std::function<void(Args...)> listener, sf::Int64 listens = -1)
     {
         m_listeners.emplace_back(listener, listens);
+
+        return *this;
     }
 
-    void addOnce(const std::function<void(Args...)> listener)
+    /**
+     * @brief addOnce adds a function that will be only trigerred the first
+     * time the signal is trigerred
+     * @param listener the function to call the first time the signal is trigerred
+     * @return itself
+     */
+    Signal &addOnce(const std::function<void(Args...)> listener)
     {
-        m_listeners.emplace_back(listener, 0);
+        m_listeners.emplace_back(listener, 1);
+
+        return *this;
     }
 
 private:
+    /**
+     * @brief The Listener struct
+     * struct used to store the listener function
+     * and the remaning number of calls for himself
+     */
     struct Listener {
 
         Listener(const std::function<void(Args...)> f, sf::Int64 calls):
@@ -83,11 +129,21 @@ private:
             maxCalls(calls)
         {}
 
+        /**
+         * @brief func function to call
+         */
         std::function<void(Args...)> func;
+
+        /**
+         * @brief maxCalls maximum number of calls
+         */
         sf::Int64 maxCalls = -1;
     };
 
-
+    /**
+     * @brief m_listeners all the listeners of this signal
+     * these will be called when the signal itself is trigerred
+     */
     std::vector<Listener> m_listeners;
 };
 

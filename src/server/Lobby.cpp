@@ -31,6 +31,9 @@
 
 #include "Lobby.hpp"
 
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Sleep.hpp>
+
 namespace mp {
 
 //LobbyThread
@@ -52,20 +55,20 @@ Lobby::Lobby() :
     listeningThread(&Lobby::listenSockets, this),
     m_nextPowerup(sf::seconds(3))
 {
-    game.getEventManager().declareListener(game.hitPaddleEvent, [this](std::size_t pNumber, b2Vec2 pos){
+    game.hitPaddleSignal.add([this](std::size_t pNumber, b2Vec2 pos){
         if (pNumber == 1)
             game.getPlayer1().gainPoint();
         else if (pNumber == 2)
             game.getPlayer2().gainPoint();
     });
 
-    game.getEventManager().declareListener(game.lostEvent, [this](int pLooser){
+    game.lostSignal.add([this](int pLooser){
         bool p1Looser = pLooser == 1;
         game.getPlayer1().setIsWinner(!p1Looser);
         game.getPlayer2().setIsWinner(p1Looser);
     });
 
-    game.getEventManager().declareListener(game.countdownEndedEvent, [this](){
+    game.countdownEndedSignal.add([this](){
         game.setGameState(GAMESTATE::PLAYING);
     });
 }
@@ -145,7 +148,6 @@ void Lobby::start()
             packet << game;
             socket1->send(packet); //Update the players
             socket2->send(packet);
-            game.clearNewPowerUps();
             totalTime = sf::Time(); // Reset total time
         }
         sf::sleep(sf::milliseconds(10));
@@ -156,7 +158,6 @@ void Lobby::start()
         }
         socketMutex.unlock();
     }
-    std::cout << "Game ended" << std::endl;
 
     if (socket1 && socket2) { // One player lost
         sf::Packet lastPacket;

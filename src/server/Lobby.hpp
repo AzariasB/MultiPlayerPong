@@ -34,12 +34,18 @@
 
 #include <memory>
 #include <queue>
+#include <utility>
 #include <atomic>
+
+#include <SFML/Window/Event.hpp>
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/SocketSelector.hpp>
+
+#include <SFML/System/Thread.hpp>
+#include <SFML/System/Mutex.hpp>
 
 #include "src/common/Game.hpp"
 
