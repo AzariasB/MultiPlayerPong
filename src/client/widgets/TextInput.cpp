@@ -31,6 +31,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Clipboard.hpp>
 #include "TextInput.hpp"
 
 #include "src/client/Provider.hpp"
@@ -56,9 +57,9 @@ TextInput::TextInput(const sf::Vector2f &position) :
     updatePipePos();
 
     m_timer.setCallback([this](){
-        sf::Color txtColor = m_pipe.getColor();
+        sf::Color txtColor = m_pipe.getFillColor();
         txtColor.a = 255 - txtColor.a;
-        m_pipe.setColor(txtColor);
+        m_pipe.setFillColor(txtColor);
     });
 }
 
@@ -78,21 +79,35 @@ void TextInput::update(const sf::Time &elapsed)
 
 void TextInput::handleEvent(const sf::Event& ev)
 {
-    if (ev.type == sf::Event::TextEntered) {
+    if(ev.type == sf::Event::KeyPressed){
+        if(ev.key.code == sf::Keyboard::V && ev.key.control){
+            addString(sf::Clipboard::getString().toAnsiString());
+        }
+    } else if (ev.type == sf::Event::TextEntered) {
         sf::Uint32 txt = ev.text.unicode;
         if(txt == 8){//backspace
-            if(!m_typed.empty())
-                m_typed.pop_back();
-        }else if(txt > 31 && txt < 127){
-            m_typed += (char) ev.text.unicode;
+            removeLastChar();
+        } else if(txt > 31 && txt < 127){
+            addString(std::string(1, (char)txt));
         }
+    }
+}
+
+void TextInput::removeLastChar()
+{
+    if(!m_typed.empty()){
+        m_typed.pop_back();
         m_text.setString(m_typed);
-        if(m_text.getGlobalBounds().width + 40 > SF_DIALOG_WIDTH){
-            m_typed.pop_back();
-            m_text.setString(m_typed);
-        }
         updatePipePos();
     }
+}
+
+void TextInput::addString(const std::string &toAdd)
+{
+    m_typed += toAdd;
+    m_typed = m_typed.substr(0, MAX_INPUT_CHARS);
+    m_text.setString(m_typed);
+    updatePipePos();
 }
 
 TextInput::~TextInput()

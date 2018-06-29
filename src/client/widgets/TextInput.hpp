@@ -95,6 +95,19 @@ private:
     void updatePipePos();
 
     /**
+     * @brief addString adds the given string to the actual string, without
+     * adding more than the maximum limit
+     * @param toAdd the string to append to the current one
+     */
+    void addString(const std::string &toAdd);
+
+    /**
+     * @brief removeLastChar clears out the last char
+     * of the string (if there's any)
+     */
+    void removeLastChar();
+
+    /**
      * @brief m_text the text to draw showing what the user typed
      */
     sf::Text m_text;

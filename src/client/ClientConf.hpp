@@ -50,13 +50,15 @@ namespace mp
 
     constexpr int SF_BUTTON_BORDER = 2;
 
+    constexpr int MAX_INPUT_CHARS = 65;
+
 
     namespace cc//namespace client conf
     {
         /**
- * @brief The STATE_TYPE enum associate with each state, an int (enum)
- * to store these in the state machine, and retrieve them later
- */
+         * @brief The STATE_TYPE enum associate with each state, an int (enum)
+         * to store these in the state machine, and retrieve them later
+         */
         enum STATE_TYPE {
             MENU,//First state
             PLAY_MULTIPLAYER,
