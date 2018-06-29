@@ -40,10 +40,14 @@ namespace mp {
 PlaySoloState::PlaySoloState():
     PlayState()
 {
+}
+
+void PlaySoloState::onBeforeEnter()
+{
+    PlayState::onBeforeEnter();
+
     ClientApp::getInstance().setPNumber(1);
     pr::game().getPlayer2().getPaddle().setIsAI(true);
-
-
 
     pr::game().countdownEndedSignal.add([](){pr::game().setGameState(GAMESTATE::PLAYING);});
 
@@ -57,6 +61,14 @@ PlaySoloState::PlaySoloState():
         B2_NOT_USED(position);
         (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer1()).gainPoint();
     });
+}
+
+void PlaySoloState::onAfterLeaving()
+{
+    PlayState::onAfterLeaving();
+
+    pr::game().countdownEndedSignal.clear();
+    pr::game().lostSignal.clear();
 }
 
 void PlaySoloState::handleEvent(const sf::Event &ev)

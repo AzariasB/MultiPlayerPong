@@ -116,6 +116,14 @@ public:
         return *this;
     }
 
+    /**
+     * @brief clear removes all the listeners
+     */
+    void clear()
+    {
+        m_listeners.clear();
+    }
+
 private:
     /**
      * @brief The Listener struct

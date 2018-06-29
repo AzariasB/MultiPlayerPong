@@ -29,6 +29,7 @@
  * Created on 7/5/2018
  */
 #include "PauseState.hpp"
+#include "src/common/Game.hpp"
 #include "src/common/Config.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
@@ -47,6 +48,9 @@ PauseState::PauseState():
     Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
     startY += resume.getHeight() + 10.f;
 
+    Button &restart = m_menu.addButton("Restart", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::returnIcon);
+    startY += restart.getHeight() + 10.f;
+
     Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
     startY += options.getHeight() + 10.f;
 
@@ -58,6 +62,10 @@ PauseState::PauseState():
     resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
     options.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
     menuBtn.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
+    restart.clickedSignal.add([](){
+        pr::game().reset();
+        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+    });
 }
 
 

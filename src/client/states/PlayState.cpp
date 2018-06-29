@@ -53,6 +53,13 @@ PlayState::PlayState():
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
 
+    m_nextParticle.setCallback([this](){
+        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    });
+}
+
+void PlayState::onBeforeEnter()
+{
     pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
         Q_UNUSED(pNum);
         pr::soundEngine().playSound(Assets::Sounds::Bounce);
@@ -67,10 +74,6 @@ PlayState::PlayState():
         m_particleGenerator.gainPoint(gainPointPos );
         m_particleGenerator.explode(b2VecToSfVect(position));
         pr::renderer().shake();
-    });
-
-    m_nextParticle.setCallback([this](){
-        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
     });
 }
 
@@ -107,6 +110,7 @@ void PlayState::update(const sf::Time &elapsed)
 void PlayState::onAfterLeaving()
 {
     m_particleGenerator.clear();
+    pr::game().hitPaddleSignal.clear();
 }
 
 void PlayState::render(Renderer &renderer) const

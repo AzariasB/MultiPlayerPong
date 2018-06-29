@@ -75,6 +75,11 @@ public:
     virtual void handleEvent(const sf::Event &ev) override;
 
     /**
+     * @brief onBeforeEnter inherited function
+     */
+    virtual void onBeforeEnter() override;
+
+    /**
      * @brief onAfterLeaving inherited function
      * clears out the particles
      */

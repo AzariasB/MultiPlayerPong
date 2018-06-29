@@ -59,6 +59,16 @@ public:
      */
     void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief onBeforeEnter inherited function
+     */
+    void onBeforeEnter() override;
+
+    /**
+     * @brief onAfterLeaving inherited function
+     */
+    void onAfterLeaving() override;
+
     virtual ~PlaySoloState();
 };
 
