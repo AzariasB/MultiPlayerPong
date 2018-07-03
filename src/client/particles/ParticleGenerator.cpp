@@ -46,7 +46,7 @@ ParticleGenerator::ParticleGenerator()
     for(int i = 0; i < 2; ++i)
         m_particles.emplace_back(std::make_unique<ExplosionParticle>());
 
-    for(int i = 0; i < 20; ++i)
+    for(int i = 0; i < 200; ++i)
         m_particles.emplace_back(std::make_unique<BallTrailParticle>());
 
     for(int i = 0; i < 2; ++i)
@@ -58,7 +58,7 @@ ParticleGenerator::ParticleGenerator()
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 {    
-    instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
+   // instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
 }
 
 
@@ -79,18 +79,17 @@ void ParticleGenerator::countdown(const std::string & countdownValue, const sf::
 
 std::unique_ptr<Particle> &ParticleGenerator::findUnusedParticle(Particle::PARTICLE_TYPE type)
 {
-    auto found = std::find_if(m_particles.begin(), m_particles.end(), [&type](const auto &p){
-        return !p->isUsed && p->type == type;
-    });
+    for(auto &p: m_particles)
+        if(!p->isUsed && p->type == type) return p;
 
-    return found == m_particles.end() ? m_emptyParticle : *found;
+    return m_emptyParticle;
 }
 
 void ParticleGenerator::render(Renderer &renderer) const
 {
-    /* for(const auto&part : m_particles){
+    for(const auto&part : m_particles){
         if(part->isUsed) part->render(renderer);
-    }*/
+    }
 }
 
 void ParticleGenerator::clear()
