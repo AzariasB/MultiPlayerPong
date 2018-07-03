@@ -45,42 +45,51 @@ OptionState::OptionState():
     m_menu()
 {
     float startY = 50.f;
-    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50)->getGlobalBounds().height + 20.f;
+    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50, 70)->getGlobalBounds().height + 50.f;
 
-    m_muteButton = m_menu.addButton("Toggle sound", SF_ARENA_WIDTH/4.f, startY).get();
-    sf::Sprite sound = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Sound ), getCurrentSoundRect());
-    m_muteButton->setIcon(sound);
-    pr::connect(m_muteButton->clickedEvent, &OptionState::toggleSound, this);
-    startY += m_muteButton->getHeight();
+    m_muteButton = &m_menu.addButton("Toggle sound", SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::audioOnIcon);
 
-    const Button &keyBindingButton = *m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY);
-    startY += keyBindingButton.getHeight();
-    pr::connect(keyBindingButton.clickedEvent , &StateMachine::goToState , &pr::stateMachine() ,  std::make_pair((int) cc::KEY_BINDINGS, TransitionData::GO_RIGHT) );
+    startY += m_muteButton->getHeight() + 10;
 
-    const Button &fullScreenButton = *m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY);
-    startY += fullScreenButton.getHeight() + 50.f;
-    pr::connect(fullScreenButton.clickedEvent, &ClientApp::toggleFullScreen, &ClientApp::getInstance());
+    Button &keyBindingButton = m_menu.addButton("Key bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
+    startY += keyBindingButton.getHeight() + 10;
 
-    sf::Uint64 backClicked = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY )->clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState,  &pr::stateMachine() , std::make_pair((int)cc::MENU, TransitionData::GO_LEFT) );
+    m_screenButton = &m_menu.addButton("Fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
+    startY += m_screenButton->getHeight() + 50.f;
 
-    sf::Uint64 playClicked = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY)->clickedEvent;
-    pr::connect(playClicked, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::PAUSE, TransitionData::GO_RIGHT));
+    Button& backButton = m_menu.addButton("Menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitLeftIcon);
+
+    Button &playButton = m_menu.addButton("Play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
 
     m_menu.normalizeButtons();
+
+    keyBindingButton.clickedSignal.add([](){ pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT); });
+    backButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});
+    playButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
+    m_muteButton->clickedSignal.add([this](){toggleSound();});
+    m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
 }
 
 void OptionState::toggleSound()
 {
-    pr::soundEngine().isMuted() ? pr::soundEngine().unmute() :
-                                  pr::soundEngine().mute();
-
+    soundSignal.trigger();
     m_muteButton->setIconTextureRect(getCurrentSoundRect());
+}
+
+void OptionState::toggleFullScreen()
+{
+    fullScreenSignal.trigger();
+    m_screenButton->setIconTextureRect(getCurrentScreenRect());
 }
 
 const sf::IntRect &OptionState::getCurrentSoundRect() const
 {
-    return pr::soundEngine().isMuted() ? m_withoutSoundRect : m_withSoundRect;
+    return pr::soundEngine().isMuted() ? Assets::IconAtlas::audioOffIcon.bounds : Assets::IconAtlas::audioOnIcon.bounds;
+}
+
+const sf::IntRect &OptionState::getCurrentScreenRect() const
+{
+    return ClientApp::getInstance().isFullScreen() ? Assets::IconAtlas::smallerIcon.bounds : Assets::IconAtlas::largerIcon.bounds;
 }
 
 OptionState::~OptionState()
@@ -88,9 +97,9 @@ OptionState::~OptionState()
 
 }
 
-void OptionState::draw(Renderer &renderer) const
+void OptionState::render(Renderer &renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void OptionState::update(const sf::Time &elapsed)

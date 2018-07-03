@@ -7,14 +7,19 @@
   </qresource>
   <qresource prefix="/sounds">
     <file alias="bounce.wav">res/sounds/bounce.wav</file>
+    <file alias="loose.wav">res/sounds/loose.wav</file>
     <file alias="click1.wav">res/sounds/click1.wav</file>
     <file alias="rollover1.wav">res/sounds/rollover1.wav</file>
     <file alias="ping_pong_8bit_biiip.wav">res/sounds/ping_pong_8bit_biiip.wav</file>
+    <file alias="win.wav">res/sounds/win.wav</file>
     <file alias="click3.wav">res/sounds/click3.wav</file>
     <file alias="click4.wav">res/sounds/click4.wav</file>
     <file alias="click2.wav">res/sounds/click2.wav</file>
     <file alias="ping_pong_8bit_beeep.ogg">res/sounds/ping_pong_8bit_beeep.ogg</file>
     <file alias="click5.wav">res/sounds/click5.wav</file>
+  </qresource>
+  <qresource prefix="/shaders">
+    <file alias="alpha.frag">res/shaders/alpha.frag</file>
   </qresource>
   <qresource prefix="/animations">
     <file alias="ball_retract.png">res/animations/ball_retract.png</file>
@@ -23,13 +28,13 @@
     <file alias="paddle_retract.png">res/animations/paddle_retract.png</file>
   </qresource>
   <qresource prefix="/icons">
-    <file alias="gear.png">res/icons/gear.png</file>
-    <file alias="information.png">res/icons/information.png</file>
-    <file alias="sound.png">res/icons/sound.png</file>
-    <file alias="exitleft.png">res/icons/exitLeft.png</file>
-    <file alias="wrench.png">res/icons/wrench.png</file>
-    <file alias="singleplayer.png">res/icons/singleplayer.png</file>
-    <file alias="power.png">res/icons/power.png</file>
-    <file alias="multiplayer.png">res/icons/multiplayer.png</file>
+    <file alias="qt.png">res/icons/qt.png</file>
+    <file alias="box2d.png">res/icons/Box2d.png</file>
+    <file alias="sfml32x32.png">res/icons/sfml32x32.png</file>
+    <file alias="sfml.png">res/icons/sfml.png</file>
+    <file alias="cursor.png">res/icons/cursor.png</file>
+  </qresource>
+  <qresource prefix="/atlases">
+    <file alias="icon.png">res/atlases/icon.png</file>
   </qresource>
 </RCC>

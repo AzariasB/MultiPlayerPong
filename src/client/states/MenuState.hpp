@@ -60,7 +60,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer& renderer) const override;
+    void render(Renderer& renderer) const override;
 
     /**
      * @brief handleEvent inherited function
@@ -91,27 +91,11 @@ public:
 private:
 
     /**
-     * @brief requestQuit shows a dialog asking
-     * if the user really wants to leave
-     */
-    void requestQuit();
-
-    /**
      * @brief ipEntered method called whenever the ip dialog is confirmed
      * @param entered
      */
     void ipEntered(const std::string &entered);
 
-
-    /**
-     * @brief showInputDialog shows input dialog
-     */
-    void showInputDialog();
-
-    /**
-     * @brief inputDialogHidden when the input dialog is hidden
-     */
-    void inputDialogHidden();
 
     /**
      * @brief isValidIp checks if the given string is a valid ip (using regexp)
@@ -131,11 +115,6 @@ private:
      * @brief m_menu Menu holding all the differents buttons
      */
     Menu m_menu;
-
-    /**
-     * @brief m_inputDialog input dialog
-     */
-    sf::Uint64 m_inputDialiogId = 0;
 };
 
 

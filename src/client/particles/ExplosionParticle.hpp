@@ -54,7 +54,7 @@ public:
      * @param particleNumber number of lines to draw
      * @param maxLifeTime max lifetime of a single line
      */
-    ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime);
+    ExplosionParticle();
 
     /**
      * @brief isFinished overriden function
@@ -73,6 +73,15 @@ public:
      * @param elapsed
      */
     void update(const sf::Time &elapsed) override;
+
+
+    /**
+     * @brief init initializes the particles
+     * @param origin center point of the expolosion
+     * @param particleNumber number of rays to draw
+     * @param maxLifeTime max lifetime of the particle
+     */
+    void init(const sf::Vector2f &origin, std::size_t particleNumber, const sf::Time &maxLifeTime);
 
 private:
     /**

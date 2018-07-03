@@ -55,7 +55,7 @@ public:
      * @param position starting position of the particle
      * @param lifeTime lifetime of this particle
      */
-    GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime);
+    GainPointParticle();
 
     /**
      * @brief render overriden function
@@ -75,16 +75,23 @@ public:
      */
     bool isFinished() const override;
 
+    /**
+     * @brief init initialized the text
+     * @param position position of the text
+     * @param lifetime text lifetime
+     */
+    void init(const sf::Vector2f &position, const sf::Time &lifetime);
+
 private:
     /**
      * @brief m_positionTwin tweening for the position
      */
-    twin::Twin<float, sf::Int32> m_positionTwin;
+    twin::Twin<float> m_positionTwin;
 
     /**
      * @brief m_alphaTwin tweening for the alpha color
      */
-    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
+    twin::Twin<sf::Uint8> m_alphaTwin;
 
     /**
      * @brief m_text "+1" text

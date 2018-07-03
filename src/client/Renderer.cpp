@@ -28,6 +28,8 @@
  *
  * Created on 9 octobre 2017, 19:19
  */
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Assets.hpp"
 #include "Renderer.hpp"
@@ -39,15 +41,23 @@
 #include "Provider.hpp"
 #include "ResourcesManager.hpp"
 #include "ClientConf.hpp"
+#include "Renderable.hpp"
 
 #include <math.h>
+#include <functional>
 
 namespace mp {
 
-Renderer::Renderer(sf::RenderTarget &target) :
-    target(target)
+Renderer::Renderer(sf::RenderTarget *target) :
+    m_target(target),
+    m_stack()
 {
     m_stack.push(sf::RenderStates::Default);
+}
+
+void Renderer::updateRenderTarget(sf::RenderTarget *target)
+{
+    m_target = target;
 }
 
 Renderer::~Renderer()
@@ -56,8 +66,8 @@ Renderer::~Renderer()
 
 Renderer &Renderer::pop()
 {
-    if(m_stack.size() == 0){
-        std::out_of_range("The contains only one element");
+    if(m_stack.size() == 1){
+        std::out_of_range("The stack contains only one element");
     }
     m_stack.pop();
 
@@ -70,18 +80,12 @@ Renderer &Renderer::push()
     return *this;
 }
 
-Renderer &Renderer::pushTranslate(const sf::Vector2f &translation)
-{
-    push();
-    translate(translation);
-}
-
 void Renderer::shake()
 {
     //   m_shakeTimeout = sf::seconds(1.f);
 }
 
-void Renderer::update(sf::Time elapsed)
+void Renderer::update(const sf::Time &elapsed)
 {
     /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
@@ -134,77 +138,19 @@ Renderer &Renderer::rotate(float angle)
     return *this;
 }
 
-void Renderer::renderPowerup(const Powerup &powerup)
+Renderer &Renderer::renderPaddle(const Paddle& paddle)
 {
-    if(powerup.isHidden())return;
-
-    if(m_powerupAnimations.count(powerup.getId()) == 0){
-        addPowerUpAnimation(powerup);
-    }
-    Animation &anim = m_powerupAnimations.find(powerup.getId())->second;
-
-    sf::Vector2f position(powerup.getHitbox().left, powerup.getHitbox().top);
-    anim.setPosition(position);
-    render(anim);
+    return draw(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
 }
 
-Animation &Renderer::addPowerUpAnimation(const Powerup &powerup)
+Renderer &Renderer::renderWall(const Wall &wall)
 {
-    const sf::Texture &texture = powerupTexture(powerup.getType());
-    sf::Vector2i sprites = powerupSprites(powerup.getType());
-    auto pair = m_powerupAnimations.emplace(std::piecewise_construct,
-                                            std::forward_as_tuple(powerup.getId()),
-                                            std::forward_as_tuple(texture, sprites, sf::seconds(1))
-                                            );
-    pr::connect(powerup.powerupDestroyed, &Renderer::destroyAnimation, this, powerup.getId());
-    return pair.first->second;
+    return draw(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
 }
 
-void Renderer::destroyAnimation(sf::Uint64 animationId)
+Renderer &Renderer::renderBall(const Ball& ball)
 {
-    m_powerupAnimations.erase(animationId);
-}
-
-const sf::Texture &Renderer::powerupTexture(const Powerup::POWERUP_TYPE &powerupType) const
-{
-    switch(powerupType){
-    case Powerup::BALL_EXTEND:
-        return pr::resourceManager().getTexture(Assets::Animations::BallExtend );
-    case Powerup::BALL_RETRACT:
-        return pr::resourceManager().getTexture(Assets::Animations::BallRetract );
-    case Powerup::PADDLE_EXTEND:
-        return pr::resourceManager().getTexture(Assets::Animations::PaddleExtend);
-    case Powerup::PADDLE_RETRACT:
-        return pr::resourceManager().getTexture(Assets::Animations::PaddleRetract);
-    default:
-        return pr::resourceManager().getTexture(0);
-    }
-}
-
-sf::Vector2i Renderer::powerupSprites(const Powerup::POWERUP_TYPE &powerupType) const
-{
-    switch(powerupType){
-    case Powerup::PADDLE_EXTEND:
-    case Powerup::PADDLE_RETRACT:
-        return sf::Vector2i(6,1);
-    default:
-        return sf::Vector2i(4,1);
-    }
-}
-
-void Renderer::renderPaddle(const Paddle& paddle)
-{
-    render(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
-}
-
-void Renderer::renderWall(const Wall &wall)
-{
-    render(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
-}
-
-void Renderer::renderBall(const Ball& ball)
-{
-    render(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+    return draw(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
@@ -238,9 +184,16 @@ std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, f
     return m_shapes[obj];
 }
 
-void Renderer::render(const sf::Drawable& drawable)
+Renderer &Renderer::draw(const sf::Drawable &drawable)
 {
-    target.draw(drawable, m_stack.top());
+    m_target->draw(drawable, m_stack.top());
+    return *this;
+}
+
+Renderer &Renderer::render(const Renderable &renderable)
+{
+    renderable.render(*this);
+    return *this;
 }
 
 }

@@ -30,7 +30,6 @@
  */
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
 #include "ContactListener.hpp"
-#include "EventManager.hpp"
 #include "Paddle.hpp"
 #include "PhysicObject.hpp"
 
@@ -39,23 +38,26 @@ namespace mp {
 
 class Ball;
 
-ContactListener::ContactListener(EventManager &evManager):
-    m_evManager(evManager),
-    ballHitPaddleEvent(evManager.nextEventCode()),
-    ballHitWallEvent(evManager.nextEventCode())
+ContactListener::ContactListener():
+    ballHitPaddleSignal(),
+    ballHitWallSignal()
 {
 
 }
 
-bool ContactListener::userDataIsBall(PhysicObject &objA, PhysicObject &objB) const
+ContactListener::~ContactListener()
+{
+}
+
+bool ContactListener::userDataIsBall(PhysicObject &objA, PhysicObject &objB)
 {
     if(objA.type == PhysicObject::BALL){
         if(objB.type == PhysicObject::PADDLE){
             Paddle &paddle = static_cast<Paddle&>(objB);
-            std::size_t v = paddle.getNum();
-            m_evManager.trigger(ballHitPaddleEvent,paddle.getNum(), objA.getPosition());
+            b2Vec2 pos = objA.getPosition();
+            ballHitPaddleSignal.trigger(paddle.getNum(), pos);
         }else{
-            m_evManager.trigger(ballHitWallEvent, objA.getPosition());
+            ballHitWallSignal.trigger(objA.getPosition());
         }
 
         return true;

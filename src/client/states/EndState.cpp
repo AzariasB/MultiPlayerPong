@@ -38,29 +38,58 @@ namespace mp {
 
 EndState::EndState():
     m_menu(),
-    m_content(*m_menu.addLabel("",0,0))
+    m_content(*m_menu.addLabel("",0,0)),
+    m_buffer(sf::PrimitiveType::Triangles, triangleNumber * 3),
+    m_angle(0.f)
 {
     m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
 
-    Button &btn = *m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4);
-    pr::connect(btn.clickedEvent, &EndState::goToMenu, this);
+    m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
+            .clickedSignal
+            .add([this](){goToMenu(); });
+
 }
 
 EndState::~EndState()
 {
-
 }
 
+sf::Vector2f EndState::toVertexPosition(int index) const
+{
+    float angle = (2 * M_PI) * (index / (float)triangleNumber);
+    return sf::Vector2f(
+                std::cos(angle) * (SF_ARENA_WIDTH / 2.f) + (SF_ARENA_WIDTH / 2.f),
+                std::sin(angle) * (SF_ARENA_WIDTH  / 2.f) + (SF_ARENA_HEIGHT / 2.f)
+            );
+}
+
+void EndState::updateVerticesColor(bool win)
+{
+    m_buffer.clear();
+    sf::Vector2f center(SF_ARENA_WIDTH  / 2.f, SF_ARENA_HEIGHT / 2.f);
+    for(std::size_t i = 0; i < triangleNumber; ++i){
+        sf::Color centerColor = win ? cc::Colors::endWinColor[i&1] : cc::Colors::endLoseColor[i&1];
+        sf::Color outColor = centerColor;
+        outColor.a = 0;
+        m_buffer.append({center, centerColor});
+        m_buffer.append({toVertexPosition(i), outColor});
+        m_buffer.append({toVertexPosition(i+1), outColor});
+    }
+
+}
 
 void EndState::goToMenu()
 {
     pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
-void EndState::draw(Renderer& renderer) const
+void EndState::render(Renderer& renderer) const
 {
-    //m_messageDialog->draw(renderer);
-    m_menu.draw(renderer);
+    renderer.push()
+            .rotateAround(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), m_angle)
+            .draw(m_buffer)
+            .pop()
+            .render(m_menu);
 }
 
 
@@ -74,19 +103,26 @@ void EndState::handleEvent(const sf::Event& ev)
     }
 }
 
-void EndState::onEnter(BaseStateData *data)
+void EndState::onBeforeEnter()
 {
-    m_content.setString(ClientApp::getInstance().isWinner() ? "You won !" : "You lost !");
+    bool winner = ClientApp::getInstance().isWinner();
+    pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
+    updateVerticesColor(winner);
+    m_content.setString(winner ? "You won !" : "You lost !");
     m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
     m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
+}
 
+void EndState::onEnter(BaseStateData *data)
+{
     pr::game().reset();
     pr::socket().disconnect();
 }
 
 void EndState::update(const sf::Time &elapsed)
-{
+{    
     m_menu.update(elapsed);
+    m_angle += elapsed.asSeconds();
 }
 
 }

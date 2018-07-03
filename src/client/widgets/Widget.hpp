@@ -31,6 +31,8 @@
 
 #pragma once
 
+#include "src/client/Renderable.hpp"
+
 namespace sf {
     class Event;
     class Time;
@@ -44,7 +46,7 @@ class Renderer;
 /**
  * @brief The Widget class base class for all the widgets of this app
  */
-class Widget {
+class Widget : public Renderable {
 public:
 
     enum Alignment{
@@ -70,7 +72,7 @@ public:
      * @param target the target in which to draw the widget
      * @param states the states to use when drawing the widget
      */
-    virtual void draw(Renderer &renderer) const = 0;
+    virtual void render(Renderer &renderer) const override = 0;
 
     /**
      * @brief handleEvent handles an event sent by sfml

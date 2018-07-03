@@ -35,6 +35,7 @@
 
 #include "Widget.hpp"
 #include "Button.hpp"
+#include "src/client/Assets.hpp"
 
 namespace mp {
 
@@ -60,7 +61,7 @@ public:
      * @param target
      * @param states
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const;
 
     /**
      * @brief handleEvent inherited function
@@ -82,7 +83,7 @@ public:
      * @param yPos the Y position of the button
      * @return the button newly created
      */
-    std::unique_ptr<Button> &addButton(const std::string &content, float xPos, float yPos);
+    Button &addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result
@@ -91,7 +92,7 @@ public:
      * @param yPos the Y position of the text
      * @return the text newly created
      */
-    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize = 30);
+    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize = 40);
 
     /**
      * @brief addCenteredLabel adds the label to the menu, with the given text, and centers it
@@ -101,7 +102,7 @@ public:
      * @param yCenter y position of the labels center
      * @return the newly created text
      */
-    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 30);
+    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 40);
 
     /**
      * @brief normalizeButtons finds the largest button
@@ -109,12 +110,12 @@ public:
      */
     void normalizeButtons(float additionalWidth = 0.f);
 
-private:
     /**
      * @brief changeSelection updates the selected button
      * @param dir
      */
     void changeSelection(int dir);
+private:
 
     /**
      * @brief setSeletedIndex changes the selected button index
@@ -124,20 +125,21 @@ private:
 
     /**
      * @brief m_labels all the labels of the menu
+     * a pointer is used so that the reference that is
+     * returned can still be used whenever the size
+     * of the vector changes
      */
     std::vector<std::unique_ptr<sf::Text>> m_labels;
 
     /**
      * @brief m_buttons all the buttons of the menu
+     * a pointer is used so that the reference returned
+     * when creating the button is still valid whenever
+     * the vector is changing size
      */
     std::vector<std::unique_ptr<Button>> m_buttons;
 
     std::size_t m_selectedButton = 0;
-
-    /**
-     * @brief m_sprites all the sprites of the menu
-     */
-    std::vector<std::unique_ptr<sf::Sprite>> m_sprites;
 };
 
 

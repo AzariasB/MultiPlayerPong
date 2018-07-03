@@ -34,7 +34,9 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <iostream>
+#include <functional>
 #include "Button.hpp"
+
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
@@ -43,37 +45,56 @@
 namespace mp {
 
 Button::Button(const std::string &text) :
-    m_text(text,pr::resourceManager().getFont()),
-    m_width(m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 10),
+    m_text(text,pr::resourceManager().getFont(), 50),
+    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
     //Events
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    clickedSignal(),
+    selectedSignal()
 {
     init();
 }
 
 Button::Button(const std::string &text, float xPos, float yPos):
-    m_text(text, pr::resourceManager().getFont()),
-    m_width(m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 10),
+    m_text(text, pr::resourceManager().getFont(), 50),
+    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
     //Events
-    clickedEvent(pr::nextEventCode()),
-    selectdEvent(pr::nextEventCode())
+    clickedSignal(),
+    selectedSignal()
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
 }
 
+Button::Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
+    m_text(text, pr::resourceManager().getFont(), 50),
+    m_width(text == "" ? 0 :  m_text.getGlobalBounds().width),
+    m_height(m_text.getGlobalBounds().height + 30),
+    m_color(cc::Colors::fontColor),
+    m_background(),
+    m_border(),
+    //Events
+    clickedSignal(),
+    selectedSignal()
+{
+    init();
+    setPosition(sf::Vector2f(xPos, yPos));
+    setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
+}
+
+
 void Button::init()
 {
-    m_background.setFillColor(cc::Colors::buttonColor);
+    m_rectColor = ColorTweening(cc::Colors::buttonColor);
+
+    m_background.setFillColor(m_rectColor.get());
     m_border.setOutlineColor(cc::Colors::buttonBorderColor);
     m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineThickness(SF_BUTTON_BORDER);
@@ -94,8 +115,9 @@ float Button::getWidth() const
 
 void Button::update(const sf::Time &elapsed)
 {
-    m_color.update(elapsed.asSeconds());
-    m_rectWidth.step(elapsed.asSeconds());
+    m_color.update(elapsed);
+    m_rectWidth.step(elapsed);
+    m_rectColor.update(elapsed);
     updateText();
 }
 
@@ -113,11 +135,14 @@ void Button::handleEvent(const sf::Event& ev)
     if (ev.type == sf::Event::MouseMoved) {
         sf::Vector2f realMovePos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
 
-        bool was_hilighted = m_hilighted;
-        setSelected(m_border.getGlobalBounds().contains(realMovePos));
+        bool wasHilighted = m_hilighted;
+        bool isSelected = m_border.getGlobalBounds().contains(realMovePos);
 
-        if(was_hilighted != m_hilighted)
-            pr::trigger(selectdEvent);
+        if(isSelected)
+            setSelected(true);
+
+        if(wasHilighted != m_hilighted)
+            selectedSignal.trigger();
 
     } else if (ev.type == sf::Event::MouseButtonPressed) {
         sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
@@ -126,7 +151,14 @@ void Button::handleEvent(const sf::Event& ev)
         isClicked = true;
     }
 
-    if (isClicked)pr::trigger(clickedEvent);
+    if (isClicked){        
+        std::function<void()> callback = [this](){
+            m_rectColor = ColorTweening(cc::Colors::buttonClickedColor, cc::Colors::buttonColor, sf::milliseconds(200), twin::quintOut);
+        };
+
+        m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, sf::milliseconds(200), twin::quintOut, callback);
+        clickedSignal.trigger();
+    }
 
 }
 
@@ -136,28 +168,30 @@ bool Button::isSelectionEvent(const sf::Event &ev) const
             ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
 }
 
-void Button::draw(Renderer &renderer) const
+void Button::render(Renderer &renderer) const
 {
     if(!isVisible())return;
 
 
-    renderer.render(m_border);
-    renderer.render(m_background);
-    renderer.render(m_icon);
+    renderer.draw(m_border);
+    renderer.draw(m_background);
+    renderer.draw(m_icon);
 
     switch (m_alignment) {
     case Alignment::Center:
-        renderer.pushTranslate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
+        renderer.push()
+                .translate(sf::Vector2f( (m_width - m_text.getGlobalBounds().width) / 2  , 0));
         break;
     case Alignment::TopLeft :
-        renderer.pushTranslate(sf::Vector2f(10, 0));
+        renderer.push()
+                .translate(sf::Vector2f(10, 0));
         break;
     default:
         renderer.push();
         break;
     }
 
-    renderer.render(m_text);
+    renderer.draw(m_text);
 
     renderer.pop();
 }
@@ -172,11 +206,11 @@ void Button::setSelected(bool selected)
     if(m_hilighted == selected)return;
 
     if(selected){
-        m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
+        m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, sf::milliseconds(100), twin::easing::linear);
+        m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }else{
-        m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, 0.1, twin::easing::linear);
-        m_rectWidth = twin::makeTwin(m_width, 0.f, 0.5f, twin::easing::quintOut);
+        m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, sf::milliseconds(100), twin::easing::linear);
+        m_rectWidth = twin::makeTwin(m_width, 0.f, sf::milliseconds(500), twin::easing::quintOut);
     }
     m_hilighted = selected;
     updateText();
@@ -209,7 +243,7 @@ void Button::setWidth(float width)
 void Button::updateSize()
 {
     if(m_hilighted){
-        m_rectWidth = twin::makeTwin(0.f, m_width, 0.5f, twin::easing::quintOut);
+        m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }
 
     m_border.setSize(sf::Vector2f(m_width, m_height));
@@ -237,7 +271,7 @@ void Button::updateIcon()
     sf::Vector2f iconPosition(m_position.x + m_width - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
     m_icon.setPosition(iconPosition);
 
-    setWidth(m_width + iFr.width);
+    setWidth(m_width + nwSize.width);
 }
 
 
@@ -246,6 +280,7 @@ void Button::updateText()
 {
     m_text.setFillColor(m_color.get());
     m_icon.setColor(m_color.get());
+    m_background.setFillColor(m_rectColor.get());
     m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_height));
 }
 
@@ -257,7 +292,6 @@ void Button::setAlignment(Alignment al)
 
 Button::~Button()
 {
-
 }
 
 }

@@ -34,8 +34,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 
-#include "src/common/EventManager.hpp"
-
 namespace mp {
 
 class Game;
@@ -57,17 +55,11 @@ StateMachine &stateMachine();
 
 const ResourcesManager &resourceManager();
 
-EventManager &eventManager();
-
-sf::Uint64 nextEventCode();
-
 sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
 
 KeyBinding &keyBinding();
 
 SoundEngine &soundEngine();
-
-ParticleGenerator &particleGenerator();
 
 Renderer &renderer();
 
@@ -76,37 +68,6 @@ sf::TcpSocket &socket();
 Player &player();
 
 DialogManager &dialogManager();
-
-
-template<typename T, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T* obj)
-{
-    return eventManager().declareListener(evCode, func, obj);
-}
-
-template<typename T, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(Args...), T *obj, Args... args)
-{
-    return eventManager().declareListener(evCode, func, obj, args...);
-}
-
-template<typename T, typename A, typename ...Args>
-const std::string &connect(sf::Uint64 evCode, void (T::*func)(A, Args...), T *obj, A val)
-{
-    return eventManager().declareListener(evCode, func, obj, val);
-}
-
-template<typename ...Args>
-const std::string  &connect(sf::Uint64 evCode, void (*func)(Args...), Args... args)
-{
-    return eventManager().declareListener(evCode, func, args...);
-}
-
-template<typename ...Args>
-void trigger(sf::Uint64 evCode, Args... argp)
-{
-    eventManager().trigger(evCode, argp...);
-}
 
 }//namespace pr
 

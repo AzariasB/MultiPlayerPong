@@ -29,7 +29,9 @@
  * Created on 7/5/2018
  */
 #include "PauseState.hpp"
+#include "src/common/Game.hpp"
 #include "src/common/Config.hpp"
+#include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/StateMachine.hpp"
@@ -41,23 +43,41 @@ PauseState::PauseState():
 {
     m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
-    const Button &resume = *m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , 250);
-    pr::connect(resume.clickedEvent, &PauseState::resume, this);
+    float startY = 250.f;
 
-    const Button &options = *m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , 300);
-    pr::connect(options.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::OPTIONS, TransitionData::GO_RIGHT));
+    Button &resume = m_menu.addButton("Resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
+    startY += resume.getHeight() + 10.f;
 
-    const Button &menuBtn = *m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, 350);
-    pr::connect(menuBtn.clickedEvent, &StateMachine::goToState, &pr::stateMachine(), std::make_pair((int)cc::MENU, TransitionData::GO_DOWN));
+    Button &restart = m_menu.addButton("Restart", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::returnIcon);
+    startY += restart.getHeight() + 10.f;
 
-    m_menu.normalizeButtons();
+    Button &options = m_menu.addButton("Options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
+    startY += options.getHeight() + 10.f;
+
+    Button &menuBtn = m_menu.addButton("Menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
+    startY += menuBtn.getHeight() + 10.f;
+
+    m_menu.normalizeButtons(10);
+
+    resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
+    options.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
+    menuBtn.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
+    restart.clickedSignal.add([](){
+        pr::game().reset();
+        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+    });
 }
 
 
-void PauseState::draw(Renderer &renderer) const
+void PauseState::render(Renderer &renderer) const
 {
-    pr::stateMachine().getStateAt(cc::PLAY_SOLO).draw(renderer);
-    m_menu.draw(renderer);
+    pr::stateMachine()
+            .getStateAt(cc::PLAY_SOLO)
+            .render(renderer);
+
+    renderer.push()
+            .render(m_menu)
+            .pop();
 }
 
 void PauseState::update(const sf::Time &elapsed)
@@ -69,12 +89,7 @@ void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        resume();
-}
-
-void PauseState::resume()
-{
-    pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
 }
 
 

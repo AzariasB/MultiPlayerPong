@@ -35,6 +35,7 @@
 
 #include "Particle.hpp"
 #include "src/lib/twin.hpp"
+#include "src/client/ColorTweening.hpp"
 
 namespace sf {
 class Time;
@@ -52,12 +53,8 @@ class BallTrailParticle : public Particle
 public:
     /**
      * @brief BallTrailParticle constructor
-     * @param center center position of the particle
-     * @param lifeTime lifetime of the particle
-     * @param startRadius starting radius of this particle
-     * @param color color of the particle
      */
-    BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color);
+    BallTrailParticle();
 
     /**
      * @brief update overriden function
@@ -70,6 +67,15 @@ public:
      * @return when the radius of this particle is zero, it can be destroyed
      */
     bool isFinished() const override;
+
+    /**
+     * @brief init
+     * @param center center point of the trail
+     * @param lifeTime lifetime of the trail
+     * @param startRadius starting radius of the trail
+     * @param color color of the trail
+     */
+    void init(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, const sf::Color &color);
 
     /**
      * @brief render draws the particle
@@ -86,12 +92,11 @@ private:
     /**
      * @brief m_twin tweening for the radius
      */
-    twin::Twin<float, sf::Int32> m_twin;
+    twin::Twin<float> m_twin;
 
-    /**
-     * @brief m_alphaTwin tweening for the alpha color
-     */
-    twin::Twin<sf::Uint8, sf::Int32> m_alphaTwin;
+    ColorTweening m_alphaTwin;
+
+    sf::Time m_lifeTime;
 
     /**
      * @brief m_angle current rotating angle

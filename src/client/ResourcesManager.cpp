@@ -31,14 +31,26 @@
 
 #include <iostream>
 #include "ResourcesManager.hpp"
+#include "Assets.hpp"
 #include <QResource>
 #include <SFML/System/MemoryInputStream.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 namespace mp {
 
 ResourcesManager::ResourcesManager():
     m_uncompressedQuicksandFont(":/fonts/whateverittakesbold.ttf")
 {
+
+    for(const auto &p: Assets::animations) registerTexture(p.second, p.first);
+
+    for(const auto &p : Assets::atlases) registerTexture(p.second, p.first);
+
+    for(const auto &p: Assets::sounds)registerSound(p.second, p.first);
+
+    for(const auto &p : Assets::icons) registerTexture(p.second, p.first);
+
+    for(const auto &s : Assets::shaders) registerShader(s.second, s.first);
 
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
         std::cerr << "Fail to load Whatever it takes font\n";
@@ -48,63 +60,62 @@ ResourcesManager::ResourcesManager():
 
 sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
     if (m_sounds.find(soundID) != m_sounds.end()) {
-        return m_sounds[soundID]->second;
+        return m_sounds[soundID].second;
     } else {
         std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
         return m_emptySound;
     }
 }
 
-sf::Shader &ResourcesManager::registerShader(const std::string &filename, const std::string &shaderName)
+void ResourcesManager::registerShader(const std::string &filename, const sf::Uint64 &shaderId)
 {
     QResource sRes(filename.c_str());
 
     sf::MemoryInputStream mis;
     mis.open(sRes.data(), sRes.size());
-
-    sf::Shader &s = m_shaders[shaderName];
-    s.loadFromStream(mis, sf::Shader::Fragment);
-    return s;
+    m_shadersContent[shaderId] = mis;
 }
 
-sf::Shader &ResourcesManager::getShader(const std::string &shaderName)
+sf::Shader *ResourcesManager::createShader(const sf::Uint64 &shaderId) const
 {
-    if(m_shaders.find(shaderName) != m_shaders.end()){
-        return m_shaders[shaderName];
+    if(m_shadersContent.find(shaderId) != m_shadersContent.end()){
+        sf::Shader *shader = new sf::Shader;
+        sf::MemoryInputStream mis = m_shadersContent.find(shaderId)->second;
+        shader->loadFromStream(mis, sf::Shader::Fragment);
+        return shader;
     }
-    return m_emptyShader;
+    return nullptr;
 }
 
 
 const sf::Texture &ResourcesManager::getTexture(const sf::Uint64 &textureID) const
 {
     if(m_textures.find(textureID) != m_textures.end()){
-        return *m_textures.find(textureID)->second;
+        return m_textures.find(textureID)->second;
     }else{
         std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
         return m_emptyTexture;
     }
 }
 
-void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId) {
+void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId)
+{
     QResource res(filename.c_str());
-    m_sounds[soundId] = std::make_unique<std::pair < sf::SoundBuffer, sf::Sound >> ();
-    m_sounds[soundId]->first.loadFromMemory(res.data(), res.size());
-    m_sounds[soundId]->second.setBuffer(m_sounds[soundId]->first);
+    m_sounds[soundId].first.loadFromMemory(res.data(), res.size());
+    m_sounds[soundId].second.setBuffer(m_sounds[soundId].first);
 }
 
 void ResourcesManager::registerTexture(const std::string &filename, const sf::Uint64 &textureID)
 {
     QResource res(filename.c_str());
-    m_textures[textureID] = std::make_unique<sf::Texture>();
 
     if(res.isCompressed()){
         QByteArray arr = qUncompress(res.data(), res.size());
-        if(!m_textures[textureID]->loadFromMemory(arr.data(), arr.size())){
+        if(!m_textures[textureID].loadFromMemory(arr.data(), arr.size())){
             std::cerr << "Failed to load texture " << textureID << "\n";
         }
     }else{
-        if(!m_textures[textureID]->loadFromMemory(res.data(), res.size())){
+        if(!m_textures[textureID].loadFromMemory(res.data(), res.size())){
             std::cerr << "Failed to load texture " << textureID << "\n";
         }
     }

@@ -31,6 +31,9 @@
 
 #include "Lobby.hpp"
 
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Sleep.hpp>
+
 namespace mp {
 
 //LobbyThread
@@ -52,9 +55,22 @@ Lobby::Lobby() :
     listeningThread(&Lobby::listenSockets, this),
     m_nextPowerup(sf::seconds(3))
 {
-    game.getEventManager().declareListener(game.hitPaddleEvent, &Lobby::ballBounce, this);
-    game.getEventManager().declareListener(game.lostEvent, &Lobby::handleLoss, this);
-    game.getEventManager().declareListener(game.countdownEndedEvent, &Game::setGameState, &game, GAMESTATE::PLAYING);
+    game.hitPaddleSignal.add([this](std::size_t pNumber, b2Vec2 pos){
+        if (pNumber == 1)
+            game.getPlayer1().gainPoint();
+        else if (pNumber == 2)
+            game.getPlayer2().gainPoint();
+    });
+
+    game.lostSignal.add([this](int pLooser){
+        bool p1Looser = pLooser == 1;
+        game.getPlayer1().setIsWinner(!p1Looser);
+        game.getPlayer2().setIsWinner(p1Looser);
+    });
+
+    game.countdownEndedSignal.add([this](){
+        game.setGameState(GAMESTATE::PLAYING);
+    });
 }
 
 Lobby::~Lobby()
@@ -132,7 +148,6 @@ void Lobby::start()
             packet << game;
             socket1->send(packet); //Update the players
             socket2->send(packet);
-            game.clearNewPowerUps();
             totalTime = sf::Time(); // Reset total time
         }
         sf::sleep(sf::milliseconds(10));
@@ -143,7 +158,6 @@ void Lobby::start()
         }
         socketMutex.unlock();
     }
-    std::cout << "Game ended" << std::endl;
 
     if (socket1 && socket2) { // One player lost
         sf::Packet lastPacket;
@@ -173,21 +187,6 @@ bool Lobby::tryAddPowerup(const sf::Time &elapsed)
     game.addPowerUp(pt,sf::Vector2f(SF_ARENA_WIDTH/2, SF_ARENA_HEIGHT/2), math::normalize(sf::Vector2f(dirLeft, dirUp)));
     */
     return true;
-}
-
-void Lobby::ballBounce(std::size_t pNumber, b2Vec2 &pos)
-{
-    if (pNumber == 1)
-        game.getPlayer1().gainPoint();
-    else if (pNumber == 2)
-        game.getPlayer2().gainPoint();
-}
-
-void Lobby::handleLoss(int pLooser)
-{
-    bool p1Looser = pLooser == 1;
-    game.getPlayer1().setIsWinner(!p1Looser);
-    game.getPlayer2().setIsWinner(p1Looser);
 }
 
 void Lobby::earlyWinner()

@@ -51,30 +51,29 @@ WaitingState::WaitingState() :
     m_menu(),
     m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
-    Button &btn =  *m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f);
-    pr::connect(btn.clickedEvent, &WaitingState::cancelClicked, this);
+    m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
+            .clickedSignal.add([](){
+                pr::socket().disconnect();
+                pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
+            });
 }
 
 
-void WaitingState::draw(Renderer& renderer) const
+void WaitingState::render(Renderer& renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::WAITING)return;
     m_menu.handleEvent(ev);
-}
-
-
-void WaitingState::cancelClicked()
-{
-    pr::socket().disconnect();
-    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
 }
 
 void WaitingState::update(const sf::Time &elapsed)
 {
+    if(pr::stateMachine().getCurrentStateIndex() != cc::WAITING)return;
+
     m_menu.update(elapsed);
 
     //Blinking point
@@ -116,7 +115,8 @@ void WaitingState::onEnter(BaseStateData *data)
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
     pr::socket().setBlocking(false);
     if (status != sf::Socket::Done) {
-        pr::dialogManager().message("Error","Failed to connect to the server");
+        DialogMessage& msg = pr::dialogManager().message("Error","Failed to connect to the server");
+        msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
         pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     } else {
         m_content.setString("Waiting for player...");

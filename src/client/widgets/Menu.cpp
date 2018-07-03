@@ -54,16 +54,15 @@ void Menu::update(const sf::Time &elapsed)
         it->update(elapsed);
 }
 
-std::unique_ptr<Button> &Menu::addButton(const std::string &content, float xPos, float yPos)
+Button &Menu::addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
 {    
-    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
+    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
     std::unique_ptr<Button> &inserted = m_buttons.back();
 
     int idx = m_buttons.size() -1;
-    pr::connect(inserted->selectdEvent, &Menu::setSeletedIndex, this, idx);
-
+    inserted->selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
     if(m_buttons.size() == 1) inserted->setSelected(true);
-    return inserted;
+    return *inserted;
 }
 
 std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)
@@ -93,24 +92,21 @@ void Menu::normalizeButtons(float additionalWidth)
         it->setWidth(max + additionalWidth);
 }
 
-void Menu::draw(Renderer &renderer) const
+void Menu::render(Renderer &renderer) const
 {
     if(!isVisible())return;
 
     for(auto &ptr : m_buttons)
-        ptr->draw(renderer);
+        ptr->render(renderer);
 
     for(auto &ptr : m_labels)
-        renderer.render(*ptr);
-
-    for(auto &ptr : m_sprites)
-        renderer.render(*ptr);
+        renderer.draw(*ptr);
 }
 
 void Menu::handleEvent(const sf::Event &ev)
 {
-    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down)){
-        changeSelection(ev.key.code == sf::Keyboard::Up ? -1 : 1);
+    if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
+        changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
         changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
     }else{

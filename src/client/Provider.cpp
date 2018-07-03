@@ -44,11 +44,6 @@ Game &pr::game()
     return ClientApp::getInstance().getGame();
 }
 
-EventManager &pr::eventManager()
-{
-    return game().getEventManager();
-}
-
 const ResourcesManager &pr::resourceManager()
 {
     return ClientApp::getInstance().getResourcesManager();
@@ -58,12 +53,6 @@ StateMachine &pr::stateMachine()
 {
     return ClientApp::getInstance().getStateMachine();
 }
-
-sf::Uint64 pr::nextEventCode()
-{
-    return eventManager().nextEventCode();
-}
-
 
 sf::Vector2f pr::mapPixelToCoords(const sf::Vector2i &coords)
 {
@@ -78,11 +67,6 @@ KeyBinding &pr::keyBinding()
 SoundEngine &pr::soundEngine()
 {
     return ClientApp::getInstance().getSoundEngine();
-}
-
-ParticleGenerator &pr::particleGenerator()
-{
-    return ClientApp::getInstance().getParticleGenerator();
 }
 
 Renderer &pr::renderer()

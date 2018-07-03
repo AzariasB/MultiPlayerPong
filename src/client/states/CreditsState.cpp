@@ -38,7 +38,7 @@ namespace mp {
 CreditsState::CreditsState():
     mMenu()
 {
-    mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 40);
+    mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 70);
 
     float he = 150;
 
@@ -46,12 +46,13 @@ CreditsState::CreditsState():
     he += mMenu.addLabel("- Drawing : Azarias Boutin", 10, he)->getLocalBounds().height;
     he += mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, he)->getLocalBounds().height;
     he += mMenu.addLabel("- Font 'Whatever it takes' (brittneymurphydesign.com)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- SFML 2.5.0 (sfml-dev.org)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Box2D 2.3.1 (box2d.org)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Qt 5.10.1 (qt.io)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- SFML " + sfmlVersion() + " (sfml-dev.org)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", 10, he)->getLocalBounds().height;
 
-    Button &btn = *mMenu.addButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 50);
-    pr::connect(btn.clickedEvent, &CreditsState::menu, this);
+    Button &btn = mMenu.addButton("Menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::IconAtlas::exitLeftIcon);
+    btn.setWidth(btn.getWidth() + 10);
+    btn.clickedSignal.add([this](){ menu(); });
 }
 
 
@@ -67,9 +68,32 @@ void CreditsState::update(const sf::Time &elapsed)
     mMenu.update(elapsed);
 }
 
-void CreditsState::draw(Renderer &renderer) const
+std::string CreditsState::sfmlVersion() const
 {
-    mMenu.draw(renderer);
+    return toVersion(SFML_VERSION_MAJOR, SFML_VERSION_MINOR, SFML_VERSION_PATCH);
+}
+
+std::string CreditsState::box2dVersion() const
+{
+    b2Version v = b2_version;
+    return toVersion(v.major, v.minor, v.revision);
+}
+
+std::string CreditsState::qtVersion() const
+{
+    return QT_VERSION_STR;
+}
+
+std::string CreditsState::toVersion(int major, int minor, int patch) const
+{
+    return std::to_string(major) + "." +
+            std::to_string(minor) + "." +
+            std::to_string(patch) + ".";
+}
+
+void CreditsState::render(Renderer &renderer) const
+{
+    mMenu.render(renderer);
 }
 
 void CreditsState::menu()

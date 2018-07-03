@@ -42,9 +42,9 @@
 #include "StateMachine.hpp"
 #include "ResourcesManager.hpp"
 #include "SoundEngine.hpp"
-#include "particles/ParticleGenerator.hpp"
 #include "KeyBinding.hpp"
 #include "widgets/DialogManager.hpp"
+#include "widgets/FPSCounter.hpp"
 
 
 namespace mp {
@@ -135,19 +135,6 @@ public:
      */
     const SoundEngine &getSoundEngine() const;
 
-    /**
-     * @brief getParticleGenerator reference to the particle generator
-     * @return a reference to the particle generator
-     */
-    ParticleGenerator &getParticleGenerator();
-
-    /**
-     * @brief getParticleGenerator const reference to the particle generator
-     * @return a const reference to the particle generator
-     */
-    const ParticleGenerator &getParticleGenerator() const;
-
-
     sf::RenderWindow &getWindow();
 
     /**
@@ -189,6 +176,12 @@ public:
     bool isWinner() const;
 
     /**
+     * @brief isFullScreen if the window is fullscreen
+     * @return
+     */
+    bool isFullScreen() const;
+
+    /**
      * @brief quit closes the window to finish the main loop
      */
     void quit();
@@ -205,6 +198,12 @@ public:
     void operator=(const ClientApp &) = delete;
 
 private:
+    /**
+     * @brief conifgureWindow sets the differents
+     * attributes of the window
+     */
+    void configureWindow();
+
     /**
      * @brief ClientApp default constructor, no data to input
      */
@@ -230,6 +229,11 @@ private:
     void resizeEvent(const sf::Event &event);
 
     /**
+     * @brief m_cursor mouse cursor
+     */
+    sf::Cursor m_cursor;
+
+    /**
      * @brief window window to use to get events
      * and render stuff
      */
@@ -240,6 +244,12 @@ private:
      * is fullscreen
      */
     bool m_isFullscreen = false;
+
+    /**
+     * @brief rManager the resource manager, holds all the data
+     * used for the graphics and the sound (client related)
+     */
+    ResourcesManager rManager;
 
     /**
      * @brief renderer Object to use to render the game objects,
@@ -271,22 +281,10 @@ private:
     sf::TcpSocket socket;
 
     /**
-     * @brief rManager the resource manager, holds all the data
-     * used for the graphics and the sound (client related)
-     */
-    ResourcesManager rManager;
-
-    /**
      * @brief m_sEngine the sound engine : to have an easy
      * access to play sounds
      */
     SoundEngine m_sEngine;
-
-    /**
-     * @brief m_particleGenerator particle generator
-     * used to create explosions effects an such
-     */
-    ParticleGenerator m_particleGenerator;
 
     /**
      * @brief m_keyBinding the objects that contains all
@@ -299,6 +297,12 @@ private:
      * used to create different types of dialogs
      */
     DialogManager m_dialogManager;
+
+    /**
+     * @brief m_counter counter to show
+     * the game's fps
+     */
+    FPSCounter m_counter;
 
 };
 

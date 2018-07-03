@@ -38,6 +38,7 @@
 #include "src/common/Config.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/lib/twin.hpp"
+#include "Menu.hpp"
 
 
 
@@ -67,12 +68,14 @@ public:
      */
     Dialog(const sf::Uint64 id, const std::string &title);
 
+    virtual ~Dialog();
+
 	/**
 	 * @brief draw draws the dialog and all its sub-components
 	 * @param target the target in which to draw
 	 * @param states the states to use to draw
 	 */
-    virtual void draw(Renderer &renderer) const;
+    virtual void render(Renderer &renderer) const;
 	/**
 	 * @brief handleEvent inherited function
 	 * @param ev
@@ -128,6 +131,8 @@ protected:
      */
     void afterDraw(Renderer &renderer) const;
 
+    Menu &menu();
+
     /**
      * @brief originX origin of the dialog (it's not the 0,0 point of the screen)
      */
@@ -143,14 +148,9 @@ protected:
 private:
 
     /**
-     * @brief closed when the 'x' button is pressed
-     */
-    void closed();
-
-    /**
      * @brief m_yPosition y position of this dialog
      */
-    twin::Twin<float, float> m_yTransition;
+    twin::Twin<float> m_yTransition;
 
     /**
      * @brief m_yPosition Y position of the dialog
@@ -158,10 +158,10 @@ private:
      */
     float m_yPosition;
 
-	/**
-	 * @brief m_xButton the top-right cross of the dialog
-	 */
-	Button m_xButton;
+    /**
+     * @brief m_menu menu containing all the buttons
+     */
+    Menu m_menu;
 
 	/**
 	 * @brief m_title title of the dialog
@@ -184,107 +184,172 @@ private:
     const sf::Uint64 m_id;
 
 public:
-    const sf::Uint64 closeEvent;
-    const sf::Uint64 hiddenEvent;
+    Signal<> closeSignal;
+    Signal<> hiddenSignal;
 };
 
 //END DIALOG
 
 //BEGIN INPUT DIALOG
+
+/**
+ * @brief The DialogInput class dialog inputs are here
+ * to ask a question to the user, and have a textbox to
+ * answer this question
+ * he can either cancel or confirm the text he typed
+ */
 class DialogInput : public Dialog
 {
 public:
+    /**
+     * @brief DialogInput constructor
+     * @param id id of this dialog
+     * @param title title of the dialog
+     * @param question question to ask to the user
+     */
     DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question);
 
+    virtual ~DialogInput();
+
+    /**
+     * @brief getValue gets the value typed by the user
+     * @return a string containing the value typed by the user
+     */
     const std::string &getValue() const;
 
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
-    void draw(Renderer &renderer) const override;
+    /**
+     * @brief draw inherited function
+     * @param renderer
+     */
+    void render(Renderer &renderer) const override;
 
+    /**
+     * @brief handleEvent inherited function
+     * @param ev
+     */
     void handleEvent(const sf::Event &ev) override;
 
 private:
-
+    /**
+     * @brief m_questionText text containing the question
+     * asked to the user
+     */
     sf::Text m_questionText;
 
+    /**
+     * @brief m_input text input where the user can type
+     * the answer
+     */
     TextInput m_input;
 
-    Button m_confirmButton;
-
-    Button m_cancelButton;
-
-    void confirmClicked();
-
-    void cancelClicked();
-
 public:
-    const sf::Uint64 confirmClickedEvent;
-    const sf::Uint64 cancelClickedEvent;
+    Signal<std::string> confirmedSignal;
+    Signal<> canceledSignal;
 };
 //END INPUT DIALOG
 
 
 //BEGIN QUESTION DIALOG
+
+/**
+ * @brief The DialogQuestion class used to ask
+ * a yes-no question to the user
+ */
 class DialogQuestion : public Dialog
 {
 public:
+    /**
+     * @brief DialogQuestion constructor
+     * @param id id of this dialog
+     * @param title title of the dialog
+     * @param question question to ask to the user
+     */
     DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question);
 
+    virtual ~DialogQuestion();
+
+    /**
+     * @brief getQuestion getter for the question asked
+     * to the user
+     * @return
+     */
     const std::string &getQuestion() const;
 
+    /**
+     * @brief setQuestion changes the question asked to the user
+     * @param nwQuestion the new question to ask the user
+     */
     void setQuestion(const std::string &nwQuestion);
 
-    void update(const sf::Time &elapsed) override;
-
-    void draw(Renderer &renderer) const override;
-
-    void handleEvent(const sf::Event &ev) override;
+    /**
+     * @brief render inherited function
+     * @param renderer
+     */
+    void render(Renderer &renderer) const override;
 
 private:
-
+    /**
+     * @brief m_questionText text asking the user a question
+     */
     sf::Text m_questionText;
 
-    Button m_yesButton;
-
-    Button m_noButton;
-
-    void yesClicked();
-
-    void noClicked();
-
 public:
-    const sf::Uint64 yesClickedEvent;
-    const sf::Uint64 noClickedEvent;
+    Signal<> yesClickedSignal;
+    Signal<> noClickedSignal;
 };
 //END QUESTION DIALOG
 
 //BEGIN MESSAGE DIALOG
+
+/**
+ * @brief The DialogMessage class dialog showing
+ * a message to the user, with only a "ok" button
+ */
 class DialogMessage : public Dialog
 {
 public:
+    /**
+     * @brief DialogMessage constructor
+     * @param id dialog id
+     * @param title
+     * @param message message to show the user
+     */
     DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message);
 
-    const std::string &getMessage() const;
+    virtual ~DialogMessage();
 
+    /**
+     * @brief getMessage returns the message shown to the user
+     * @return
+     */
+    std::string getMessage() const;
+
+    /**
+     * @brief setMessage changes the message shown to the user
+     * @param nwMessage
+     */
     void setMessage(const std::string &nwMessage);
 
-    void update(const sf::Time &elapsed) override;
-
-    void draw(Renderer &renderer) const override;
-
-    void handleEvent(const sf::Event &ev) override;
+    /**
+     * @brief render inherited function
+     * @param renderer
+     */
+    void render(Renderer &renderer) const override;
 
 private:
-
-    void okClicked();
-
+    /**
+     * @brief m_messageText the message shown to the user
+     */
     sf::Text m_messageText;
 
-    Button m_okButton;
-
 public:
-    const sf::Uint64 okClickedEvent;
+    Signal<> okClickedSignal;
 };
 //END MESSAGE DIALOG
 

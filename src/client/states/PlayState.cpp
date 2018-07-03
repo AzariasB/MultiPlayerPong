@@ -47,88 +47,85 @@ namespace mp {
 
 PlayState::PlayState():
     m_p1ScoreText("0", pr::resourceManager().getFont()),
-    m_p2ScoreText("0", pr::resourceManager().getFont())
+    m_p2ScoreText("0", pr::resourceManager().getFont()),
+    m_nextParticle(cc::Times::trailCountdownTime, true)
 {
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
     m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
 
-    pr::connect(
-                pr::game().hitPaddleEvent,
-                &PlayState::bounced,
-                this
-                );  //Subscribe to bounce event
+    m_nextParticle.setCallback([this](){
+        m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    });
 }
 
-void PlayState::bounced(std::size_t pNum, sf::Vector2f position)
+void PlayState::onBeforeEnter()
 {
-    Q_UNUSED(pNum);
-    pr::soundEngine().playSound(Assets::Sounds::Bounce , {position.x * 10, 0, position.y * 10});
+    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
+        Q_UNUSED(pNum);
+        pr::soundEngine().playSound(Assets::Sounds::Bounce);
 
-    sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
-    if(pNum == 2){
-        gainPointPos = m_p2ScoreText.getPosition();
-    }
-    gainPointPos.x -= 30.f;
-    gainPointPos.y += 30.f;
+        sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
+        if(pNum == 2){
+            gainPointPos = m_p2ScoreText.getPosition();
+        }
+        gainPointPos.x -= 30.f;
+        gainPointPos.y += 30.f;
 
-    pr::particleGenerator().gainPoint(gainPointPos );
-    pr::particleGenerator().explode(position);//get position
-    pr::renderer().shake();
+        m_particleGenerator.gainPoint(gainPointPos );
+        m_particleGenerator.explode(b2VecToSfVect(position));
+        pr::renderer().shake();
+    });
 }
 
 void PlayState::update(const sf::Time &elapsed)
 {
     if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
 
-    if (pr::game().playerWon())
-        pr::stateMachine().setCurrentState(cc::FINISHED);
-    else
-        pr::game().update(elapsed);
-
-
-    m_nextParticle -= elapsed;
-    if(m_nextParticle <= sf::Time::Zero){
-        m_nextParticle = sf::milliseconds(10);
-        pr::particleGenerator().ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
+    if (pr::game().playerWon()){
+        pr::stateMachine().goToState(cc::FINISHED, TransitionData::GO_UP);
+        return;
     }
 
-    pr::particleGenerator().update(elapsed);
+
+    pr::game().update(elapsed);
+
+    m_nextParticle.update(elapsed);
     m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
 
     if(pr::game().isCountingDown()){
         if( m_lastCountdownValue != (int)pr::game().getCountdownTime().asSeconds()){
             m_lastCountdownValue = (int)pr::game().getCountdownTime().asSeconds();
-            pr::particleGenerator().countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+            m_particleGenerator.countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
             pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
         }
     }else if(m_lastCountdownValue == 0){
         m_lastCountdownValue = -1;
-        pr::particleGenerator().countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+        m_particleGenerator.countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
         pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
     }
+    m_particleGenerator.update(elapsed);
 }
 
-void PlayState::draw(Renderer &renderer) const
+void PlayState::onAfterLeaving()
+{
+    m_particleGenerator.clear();
+    pr::game().hitPaddleSignal.clear();
+}
+
+void PlayState::render(Renderer &renderer) const
 {
     renderer.push()
-            .scale(M_TO_P);
-
-    pr::particleGenerator().draw(renderer);
-    renderer.renderBall(pr::game().getBall());
-    renderer.renderPaddle(pr::game().getPlayer1().getPaddle());
-    renderer.renderPaddle(pr::game().getPlayer2().getPaddle());
-    renderer.renderWall(pr::game().upperWall());
-    renderer.renderWall(pr::game().lowerWall());
-    renderer.pop();
-
-    renderer.render(m_p1ScoreText);
-    renderer.render(m_p2ScoreText);
-
-    const std::unordered_map<sf::Uint64, Powerup> &powerups = pr::game().getPowerups();
-    for(auto it = powerups.begin(); it != powerups.end(); ++it){
-        renderer.renderPowerup(it->second);
-    }
+            .scale(M_TO_P)
+            .render(m_particleGenerator)
+            .renderBall(pr::game().getBall())
+            .renderPaddle(pr::game().getPlayer1().getPaddle())
+            .renderPaddle(pr::game().getPlayer2().getPaddle())
+            .renderWall(pr::game().upperWall())
+            .renderWall(pr::game().lowerWall())
+            .pop()
+            .draw(m_p1ScoreText)
+            .draw(m_p2ScoreText);
 }
 
 PlayState::~PlayState()

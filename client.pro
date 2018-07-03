@@ -28,5 +28,4 @@ CONFIG(debug, debug|release) {
 
 include(src/client/client.pro)
 
-RESOURCES += \
-    resources.qrc
+RESOURCES += resources.qrc

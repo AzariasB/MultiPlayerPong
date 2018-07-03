@@ -4,6 +4,7 @@
 #include <cmath>
 #include <type_traits>
 #include <functional>
+#include <SFML/System/Time.hpp>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -487,8 +488,7 @@ enum easing{
      * 0 means starting
      * 1 means finished
      */
-    template<typename T,//type of bounds
-             typename U,//type of steps
+    template<typename BOUND,//type of bounds
              typename F = std::function<void()>>//type of callbak function
     class Twin
     {
@@ -503,11 +503,12 @@ enum easing{
          * @param finalCallback the function to call when the tweening
          * is over
          */
-        Twin(const T &from, const T& to, const U &time, easing ease, F finalCallback):
+        Twin(const BOUND &from, const BOUND& to, const sf::Time &time, easing ease, const F finalCallback):
             from(from),
             to(to),
             totalTime(time),
-            advance(0),
+            advance(),
+            totalProgress(0.f),
             finishCallback(finalCallback),
             easingF(getEasing(ease))
         {
@@ -520,11 +521,12 @@ enum easing{
          * @param time the time it takes to go from 'from' to 'to'
          * @param ease the easing function
          */
-        Twin(T from, T to, U time, easing ease):
+        Twin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ease):
             from(from),
             to(to),
             totalTime(time),
-            advance(0),
+            advance(),
+            totalProgress(0.f),
             finishCallback(noop),
             easingF(getEasing(ease))
         {
@@ -533,9 +535,10 @@ enum easing{
         Twin():
             from(0),
             to(0),
-            advance(0),
+            totalTime(),
+            advance(),
+            totalProgress(0.f),
             finishCallback(noop),
-            totalTime(0),
             easingF(getEasing(linear))
         {
 
@@ -545,14 +548,17 @@ enum easing{
          * @brief step steps of the given progress
          * @param progress the progress made since the last step
          */
-        void step(U progress)
+        void step(const sf::Time &progress)
         {
+            if(totalProgress == 1.f)return;
+
             advance += progress;
-            totalProgress = advance/static_cast<float>(totalTime);
+            totalProgress = advance/totalTime;
             if(advance >= totalTime){
                 advance = totalTime;
-                totalProgress = advance/static_cast<float>(totalTime);
-                finishCallback();
+                totalProgress = advance/totalTime;
+
+                if(finishCallback) finishCallback();
             }
         }
 
@@ -564,7 +570,7 @@ enum easing{
          * function in a variable
          * @return the value of the data held
          */
-        T get() const
+        BOUND get() const
         {
             return easingF(totalProgress, from,to);
         }
@@ -578,6 +584,11 @@ enum easing{
             return totalProgress;
         }
 
+        void setCallback(const F cb)
+        {
+            finishCallback = cb;
+        }
+
         virtual ~Twin()
         {
 
@@ -589,42 +600,42 @@ enum easing{
          * @param easingType the easing enum
          * @return the function corresponding to the enum
          */
-        std::function<T(float, T,T)> getEasing(twin::easing easingType) const
+        std::function<BOUND(float, BOUND,BOUND)> getEasing(twin::easing easingType) const
         {
             switch (easingType) {
-            case linear:return linearImpl<T>;
-            case sineIn:return sinusoidalIn<T>;
-            case sineOut:return sinusoidalOut<T>;
-            case sineInOut:return sinusoidalInOut<T>;
-            case quadIn:return quadraticIn<T>;
-            case quadOut:return quadraticOut<T>;
-            case quadInOut:return quadraticInOut<T>;
-            case cubicIn:return cubicInImpl<T>;
-            case cubicOut:return cubicOutImpl<T>;
-            case cubicInOut:return cubicInOutImpl<T>;
-            case quartIn:return quarticIn<T>;
-            case quartOut:return quarticOut<T>;
-            case quartInOut:return quarticInOut<T>;
-            case quintIn:return quinticIn<T>;
-            case quintOut:return quinticOut<T>;
-            case quintInOut:return quinticInOut<T>;
-            case expoIn:return exponentialIn<T>;
-            case expoOut:return exponentialOut<T>;
-            case expoInOut:return exponentialInOut<T>;
-            case circIn:return circularIn<T>;
-            case circOut:return circularOut<T>;
-            case circInOut:return circularInOut<T>;
-            case backIn:return backInImpl<T>;
-            case backOut:return backOutImpl<T>;
-            case backInOut:return backInOutImpl<T>;
-            case elastIn:return elasticIn<T>;
-            case elastOut:return elasticOut<T>;
-            case elastInOut:return elasticInOut<T>;
-            case bounceIn:return bounceInImpl<T>;
-            case bounceOut:return bounceOutImpl<T>;
-            case bounceInOut:return bounceInOutImpl<T>;
+            case linear:return linearImpl<BOUND>;
+            case sineIn:return sinusoidalIn<BOUND>;
+            case sineOut:return sinusoidalOut<BOUND>;
+            case sineInOut:return sinusoidalInOut<BOUND>;
+            case quadIn:return quadraticIn<BOUND>;
+            case quadOut:return quadraticOut<BOUND>;
+            case quadInOut:return quadraticInOut<BOUND>;
+            case cubicIn:return cubicInImpl<BOUND>;
+            case cubicOut:return cubicOutImpl<BOUND>;
+            case cubicInOut:return cubicInOutImpl<BOUND>;
+            case quartIn:return quarticIn<BOUND>;
+            case quartOut:return quarticOut<BOUND>;
+            case quartInOut:return quarticInOut<BOUND>;
+            case quintIn:return quinticIn<BOUND>;
+            case quintOut:return quinticOut<BOUND>;
+            case quintInOut:return quinticInOut<BOUND>;
+            case expoIn:return exponentialIn<BOUND>;
+            case expoOut:return exponentialOut<BOUND>;
+            case expoInOut:return exponentialInOut<BOUND>;
+            case circIn:return circularIn<BOUND>;
+            case circOut:return circularOut<BOUND>;
+            case circInOut:return circularInOut<BOUND>;
+            case backIn:return backInImpl<BOUND>;
+            case backOut:return backOutImpl<BOUND>;
+            case backInOut:return backInOutImpl<BOUND>;
+            case elastIn:return elasticIn<BOUND>;
+            case elastOut:return elasticOut<BOUND>;
+            case elastInOut:return elasticInOut<BOUND>;
+            case bounceIn:return bounceInImpl<BOUND>;
+            case bounceOut:return bounceOutImpl<BOUND>;
+            case bounceInOut:return bounceInOutImpl<BOUND>;
             }
-            return linearImpl<T>;
+            return linearImpl<BOUND>;
         }
 
         /**
@@ -634,24 +645,24 @@ enum easing{
         std::function<void()> noop = [](){};
 
         //the value from where the tweening starts
-        T from;
+        BOUND from;
 
         //The value the tweening must reach
-        T to;
+        BOUND to;
 
         float totalProgress;//total progress  0 = begin, 1 = finished
 
         //The time it must take to reach the value
-        U totalTime;
+        sf::Time totalTime;
 
         //The current time value
-        U advance;
+        sf::Time advance;
 
         //the function to call whenever the tweening is over
         F finishCallback;
 
         //The easing function to get the value
-        std::function<T(float,T,T)> easingF;
+        std::function<BOUND(float,BOUND,BOUND)> easingF;
     };
 
     /**
@@ -663,16 +674,13 @@ enum easing{
      * @param func the callback function when the tweening is over
      * @return a twin object
      */
-    template<typename T,
-             typename U,
-             typename F>
-    Twin<T,U,F> makeTwin(const T &from, const T &to, const U &time, easing ez, F func)
+    template<typename BOUND,
+             typename CALLBACK>
+    Twin<BOUND,CALLBACK> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez, const CALLBACK &func)
     {
-        return Twin<T,U,F>(from, to, time, ez, func);
+        return Twin<BOUND,CALLBACK>(from, to, time, ez, func);
     }
 
-    template<typename T,
-             typename U>
     /**
      * @brief makeTwin util function to create a twin object withe template type deduction
      * @param from the original value
@@ -681,9 +689,10 @@ enum easing{
      * @param ez the easing function to use
      * @return a twing object
      */
-    Twin<T,U> makeTwin(const T &from, const T &to, const U &time, easing ez)
+    template<typename BOUND>
+    Twin<BOUND> makeTwin(const BOUND &from, const BOUND &to, const sf::Time &time, easing ez, const std::function<void()> callback = {})
     {
-        return Twin<T,U>(from,to, time, ez);
+        return Twin<BOUND>(from,to, time, ez, callback);
     }
 }
 

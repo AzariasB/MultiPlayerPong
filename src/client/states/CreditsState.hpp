@@ -62,7 +62,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief handleEvent inherited function
@@ -71,6 +71,14 @@ public:
     void handleEvent(const sf::Event &ev) override;
 
 private:
+
+    std::string sfmlVersion() const;
+
+    std::string box2dVersion() const;
+
+    std::string qtVersion() const;
+
+    std::string toVersion(int major, int minor, int patch) const;
 
     /**
      * @brief menu transitions back to the menu

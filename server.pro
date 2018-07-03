@@ -6,6 +6,7 @@
 
 include(common.pro)
 
+unix:LIBS += -lsfml-network -lsfml-system
 win32:LIBS += -lsfml-network-s -lsfml-system-s -lws2_32 -lwinmm
 
 DEFINES += "SERVER"
@@ -13,17 +14,17 @@ DEFINES += "SERVER"
 
 #Change config depending on the build configuration
 CONFIG(debug, debug|release) {
-        TARGET = pong
+        TARGET = server
         DESTDIR = build/server
         OBJECTS_DIR = build/server/.obj
         MOC_DIR = build/server/.moc
         RCC_DIR = build/server/.rcc
 } else {
-        TARGET = pong
-        DESTDIR = build/release
-        OBJECTS_DIR = build/release/.obj
-        MOC_DIR = build/release/.moc
-        RCC_DIR = build/release/.rcc
+        TARGET = server
+        DESTDIR = build/server
+        OBJECTS_DIR = build/server/.obj
+        MOC_DIR = build/server/.moc
+        RCC_DIR = build/server/.rcc
 }
 
 include(src/server/server.pro)

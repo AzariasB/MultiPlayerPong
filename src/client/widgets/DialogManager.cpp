@@ -42,10 +42,10 @@ DialogManager::~DialogManager()
 
 }
 
-void DialogManager::draw(Renderer &renderer) const
+void DialogManager::render(Renderer &renderer) const
 {
     for(auto &ptr : m_dialogs)
-        ptr.second->draw(renderer);
+        ptr.second->render(renderer);
 }
 
 void DialogManager::handleEvent(const sf::Event &ev)

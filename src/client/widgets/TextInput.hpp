@@ -37,6 +37,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Widget.hpp"
+#include "src/common/Timer.hpp"
 
 namespace mp {
 
@@ -59,13 +60,20 @@ public:
      * @param target
      * @param states
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const;
 
     /**
      * @brief handleEvent inherited function
      * @param ev
      */
     void handleEvent(const sf::Event& ev) override;
+
+    /**
+     * @brief update inherited function (used to update the
+     * blinking pipe at the end)
+     * @param elapsed
+     */
+    void update(const sf::Time &elapsed) override;
 
     /**
      * @brief setText sets the text inside the text input
@@ -85,6 +93,19 @@ private:
      * @brief updatePipePos update the blinking pipe position
      */
     void updatePipePos();
+
+    /**
+     * @brief addString adds the given string to the actual string, without
+     * adding more than the maximum limit
+     * @param toAdd the string to append to the current one
+     */
+    void addString(const std::string &toAdd);
+
+    /**
+     * @brief removeLastChar clears out the last char
+     * of the string (if there's any)
+     */
+    void removeLastChar();
 
     /**
      * @brief m_text the text to draw showing what the user typed
@@ -109,8 +130,7 @@ private:
     /**
      * @brief m_clock a mutable object in order to make the pipe blink
      */
-    mutable sf::Clock m_clock;
-
+    Timer m_timer;
 };
 
 }

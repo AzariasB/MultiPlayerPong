@@ -72,13 +72,6 @@ void Ball::update(const sf::Time &elapsed)
     //no updates for now
 }
 
-void Ball::resetPowerup(Powerup::POWERUP_TYPE type)
-{
-    if(type == Powerup::BALL_EXTEND || type == Powerup::BALL_RETRACT){
-        m_radiusBoost = 0;
-    }
-}
-
 void Ball::reset()
 {
     mBody->SetTransform(b2Vec2(BALL_START_X, BALL_START_Y),0);

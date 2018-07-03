@@ -40,12 +40,35 @@ namespace mp {
 PlaySoloState::PlaySoloState():
     PlayState()
 {
-    ClientApp::getInstance().setPNumber(1);
+}
 
-    pr::connect(pr::game().countdownEndedEvent, &Game::setGameState, &pr::game(), GAMESTATE::PLAYING);
+void PlaySoloState::onBeforeEnter()
+{
+    PlayState::onBeforeEnter();
+
+    ClientApp::getInstance().setPNumber(1);
     pr::game().getPlayer2().getPaddle().setIsAI(true);
-    pr::connect(pr::game().lostEvent, &PlaySoloState::handleLoss, this);
-    pr::connect(pr::game().hitPaddleEvent, &PlaySoloState::hitPaddleEvent, this);
+
+    pr::game().countdownEndedSignal.add([](){pr::game().setGameState(GAMESTATE::PLAYING);});
+
+    pr::game().lostSignal.add([this](int looser){
+        bool amWinner = looser == 2;
+        pr::game().getPlayer1().setIsWinner(amWinner);
+        pr::game().getPlayer2().setIsWinner(!amWinner);
+    });
+
+    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
+        B2_NOT_USED(position);
+        (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer1()).gainPoint();
+    });
+}
+
+void PlaySoloState::onAfterLeaving()
+{
+    PlayState::onAfterLeaving();
+
+    pr::game().countdownEndedSignal.clear();
+    pr::game().lostSignal.clear();
 }
 
 void PlaySoloState::handleEvent(const sf::Event &ev)
@@ -54,20 +77,6 @@ void PlaySoloState::handleEvent(const sf::Event &ev)
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
         pr::stateMachine().setCurrentState(cc::PAUSE);
     }
-}
-
-void PlaySoloState::handleLoss(int looser)
-{
-    bool playerWon = looser == 2;
-    pr::game().getPlayer1().setIsWinner(playerWon);
-    pr::game().getPlayer2().setIsWinner(!playerWon);
-}
-
-void PlaySoloState::hitPaddleEvent(std::size_t pNum, b2Vec2 position)
-{
-    B2_NOT_USED(position);
-    Player &p = pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
-    p.gainPoint();
 }
 
 PlaySoloState::~PlaySoloState()

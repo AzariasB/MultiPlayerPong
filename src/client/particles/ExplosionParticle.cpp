@@ -38,11 +38,16 @@
 
 namespace mp {
 
-ExplosionParticle::ExplosionParticle(const sf::Vector2f &origin, std::size_t particleNumber, sf::Time maxLifeTime):
-    m_maxLifeTime(maxLifeTime),
-    m_vertices(sf::PrimitiveType::Lines, particleNumber*2),
-    m_particles(particleNumber)
+ExplosionParticle::ExplosionParticle():
+    Particle(PARTICLE_TYPE::Explosion)
 {
+}
+
+void ExplosionParticle::init(const sf::Vector2f &origin, std::size_t particleNumber, const sf::Time &maxLifeTime)
+{
+    m_vertices = sf::VertexArray(sf::PrimitiveType::Lines, particleNumber + 2);
+    m_maxLifeTime = maxLifeTime;
+    m_particles = std::vector<Line>(particleNumber);
     createParticles(origin, particleNumber);
 }
 
@@ -86,7 +91,7 @@ void ExplosionParticle::update(const sf::Time &elapsed)
 
 void ExplosionParticle::render(Renderer &renderer) const
 {
-    renderer.render(m_vertices);
+    renderer.draw(m_vertices);
 }
 
 }

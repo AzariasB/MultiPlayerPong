@@ -33,6 +33,7 @@
 #include "src/client/widgets/Menu.hpp"
 #include "src/client/KeyBinding.hpp"
 #include "src/client/State.hpp"
+#include "src/client/Assets.hpp"
 
 
 namespace mp {
@@ -68,7 +69,7 @@ public:
      * @param target
      * @param states
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief update inherited function
@@ -105,6 +106,8 @@ private:
          */
         KeyBinding::KEY_ACTION action;
     };
+
+    const Assets::IconAtlas::Holder &actionIcon(KeyBinding::KEY_ACTION action) const;
 
     /**
      * @brief buttonClicked whenever a button is clicked, to change the binding

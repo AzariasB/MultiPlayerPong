@@ -33,6 +33,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
+#include "src/lib/twin.hpp"
 
 namespace mp {
 
@@ -51,7 +52,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer &renderer) const override;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief update inherited function
@@ -68,18 +69,6 @@ public:
 private:
 
     Menu m_menu;
-
-    /**
-     * @brief resume resumes the game
-     * returns to the game state
-     */
-    void resume();
-
-
-    /**
-     * @brief play goes to the play state
-     */
-    void play();
 };
 
 

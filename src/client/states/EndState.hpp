@@ -34,9 +34,12 @@
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 
+#include <SFML/Graphics/VertexBuffer.hpp>
+
 
 namespace mp {
 
+constexpr std::size_t triangleNumber = 10;
 
 class Dialog;
 
@@ -58,7 +61,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer& renderer) const override;
+    void render(Renderer& renderer) const override;
 
     /**
      * @brief handleEvent inherited function
@@ -79,6 +82,12 @@ public:
     void onEnter(BaseStateData *data) override;
 
     /**
+     * @brief onBeforeEnter inherited function
+     * intialize all the drawing stuff
+     */
+    void onBeforeEnter() override;
+
+    /**
      * @brief backButtonPressed when the "ok" or the cross of the dialog is pressed,
      * goes back to the main menu
      */
@@ -87,6 +96,10 @@ public:
     virtual ~EndState();
 
 private:
+    void updateVerticesColor(bool win);
+
+    sf::Vector2f toVertexPosition(int index) const;
+
     /**
      * @brief m_menu the menu of the state, to show
      * the texts and the "back" button menu
@@ -99,6 +112,13 @@ private:
      * or "loose"
      */
     sf::Text &m_content;
+
+    /**
+     * @brief m_buffer buffer for the animation
+     */
+    sf::VertexArray m_buffer;
+
+    float m_angle;
 };
 
 

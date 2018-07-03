@@ -60,6 +60,14 @@ T clampf(T min, T max, T val)
 }
 
 
+template<typename T>
+T &centerOrigin(T& ref)
+{
+    auto bounds = ref.getGlobalBounds();
+    ref.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    return ref;
+}
+
 /**
  * @brief sign returns the sign of the floating number
  * @param f the number

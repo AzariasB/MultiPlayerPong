@@ -34,12 +34,18 @@
 
 #include <memory>
 #include <queue>
+#include <utility>
 #include <atomic>
+
+#include <SFML/Window/Event.hpp>
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/TcpListener.hpp>
 #include <SFML/Network/SocketSelector.hpp>
+
+#include <SFML/System/Thread.hpp>
+#include <SFML/System/Mutex.hpp>
 
 #include "src/common/Game.hpp"
 
@@ -111,19 +117,6 @@ public:
      * @return wether the lobby's game finished (thus it can be destroyed)
      */
     bool isFinished() const;
-
-    /**
-     * @brief ballBounce called when the bounce event is triggered
-     * handles the ball bouncing
-     * @param pNumber the player's number who's hitting the ball
-     */
-    void ballBounce(std::size_t pNumber, b2Vec2 &pos);
-
-    /**
-     * @brief handleLoss call when the event "playerLost" is fired
-     * @param pLooser the number of the player who lost
-     */
-    void handleLoss(int pLooser);
 
 
     virtual ~Lobby();

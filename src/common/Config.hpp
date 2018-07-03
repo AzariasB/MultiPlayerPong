@@ -35,8 +35,8 @@ namespace mp {
 //Server
 constexpr int DEFAULT_PORT = 5300;
 
-constexpr float ARENA_WIDTH = 12.5;
-constexpr float ARENA_HEIGHT = 9.375;
+constexpr float ARENA_WIDTH = 18.75;
+constexpr float ARENA_HEIGHT = 14.0625;
 
 //Paddle
 constexpr float PADDLE_WIDTH = 0.1;

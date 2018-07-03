@@ -30,6 +30,8 @@
  */
 #pragma once
 
+#include "src/client/Renderable.hpp"
+
 namespace sf {
     class Time;
 }
@@ -45,13 +47,22 @@ class Renderer;
  * a particle must have the 'update' function,
  * the 'render' function and the 'isFinished' function
  */
-class Particle
+class Particle : public Renderable
 {
 public:
+
+    const enum PARTICLE_TYPE {
+        BallTrail,
+        Countdown,
+        Explosion,
+        GainPoint
+    } type;
+
     /**
      * @brief Particle empty constructor
      */
-    Particle()
+    Particle(PARTICLE_TYPE sonType):
+        type(sonType)
     {
 
     }
@@ -64,17 +75,12 @@ public:
     virtual void update(const sf::Time &elapsed) = 0;
 
     /**
-     * @brief render renders the particle
-     * @param renderer the renderer to use to draw the particle
-     */
-    virtual void render(Renderer &renderer) const = 0;
-
-    /**
      * @brief isFinished helper to tell the particle manager whenever
      * this particle is finished, and can be destroyed
      * @return
      */
     virtual bool isFinished() const = 0;
+
 
     /**
      * @brief ~Particle virtual destructor
@@ -83,6 +89,8 @@ public:
     {
 
     }
+
+    bool isUsed = true;
 };
 
 

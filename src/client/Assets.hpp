@@ -37,6 +37,8 @@
 #pragma once
 
 #include <unordered_map>
+#include <SFML/Config.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 namespace mp{
 
@@ -45,16 +47,136 @@ class Assets
 public:
   
     enum Fonts {Whateverittakes = 1, Whateverittakesbold = 2, Quicksand = 3};
-    static const std::unordered_map<Fonts, std::string> fonts;
+    static const std::unordered_map<sf::Uint64, std::string> fonts;
 
-    enum Sounds {Bounce = 4, Click1 = 5, Rollover1 = 6, PingPong8bitBiiip = 7, Click3 = 8, Click4 = 9, Click2 = 10, PingPong8bitBeeep = 11, Click5 = 12};
-    static const std::unordered_map<Sounds, std::string> sounds;
+    enum Sounds {Bounce = 4, Loose = 5, Click1 = 6, Rollover1 = 7, PingPong8bitBiiip = 8, Win = 9, Click3 = 10, Click4 = 11, Click2 = 12, PingPong8bitBeeep = 13, Click5 = 14};
+    static const std::unordered_map<sf::Uint64, std::string> sounds;
 
-    enum Animations {BallRetract = 13, BallExtend = 14, PaddleExtend = 15, PaddleRetract = 16};
-    static const std::unordered_map<Animations, std::string> animations;
+    enum Shaders {Alpha = 15};
+    static const std::unordered_map<sf::Uint64, std::string> shaders;
 
-    enum Icons {Gear = 17, Information = 18, Sound = 19, Exitleft = 20, Wrench = 21, Singleplayer = 22, Power = 23, Multiplayer = 24};
-    static const std::unordered_map<Icons, std::string> icons;
+    enum Animations {BallRetract = 16, BallExtend = 17, PaddleExtend = 18, PaddleRetract = 19};
+    static const std::unordered_map<sf::Uint64, std::string> animations;
+
+    enum Icons {Qt = 20, Box2d = 21, Sfml32x32 = 22, Sfml = 23, Cursor = 24};
+    static const std::unordered_map<sf::Uint64, std::string> icons;
+
+      class IconAtlas {
+        public:
+          struct Holder {
+            const int textureId = 25;
+            const sf::IntRect bounds;
+          };
+
+          static const Holder arrowDownIcon;
+          static const Holder arrowLeftIcon;
+          static const Holder arrowRightIcon;
+          static const Holder arrowUpIcon;
+          static const Holder audioOffIcon;
+          static const Holder audioOnIcon;
+          static const Holder barsHorizontalIcon;
+          static const Holder barsVerticalIcon;
+          static const Holder button1Icon;
+          static const Holder button2Icon;
+          static const Holder button3Icon;
+          static const Holder buttonAIcon;
+          static const Holder buttonBIcon;
+          static const Holder buttonLIcon;
+          static const Holder buttonL1Icon;
+          static const Holder buttonL2Icon;
+          static const Holder buttonRIcon;
+          static const Holder buttonR1Icon;
+          static const Holder buttonR2Icon;
+          static const Holder buttonSelectIcon;
+          static const Holder buttonStartIcon;
+          static const Holder buttonXIcon;
+          static const Holder buttonYIcon;
+          static const Holder checkmarkIcon;
+          static const Holder contrastIcon;
+          static const Holder crossIcon;
+          static const Holder downIcon;
+          static const Holder downLeftIcon;
+          static const Holder downRightIcon;
+          static const Holder exclamationIcon;
+          static const Holder exitIcon;
+          static const Holder exitLeftIcon;
+          static const Holder exitRightIcon;
+          static const Holder exportIcon;
+          static const Holder fastForwardIcon;
+          static const Holder gamepadIcon;
+          static const Holder gamepad1Icon;
+          static const Holder gamepad2Icon;
+          static const Holder gamepad3Icon;
+          static const Holder gamepad4Icon;
+          static const Holder gearIcon;
+          static const Holder homeIcon;
+          static const Holder importIcon;
+          static const Holder informationIcon;
+          static const Holder joystickIcon;
+          static const Holder joystickLeftIcon;
+          static const Holder joystickRightIcon;
+          static const Holder joystickUpIcon;
+          static const Holder largerIcon;
+          static const Holder leaderboardsComplexIcon;
+          static const Holder leaderboardsSimpleIcon;
+          static const Holder leftIcon;
+          static const Holder lockedIcon;
+          static const Holder massiveMultiplayerIcon;
+          static const Holder medal1Icon;
+          static const Holder medal2Icon;
+          static const Holder menuGridIcon;
+          static const Holder menuListIcon;
+          static const Holder minusIcon;
+          static const Holder mouseIcon;
+          static const Holder movieIcon;
+          static const Holder multiplayerIcon;
+          static const Holder musicOffIcon;
+          static const Holder musicOnIcon;
+          static const Holder nextIcon;
+          static const Holder openIcon;
+          static const Holder pauseIcon;
+          static const Holder phoneIcon;
+          static const Holder plusIcon;
+          static const Holder powerIcon;
+          static const Holder previousIcon;
+          static const Holder questionIcon;
+          static const Holder returnIcon;
+          static const Holder rewindIcon;
+          static const Holder rightIcon;
+          static const Holder saveIcon;
+          static const Holder scrollHorizontalIcon;
+          static const Holder scrollVerticalIcon;
+          static const Holder share1Icon;
+          static const Holder share2Icon;
+          static const Holder shoppingBasketIcon;
+          static const Holder shoppingCartIcon;
+          static const Holder siganl1Icon;
+          static const Holder signal2Icon;
+          static const Holder signal3Icon;
+          static const Holder singleplayerIcon;
+          static const Holder smallerIcon;
+          static const Holder starIcon;
+          static const Holder stopIcon;
+          static const Holder tabletIcon;
+          static const Holder targetIcon;
+          static const Holder trashcanIcon;
+          static const Holder trashcanOpenIcon;
+          static const Holder trophyIcon;
+          static const Holder unlockedIcon;
+          static const Holder upIcon;
+          static const Holder upLeftIcon;
+          static const Holder upRightIcon;
+          static const Holder videoIcon;
+          static const Holder warningIcon;
+          static const Holder wrenchIcon;
+          static const Holder zoomIcon;
+          static const Holder zoomDefaultIcon;
+          static const Holder zoomInIcon;
+          static const Holder zoomOutIcon;
+      };
+
+    enum Atlases {Icon = 25};
+    static const std::unordered_map<sf::Uint64, std::string> atlases;
 
 
 private:

@@ -31,28 +31,34 @@
 #pragma once
 
 #include <SFML/Graphics/Color.hpp>
-
+#include <SFML/System/Time.hpp>
+#include "src/common/Config.hpp"
+#include "src/common/Math.hpp"
 
 namespace mp
 {
-
-    constexpr int SF_DIALOG_WIDTH = 700;
-    constexpr int SF_DIALOG_HEIGHT = 200;
-
     //Dimensions (all in meters)
     //Arena
-    constexpr int SF_ARENA_WIDTH = 800;
-    constexpr int SF_ARENA_HEIGHT = 600;
+    constexpr int SF_ARENA_WIDTH = ARENA_WIDTH * M_TO_P;
+    constexpr int SF_ARENA_HEIGHT = ARENA_HEIGHT * M_TO_P;
+
+    constexpr int SF_DIALOG_WIDTH =  4 * SF_ARENA_WIDTH / 5;
+    constexpr int SF_DIALOG_HEIGHT = SF_ARENA_HEIGHT / 3.f;
+
+    constexpr float MAX_ICON_WIDTH = 70.f;
+    constexpr float MAX_ICON_HEIGHT = 70.f;
 
     constexpr int SF_BUTTON_BORDER = 2;
+
+    constexpr int MAX_INPUT_CHARS = 65;
 
 
     namespace cc//namespace client conf
     {
         /**
- * @brief The STATE_TYPE enum associate with each state, an int (enum)
- * to store these in the state machine, and retrieve them later
- */
+         * @brief The STATE_TYPE enum associate with each state, an int (enum)
+         * to store these in the state machine, and retrieve them later
+         */
         enum STATE_TYPE {
             MENU,//First state
             PLAY_MULTIPLAYER,
@@ -63,14 +69,15 @@ namespace mp
             KEY_BINDINGS,
             WAITING,
             FINISHED,
-            TRANSITION
+            TRANSITION,
+            SPLASH_SCREEN
         };
 
-        class Colors {
-        public:
+        struct Colors {
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;
             static const sf::Color buttonBorderColor;
+            static const sf::Color buttonClickedColor;
             static const sf::Color dialogBackgroundColor;
             static const sf::Color dialogOutlineColor;
             static const sf::Color fontColor;
@@ -78,6 +85,17 @@ namespace mp
             static const sf::Color paddleColor;
             static const sf::Color ballColor;
             static const sf::Color wallColor;
+
+            static const sf::Color endWinColor[2];
+            static const sf::Color endLoseColor[2];
+        };
+
+        struct Times {
+            static const sf::Time transitionTime;
+            static const sf::Time gainPointLifeTime;
+            static const sf::Time explosionLifeTime;
+            static const sf::Time trailLifeTime;
+            static const sf::Time trailCountdownTime;
         };
 
     }

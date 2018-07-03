@@ -39,7 +39,8 @@
 
 #include "Widget.hpp"
 #include "src/lib/twin.hpp"
-#include "src/common/EventManager.hpp"
+#include "src/client/Assets.hpp"
+#include "src/common/Signal.hpp"
 #include "src/client/ColorTweening.hpp"
 
 
@@ -71,6 +72,15 @@ public:
      */
     Button(const std::string &text, float xPos, float yPos);
 
+    /**
+     * @brief Button constructor
+     * @param app reference to the Client application
+     * @param text text to show
+     * @param xpos x position of the button
+     * @param yPos y position of the button
+     */
+    Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+
 
     /**
      * @brief update inerited function
@@ -83,7 +93,7 @@ public:
      * @param target the target to use to draw the shapes
      * @param states the states to use when rendering
      */
-    void draw(Renderer &renderer) const;
+    void render(Renderer &renderer) const;
 
     /**
      * @brief setPosition sets the position of the button
@@ -238,11 +248,18 @@ private:
      */
     ColorTweening m_color;
 
+
+    /**
+     * @brief m_rectColor color of the rectangle
+     * that appear when the button is selected
+     */
+    ColorTweening m_rectColor;
+
     /**
      * @brief m_rectWidth tweening used
      * to animate the button background
      */
-    twin::Twin<float, float> m_rectWidth;
+    twin::Twin<float> m_rectWidth;
 
     /**
      * @brief m_background background
@@ -262,8 +279,8 @@ private:
     Alignment m_alignment = Center;
 
 public:
-    const sf::Uint64 clickedEvent;
-    const sf::Uint64 selectdEvent;
+    Signal<> clickedSignal;
+    Signal<> selectedSignal;
 };
 
 

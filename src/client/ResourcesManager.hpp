@@ -34,13 +34,17 @@
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Shader.hpp>
+#include <SFML/System/MemoryInputStream.hpp>
 #include <unordered_map>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <memory>
 #include <QResource>
 
+
+namespace sf {
+    class Shader;
+}
 
 namespace mp {
 /**
@@ -75,7 +79,7 @@ public:
      * @param shaderName the name of the shader to use in the program
      * @return the created shader
      */
-    sf::Shader &registerShader(const std::string &filename, const std::string &shaderName);
+    void registerShader(const std::string &filename, const sf::Uint64 &shaderId);
 
     /**
      * @brief getSound returns the sound associated with the name given when registered
@@ -97,7 +101,7 @@ public:
      * @param shaderName name of the shader
      * @return  reference to the shader saved with the given name
      */
-    sf::Shader &getShader(const std::string &shaderName);
+    sf::Shader *createShader(const sf::Uint64 &shaderId) const;
 
     /**
      * @brief getFont the font for the game
@@ -126,11 +130,6 @@ private:
     sf::Sound m_emptySound;
 
     /**
-     * @brief m_emptyShader empty shader used when an unknwon shader is requested
-     */
-    sf::Shader m_emptyShader;
-
-    /**
      * @brief m_emptyTexture empty texture used when an unknown texture is requested
      */
     const sf::Texture m_emptyTexture;
@@ -138,14 +137,17 @@ private:
     /**
      * @brief m_sounds keep all the soundbuffer and their sound in memory
      */
-    std::unordered_map<sf::Uint64, std::unique_ptr<std::pair<sf::SoundBuffer, sf::Sound>> >m_sounds;
+    std::unordered_map<sf::Uint64, std::pair<sf::SoundBuffer, sf::Sound> >m_sounds;
 
     /**
      * @brief m_textures keep all the texture in memory
      */
-    std::unordered_map<sf::Uint64, std::unique_ptr<sf::Texture>> m_textures;
+    std::unordered_map<sf::Uint64, sf::Texture> m_textures;
 
-    std::unordered_map<std::string, sf::Shader> m_shaders;
+    /**
+     * @brief m_shaders keep all the shaders in memory
+     */
+    std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_shadersContent;
 };
 
 

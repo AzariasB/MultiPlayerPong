@@ -44,30 +44,32 @@ KeyBindingState::KeyBindingState():
 {
     const int startX = SF_ARENA_WIDTH/2.f;
     int startY = 100;
-    startY += m_menu.addCenteredLabel("Key bindings", startX, startY)->getGlobalBounds().height + 20;
+    startY += m_menu.addCenteredLabel("Key bindings", startX, startY, 70)->getGlobalBounds().height + 50;
 
 
     const int xSide = SF_ARENA_WIDTH / 4.f;
     for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
         std::string btnTitle = pr::keyBinding().toString(ka);
-        Button *b = m_menu.addButton(btnTitle ,xSide, startY).get();
-        startY += b->getHeight();
-        m_actions.emplace_back(std::make_unique<ActionsButton>(b, ka));
-        pr::connect(
-                    b->clickedEvent,
-                    &KeyBindingState::buttonClicked,
-                    this,
-                    m_actions.back().get()
-                    );
+        Button &b = m_menu.addButton(btnTitle ,xSide, startY, actionIcon(ka));
+        startY += b.getHeight() + 10;
+        m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
+        auto action = m_actions.back().get();
+        b.clickedSignal.add([this, action](){
+            buttonClicked(action);
+        });
     }
 
-    startY += 50.f;
-    sf::Uint64 resetClicked  = m_menu.addButton("Reset", startX, startY)->clickedEvent;
-    pr::connect(resetClicked, &KeyBindingState::resetKeys, this);
+    startY += 150.f;
+    Button& resetbtn = m_menu.addButton("Reset", startX, startY, Assets::IconAtlas::returnIcon);
+    startY += resetbtn.getHeight();
+    resetbtn.clickedSignal.add([this](){resetKeys();});
 
 
-    sf::Uint64 backClicked = m_menu.addButton("Back", startX, startY + 100)->clickedEvent;
-    pr::connect(backClicked, &StateMachine::goToState, &pr::stateMachine() , std::make_pair((int)cc::OPTIONS, TransitionData::GO_LEFT) );
+    m_menu.addButton("Back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
+            .clickedSignal
+            .add([](){
+                pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
+            });
 
     m_menu.normalizeButtons();
 }
@@ -83,9 +85,9 @@ void KeyBindingState::resetKeys()
         it->button->setText(pr::keyBinding().toString(it->action));
 }
 
-void KeyBindingState::draw(Renderer &renderer) const
+void KeyBindingState::render(Renderer &renderer) const
 {
-    m_menu.draw(renderer);
+    m_menu.render(renderer);
 }
 
 void KeyBindingState::handleEvent(const sf::Event &ev)
@@ -99,7 +101,20 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
-        m_menu.handleEvent(ev);
+        if(ev.type == sf::Event::KeyReleased && ev.key.code == sf::Keyboard::Escape){
+            pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
+        }else{
+            m_menu.handleEvent(ev);
+        }
+    }
+}
+
+const Assets::IconAtlas::Holder &KeyBindingState::actionIcon(KeyBinding::KEY_ACTION action) const
+{
+    switch (action) {
+    case KeyBinding::GO_DOWN: return Assets::IconAtlas::arrowDownIcon;
+    case KeyBinding::GO_UP: return Assets::IconAtlas::arrowUpIcon;
+    default: return Assets::IconAtlas::crossIcon;
     }
 }
 
@@ -120,8 +135,9 @@ void KeyBindingState::buttonClicked(ActionsButton *ab)
     m_waitingAction = ab;
     DialogMessage &dm = pr::dialogManager().message("Change key binding","Press a key");
     m_messageDialogId = dm.id();
-    pr::connect(dm.okClickedEvent, &KeyBindingState::cancelDialog, this);
-    pr::connect(dm.closeEvent, &KeyBindingState::cancelDialog, this);
+    auto cancel = [this](){cancelDialog();};
+    dm.okClickedSignal.add(cancel);
+    dm.closeSignal.add(cancel);
 }
 
 

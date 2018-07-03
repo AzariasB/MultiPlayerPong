@@ -68,7 +68,7 @@ public:
      * @brief draw inherited function
      * @param renderer
      */
-    void draw(Renderer& renderer) const override;
+    void render(Renderer& renderer) const override;
 
     /**
      * @brief update inherited function
@@ -87,11 +87,6 @@ public:
      * @param data inherited function
      */
     void onEnter(BaseStateData *data) override;
-
-    /**
-     * @brief cancelClicked function called when the button "cancel" is clicked
-     */
-    void cancelClicked();
 
     virtual ~WaitingState();
 private:

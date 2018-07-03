@@ -30,6 +30,7 @@
  */
 #include <SFML/System/Time.hpp>
 
+#include "src/common/Math.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/Renderer.hpp"
@@ -38,12 +39,16 @@
 
 namespace mp {
 
-GainPointParticle::GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime):
-    Particle(),
-    m_positionTwin(twin::makeTwin(position.y, position.y-20.f, lifeTime.asMilliseconds(), twin::linear)),
-    m_alphaTwin(twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifeTime.asMilliseconds(), twin::linear )),
-    m_text("+1",pr::resourceManager().getFont(), 20)
+GainPointParticle::GainPointParticle():
+    Particle(PARTICLE_TYPE::GainPoint)
 {
+}
+
+void GainPointParticle::init(const sf::Vector2f &position, const sf::Time &lifetime)
+{
+    m_positionTwin = twin::makeTwin(position.y, position.y - 20.f, lifetime, twin::linear);
+    m_alphaTwin = twin::makeTwin((sf::Uint8)255, (sf::Uint8)0, lifetime, twin::linear);
+    m_text = sf::Text("+1", pr::resourceManager().getFont(), 20);
     m_text.setPosition(position);
 }
 
@@ -55,15 +60,17 @@ bool GainPointParticle::isFinished() const
 
 void GainPointParticle::render(Renderer &renderer) const
 {
-    renderer.scale(P_TO_M);
-    renderer.render(m_text);
-    renderer.scale(M_TO_P);
+    renderer
+            .push()
+            .scale(P_TO_M)
+            .draw(m_text)
+            .pop();
 }
 
 void GainPointParticle::update(const sf::Time &elapsed)
 {
-    m_positionTwin.step(elapsed.asMilliseconds());
-    m_alphaTwin.step(elapsed.asMilliseconds());
+    m_positionTwin.step(elapsed);
+    m_alphaTwin.step(elapsed);
 
     sf::Color textColor = m_text.getFillColor();
     textColor.a = m_alphaTwin.get();

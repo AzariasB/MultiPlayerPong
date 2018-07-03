@@ -33,6 +33,8 @@
 #include <Box2D/Dynamics/b2WorldCallbacks.h>
 #include <SFML/Config.hpp>
 
+#include "Signal.hpp"
+
 namespace mp {
 
 
@@ -55,7 +57,7 @@ public:
      * @param evManager eventmanager to use to
      * trigger the different collisions events
      */
-    ContactListener(EventManager &evManager);
+    ContactListener();
 
     /**
      * @brief BeginContact overriden function
@@ -63,12 +65,9 @@ public:
      */
     void BeginContact(b2Contact *contact) override;
 
+    virtual ~ContactListener();
+
 private:
-    /**
-     * @brief m_evManager event manager used to trigger
-     * the collisions events
-     */
-    EventManager &m_evManager;
 
     /**
      * @brief userDataIsBall given two phyisics objects, check if one of them is the ball
@@ -76,11 +75,11 @@ private:
      * @param objB second physic object
      * @return wether one of the two given object is a ball
      */
-    bool userDataIsBall(PhysicObject &objA, PhysicObject &objB) const;
+    bool userDataIsBall(PhysicObject &objA, PhysicObject &objB);
 
 public:
-    const sf::Int64 ballHitWallEvent;
-    const sf::Int64 ballHitPaddleEvent;
+    Signal<b2Vec2> ballHitWallSignal;
+    Signal<std::size_t, b2Vec2> ballHitPaddleSignal;
 };
 
 

@@ -86,10 +86,6 @@ public:
      */
     void retract();
 
-    /**
-     * @brief resetPowerupEffect removes the effect of a given powerup type
-     */
-    void resetPowerupEffect(Powerup::POWERUP_TYPE type);
 
     /**
      * @brief update update the paddle states

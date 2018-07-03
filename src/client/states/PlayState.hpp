@@ -33,8 +33,10 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Time.hpp>
+
 #include "src/client/State.hpp"
+#include "src/client/particles/ParticleGenerator.hpp"
+#include "src/common/Timer.hpp"
 
 namespace mp {
 
@@ -58,7 +60,7 @@ public:
      * @brief draw draws all the entity of the stage
      * @param renderer
      */
-    virtual void draw(Renderer &renderer) const override;
+    virtual void render(Renderer &renderer) const override;
 
     /**
      * @brief update updates all the entities of the stage
@@ -72,11 +74,20 @@ public:
      */
     virtual void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief onBeforeEnter inherited function
+     */
+    virtual void onBeforeEnter() override;
+
+    /**
+     * @brief onAfterLeaving inherited function
+     * clears out the particles
+     */
+    virtual void onAfterLeaving() override;
+
     virtual ~PlayState();
 
 private:
-    void bounced(std::size_t pNum, sf::Vector2f position);
-
     /**
      * @brief m_p1ScoreText score of the player1
      */
@@ -94,7 +105,14 @@ private:
     /**
      * @brief m_nextParticle time until next particle spawn
      */
-    sf::Time m_nextParticle;
+    Timer m_nextParticle;
+
+    /**
+     * @brief m_particleGenerator used to generate
+     * all the particles
+     * related to the game
+     */
+    ParticleGenerator m_particleGenerator;
 
     /**
      * @brief gameFinisehd wether the game ended

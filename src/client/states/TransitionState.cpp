@@ -29,31 +29,30 @@
 #include "src/client/Renderer.hpp"
 #include "src/client/StateMachine.hpp"
 
+#include "src/common/VectorsUtils.hpp"
 
 namespace mp {
-
-const sf::Int32 TransitionState::mTransitionDuration = 500;
-
 
 TransitionState::TransitionState()
 {
 }
 
 
-void TransitionState::draw(Renderer &renderer) const
+void TransitionState::render(Renderer &renderer) const
 {
-    renderer.pushTranslate(mExitingTranslate);
-    pr::stateMachine().getStateAt(mExitingStateLabel).draw(renderer);
-    renderer.pop();
-
-    renderer.pushTranslate(mEnteringTranslate);
-    pr::stateMachine().getStateAt(mEnteringStateLabel).draw(renderer);
-    renderer.pop();
+    renderer.push()
+            .translate(mExitingTranslate)
+            .render(pr::stateMachine().getStateAt(mExitingStateLabel))
+            .pop()
+            .push()
+            .translate(mEnteringTranslate)
+            .render(pr::stateMachine().getStateAt(mEnteringStateLabel))
+            .pop();
 }
 
 void TransitionState::update(const sf::Time &elapsed)
 {
-    mTweening.step(elapsed.asMilliseconds());
+    mTweening.step(elapsed);
     if(mTweening.progress() == 1.f){
         if(mEnteringData){
             pr::stateMachine().setCurrentState(mEnteringStateLabel, *mEnteringData);
@@ -102,15 +101,13 @@ void TransitionState::onEnter(BaseStateData *data)
         tweening.second = SF_ARENA_HEIGHT;
     }
 
-    mTweening = twin::makeTwin(tweening.first, tweening.second, mTransitionDuration, twin::easing::backInOut);
+    mTweening = twin::makeTwin(tweening.first, tweening.second, cc::Times::transitionTime, twin::easing::backInOut);
 
-    TransitionData &td = *stData->data();
-
-    mEnteringStateLabel = td.enteringStateLabel;
-    mExitingStateLabel = td.exitingStateLabel;
-    m_tickEnteringState = td.updateEnteringState;
-    m_tickExistingState = td.updateExistingState;
-    mEnteringData.swap(td.enteringData);
+    mEnteringStateLabel = transition.enteringStateLabel;
+    mExitingStateLabel = transition.exitingStateLabel;
+    m_tickEnteringState = transition.updateEnteringState;
+    m_tickExistingState = transition.updateExistingState;
+    mEnteringData.swap(transition.enteringData);
     mDirection = dir;
     updateCenters();
 }

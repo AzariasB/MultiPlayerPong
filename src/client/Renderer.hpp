@@ -38,7 +38,6 @@
 #include <stack>
 
 #include "Animation.hpp"
-#include "src/common/Powerup.hpp"
 
 namespace mp {
 
@@ -46,6 +45,7 @@ class Ball;
 class Paddle;
 class Wall;
 class PhysicObject;
+class Renderable;
 
 /**
  * @brief The Renderer class used to render every objects of the game
@@ -59,31 +59,33 @@ public:
      * @brief Renderer constructor
      * @param target the target that will be used to render all the game's objects
      */
-    Renderer(sf::RenderTarget &target);
+    Renderer(sf::RenderTarget *target);
+
+    /**
+     * @brief updateRenderTarget whenever the client toggles
+     * the screen state, we create a new window
+     * thus, we need to be able to change the render target
+     * @param target
+     */
+    void updateRenderTarget(sf::RenderTarget *target);
 
     /**
      * @brief renderBall renders the game's ball (as a blue circle for now)
      * @param ball the ball to render
      */
-    void renderBall(const Ball &ball);
+    Renderer &renderBall(const Ball &ball);
 
     /**
      * @brief renderPaddle renders one paddle. (as a yellow rectangle for now)
      * @param paddle a const reference to the paddle to render
      */
-    void renderPaddle(const Paddle &paddle);
+    Renderer &renderPaddle(const Paddle &paddle);
 
     /**
      * @brief renderWall renders a wall
      * @param wall
      */
-    void renderWall(const Wall &wall);
-
-    /**
-     * @brief renderPowerup renders one powerup
-     * @param powerup const reference to the powerup to render
-     */
-    void renderPowerup(const Powerup &powerup);
+    Renderer &renderWall(const Wall &wall);
 
     /**
      * @brief shake triggers a slight screen shaking for one second
@@ -94,13 +96,20 @@ public:
      * @brief update updates the inner state of this object
      * @param elapsed the time elapsed since the last update
      */
-    void update(sf::Time elapsed);
+    void update(const sf::Time &elapsed);
 
     /**
-     * @brief render renders any drawable components, using it's inner renderstate
+     * @brief render renders any sfml drawable components, using it's inner renderstate
      * @param drawable the drawable object to render
      */
-    void render(const sf::Drawable &drawable);
+    Renderer &draw(const sf::Drawable &drawable);
+
+    /**
+     * @brief render renders any custom object with the "render" method
+     * @param renderable the object to render
+     * @return itself
+     */
+    Renderer &render(const Renderable& renderable);
 
     /**
      * @brief scale scales the next object to render
@@ -135,6 +144,15 @@ public:
     Renderer &rotate(float angle);
 
     /**
+     * @brief alpha changes the alpha value of the rendering
+     * @param alpha the new alpha value
+     * @return the renderer itself
+     * uses a shader to change the alpha value of the items to render
+     * if the
+     */
+    Renderer &alpha(sf::Uint8 alpha);
+
+    /**
      * @brief push pushes the current renderstate
      * on the stack, all the data of the last renderstate
      * is kept and can be modified without changing
@@ -143,28 +161,11 @@ public:
     Renderer &push();
 
     /**
-     * @brief pushTranslate pushes the current render state, and translate the pushed
-     * render state of the given translation
-     * @param translation
-     * @return the renderer itself
-     */
-    Renderer &pushTranslate(const sf::Vector2f &translation);
-
-    /**
      * @brief pop pops the current render states,
      * and changes the current render state to the one under the current
      * throws exception if stack only contains one renderstate
      */
     Renderer &pop();
-
-    /**
-     * @brief getRenderTarget a reference to the renderTarget
-     * @return a reference to the renderTarget
-     */
-    sf::RenderTarget &getRenderTarget()
-    {
-        return target;
-    }
 
     virtual ~Renderer();
 private:
@@ -174,26 +175,6 @@ private:
      * @return
      */
     sf::RenderStates &top();
-
-    /**
-     * @brief addPowerUpAnimation adds the animations for the given powerup to the map
-     * @param powerup the new powerup
-     */
-    Animation &addPowerUpAnimation(const Powerup &powerup);
-
-    /**
-     * @brief powerupTexture returns the texture for the type of powerup
-     * @param powerup
-     * @return
-     */
-    const sf::Texture &powerupTexture(const Powerup::POWERUP_TYPE &powerupType) const;
-
-    /**
-     * @brief powerupSprites return the sprites dimensions depending on the powerup type
-     * @param powerupType the powerup to use to find the dimensions
-     * @return
-     */
-    sf::Vector2i powerupSprites(const Powerup::POWERUP_TYPE &powerupType) const;
 
     /**
      * @brief destroyAnimation when a powerup is destroyed, destroys the animtaion linked to it
@@ -224,7 +205,7 @@ private:
     /**
      * @brief target the target to use to draw stuff on it
      */
-    sf::RenderTarget &target;
+    sf::RenderTarget *m_target;
 
     /**
      * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
