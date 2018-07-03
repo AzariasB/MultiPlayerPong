@@ -50,10 +50,19 @@ class Renderer;
 class Particle : public Renderable
 {
 public:
+
+    const enum PARTICLE_TYPE {
+        BallTrail,
+        Countdown,
+        Explosion,
+        GainPoint
+    } type;
+
     /**
      * @brief Particle empty constructor
      */
-    Particle()
+    Particle(PARTICLE_TYPE sonType):
+        type(sonType)
     {
 
     }
@@ -72,6 +81,7 @@ public:
      */
     virtual bool isFinished() const = 0;
 
+
     /**
      * @brief ~Particle virtual destructor
      */
@@ -79,6 +89,8 @@ public:
     {
 
     }
+
+    bool isUsed = true;
 };
 
 

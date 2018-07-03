@@ -55,7 +55,7 @@ public:
      * @param position starting position of the particle
      * @param lifeTime lifetime of this particle
      */
-    GainPointParticle(const sf::Vector2f &position, const sf::Time &lifeTime);
+    GainPointParticle();
 
     /**
      * @brief render overriden function
@@ -74,6 +74,13 @@ public:
      * @return when the the animation is over (and alpha = 0)
      */
     bool isFinished() const override;
+
+    /**
+     * @brief init initialized the text
+     * @param position position of the text
+     * @param lifetime text lifetime
+     */
+    void init(const sf::Vector2f &position, const sf::Time &lifetime);
 
 private:
     /**

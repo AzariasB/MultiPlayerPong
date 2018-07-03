@@ -49,20 +49,56 @@ namespace mp {
 class CountdownParticle : public Particle
 {
 public:
-    CountdownParticle(const std::string &text, const sf::Vector2f &positon, const sf::Time &lifetime);
+    /**
+     * @brief CountdownParticle constructor
+     */
+    CountdownParticle();
 
+    /**
+     * @brief update inherited function
+     * @param elapsed
+     */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief render inherited function
+     * @param renderer
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief isFinished when the text is finally rendered
+     * @return
+     */
     bool isFinished() const override;
 
-private:
+    /**
+     * @brief init initializes the partile
+     * @param text
+     * @param position
+     * @param lifetime
+     */
+    void init(const std::string &text, const sf::Vector2f &position, const sf::Time &lifetime);
 
+private:
+    /**
+     * @brief m_textScale scale of the text
+     */
     twin::Twin<float> m_textScale;
+
+    /**
+     * @brief m_textAlpha tweening for the text alpha
+     */
     twin::Twin<sf::Uint8> m_textAlpha;
 
+    /**
+     * @brief m_text text to draw
+     */
     sf::Text m_text;
+
+    /**
+     * @brief m_textColor color of the text
+     */
     sf::Color m_textColor;
 };
 

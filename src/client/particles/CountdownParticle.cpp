@@ -38,14 +38,17 @@
 
 namespace mp {
 
-CountdownParticle::CountdownParticle(const std::string &text, const sf::Vector2f &positon, const sf::Time &lifetime):
-    Particle(),
-    m_textScale(twin::makeTwin(0.1f, 1.f, lifetime, twin::linear)),
-    m_textAlpha(twin::makeTwin((sf::Uint8)255, (sf::Uint8)0, lifetime, twin::linear)),
-    m_text(text, pr::resourceManager().getFont(), 60)
+CountdownParticle::CountdownParticle():
+    Particle(PARTICLE_TYPE::Countdown)
 {
-    m_text.setOrigin(m_text.getLocalBounds().width / 2.f, m_text.getLocalBounds().height / 2.f);
-    m_text.setPosition(positon);
+}
+
+void CountdownParticle::init(const std::string &text, const sf::Vector2f &position, const sf::Time &lifetime)
+{
+    m_textScale = twin::makeTwin(0.1f, 1.f, lifetime, twin::linear);
+    m_textAlpha = twin::makeTwin((sf::Uint8)255, (sf::Uint8)0, lifetime, twin::linear);
+    m_text = sf::Text(text, pr::resourceManager().getFont(), 60);
+    math::centerOrigin(m_text).setPosition(position);
     m_textColor = m_text.getColor();
 }
 

@@ -43,43 +43,54 @@ namespace mp {
 
 ParticleGenerator::ParticleGenerator()
 {
+    for(int i = 0; i < 2; ++i)
+        m_particles.emplace_back(std::make_unique<ExplosionParticle>());
 
+    for(int i = 0; i < 20; ++i)
+        m_particles.emplace_back(std::make_unique<BallTrailParticle>());
+
+    for(int i = 0; i < 2; ++i)
+        m_particles.emplace_back(std::make_unique<GainPointParticle>());
+
+    for(int i = 0; i  < 2; ++i)
+        m_particles.emplace_back(std::make_unique<CountdownParticle>());
 }
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
-{
-    m_particles.emplace_back(
-         std::make_unique<ExplosionParticle>(explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime)
-    );
+{    
+    instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
 }
 
 
 void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 {
-    m_particles.emplace_back(
-        std::make_unique<BallTrailParticle>(ballCenter, cc::Times::trailLifeTime, BALL_RADIUS, sf::Color::White)
-    );
+    instanciateParticle<BallTrailParticle>(Particle::BallTrail, ballCenter, cc::Times::trailLifeTime, BALL_RADIUS, sf::Color::White);
 }
 
 void ParticleGenerator::gainPoint(const sf::Vector2f &position)
 {
-    m_particles.emplace_back(
-        std::make_unique<GainPointParticle>(position, cc::Times::gainPointLifeTime)
-    );
+    instanciateParticle<GainPointParticle>(Particle::GainPoint, position, cc::Times::gainPointLifeTime);
 }
 
 void ParticleGenerator::countdown(const std::string & countdownValue, const sf::Vector2f &position)
 {
-    m_particles.emplace_back(
-        std::make_unique<CountdownParticle>(countdownValue, position, sf::seconds(1))
-    );
+    instanciateParticle<CountdownParticle>(Particle::Countdown, countdownValue, position, sf::seconds(1));
+}
+
+std::unique_ptr<Particle> &ParticleGenerator::findUnusedParticle(Particle::PARTICLE_TYPE type)
+{
+    auto found = std::find_if(m_particles.begin(), m_particles.end(), [&type](const auto &p){
+        return !p->isUsed && p->type == type;
+    });
+
+    return found == m_particles.end() ? m_emptyParticle : *found;
 }
 
 void ParticleGenerator::render(Renderer &renderer) const
 {
-    for(const auto&part : m_particles){
-        part->render(renderer);
-    }
+    /* for(const auto&part : m_particles){
+        if(part->isUsed) part->render(renderer);
+    }*/
 }
 
 void ParticleGenerator::clear()
@@ -89,12 +100,10 @@ void ParticleGenerator::clear()
 
 void ParticleGenerator::update(const sf::Time &elapsed)
 {
-    for(auto it = m_particles.begin(); it != m_particles.end();){
-        (*it)->update(elapsed);
-        if((*it)->isFinished()){
-            it = m_particles.erase(it);
-        }else{
-            ++it;
+    for(auto &p : m_particles){
+        if(p->isUsed){
+            p->update(elapsed);
+            if(p->isFinished()) p->isUsed = false;
         }
     }
 }

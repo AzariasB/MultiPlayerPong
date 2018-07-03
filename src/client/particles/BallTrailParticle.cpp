@@ -40,14 +40,18 @@
 
 namespace mp {
 
-BallTrailParticle::BallTrailParticle(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, sf::Color color):
-    Particle(),
-    m_center(center),
-    m_twin(twin::makeTwin(startRadius, 0.f, lifeTime, twin::cubicOut)),
-    m_alphaTwin(sf::Color::White, sf::Color(255, 255, 255, 0), lifeTime, twin::expoOut),
-    m_lifeTime(lifeTime),
-    m_shape(startRadius, 5)
+BallTrailParticle::BallTrailParticle():
+    Particle(PARTICLE_TYPE::BallTrail)
 {
+}
+
+void BallTrailParticle::init(const sf::Vector2f &center, const sf::Time &lifeTime, float startRadius, const sf::Color &color)
+{
+    m_center = center;
+    m_twin = twin::makeTwin(startRadius, 0.f, lifeTime, twin::cubicOut);
+    m_alphaTwin = ColorTweening(color, sf::Color(255, 255, 255, 0), lifeTime, twin::expoOut);
+    m_lifeTime = lifeTime;
+    m_shape = sf::CircleShape(startRadius, 5);
     m_shape.setPosition(m_center.x - startRadius, m_center.y - startRadius);
     m_shape.setFillColor(color);
 }

@@ -40,6 +40,10 @@
 
 namespace mp {
 class Renderer;
+class ExplosionParticle;
+class BallTrailParticle;
+class GainPointParticle;
+class CountdownParticle;
 
 /**
  * @brief The ParticleGenerator class
@@ -97,12 +101,39 @@ public:
     void clear();
 
 private:
+
+    /**
+     * @brief findUnusedParticle tries to find an unused particle
+     * of the given type, if the particle is found, will return the
+     * pointer and remove the particle from the 'unused particles' array
+     * @param type the type of the particle to find
+     * @return the particle if one was found, nullptr otherwise
+     */
+    std::unique_ptr<Particle> &findUnusedParticle(Particle::PARTICLE_TYPE type);
+
+    template<typename PARTICLE, typename ...Args>
+    void instanciateParticle(Particle::PARTICLE_TYPE type, Args ...argp)
+    {
+        auto &p = findUnusedParticle(type);
+        if(p == m_emptyParticle) return;
+
+        PARTICLE *part = static_cast<PARTICLE*>(p.get());
+
+        part->isUsed = true;
+        part->init(argp...);
+    }
+
     /**
      * @brief m_particles all the particles
      * a unique_ptr is used here because the particle
      * is an abstract class
      */
     std::vector<std::unique_ptr<Particle> > m_particles;
+
+    /**
+     * @brief m_emptyParticle pointer to an empty particle
+     */
+    std::unique_ptr<Particle> m_emptyParticle;
 };
 
 
