@@ -58,7 +58,7 @@ ParticleGenerator::ParticleGenerator()
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 {    
-   // instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
+   instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
 }
 
 
