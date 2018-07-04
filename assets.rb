@@ -5,8 +5,7 @@ require 'builder'
 require 'nokogiri'
 
 def LICENCE(filename)
-	return  %{
-/*
+	return  %{/*
  * The MIT License
  *
  * Copyright 2017-#{Date.today.year} azarias.
@@ -42,8 +41,7 @@ def LICENCE(filename)
 	}
 end
 
-HPP_TEMPLATE =  %{
-#{LICENCE('Assets.hpp')}
+HPP_TEMPLATE =  %{#{LICENCE('Assets.hpp')}
 
 #pragma once
 
@@ -66,8 +64,7 @@ private:
 }
 }
 
-CPP_TEMPLATE = %{
-#{LICENCE('Assets.cpp')}
+CPP_TEMPLATE = %{#{LICENCE('Assets.cpp')}
 
 #include "Assets.hpp"
 
