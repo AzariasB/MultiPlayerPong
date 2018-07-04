@@ -45,7 +45,7 @@ ExplosionParticle::ExplosionParticle():
 
 void ExplosionParticle::init(const sf::Vector2f &origin, std::size_t particleNumber, const sf::Time &maxLifeTime)
 {
-    m_vertices = sf::VertexArray(sf::PrimitiveType::Lines, particleNumber + 2);
+    m_vertices = sf::VertexArray(sf::PrimitiveType::Lines, particleNumber * 2);
     m_maxLifeTime = maxLifeTime;
     m_particles = std::vector<Line>(particleNumber);
     createParticles(origin, particleNumber);

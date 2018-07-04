@@ -119,8 +119,8 @@ private:
 
         PARTICLE *part = static_cast<PARTICLE*>(p.get());
 
-        part->isUsed = true;
         part->init(argp...);
+        part->isUsed = true;
     }
 
     /**
