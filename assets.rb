@@ -3,6 +3,7 @@
 require 'date'
 require 'builder'
 require 'nokogiri'
+require 'json'
 
 def LICENCE(filename)
 	return  %{/*
@@ -46,8 +47,10 @@ HPP_TEMPLATE =  %{#{LICENCE('Assets.hpp')}
 #pragma once
 
 #include <unordered_map>
+#include <vector>
 #include <SFML/Config.hpp>
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/System/String.hpp>
 
 namespace mp{
 
@@ -81,6 +84,7 @@ class String
 end
 
 @atlases = {}
+@i18ns = []
 
 def parse_atlases(folder, dic)
   Dir[folder + "/*.xml"].each{|x|
@@ -102,6 +106,13 @@ def parse_atlases(folder, dic)
 
 end
 
+def parse_i18n(folder, dic)
+  Dir[folder + "/*.json"].each{|x|
+    @i18ns << JSON.parse(File.read(x))
+
+  }
+end
+
 def parseFolder(folder, dic)
 
   Dir.foreach(folder) do |file|
@@ -117,6 +128,8 @@ def parseFolder(folder, dic)
     elsif File.directory?(fullFile)
       if fullFile =~ /atlases$/
         parse_atlases(fullFile, dic)
+      elsif fullFile =~ /i18n$/
+        parse_i18n(fullFile, dic)
       else
         parseFolder(fullFile, dic)
       end
@@ -125,6 +138,10 @@ def parseFolder(folder, dic)
   end
 
   return dic
+end
+
+def translation_tocppmap(tr)
+
 end
 
 def build_rcc(files)
@@ -153,12 +170,12 @@ end
 
 def build_cpp(files)
   cpp_content = ""
-  res = ""
+  hpp_content = ""
   counter = 0
   files.each do |k,v|
     c_case = k.camel_case
     enum_val = v.map{|x| File.basename(x, ".*").camel_case + " = #{counter+=1}"}
-    res += %{
+    hpp_content += %{
     enum #{c_case} {#{enum_val*", "}};
     static const std::unordered_map<sf::Uint64, std::string> #{k};
 }
@@ -184,16 +201,16 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
         "static const Holder #{x[:name]};"
     }
 
-    res += %{
-      class #{at_name}Atlas {
-        public:
-          struct Holder {
-            const int textureId = #{atlas_id};
-            const sf::IntRect bounds;
-          };
+    hpp_content += %{
+    class #{at_name}Atlas {
+      public:
+        struct Holder {
+          const int textureId = #{atlas_id};
+          const sf::IntRect bounds;
+        };
 
-          #{atlases*"\n          "}
-      };
+        #{atlases*"\n        "}
+    };
 }
 
     atlases = v[:atlases].map{|x|
@@ -204,7 +221,26 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
 
   end
 
-  res += %{
+  hpp_content += %{
+    class I18N {
+    public:
+      struct Translation {
+        const std::string abreviation;
+        const sf::String name;
+        const std::unordered_map<std::string, sf::String> translation;
+      };
+
+      static const std::vector<Translation> translations;
+    };
+}
+
+  cpp_content += "const std::vector<Assets::I18N::Translation> Assets::I18N::translations = {{\n"
+  cpp_content +=  @i18ns.map {|x|
+     %{   {"#{x['lang']}", L"#{x['name']}", {#{x['translations'].map{|k,v| "{\"#{k}\",L\"#{v}\"}"}*", " } }}}
+  }*",\n"
+  cpp_content += "\n}};"
+
+  hpp_content += %{
     enum Atlases {#{atlas_enum*", "}};
     static const std::unordered_map<sf::Uint64, std::string> atlases;
 }
@@ -219,7 +255,7 @@ const std::unordered_map<sf::Uint64, std::string> Assets::atlases = {
 };
 }
 
-  [res, cpp_content]
+  [hpp_content, cpp_content]
 end
 
 res = parseFolder("#{Dir.pwd}/res", {})

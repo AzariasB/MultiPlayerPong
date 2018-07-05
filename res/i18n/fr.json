@@ -1,0 +1,31 @@
+{
+	"version": "1.0",
+	"lang": "fr",
+	"name": "Français",
+	"translations": {
+		"solo": "Solo",
+		"multi": "Multijoueur",
+		"options": "Options",
+		"credits": "Crédits",
+		"quit": "Quitter",
+		"confirm": "Confirmer",
+		"cancel": "Annuler",
+		"invalid_ip": "IP invalide",
+		"entered_invalid_id": "L'IP entrée est invalide",
+		"toggle_sound": "Changer son",
+		"key_bindings": "Contrôles clavier",
+		"fullscreen": "Plein écran",
+		"menu": "Menu",
+		"play": "Jouer",
+		"go_up": "Monter",
+		"go_down": "Descendre",
+		"reset": "Réinitialiser",
+		"back": "Retour",
+		"really_quit": "Voulez-vous vraiment quitter ?",
+		"yes": "Oui",
+		"no": "Non",
+		"resume": "Reprendre",
+		"restart": "Recommencer",
+		"pause": "Pause"
+	}
+}
