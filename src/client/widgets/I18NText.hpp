@@ -23,56 +23,33 @@
  */
 
 /*
- * File:   Provider.hpp
+ * File:   I18NText.hpp
  * Author: azarias
  *
- * Created on 18/11/2017
+ * Created on 5/7/2018
  */
 #pragma once
 
-#include <SFML/Config.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include "src/common/Signal.hpp"
 
 namespace mp {
-
-class Game;
-class StateMachine;
-class EventManager;
-class KeyBinding;
-class SoundEngine;
-class ParticleGenerator;
-class Renderer;
-class Player;
-class ResourcesManager;
-class DialogManager;
 class Translator;
 
+class I18NText : public sf::Text
+{
+public:
+    I18NText(Translator &translator, const std::string &translationName, int fontSize = 30);
 
-namespace pr {
-Game &game();
+    int width();
 
-StateMachine &stateMachine();
+    int height();
 
-const ResourcesManager &resourceManager();
+private:
+    const std::string m_translation;
 
-sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
-
-KeyBinding &keyBinding();
-
-SoundEngine &soundEngine();
-
-Renderer &renderer();
-
-sf::TcpSocket &socket();
-
-Player &player();
-
-DialogManager &dialogManager();
-
-Translator &translator();
-
-}//namespace pr
+    Translator &m_translator;
+};
 
 
-}//namespace mp
+}

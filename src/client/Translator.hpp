@@ -23,56 +23,38 @@
  */
 
 /*
- * File:   Provider.hpp
+ * File:   Translator.hpp
  * Author: azarias
  *
- * Created on 18/11/2017
+ * Created on 5/7/2018
  */
 #pragma once
 
-#include <SFML/Config.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Network/TcpSocket.hpp>
+#include "widgets/I18NText.hpp"
+#include "Assets.hpp"
+#include "src/common/Signal.hpp"
 
 namespace mp {
 
-class Game;
-class StateMachine;
-class EventManager;
-class KeyBinding;
-class SoundEngine;
-class ParticleGenerator;
-class Renderer;
-class Player;
-class ResourcesManager;
-class DialogManager;
-class Translator;
 
+class Translator
+{
+public:
+    Translator();
 
-namespace pr {
-Game &game();
+    const sf::String &translate(const std::string &translationName) const;
 
-StateMachine &stateMachine();
+    void setCurrentTranslation(const std::string &trName);
 
-const ResourcesManager &resourceManager();
+    I18NText make(const std::string &translationName, int fontSize = 30);
 
-sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
+private:
+    std::string m_currentTranslation = "en";
 
-KeyBinding &keyBinding();
+    sf::String m_empty = "";
 
-SoundEngine &soundEngine();
+public:
+    Signal<> translationChangedSignal;
+};
 
-Renderer &renderer();
-
-sf::TcpSocket &socket();
-
-Player &player();
-
-DialogManager &dialogManager();
-
-Translator &translator();
-
-}//namespace pr
-
-
-}//namespace mp
+}

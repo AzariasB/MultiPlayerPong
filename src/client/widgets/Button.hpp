@@ -38,6 +38,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Widget.hpp"
+#include "I18NText.hpp"
 #include "src/lib/twin.hpp"
 #include "src/client/Assets.hpp"
 #include "src/common/Signal.hpp"
@@ -220,7 +221,7 @@ private:
     /**
      * @brief m_text the text for the button
      */
-    sf::Text m_text;
+    I18NText m_text;
 
     /**
      * @brief m_width width of the button

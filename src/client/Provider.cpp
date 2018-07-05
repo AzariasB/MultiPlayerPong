@@ -32,10 +32,11 @@
 #include "ClientApp.hpp"
 #include "particles/ParticleGenerator.hpp"
 #include "Renderer.hpp"
+#include "KeyBinding.hpp"
+#include "Translator.hpp"
+#include "SoundEngine.hpp"
 #include "src/common/Game.hpp"
 #include "src/common/Player.hpp"
-#include "KeyBinding.hpp"
-#include "SoundEngine.hpp"
 
 namespace mp {
 
@@ -87,6 +88,11 @@ Player &pr::player()
 DialogManager &pr::dialogManager()
 {
     return ClientApp::getInstance().getDialogManager();
+}
+
+Translator &pr::translator()
+{
+    return ClientApp::getInstance().getTranslator();
 }
 
 }

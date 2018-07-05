@@ -64,6 +64,7 @@ ClientApp::ClientApp() :
            sf::Style::Default)),
     m_cursor(),
     rManager(),
+    m_translator(),
     renderer(window),
     game(),
     stateMachine(),
@@ -315,6 +316,11 @@ const ResourcesManager& ClientApp::getResourcesManager()
 const KeyBinding &ClientApp::getKeyBindings() const
 {
     return m_keyBinding;
+}
+
+Translator &ClientApp::getTranslator()
+{
+    return m_translator;
 }
 
 }

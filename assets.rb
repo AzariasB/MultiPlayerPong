@@ -47,7 +47,6 @@ HPP_TEMPLATE =  %{#{LICENCE('Assets.hpp')}
 #pragma once
 
 #include <unordered_map>
-#include <vector>
 #include <SFML/Config.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/String.hpp>
@@ -225,20 +224,19 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
     class I18N {
     public:
       struct Translation {
-        const std::string abreviation;
         const sf::String name;
         const std::unordered_map<std::string, sf::String> translation;
       };
 
-      static const std::vector<Translation> translations;
+      static const std::unordered_map<std::string, Translation> translations;
     };
 }
 
-  cpp_content += "const std::vector<Assets::I18N::Translation> Assets::I18N::translations = {{\n"
+  cpp_content += "const std::unordered_map<std::string, Assets::I18N::Translation> Assets::I18N::translations = {\n"
   cpp_content +=  @i18ns.map {|x|
-     %{   {"#{x['lang']}", L"#{x['name']}", {#{x['translations'].map{|k,v| "{\"#{k}\",L\"#{v}\"}"}*", " } }}}
+     %{   {"#{x['lang']}", { L"#{x['name']}", {#{x['translations'].map{|k,v| "{\"#{k}\",L\"#{v}\"}"}*", " } }}}}
   }*",\n"
-  cpp_content += "\n}};"
+  cpp_content += "\n};"
 
   hpp_content += %{
     enum Atlases {#{atlas_enum*", "}};

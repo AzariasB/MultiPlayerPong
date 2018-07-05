@@ -23,56 +23,39 @@
  */
 
 /*
- * File:   Provider.hpp
+ * File:   I18NText.cpp
  * Author: azarias
  *
- * Created on 18/11/2017
+ * Created on 5/7/2018
  */
-#pragma once
-
-#include <SFML/Config.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Network/TcpSocket.hpp>
+#include "I18NText.hpp"
+#include "src/client/Translator.hpp"
+#include "src/client/Provider.hpp"
+#include "src/client/ResourcesManager.hpp"
 
 namespace mp {
 
-class Game;
-class StateMachine;
-class EventManager;
-class KeyBinding;
-class SoundEngine;
-class ParticleGenerator;
-class Renderer;
-class Player;
-class ResourcesManager;
-class DialogManager;
-class Translator;
 
 
-namespace pr {
-Game &game();
+I18NText::I18NText(Translator &translator, const std::string &translationName, int fontSize):
+    sf::Text(translator.translate(translationName), pr::resourceManager().getFont()),
+    m_translator(translator),
+    m_translation(translationName)
+{
+    m_translator.translationChangedSignal.add([this](){
+        setString(m_translator.translate(m_translation));
+    });
+    setCharacterSize(fontSize);
+}
 
-StateMachine &stateMachine();
+int I18NText::width()
+{
+    return getGlobalBounds().width;
+}
 
-const ResourcesManager &resourceManager();
+int I18NText::height()
+{
+    return getGlobalBounds().height;
+}
 
-sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
-
-KeyBinding &keyBinding();
-
-SoundEngine &soundEngine();
-
-Renderer &renderer();
-
-sf::TcpSocket &socket();
-
-Player &player();
-
-DialogManager &dialogManager();
-
-Translator &translator();
-
-}//namespace pr
-
-
-}//namespace mp
+}

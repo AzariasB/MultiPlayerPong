@@ -23,56 +23,41 @@
  */
 
 /*
- * File:   Provider.hpp
+ * File:   Translator.cpp
  * Author: azarias
  *
- * Created on 18/11/2017
+ * Created on 5/7/2018
  */
-#pragma once
-
-#include <SFML/Config.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Network/TcpSocket.hpp>
+#include "Translator.hpp"
+#include "Provider.hpp"
 
 namespace mp {
 
-class Game;
-class StateMachine;
-class EventManager;
-class KeyBinding;
-class SoundEngine;
-class ParticleGenerator;
-class Renderer;
-class Player;
-class ResourcesManager;
-class DialogManager;
-class Translator;
+Translator::Translator()
+{
 
+}
 
-namespace pr {
-Game &game();
+const sf::String &Translator::translate(const std::string &translationName) const
+{
+    const auto &tr = Assets::I18N::translations;
+    const auto iterator = tr.find(m_currentTranslation);
+    if( iterator == tr.end())return m_empty;
+    const auto &map = (*iterator).second;
+    const auto &val = map.translation.find(translationName);
+    if(val == map.translation.end())return m_empty;
+    return (*val).second;
+}
 
-StateMachine &stateMachine();
+void Translator::setCurrentTranslation(const std::string &trName)
+{
+    m_currentTranslation = trName;
+    translationChangedSignal.trigger();
+}
 
-const ResourcesManager &resourceManager();
+I18NText Translator::make(const std::string &translationName, int fontSize)
+{
+    return I18NText(*this, translationName, fontSize);
 
-sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
-
-KeyBinding &keyBinding();
-
-SoundEngine &soundEngine();
-
-Renderer &renderer();
-
-sf::TcpSocket &socket();
-
-Player &player();
-
-DialogManager &dialogManager();
-
-Translator &translator();
-
-}//namespace pr
-
-
-}//namespace mp
+}
+}

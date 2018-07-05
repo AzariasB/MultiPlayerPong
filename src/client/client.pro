@@ -13,7 +13,8 @@ SOURCES +=\
     $$PWD/Provider.cpp \
     $$PWD/ColorTweening.cpp \
     $$PWD/ClientConf.cpp \
-    $$PWD/Assets.cpp
+    $$PWD/Assets.cpp \
+    $$PWD/Translator.cpp
 
 HEADERS +=\
     $$PWD/ClientApp.hpp \
@@ -29,4 +30,5 @@ HEADERS +=\
     $$PWD/ClientConf.hpp \
     $$PWD/ColorTweening.hpp \
     $$PWD/Assets.hpp \
-    $$PWD/Renderable.hpp
+    $$PWD/Renderable.hpp \
+    $$PWD/Translator.hpp

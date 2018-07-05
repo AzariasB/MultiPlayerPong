@@ -39,10 +39,11 @@
 #include "src/common/Application.hpp"
 #include "src/common/Game.hpp"
 #include "Renderer.hpp"
+#include "KeyBinding.hpp"
+#include "Translator.hpp"
+#include "SoundEngine.hpp"
 #include "StateMachine.hpp"
 #include "ResourcesManager.hpp"
-#include "SoundEngine.hpp"
-#include "KeyBinding.hpp"
 #include "widgets/DialogManager.hpp"
 #include "widgets/FPSCounter.hpp"
 
@@ -168,6 +169,12 @@ public:
      * @return reference to the client's dialog manager
      */
     DialogManager &getDialogManager();
+
+    /**
+     * @brief getTranslator acceess to the transaltor
+     * @return reference to the client's translator
+     */
+    Translator &getTranslator();
 
     /**
      * @brief isWinner wether the app's client is the winner (false if the game is still running)
@@ -303,6 +310,11 @@ private:
      * the game's fps
      */
     FPSCounter m_counter;
+
+    /**
+     * @brief m_translator main translator
+     */
+    Translator m_translator;
 
 };
 

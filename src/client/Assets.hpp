@@ -36,7 +36,6 @@
 #pragma once
 
 #include <unordered_map>
-#include <vector>
 #include <SFML/Config.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/String.hpp>
@@ -179,12 +178,11 @@ public:
     class I18N {
     public:
       struct Translation {
-        const std::string abreviation;
         const sf::String name;
         const std::unordered_map<std::string, sf::String> translation;
       };
 
-      static const std::vector<Translation> translations;
+      static const std::unordered_map<std::string, Translation> translations;
     };
 
     enum Atlases {Icon = 25};
