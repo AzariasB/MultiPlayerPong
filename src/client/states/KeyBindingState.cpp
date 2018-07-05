@@ -60,12 +60,12 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 150.f;
-    Button& resetbtn = m_menu.addButton("Reset", startX, startY, Assets::IconAtlas::returnIcon);
+    Button& resetbtn = m_menu.addButton("reset", startX, startY, Assets::IconAtlas::returnIcon);
     startY += resetbtn.getHeight();
     resetbtn.clickedSignal.add([this](){resetKeys();});
 
 
-    m_menu.addButton("Back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
+    m_menu.addButton("back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([](){
                 pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);

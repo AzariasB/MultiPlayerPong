@@ -49,7 +49,7 @@ public:
     I18NText make(const std::string &translationName, int fontSize = 30);
 
 private:
-    std::string m_currentTranslation = "en";
+    std::string m_currentTranslation = "fr";
 
     sf::String m_empty = "";
 

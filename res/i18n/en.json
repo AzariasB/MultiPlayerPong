@@ -26,6 +26,7 @@
 		"no": "No",
 		"resume": "Resume",
 		"restart": "Restart",
-		"pause": "Pause"
+		"pause": "Pause",
+		"ok": "Ok"
 	}
 }

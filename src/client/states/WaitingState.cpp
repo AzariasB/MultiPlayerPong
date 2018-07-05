@@ -51,7 +51,7 @@ WaitingState::WaitingState() :
     m_menu(),
     m_content(*m_menu.addCenteredLabel("Connecting...",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
 {
-    m_menu.addButton("Cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
+    m_menu.addButton("cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
             .clickedSignal.add([](){
                 pr::socket().disconnect();
                 pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);

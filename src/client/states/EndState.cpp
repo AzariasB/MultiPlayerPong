@@ -44,7 +44,7 @@ EndState::EndState():
 {
     m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
 
-    m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
+    m_menu.addButton("menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([this](){goToMenu(); });
 

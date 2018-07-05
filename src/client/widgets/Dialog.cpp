@@ -165,14 +165,14 @@ DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const s
     confirmedSignal()
 {
     menu().
-            addButton("Confirm ", originX + 102, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
+            addButton("confirm", originX + 102, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
             .clickedSignal
             .add([this](){
                 confirmedSignal.trigger(m_input.getText());
             });
 
     menu()
-            .addButton("Cancel ", originX + SF_DIALOG_WIDTH - 90, originY + SF_DIALOG_HEIGHT - 62, Assets::IconAtlas::crossIcon)
+            .addButton("cancel", originX + SF_DIALOG_WIDTH - 90, originY + SF_DIALOG_HEIGHT - 62, Assets::IconAtlas::crossIcon)
             .clickedSignal
             .add(canceledSignal);
 
@@ -220,14 +220,14 @@ DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, c
 
 
     menu()
-            .addButton("Yes ", originX + 70, originY + SF_DIALOG_HEIGHT - 72, Assets::IconAtlas::checkmarkIcon)
+            .addButton("yes", originX + 70, originY + SF_DIALOG_HEIGHT - 72, Assets::IconAtlas::checkmarkIcon)
             .clickedSignal
             .add(yesClickedSignal);
 
     menu().changeSelection(1);
 
     menu()
-            .addButton("No ", originX + SF_DIALOG_WIDTH - 60, originY + SF_DIALOG_HEIGHT - 63, Assets::IconAtlas::crossIcon)
+            .addButton("no", originX + SF_DIALOG_WIDTH - 60, originY + SF_DIALOG_HEIGHT - 63, Assets::IconAtlas::crossIcon)
             .clickedSignal
             .add(noClickedSignal);
 }
@@ -266,7 +266,7 @@ DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, con
     okClickedSignal()
 {
     menu()
-            .addButton("Ok ", originX + 65, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
+            .addButton("ok", originX + 65, originY + SF_DIALOG_HEIGHT - 65, Assets::IconAtlas::checkmarkIcon)
             .clickedSignal
             .add(okClickedSignal);
 
