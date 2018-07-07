@@ -42,6 +42,8 @@
 		"you_won": "You won !",
 		"you_lost" : "You lost",
 		"press_key" : "Press a key",
-		"change_key" : "Change key"
+		"change_key" : "Change key",
+		"Up" : "Up",
+		"Down" : "Down"
 	}
 }

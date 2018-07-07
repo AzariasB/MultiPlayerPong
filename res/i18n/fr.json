@@ -42,6 +42,8 @@
 		"you_won" : "Vous avez gagné !",
 		"you_lost" : "Vous avez perdu :(",
 		"press_key" : "Appuyez sur une touche",
-		"change_key" : "Changer de touche"
+		"change_key" : "Changer de touche",
+		"Up" : "Haut",
+		"Down" : "Bas"
 	}
 }
