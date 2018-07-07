@@ -54,7 +54,7 @@ void Menu::update(const sf::Time &elapsed)
         it->update(elapsed);
 }
 
-Button &Menu::addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
+Button &Menu::addButton(const sf::String &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
     std::unique_ptr<Button> &inserted = m_buttons.back();
@@ -65,18 +65,24 @@ Button &Menu::addButton(const std::string &content, float xPos, float yPos, cons
     return *inserted;
 }
 
-std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)
+std::unique_ptr<I18NText> &Menu::addCenteredLabel(const sf::String &content, float xCenter, float yCenter, unsigned int charSize)
 {
     auto &label = addLabel(content, xCenter, yCenter, charSize);
-    sf::Vector2f labelPos(label->getPosition().x - label->getGlobalBounds().width / 2.f,
-                          label->getPosition().y - label->getGlobalBounds().height / 2.f);
-    label->setPosition(labelPos);
+    math::centerOrigin(*label);
     return label;
 }
 
-std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize)
+std::unique_ptr<I18NText> &Menu::addLabel(const sf::String &content, float xpOs, float yPos, unsigned int charSize)
 {
-    m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont(), charSize));
+    m_labels.emplace_back(std::make_unique<I18NText>(pr::translator(), content, charSize));
+    m_labels.back()->setFillColor(cc::Colors::fontColor);
+    m_labels.back()->setPosition(xpOs, yPos);
+    return m_labels.back();
+}
+
+std::unique_ptr<I18NText> &Menu::addLabel(const std::vector<sf::String> &content, float xpOs, float yPos, unsigned int charSize)
+{
+    m_labels.emplace_back(std::make_unique<I18NText>(pr::translator(), content, charSize));
     m_labels.back()->setFillColor(cc::Colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();

@@ -105,7 +105,7 @@ private:
     /**
      * @brief m_content text containing
      */
-    sf::Text &m_content;
+    I18NText &m_content;
 };
 
 

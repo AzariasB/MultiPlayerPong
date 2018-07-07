@@ -27,6 +27,21 @@
 		"resume": "Reprendre",
 		"restart": "Recommencer",
 		"pause": "Pause",
-		"ok": "Ok"
+		"ok": "Ok",
+		"programming": "Programmation",
+		"drawing": "Dessins",
+		"sounds": "Sons",
+		"icons": "Icônes",
+		"font": "Police",
+		"connecting": "Connexion",
+		"error": "Erreur",
+		"failed_connect": "Échec de la connexion au serveur",
+		"enter_ip": "Entrez l'adresse du serveur",
+		"waiting_player": "En attente d'un joueur...",
+		"finished" : "Terminé !",
+		"you_won" : "Vous avez gagné !",
+		"you_lost" : "Vous avez perdu :(",
+		"press_key" : "Appuyez sur une touche",
+		"change_key" : "Changer de touche"
 	}
 }

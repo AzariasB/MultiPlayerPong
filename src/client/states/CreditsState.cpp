@@ -38,17 +38,18 @@ namespace mp {
 CreditsState::CreditsState():
     mMenu()
 {
-    mMenu.addCenteredLabel("Credits", SF_ARENA_WIDTH  / 2.f, 100, 70);
+    mMenu.addCenteredLabel("credits", SF_ARENA_WIDTH  / 2.f, 100, 70);
 
-    float he = 150;
+    const float leftPos = 20;
+    float he = 180;
 
-    he += mMenu.addLabel("- Programming : Azarias Boutin", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Drawing : Azarias Boutin", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Using Keney sounds (www.kenney.nl)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Font 'Whatever it takes' (brittneymurphydesign.com)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- SFML " + sfmlVersion() + " (sfml-dev.org)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", 10, he)->getLocalBounds().height;
-    he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", 10, he)->getLocalBounds().height;
+    he += mMenu.addLabel({"- ","programming"," : Azarias Boutin"}, leftPos, he)->height();
+    he += mMenu.addLabel({"- ","drawing"," : Azarias Boutin"}, leftPos, he)->height();
+    he += mMenu.addLabel({"- ","sounds","/", "icons"," : Kenney (www.kenney.nl)"}, leftPos, he)->height();
+    he += mMenu.addLabel({"- ","font"," : 'Whatever it takes' (brittneymurphydesign.com)"}, leftPos, he)->height();
+    he += mMenu.addLabel("- SFML " + sfmlVersion() + " (sfml-dev.org)", leftPos, he)->height();
+    he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", leftPos, he)->height();
+    he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", leftPos, he)->height();
 
     Button &btn = mMenu.addButton("menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::IconAtlas::exitLeftIcon);
     btn.setWidth(btn.getWidth() + 10);

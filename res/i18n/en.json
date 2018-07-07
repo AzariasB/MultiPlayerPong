@@ -27,6 +27,21 @@
 		"resume": "Resume",
 		"restart": "Restart",
 		"pause": "Pause",
-		"ok": "Ok"
+		"ok": "Ok",
+		"programming": "Programming",
+		"drawing": "Drawing",
+		"sounds": "Sounds",
+		"icons": "Icons",
+		"font": "Font",
+		"connecting": "Connecting",
+		"error": "Error",
+		"failed_connect": "Failed to connect to the server",
+		"enter_ip": "Enter server ip",
+		"waiting_player": "Waiting player...",
+		"finished": "Finished !",
+		"you_won": "You won !",
+		"you_lost" : "You lost",
+		"press_key" : "Press a key",
+		"change_key" : "Change key"
 	}
 }

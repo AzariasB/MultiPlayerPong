@@ -31,6 +31,7 @@
 #pragma once
 
 #include <SFML/Graphics/Text.hpp>
+#include <vector>
 #include "src/common/Signal.hpp"
 
 namespace mp {
@@ -39,16 +40,24 @@ class Translator;
 class I18NText : public sf::Text
 {
 public:
-    I18NText(Translator &translator, const std::string &translationName, int fontSize = 30);
+    I18NText(Translator &translator, const std::vector<sf::String> &translations, int fontSize);
+
+    I18NText(Translator &translator, const sf::String &translationName, int fontSize = 30);
+
+    I18NText &operator+=(const sf::String &add);
 
     int width();
 
     int height();
 
+    void setString(const sf::String &str);
+
 private:
-    const std::string m_translation;
+    void updateString();
 
     Translator &m_translator;
+
+    std::vector<sf::String> m_translations;
 };
 
 

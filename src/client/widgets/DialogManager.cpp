@@ -95,17 +95,17 @@ void DialogManager::closeDialog(sf::Uint64 dialogId)
     }
 }
 
-DialogInput &DialogManager::input(const std::string &title, const std::string &question)
+DialogInput &DialogManager::input(const sf::String &title, const sf::String &question)
 {
     return createDialog<DialogInput>(title, question);
 }
 
-DialogQuestion &DialogManager::question(const std::string &title, const std::string &question)
+DialogQuestion &DialogManager::question(const sf::String &title, const sf::String &question)
 {
     return createDialog<DialogQuestion>(title, question);
 }
 
-DialogMessage &DialogManager::message(const std::string &title, const std::string &message)
+DialogMessage &DialogManager::message(const sf::String &title, const sf::String &message)
 {
     return createDialog<DialogMessage>(title, message);
 }

@@ -38,14 +38,14 @@ Translator::Translator()
 
 }
 
-const sf::String &Translator::translate(const std::string &translationName) const
+sf::String Translator::translate(const std::string &translationName) const
 {
     const auto &tr = Assets::I18N::translations;
     const auto iterator = tr.find(m_currentTranslation);
-    if( iterator == tr.end())return m_empty;
+    if( iterator == tr.end())return translationName;
     const auto &map = (*iterator).second;
     const auto &val = map.translation.find(translationName);
-    if(val == map.translation.end())return m_empty;
+    if(val == map.translation.end())return translationName;
     return (*val).second;
 }
 
@@ -60,4 +60,10 @@ I18NText Translator::make(const std::string &translationName, int fontSize)
     return I18NText(*this, translationName, fontSize);
 
 }
+
+I18NText Translator::make(const std::vector<sf::String> &translations, int fontSize)
+{
+    return I18NText(*this, translations, fontSize);
+}
+
 }

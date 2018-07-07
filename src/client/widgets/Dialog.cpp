@@ -39,9 +39,9 @@
 namespace mp {
 
 // DIALOG BEGIN
-Dialog::Dialog(const sf::Uint64 id, const std::string &title):
+Dialog::Dialog(const sf::Uint64 id, const sf::String &title):
     m_menu(),
-    m_title(sf::String(title), pr::resourceManager().getFont(), 50),
+    m_title(pr::translator(), title, 50),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
     closeSignal(),
@@ -117,7 +117,7 @@ void Dialog::handleEvent(const sf::Event &ev)
     }
 }
 
-void Dialog::setTitle(const std::string &str)
+void Dialog::setTitle(const sf::String &str)
 {
     m_title.setString(str);
 }
@@ -157,9 +157,9 @@ Dialog::DIALOG_STATE Dialog::state() const
 
 //INPUT DIALOG
 
-DialogInput::DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question):
+DialogInput::DialogInput(const sf::Uint64 &id, const sf::String &title, const sf::String &question):
     Dialog(id, title),
-    m_questionText(question, pr::resourceManager().getFont()),
+    m_questionText(pr::translator(), question),
     m_input(sf::Vector2f(originX + 30, originY + SF_DIALOG_HEIGHT/2)),
     canceledSignal(),
     confirmedSignal()
@@ -196,7 +196,9 @@ void DialogInput::render(Renderer &renderer) const
 {
     beforeDraw(renderer);
     Dialog::render(renderer);
-    afterDraw(renderer.render(m_input));
+    renderer.draw(m_questionText)
+            .render(m_input);
+    afterDraw(renderer);
 }
 
 void DialogInput::handleEvent(const sf::Event &ev)
@@ -210,9 +212,9 @@ void DialogInput::handleEvent(const sf::Event &ev)
 // QUESTION DIALOG
 
 
-DialogQuestion::DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question):
+DialogQuestion::DialogQuestion(const sf::Uint64 &id, const sf::String &title, const sf::String &question):
     Dialog(id, title),
-    m_questionText(question, pr::resourceManager().getFont(), 40),
+    m_questionText(pr::translator(), question, 40),
     yesClickedSignal(),
     noClickedSignal()
 {
@@ -236,12 +238,12 @@ DialogQuestion::~DialogQuestion()
 {
 }
 
-const std::string &DialogQuestion::getQuestion() const
+const sf::String &DialogQuestion::getQuestion() const
 {
     return m_questionText.getString().toAnsiString();
 }
 
-void DialogQuestion::setQuestion(const std::string &nwQuestion)
+void DialogQuestion::setQuestion(const sf::String &nwQuestion)
 {
     m_questionText.setString(nwQuestion);
 }
@@ -260,9 +262,9 @@ void DialogQuestion::render(Renderer &renderer) const
 
 // MESSAGE BEGIN
 
-DialogMessage::DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message):
+DialogMessage::DialogMessage(const sf::Uint64 &id, const sf::String &title, const sf::String &message):
     Dialog(id, title),
-    m_messageText(message, pr::resourceManager().getFont(), 40),
+    m_messageText(pr::translator(), message, 40),
     okClickedSignal()
 {
     menu()
@@ -280,12 +282,12 @@ DialogMessage::~DialogMessage()
 {
 }
 
-std::string DialogMessage::getMessage() const
+sf::String DialogMessage::getMessage() const
 {
     return m_messageText.getString().toAnsiString();
 }
 
-void DialogMessage::setMessage(const std::string &nwMessage)
+void DialogMessage::setMessage(const sf::String &nwMessage)
 {
     m_messageText.setString(nwMessage);
 }

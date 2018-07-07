@@ -100,7 +100,7 @@ public:
      * @param question the question to show
      * @return a reference to the created dialog
      */
-    DialogInput &input(const std::string &title, const std::string &question);
+    DialogInput &input(const sf::String &title, const sf::String &question);
 
     /**
      * @brief message create a message dialog (showing a simple message)
@@ -108,7 +108,7 @@ public:
      * @param message message to show
      * @return a reference to the created message dialog
      */
-    DialogMessage &message(const std::string &title, const std::string & message);
+    DialogMessage &message(const sf::String &title, const sf::String & message);
 
     /**
      * @brief question creates a yes-no question dialog
@@ -116,7 +116,7 @@ public:
      * @param question the question to show
      * @return a reference to the created dialogquestion
      */
-    DialogQuestion &question(const std::string &title, const std::string &question);
+    DialogQuestion &question(const sf::String &title, const sf::String &question);
 
     ~DialogManager();
 

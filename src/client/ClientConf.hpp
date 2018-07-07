@@ -45,6 +45,9 @@ namespace mp
     constexpr int SF_DIALOG_WIDTH =  4 * SF_ARENA_WIDTH / 5;
     constexpr int SF_DIALOG_HEIGHT = SF_ARENA_HEIGHT / 3.f;
 
+    constexpr float SF_CENTER_X = SF_ARENA_WIDTH  / 2.f;
+    constexpr float SF_CENTER_Y = SF_ARENA_HEIGHT / 2.f;
+
     constexpr float MAX_ICON_WIDTH = 70.f;
     constexpr float MAX_ICON_HEIGHT = 70.f;
 

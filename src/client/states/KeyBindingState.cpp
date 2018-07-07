@@ -42,9 +42,9 @@ namespace mp {
 KeyBindingState::KeyBindingState():
     m_menu()
 {
-    const int startX = SF_ARENA_WIDTH/2.f;
+    const int startX = SF_CENTER_X;
     int startY = 100;
-    startY += m_menu.addCenteredLabel("Key bindings", startX, startY, 70)->getGlobalBounds().height + 50;
+    startY += m_menu.addCenteredLabel("key_bindings", startX, startY, 70)->height() + 50;
 
 
     const int xSide = SF_ARENA_WIDTH / 4.f;
@@ -125,6 +125,7 @@ void KeyBindingState::update(const sf::Time &elapsed)
 
 void KeyBindingState::cancelDialog()
 {
+    pr::dialogManager().hideDialog(m_messageDialogId);
     m_waitingAction = 0;
     m_messageDialogId = 0;
 }
@@ -133,7 +134,7 @@ void KeyBindingState::cancelDialog()
 void KeyBindingState::buttonClicked(ActionsButton *ab)
 {
     m_waitingAction = ab;
-    DialogMessage &dm = pr::dialogManager().message("Change key binding","Press a key");
+    DialogMessage &dm = pr::dialogManager().message("change_key","press_key");
     m_messageDialogId = dm.id();
     auto cancel = [this](){cancelDialog();};
     dm.okClickedSignal.add(cancel);

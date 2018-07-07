@@ -76,7 +76,7 @@ MenuState::MenuState() :
     creditsButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
 
     multiPlayerButton.clickedSignal.add([this](){
-        DialogInput &ip = pr::dialogManager().input("Ip","Enter server ip");
+        DialogInput &ip = pr::dialogManager().input("Ip","enter_ip");
         auto inputDialogHidden = [&ip](){
             pr::dialogManager().hideDialog(ip.id());
         };
@@ -89,14 +89,14 @@ MenuState::MenuState() :
                 pr::dialogManager().hideDialog(ip.id());
                 pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
             }else{
-                DialogMessage &msg = pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
+                DialogMessage &msg = pr::dialogManager().message("invalid_ip", "entered_invalid_id");
                 msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
             }
         });
     });
 
     quitButton.clickedSignal.add([this](){
-        DialogQuestion &leave = pr::dialogManager().question("Quit","Do you really want to quit ?");
+        DialogQuestion &leave = pr::dialogManager().question("quit","really_quit");
         leave.yesClickedSignal.add([](){ ClientApp::getInstance().quit(); });
         leave.noClickedSignal.add([&leave](){pr::dialogManager().hideDialog(leave.id()); });
     });
