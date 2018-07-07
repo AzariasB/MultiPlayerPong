@@ -66,7 +66,7 @@ public:
      * @brief handleEvent inherited function
      * @param ev
      */
-    void handleEvent(const sf::Event &ev);
+    bool handleEvent(const sf::Event &ev);
 
 private:
     /**

@@ -65,7 +65,7 @@ public:
      * @brief handleEvent perform the event on the current dialog
      * @param ev event to handle
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief update updates all the visible dialogs
@@ -79,6 +79,14 @@ public:
      * @return if the given id is the active dialog
      */
     bool isActiveDialog(const sf::Uint64 &dialogId);
+
+    /**
+     * @brief hasDialog returns if this dialog is currently existing
+     * (hiding, showing, visible, ... whatever)
+     * @param dialogId the id of the dialog to check
+     * @return if the dialog exists
+     */
+    bool hasDialog(const sf::Uint64 &dialogId) const;
 
     /**
      * @brief hasActiveDialogs

@@ -94,8 +94,10 @@ void Menu::normalizeButtons(float additionalWidth)
         return p1->getWidth() < p2->getWidth();
     }))->getWidth();
 
-    for(auto &it : m_buttons)
+    for(auto &it : m_buttons){
         it->setWidth(max + additionalWidth);
+        it->setOrigin(it->getWidth() / 2.f, it->getHeight() / 2.f);
+    }
 }
 
 void Menu::render(Renderer &renderer) const
@@ -109,15 +111,19 @@ void Menu::render(Renderer &renderer) const
         renderer.draw(*ptr);
 }
 
-void Menu::handleEvent(const sf::Event &ev)
+bool Menu::handleEvent(const sf::Event &ev)
 {
     if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
         changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
+        return true;
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
         changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
+        return true;
     }else{
         for(auto &ptr : m_buttons)
-            ptr->handleEvent(ev);
+            if(ptr->handleEvent(ev)) return true;
+
+        return false;
     }
 }
 

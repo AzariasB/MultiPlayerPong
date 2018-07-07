@@ -124,8 +124,8 @@ void ClientApp::handleEvent(const sf::Event& event)
     } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
         static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).toggleFullScreen();
     } else {
-        m_dialogManager.handleEvent(event);
-        stateMachine.getCurrentState().handleEvent(event);
+        if(!m_dialogManager.handleEvent(event))
+            stateMachine.getCurrentState().handleEvent(event);
     }
 }
 

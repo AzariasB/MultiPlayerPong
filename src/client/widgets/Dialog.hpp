@@ -82,7 +82,7 @@ public:
 	 * @brief handleEvent inherited function
 	 * @param ev
 	 */
-	virtual void handleEvent(const sf::Event &ev);
+    virtual bool handleEvent(const sf::Event &ev) override;
 
 
     /**
@@ -235,7 +235,7 @@ public:
      * @brief handleEvent inherited function
      * @param ev
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
 private:
     /**

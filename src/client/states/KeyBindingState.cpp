@@ -95,13 +95,13 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
     if(pr::dialogManager().isActiveDialog(m_messageDialogId)){
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
             pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
-            std::string nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
+            sf::String nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
             m_waitingAction->button->setText(nwBtnTitle);
             m_waitingAction = 0;
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
-        if(ev.type == sf::Event::KeyReleased && ev.key.code == sf::Keyboard::Escape){
+        if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
             pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
         }else{
             m_menu.handleEvent(ev);

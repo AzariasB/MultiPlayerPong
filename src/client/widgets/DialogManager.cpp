@@ -48,10 +48,11 @@ void DialogManager::render(Renderer &renderer) const
         ptr.second->render(renderer);
 }
 
-void DialogManager::handleEvent(const sf::Event &ev)
+bool DialogManager::handleEvent(const sf::Event &ev)
 {
     if(m_activeDialogId > 0)
-        m_dialogs[m_activeDialogId]->handleEvent(ev);
+        return m_dialogs[m_activeDialogId]->handleEvent(ev);
+    return false;
 }
 
 void DialogManager::update(const sf::Time &elapsed)
@@ -67,6 +68,11 @@ bool DialogManager::isActiveDialog(const sf::Uint64 &dialogId)
 bool DialogManager::hasActiveDialogs() const
 {
     return m_dialogs.size() > 0;
+}
+
+bool DialogManager::hasDialog(const sf::Uint64 &dialogId) const
+{
+    return m_dialogs.find(dialogId) != m_dialogs.end();
 }
 
 void DialogManager::hideDialog(sf::Uint64 dialogId)

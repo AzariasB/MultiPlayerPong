@@ -28,6 +28,8 @@
  *
  * Created on 24/5/2018
  */
+#include <Box2D/Common/b2Settings.h>
+
 #include "FPSCounter.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
@@ -58,9 +60,10 @@ void FPSCounter::render(Renderer &renderer) const
     renderer.draw(m_text);
 }
 
-void FPSCounter::handleEvent(const sf::Event &ev)
+bool FPSCounter::handleEvent(const sf::Event &ev)
 {
-
+    B2_NOT_USED(ev);
+    return false;
 }
 
 

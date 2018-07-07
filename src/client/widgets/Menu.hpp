@@ -68,7 +68,7 @@ public:
      * @brief handleEvent inherited function
      * @param ev
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief update inherited function

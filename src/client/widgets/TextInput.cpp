@@ -77,11 +77,12 @@ void TextInput::update(const sf::Time &elapsed)
     m_timer.update(elapsed);
 }
 
-void TextInput::handleEvent(const sf::Event& ev)
+bool TextInput::handleEvent(const sf::Event& ev)
 {
     if(ev.type == sf::Event::KeyPressed){
         if(ev.key.code == sf::Keyboard::V && ev.key.control){
             addString(sf::Clipboard::getString().toAnsiString());
+            return true;
         }
     } else if (ev.type == sf::Event::TextEntered) {
         sf::Uint32 txt = ev.text.unicode;
@@ -90,6 +91,7 @@ void TextInput::handleEvent(const sf::Event& ev)
         } else if(txt > 31 && txt < 127){
             addString(std::string(1, (char)txt));
         }
+        return true;
     }
 }
 
