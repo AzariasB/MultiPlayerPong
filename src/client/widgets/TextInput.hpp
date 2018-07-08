@@ -79,13 +79,13 @@ public:
      * @brief setText sets the text inside the text input
      * @param str the new text
      */
-    void setText(const std::string &str);
+    void setText(const sf::String &str);
 
     /**
      * @brief getText a reference to the text entered by the user
      * @return the text entered by the user
      */
-    const std::string &getText() const;
+    const sf::String &getText() const;
 
     virtual ~TextInput();
 private:
@@ -99,7 +99,7 @@ private:
      * adding more than the maximum limit
      * @param toAdd the string to append to the current one
      */
-    void addString(const std::string &toAdd);
+    void addString(const sf::String &toAdd);
 
     /**
      * @brief removeLastChar clears out the last char
@@ -120,7 +120,7 @@ private:
     /**
      * @brief m_typed the actual text entered by the user
      */
-    std::string m_typed;
+    sf::String m_typed;
 
     /**
      * @brief m_background background of the text input
