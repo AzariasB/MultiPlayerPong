@@ -36,6 +36,7 @@
 #include "Widget.hpp"
 #include "Button.hpp"
 #include "src/client/Assets.hpp"
+#include "I18NText.hpp"
 
 namespace mp {
 
@@ -67,7 +68,7 @@ public:
      * @brief handleEvent inherited function
      * @param ev
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief update inherited function
@@ -83,7 +84,7 @@ public:
      * @param yPos the Y position of the button
      * @return the button newly created
      */
-    Button &addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+    Button &addButton(const sf::String &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result
@@ -92,7 +93,17 @@ public:
      * @param yPos the Y position of the text
      * @return the text newly created
      */
-    std::unique_ptr<sf::Text> &addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize = 40);
+    std::unique_ptr<I18NText> &addLabel(const sf::String &content, float xpOs, float yPos, unsigned int charSize = 40);
+
+    /**
+     * @brief addLabel creates a lable with the several texts to translate
+     * @param content the strings to translate
+     * @param xpOs x position of the text
+     * @param yPos y position of the text
+     * @param charSize character size
+     * @return a reference to the created pointer
+     */
+    std::unique_ptr<I18NText> &addLabel(const std::vector<sf::String> &content, float xpOs, float yPos, unsigned int charSize = 40);
 
     /**
      * @brief addCenteredLabel adds the label to the menu, with the given text, and centers it
@@ -102,7 +113,7 @@ public:
      * @param yCenter y position of the labels center
      * @return the newly created text
      */
-    std::unique_ptr<sf::Text> &addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize = 40);
+    std::unique_ptr<I18NText> &addCenteredLabel(const sf::String &content, float xCenter, float yCenter, unsigned int charSize = 40);
 
     /**
      * @brief normalizeButtons finds the largest button
@@ -129,7 +140,7 @@ private:
      * returned can still be used whenever the size
      * of the vector changes
      */
-    std::vector<std::unique_ptr<sf::Text>> m_labels;
+    std::vector<std::unique_ptr<I18NText>> m_labels;
 
     /**
      * @brief m_buttons all the buttons of the menu

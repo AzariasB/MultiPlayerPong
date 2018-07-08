@@ -29,6 +29,8 @@
  * Created on 2/11/2017
  */
 #include "KeyBinding.hpp"
+#include "Provider.hpp"
+#include "Translator.hpp"
 
 namespace mp {
 
@@ -66,11 +68,11 @@ sf::Event KeyBinding::toGameEvent(const sf::Event &ev) const
     return copy;
 }
 
-std::string KeyBinding::toString(KEY_ACTION action)
+sf::String KeyBinding::toString(KEY_ACTION action)
 {
     if(m_keyActions.find(action) == m_keyActions.end()) return "";
     const KeyAction &ka = m_keyActions.find(action)->second;
-    return ka.title + " : " +  toString(ka.actualKey);
+    return pr::translator().translate(ka.title) + " : " +  toString(ka.actualKey);
 }
 
 void KeyBinding::resetBindings()
@@ -79,17 +81,19 @@ void KeyBinding::resetBindings()
         it.second.actualKey = it.second.defaultKey;
 }
 
-const std::string &KeyBinding::toString(sf::Keyboard::Key k) const
+sf::String KeyBinding::toString(sf::Keyboard::Key k) const
 {
-    return m_keyMap.find(k)->second;
+    return pr::translator().translate(m_keyMap.find(k)->second);
 }
 
 void KeyBinding::initKeyAction()
 {
 #define SAVE_ACTION(act, title, defKey) m_keyActions.emplace(std::piecewise_construct,std::forward_as_tuple(act),std::forward_as_tuple(title, defKey))
 
-    SAVE_ACTION(GO_UP, "Go Up", sf::Keyboard::Up);
-    SAVE_ACTION(GO_DOWN, "Go Down", sf::Keyboard::Down);
+    SAVE_ACTION(GO_UP, "Up", sf::Keyboard::Up);
+    SAVE_ACTION(GO_DOWN, "Down", sf::Keyboard::Down);
+
+#undef SAVE_ACTION
 }
 
 void KeyBinding::initKeyMap()
@@ -199,6 +203,7 @@ void KeyBinding::initKeyMap()
     MAP_KEY(F15);
     MAP_KEY(Pause);
 
+#undef MAP_KEY
 }
 
 }

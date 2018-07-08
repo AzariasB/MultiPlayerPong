@@ -77,35 +77,37 @@ void TextInput::update(const sf::Time &elapsed)
     m_timer.update(elapsed);
 }
 
-void TextInput::handleEvent(const sf::Event& ev)
+bool TextInput::handleEvent(const sf::Event& ev)
 {
     if(ev.type == sf::Event::KeyPressed){
         if(ev.key.code == sf::Keyboard::V && ev.key.control){
             addString(sf::Clipboard::getString().toAnsiString());
+            return true;
         }
     } else if (ev.type == sf::Event::TextEntered) {
         sf::Uint32 txt = ev.text.unicode;
         if(txt == 8){//backspace
             removeLastChar();
-        } else if(txt > 31 && txt < 127){
-            addString(std::string(1, (char)txt));
+        } else {
+            addString(sf::String(txt));
         }
+        return true;
     }
 }
 
 void TextInput::removeLastChar()
 {
-    if(!m_typed.empty()){
-        m_typed.pop_back();
+    if(!m_typed.isEmpty()){
+        m_typed = m_typed.substring(0, m_typed.getSize() - 1);
         m_text.setString(m_typed);
         updatePipePos();
     }
 }
 
-void TextInput::addString(const std::string &toAdd)
+void TextInput::addString(const sf::String &toAdd)
 {
     m_typed += toAdd;
-    m_typed = m_typed.substr(0, MAX_INPUT_CHARS);
+    m_typed = m_typed.substring(0, MAX_INPUT_CHARS);
     m_text.setString(m_typed);
     updatePipePos();
 }
@@ -115,7 +117,7 @@ TextInput::~TextInput()
 }
 
 
-void TextInput::setText(const std::string &str)
+void TextInput::setText(const sf::String &str)
 {
     m_typed = str;
     m_text.setString(m_typed);
@@ -128,7 +130,7 @@ void TextInput::updatePipePos()
     m_pipe.setPosition(m_text.getPosition().x + textWidth, m_text.getPosition().y );
 }
 
-const std::string& TextInput::getText() const
+const sf::String &TextInput::getText() const
 {
     return m_typed;
 }

@@ -111,7 +111,7 @@ private:
      * to the "content" text, to show the text "win"
      * or "loose"
      */
-    sf::Text &m_content;
+    I18NText &m_content;
 
     /**
      * @brief m_buffer buffer for the animation

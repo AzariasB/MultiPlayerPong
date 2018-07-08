@@ -32,13 +32,15 @@
 
 
 #include <SFML/Graphics/RectangleShape.hpp>
+
+#include "Menu.hpp"
 #include "Widget.hpp"
 #include "Button.hpp"
+#include "I18NText.hpp"
 #include "TextInput.hpp"
+#include "src/lib/twin.hpp"
 #include "src/common/Config.hpp"
 #include "src/client/ClientConf.hpp"
-#include "src/lib/twin.hpp"
-#include "Menu.hpp"
 
 
 
@@ -66,7 +68,7 @@ public:
      * @param message the message (if the dialog is a message dialog)
      * @param type the type of the dialog
      */
-    Dialog(const sf::Uint64 id, const std::string &title);
+    Dialog(const sf::Uint64 id, const sf::String &title);
 
     virtual ~Dialog();
 
@@ -80,7 +82,7 @@ public:
 	 * @brief handleEvent inherited function
 	 * @param ev
 	 */
-	virtual void handleEvent(const sf::Event &ev);
+    virtual bool handleEvent(const sf::Event &ev) override;
 
 
     /**
@@ -112,7 +114,7 @@ public:
 	 * @brief setTitle changes the title of the dialog
 	 * @param str the new title of the dialog
 	 */
-	void setTitle(const std::string &str);
+    void setTitle(const sf::String &str);
 
     const sf::Uint64 &id() const;
 
@@ -166,7 +168,7 @@ private:
 	/**
 	 * @brief m_title title of the dialog
 	 */
-	sf::Text m_title;
+    I18NText m_title;
 
     /**
      * @brief background shape
@@ -207,7 +209,7 @@ public:
      * @param title title of the dialog
      * @param question question to ask to the user
      */
-    DialogInput(const sf::Uint64 &id, const std::string &title, const std::string &question);
+    DialogInput(const sf::Uint64 &id, const sf::String &title, const sf::String &question);
 
     virtual ~DialogInput();
 
@@ -215,7 +217,7 @@ public:
      * @brief getValue gets the value typed by the user
      * @return a string containing the value typed by the user
      */
-    const std::string &getValue() const;
+    const sf::String &getValue() const;
 
     /**
      * @brief update inherited function
@@ -233,14 +235,14 @@ public:
      * @brief handleEvent inherited function
      * @param ev
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
 private:
     /**
      * @brief m_questionText text containing the question
      * asked to the user
      */
-    sf::Text m_questionText;
+    I18NText m_questionText;
 
     /**
      * @brief m_input text input where the user can type
@@ -249,7 +251,7 @@ private:
     TextInput m_input;
 
 public:
-    Signal<std::string> confirmedSignal;
+    Signal<sf::String> confirmedSignal;
     Signal<> canceledSignal;
 };
 //END INPUT DIALOG
@@ -270,7 +272,7 @@ public:
      * @param title title of the dialog
      * @param question question to ask to the user
      */
-    DialogQuestion(const sf::Uint64 &id, const std::string &title, const std::string &question);
+    DialogQuestion(const sf::Uint64 &id, const sf::String &title, const sf::String &question);
 
     virtual ~DialogQuestion();
 
@@ -279,13 +281,13 @@ public:
      * to the user
      * @return
      */
-    const std::string &getQuestion() const;
+    const sf::String &getQuestion() const;
 
     /**
      * @brief setQuestion changes the question asked to the user
      * @param nwQuestion the new question to ask the user
      */
-    void setQuestion(const std::string &nwQuestion);
+    void setQuestion(const sf::String &nwQuestion);
 
     /**
      * @brief render inherited function
@@ -297,7 +299,7 @@ private:
     /**
      * @brief m_questionText text asking the user a question
      */
-    sf::Text m_questionText;
+    I18NText m_questionText;
 
 public:
     Signal<> yesClickedSignal;
@@ -320,7 +322,7 @@ public:
      * @param title
      * @param message message to show the user
      */
-    DialogMessage(const sf::Uint64 &id, const std::string &title, const std::string &message);
+    DialogMessage(const sf::Uint64 &id, const sf::String &title, const sf::String &message);
 
     virtual ~DialogMessage();
 
@@ -328,13 +330,13 @@ public:
      * @brief getMessage returns the message shown to the user
      * @return
      */
-    std::string getMessage() const;
+    sf::String getMessage() const;
 
     /**
      * @brief setMessage changes the message shown to the user
      * @param nwMessage
      */
-    void setMessage(const std::string &nwMessage);
+    void setMessage(const sf::String &nwMessage);
 
     /**
      * @brief render inherited function
@@ -346,7 +348,7 @@ private:
     /**
      * @brief m_messageText the message shown to the user
      */
-    sf::Text m_messageText;
+    I18NText m_messageText;
 
 public:
     Signal<> okClickedSignal;

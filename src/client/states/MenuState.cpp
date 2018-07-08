@@ -54,20 +54,20 @@ MenuState::MenuState() :
     const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
 
-    Button &soloButton = m_menu.addButton("Solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
+    Button &soloButton = m_menu.addButton("solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
     currentHeight += soloButton.getHeight() + margin;
 
 
-    Button &multiPlayerButton = m_menu.addButton("Multiplayer", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
+    Button &multiPlayerButton = m_menu.addButton("multi", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
     currentHeight += multiPlayerButton.getHeight() + margin;
 
-    Button &optionButton = m_menu.addButton("Options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
+    Button &optionButton = m_menu.addButton("options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
     currentHeight += optionButton.getHeight() + margin;
 
-    Button &creditsButton = m_menu.addButton("Credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
+    Button &creditsButton = m_menu.addButton("credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
     currentHeight += creditsButton.getHeight() + margin;
 
-    Button &quitButton = m_menu.addButton("Quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
+    Button &quitButton = m_menu.addButton("quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
 
     m_menu.normalizeButtons(margin);
 
@@ -76,7 +76,7 @@ MenuState::MenuState() :
     creditsButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
 
     multiPlayerButton.clickedSignal.add([this](){
-        DialogInput &ip = pr::dialogManager().input("Ip","Enter server ip");
+        DialogInput &ip = pr::dialogManager().input("Ip","enter_ip");
         auto inputDialogHidden = [&ip](){
             pr::dialogManager().hideDialog(ip.id());
         };
@@ -89,14 +89,14 @@ MenuState::MenuState() :
                 pr::dialogManager().hideDialog(ip.id());
                 pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
             }else{
-                DialogMessage &msg = pr::dialogManager().message("Invalid Ip", "The IP you entered is invalid");
+                DialogMessage &msg = pr::dialogManager().message("invalid_ip", "entered_invalid_id");
                 msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
             }
         });
     });
 
     quitButton.clickedSignal.add([this](){
-        DialogQuestion &leave = pr::dialogManager().question("Quit","Do you really want to quit ?");
+        DialogQuestion &leave = pr::dialogManager().question("quit","really_quit");
         leave.yesClickedSignal.add([](){ ClientApp::getInstance().quit(); });
         leave.noClickedSignal.add([&leave](){pr::dialogManager().hideDialog(leave.id()); });
     });

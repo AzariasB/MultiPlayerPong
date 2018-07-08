@@ -91,14 +91,14 @@ public:
      * @param k the keyboard's key
      * @return the name of the given key
      */
-    const std::string &toString(sf::Keyboard::Key k) const;
+    sf::String toString(sf::Keyboard::Key k) const;
 
     /**
      * @brief toString returns the name of the action, as saved (e.g. "Go Up : Up")
      * @param action the action
      * @return the action in the form of a string
      */
-    std::string toString(KEY_ACTION action);
+    sf::String toString(KEY_ACTION action);
 
     /**
      * @brief setKeyAction changes the key for a given action
@@ -134,7 +134,7 @@ private:
              * @param title
              * @param defKey
              */
-        KeyAction(const std::string &title, sf::Keyboard::Key defKey):
+        KeyAction(const sf::String &title, sf::Keyboard::Key defKey):
             actualKey(defKey),
             title(title),
             defaultKey(defKey)
@@ -149,7 +149,7 @@ private:
         /**
      * @brief title the title of the action
      */
-        const std::string title;
+        const sf::String title;
 
         /**
      * @brief defaultKey the default key

@@ -41,13 +41,14 @@
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/Renderer.hpp"
+#include "src/client/Translator.hpp"
 
 namespace mp {
 
-Button::Button(const std::string &text) :
-    m_text(text,pr::resourceManager().getFont(), 50),
-    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 30),
+Button::Button(const sf::String &text) :
+    m_text(pr::translator().make(text, 50)),
+    m_width(text == "" ? 0 : m_text.width()),
+    m_height(m_text.height() + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
@@ -58,10 +59,10 @@ Button::Button(const std::string &text) :
     init();
 }
 
-Button::Button(const std::string &text, float xPos, float yPos):
-    m_text(text, pr::resourceManager().getFont(), 50),
-    m_width(text == "" ? 0 : m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 30),
+Button::Button(const sf::String &text, float xPos, float yPos):
+    m_text(pr::translator().make(text, 50)),
+    m_width(text == "" ? 0 : m_text.width()),
+    m_height(m_text.height() + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
@@ -73,10 +74,10 @@ Button::Button(const std::string &text, float xPos, float yPos):
     setPosition(sf::Vector2f(xPos, yPos));
 }
 
-Button::Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
-    m_text(text, pr::resourceManager().getFont(), 50),
-    m_width(text == "" ? 0 :  m_text.getGlobalBounds().width),
-    m_height(m_text.getGlobalBounds().height + 30),
+Button::Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
+    m_text(pr::translator().make(text, 50)),
+    m_width(text == "" ? 0 :  m_text.width()),
+    m_height(m_text.height() + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
     m_border(),
@@ -89,10 +90,25 @@ Button::Button(const std::string &text, float xPos, float yPos, const Assets::Ic
     setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
 }
 
+void Button::setOrigin(const sf::Vector2f &origin)
+{
+    m_origin = origin;
+
+    m_border.setOrigin(origin);
+    m_background.setOrigin(origin);
+
+    setPosition(m_position);
+}
+
+void Button::setOrigin(float x, float y)
+{
+    setOrigin(sf::Vector2f(x,y));
+}
 
 void Button::init()
 {
     m_rectColor = ColorTweening(cc::Colors::buttonColor);
+    m_icon.setOrigin(m_icon.getGlobalBounds().width, m_icon.getGlobalBounds().height / 2.f);
 
     m_background.setFillColor(m_rectColor.get());
     m_border.setOutlineColor(cc::Colors::buttonBorderColor);
@@ -124,12 +140,14 @@ void Button::update(const sf::Time &elapsed)
 void Button::setPosition(const sf::Vector2f& position)
 {
     m_position = position;
-    m_text.setPosition(position.x - m_width / 2.f, position.y);
-    m_background.setPosition(position.x - m_width / 2.f, position.y);
-    m_border.setPosition(position.x - m_width / 2.f, position.y);
+    m_background.setPosition(position.x, position.y);
+    m_border.setPosition(position.x, position.y);
+
+    m_text.setPosition(m_position.x - m_origin.x, m_position.y - m_origin.y);
+    changeIconScale();
 }
 
-void Button::handleEvent(const sf::Event& ev)
+bool Button::handleEvent(const sf::Event& ev)
 {
     bool isClicked = false;
     if (ev.type == sf::Event::MouseMoved) {
@@ -158,8 +176,10 @@ void Button::handleEvent(const sf::Event& ev)
 
         m_rectColor = ColorTweening(cc::Colors::buttonColor, cc::Colors::buttonClickedColor, sf::milliseconds(200), twin::quintOut, callback);
         clickedSignal.trigger();
+        return true;
     }
 
+    return false;
 }
 
 bool Button::isSelectionEvent(const sf::Event &ev) const
@@ -196,7 +216,7 @@ void Button::render(Renderer &renderer) const
     renderer.pop();
 }
 
-void Button::setText(const std::string &text)
+void Button::setText(const sf::String &text)
 {
     m_text.setString(text);
 }
@@ -247,9 +267,7 @@ void Button::updateSize()
     }
 
     m_border.setSize(sf::Vector2f(m_width, m_height));
-    sf::FloatRect nwSize = m_icon.getGlobalBounds();
-    sf::Vector2f iconPosition(m_position.x + (m_width / 2) - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
-    m_icon.setPosition(iconPosition);
+    changeIconScale();
     setPosition(m_position);
 }
 
@@ -258,20 +276,21 @@ void Button::setIconTextureRect(const sf::IntRect &rect)
     m_icon.setTextureRect(rect);
 }
 
-void Button::updateIcon()
+void Button::changeIconScale()
 {
     //Same height as the text
     sf::FloatRect iFr = m_icon.getLocalBounds();
 
     float scale = m_height / iFr.height;
     m_icon.setScale(scale, scale);
+    m_icon.setOrigin(iFr.width, iFr.height / 2.f);
+    m_icon.setPosition( (m_position.x - m_origin.x) + m_width, m_position.y - m_origin.y + (m_height / 2.f));
+}
 
-
-    sf::FloatRect nwSize = m_icon.getGlobalBounds();
-    sf::Vector2f iconPosition(m_position.x + m_width - nwSize.width, m_position.y +  (m_height - nwSize.height) / 2 );
-    m_icon.setPosition(iconPosition);
-
-    setWidth(m_width + nwSize.width);
+void Button::updateIcon()
+{
+    changeIconScale();
+    setWidth(m_width + m_icon.getGlobalBounds().width);
 }
 
 

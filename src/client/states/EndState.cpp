@@ -42,9 +42,9 @@ EndState::EndState():
     m_buffer(sf::PrimitiveType::Triangles, triangleNumber * 3),
     m_angle(0.f)
 {
-    m_menu.addCenteredLabel("Finished !", SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/4.f, 60);
+    m_menu.addCenteredLabel("finished", SF_CENTER_X, SF_CENTER_Y, 60);
 
-    m_menu.addButton("Menu",SF_ARENA_WIDTH/2, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
+    m_menu.addButton("menu", SF_CENTER_X, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([this](){goToMenu(); });
 
@@ -58,15 +58,15 @@ sf::Vector2f EndState::toVertexPosition(int index) const
 {
     float angle = (2 * M_PI) * (index / (float)triangleNumber);
     return sf::Vector2f(
-                std::cos(angle) * (SF_ARENA_WIDTH / 2.f) + (SF_ARENA_WIDTH / 2.f),
-                std::sin(angle) * (SF_ARENA_WIDTH  / 2.f) + (SF_ARENA_HEIGHT / 2.f)
+                std::cos(angle) * SF_CENTER_X + SF_CENTER_X,
+                std::sin(angle) * SF_CENTER_X + SF_CENTER_Y
             );
 }
 
 void EndState::updateVerticesColor(bool win)
 {
     m_buffer.clear();
-    sf::Vector2f center(SF_ARENA_WIDTH  / 2.f, SF_ARENA_HEIGHT / 2.f);
+    sf::Vector2f center(SF_CENTER_X, SF_CENTER_Y);
     for(std::size_t i = 0; i < triangleNumber; ++i){
         sf::Color centerColor = win ? cc::Colors::endWinColor[i&1] : cc::Colors::endLoseColor[i&1];
         sf::Color outColor = centerColor;
@@ -108,7 +108,7 @@ void EndState::onBeforeEnter()
     bool winner = ClientApp::getInstance().isWinner();
     pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
     updateVerticesColor(winner);
-    m_content.setString(winner ? "You won !" : "You lost !");
+    m_content.setString(winner ? "you_won" : "you_lost");
     m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
     m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
 }

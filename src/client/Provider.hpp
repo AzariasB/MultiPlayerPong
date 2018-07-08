@@ -46,6 +46,7 @@ class Renderer;
 class Player;
 class ResourcesManager;
 class DialogManager;
+class Translator;
 
 
 namespace pr {
@@ -68,6 +69,8 @@ sf::TcpSocket &socket();
 Player &player();
 
 DialogManager &dialogManager();
+
+Translator &translator();
 
 }//namespace pr
 

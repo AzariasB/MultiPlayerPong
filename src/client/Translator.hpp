@@ -23,67 +23,38 @@
  */
 
 /*
- * File:   FPSCounter.hpp
+ * File:   Translator.hpp
  * Author: azarias
  *
- * Created on 24/5/2018
+ * Created on 5/7/2018
  */
-
 #pragma once
 
-#include "Widget.hpp"
-#include "src/common/Timer.hpp"
-
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Time.hpp>
+#include "widgets/I18NText.hpp"
+#include "Assets.hpp"
+#include "src/common/Signal.hpp"
 
 namespace mp {
 
-class Renderer;
 
-/**
- * @brief The FPSCounter class utility widget
- * to show the application's FPS
- */
-class FPSCounter : public Widget
+class Translator
 {
 public:
-    FPSCounter(const sf::Font &font);
+    Translator();
 
-    /**
-     * @brief update inherited function
-     * @param elapsed
-     */
-    void update(const sf::Time &elapsed);
+    sf::String translate(const sf::String &translationName) const;
 
-    /**
-     * @brief draw inherited function
-     * @param renderer
-     */
-    void render(Renderer &renderer) const;
+    void setCurrentTranslation(const std::string &trName);
 
-    /**
-     * @brief handleEvent inherited function
-     * @param ev
-     */
-    bool handleEvent(const sf::Event &ev);
+    I18NText make(const sf::String &translationName, int fontSize = 30);
+
+    I18NText make(const std::vector<sf::String> &translations, int fontSize = 30);
 
 private:
-    /**
-     * @brief m_text text to show the fps
-     */
-    sf::Text m_text;
+    std::string m_currentTranslation = "fr";
 
-    /**
-     * @brief m_timer timer to update the fps
-     */
-    Timer m_timer;
-
-    /**
-     * @brief m_calls number of calls
-     * since last timer reset
-     */
-    int m_calls = 0;
+public:
+    Signal<> translationChangedSignal;
 };
 
 }

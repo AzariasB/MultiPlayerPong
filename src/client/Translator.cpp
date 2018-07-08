@@ -23,67 +23,51 @@
  */
 
 /*
- * File:   FPSCounter.hpp
+ * File:   Translator.cpp
  * Author: azarias
  *
- * Created on 24/5/2018
+ * Created on 5/7/2018
  */
-
-#pragma once
-
-#include "Widget.hpp"
-#include "src/common/Timer.hpp"
-
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Time.hpp>
+#include "Translator.hpp"
+#include "Provider.hpp"
+#include <iostream>
 
 namespace mp {
 
-class Renderer;
-
-/**
- * @brief The FPSCounter class utility widget
- * to show the application's FPS
- */
-class FPSCounter : public Widget
+Translator::Translator()
 {
-public:
-    FPSCounter(const sf::Font &font);
 
-    /**
-     * @brief update inherited function
-     * @param elapsed
-     */
-    void update(const sf::Time &elapsed);
+}
 
-    /**
-     * @brief draw inherited function
-     * @param renderer
-     */
-    void render(Renderer &renderer) const;
+sf::String Translator::translate(const sf::String &translationName) const
+{
+    if(translationName.isEmpty())return translationName;
 
-    /**
-     * @brief handleEvent inherited function
-     * @param ev
-     */
-    bool handleEvent(const sf::Event &ev);
+    // std::wcout << translationName.toWideString() << "\n";
+    const auto &tr = Assets::I18N::translations;
+    const auto iterator = tr.find(m_currentTranslation);
+    if( iterator == tr.end())return translationName;
+    const auto &map = (*iterator).second;
+    const auto &val = map.translation.find(translationName);
+    if(val == map.translation.end())return translationName;
+    return (*val).second;
+}
 
-private:
-    /**
-     * @brief m_text text to show the fps
-     */
-    sf::Text m_text;
+void Translator::setCurrentTranslation(const std::string &trName)
+{
+    m_currentTranslation = trName;
+    translationChangedSignal.trigger();
+}
 
-    /**
-     * @brief m_timer timer to update the fps
-     */
-    Timer m_timer;
+I18NText Translator::make(const sf::String &translationName, int fontSize)
+{
+    return I18NText(*this, translationName, fontSize);
 
-    /**
-     * @brief m_calls number of calls
-     * since last timer reset
-     */
-    int m_calls = 0;
-};
+}
+
+I18NText Translator::make(const std::vector<sf::String> &translations, int fontSize)
+{
+    return I18NText(*this, translations, fontSize);
+}
 
 }

@@ -78,7 +78,7 @@ public:
      * @brief handleEvent handles an event sent by sfml
      * @param ev the event to handle
      */
-    virtual void handleEvent(const sf::Event &ev) = 0;
+    virtual bool handleEvent(const sf::Event &ev) = 0;
 
     virtual void update(const sf::Time &elapsed)
     {

@@ -38,6 +38,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include "Widget.hpp"
+#include "I18NText.hpp"
 #include "src/lib/twin.hpp"
 #include "src/client/Assets.hpp"
 #include "src/common/Signal.hpp"
@@ -61,7 +62,7 @@ public:
      * @param app reference to the Client application
      * @param text the text to display inside the button
      */
-    Button(const std::string &text = "");
+    Button(const sf::String &text = "");
 
     /**
      * @brief Button constructor
@@ -70,7 +71,7 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos);
+    Button(const sf::String &text, float xPos, float yPos);
 
     /**
      * @brief Button constructor
@@ -79,8 +80,20 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+    Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
+    /**
+     * @brief setOrigin changes the origin of the button
+     * @param origin the new origin
+     */
+    void setOrigin(const sf::Vector2f &origin);
+
+    /**
+     * @brief setOrigin changes the origin of the button
+     * @param x the x origin
+     * @param y the y origin
+     */
+    void setOrigin(float x, float y);
 
     /**
      * @brief update inerited function
@@ -105,7 +118,7 @@ public:
      * @brief handleEvent handles a SFML input/event
      * @param ev the sfml object for the event
      */
-    void handleEvent(const sf::Event &ev);
+    bool handleEvent(const sf::Event &ev);
 
     /**
      * @brief setAlignment setter for the alignment
@@ -175,7 +188,7 @@ public:
      * @brief changes the text of the button, the dimensions will also change
      * @param text the new text to set
      */
-    void setText(const std::string &text);
+    void setText(const sf::String &text);
 
     /**
      * @brief setSelected changes the selected state of the button
@@ -200,6 +213,11 @@ private:
     void updateIcon();
 
     /**
+     * @brief changeIconScale changes the icon's scale
+     */
+    void changeIconScale();
+
+    /**
      * @brief updateSize changes the size of the rectangles
      */
     void updateSize();
@@ -220,7 +238,7 @@ private:
     /**
      * @brief m_text the text for the button
      */
-    sf::Text m_text;
+    I18NText m_text;
 
     /**
      * @brief m_width width of the button
@@ -237,6 +255,8 @@ private:
      * to update it when changing the height/width
      */
     sf::Vector2f m_position = sf::Vector2f(0,0);
+
+    sf::Vector2f m_origin = sf::Vector2f(0, 0);
 
     /**
      * @brief m_icon icon of the button (optional)

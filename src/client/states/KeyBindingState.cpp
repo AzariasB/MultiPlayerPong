@@ -42,9 +42,9 @@ namespace mp {
 KeyBindingState::KeyBindingState():
     m_menu()
 {
-    const int startX = SF_ARENA_WIDTH/2.f;
+    const int startX = SF_CENTER_X;
     int startY = 100;
-    startY += m_menu.addCenteredLabel("Key bindings", startX, startY, 70)->getGlobalBounds().height + 50;
+    startY += m_menu.addCenteredLabel("key_bindings", startX, startY, 70)->height() + 50;
 
 
     const int xSide = SF_ARENA_WIDTH / 4.f;
@@ -60,12 +60,12 @@ KeyBindingState::KeyBindingState():
     }
 
     startY += 150.f;
-    Button& resetbtn = m_menu.addButton("Reset", startX, startY, Assets::IconAtlas::returnIcon);
+    Button& resetbtn = m_menu.addButton("reset", startX, startY, Assets::IconAtlas::returnIcon);
     startY += resetbtn.getHeight();
     resetbtn.clickedSignal.add([this](){resetKeys();});
 
 
-    m_menu.addButton("Back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
+    m_menu.addButton("back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([](){
                 pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
@@ -95,13 +95,13 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
     if(pr::dialogManager().isActiveDialog(m_messageDialogId)){
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
             pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
-            std::string nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
+            sf::String nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
             m_waitingAction->button->setText(nwBtnTitle);
             m_waitingAction = 0;
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
-        if(ev.type == sf::Event::KeyReleased && ev.key.code == sf::Keyboard::Escape){
+        if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
             pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_LEFT);
         }else{
             m_menu.handleEvent(ev);
@@ -125,6 +125,7 @@ void KeyBindingState::update(const sf::Time &elapsed)
 
 void KeyBindingState::cancelDialog()
 {
+    pr::dialogManager().hideDialog(m_messageDialogId);
     m_waitingAction = 0;
     m_messageDialogId = 0;
 }
@@ -133,7 +134,7 @@ void KeyBindingState::cancelDialog()
 void KeyBindingState::buttonClicked(ActionsButton *ab)
 {
     m_waitingAction = ab;
-    DialogMessage &dm = pr::dialogManager().message("Change key binding","Press a key");
+    DialogMessage &dm = pr::dialogManager().message("change_key","press_key");
     m_messageDialogId = dm.id();
     auto cancel = [this](){cancelDialog();};
     dm.okClickedSignal.add(cancel);

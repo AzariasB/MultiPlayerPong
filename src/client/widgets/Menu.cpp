@@ -54,7 +54,7 @@ void Menu::update(const sf::Time &elapsed)
         it->update(elapsed);
 }
 
-Button &Menu::addButton(const std::string &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
+Button &Menu::addButton(const sf::String &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
     std::unique_ptr<Button> &inserted = m_buttons.back();
@@ -65,18 +65,24 @@ Button &Menu::addButton(const std::string &content, float xPos, float yPos, cons
     return *inserted;
 }
 
-std::unique_ptr<sf::Text> &Menu::addCenteredLabel(const std::string &content, float xCenter, float yCenter, unsigned int charSize)
+std::unique_ptr<I18NText> &Menu::addCenteredLabel(const sf::String &content, float xCenter, float yCenter, unsigned int charSize)
 {
     auto &label = addLabel(content, xCenter, yCenter, charSize);
-    sf::Vector2f labelPos(label->getPosition().x - label->getGlobalBounds().width / 2.f,
-                          label->getPosition().y - label->getGlobalBounds().height / 2.f);
-    label->setPosition(labelPos);
+    math::centerOrigin(*label);
     return label;
 }
 
-std::unique_ptr<sf::Text> &Menu::addLabel(const std::string &content, float xpOs, float yPos, unsigned int charSize)
+std::unique_ptr<I18NText> &Menu::addLabel(const sf::String &content, float xpOs, float yPos, unsigned int charSize)
 {
-    m_labels.emplace_back(std::make_unique<sf::Text>(content,pr::resourceManager().getFont(), charSize));
+    m_labels.emplace_back(std::make_unique<I18NText>(pr::translator(), content, charSize));
+    m_labels.back()->setFillColor(cc::Colors::fontColor);
+    m_labels.back()->setPosition(xpOs, yPos);
+    return m_labels.back();
+}
+
+std::unique_ptr<I18NText> &Menu::addLabel(const std::vector<sf::String> &content, float xpOs, float yPos, unsigned int charSize)
+{
+    m_labels.emplace_back(std::make_unique<I18NText>(pr::translator(), content, charSize));
     m_labels.back()->setFillColor(cc::Colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();
@@ -88,8 +94,10 @@ void Menu::normalizeButtons(float additionalWidth)
         return p1->getWidth() < p2->getWidth();
     }))->getWidth();
 
-    for(auto &it : m_buttons)
+    for(auto &it : m_buttons){
         it->setWidth(max + additionalWidth);
+        it->setOrigin(it->getWidth() / 2.f, it->getHeight() / 2.f);
+    }
 }
 
 void Menu::render(Renderer &renderer) const
@@ -103,15 +111,19 @@ void Menu::render(Renderer &renderer) const
         renderer.draw(*ptr);
 }
 
-void Menu::handleEvent(const sf::Event &ev)
+bool Menu::handleEvent(const sf::Event &ev)
 {
     if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
         changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
+        return true;
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
         changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
+        return true;
     }else{
         for(auto &ptr : m_buttons)
-            ptr->handleEvent(ev);
+            if(ptr->handleEvent(ev)) return true;
+
+        return false;
     }
 }
 

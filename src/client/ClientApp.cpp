@@ -31,7 +31,7 @@
 
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/Packet.hpp>
-#include <QDebug>
+#include <iostream>
 
 #include "ClientApp.hpp"
 #include "ClientConf.hpp"
@@ -64,6 +64,7 @@ ClientApp::ClientApp() :
            sf::Style::Default)),
     m_cursor(),
     rManager(),
+    m_translator(),
     renderer(window),
     game(),
     stateMachine(),
@@ -123,8 +124,8 @@ void ClientApp::handleEvent(const sf::Event& event)
     } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
         static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).toggleFullScreen();
     } else {
-        m_dialogManager.handleEvent(event);
-        stateMachine.getCurrentState().handleEvent(event);
+        if(!m_dialogManager.handleEvent(event))
+            stateMachine.getCurrentState().handleEvent(event);
     }
 }
 
@@ -182,6 +183,7 @@ void ClientApp::run(int argc, char** argv)
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
+    std::locale::global(std::locale(""));
 
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
@@ -315,6 +317,11 @@ const ResourcesManager& ClientApp::getResourcesManager()
 const KeyBinding &ClientApp::getKeyBindings() const
 {
     return m_keyBinding;
+}
+
+Translator &ClientApp::getTranslator()
+{
+    return m_translator;
 }
 
 }

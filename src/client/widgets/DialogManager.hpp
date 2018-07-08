@@ -65,7 +65,7 @@ public:
      * @brief handleEvent perform the event on the current dialog
      * @param ev event to handle
      */
-    void handleEvent(const sf::Event &ev) override;
+    bool handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief update updates all the visible dialogs
@@ -79,6 +79,14 @@ public:
      * @return if the given id is the active dialog
      */
     bool isActiveDialog(const sf::Uint64 &dialogId);
+
+    /**
+     * @brief hasDialog returns if this dialog is currently existing
+     * (hiding, showing, visible, ... whatever)
+     * @param dialogId the id of the dialog to check
+     * @return if the dialog exists
+     */
+    bool hasDialog(const sf::Uint64 &dialogId) const;
 
     /**
      * @brief hasActiveDialogs
@@ -100,7 +108,7 @@ public:
      * @param question the question to show
      * @return a reference to the created dialog
      */
-    DialogInput &input(const std::string &title, const std::string &question);
+    DialogInput &input(const sf::String &title, const sf::String &question);
 
     /**
      * @brief message create a message dialog (showing a simple message)
@@ -108,7 +116,7 @@ public:
      * @param message message to show
      * @return a reference to the created message dialog
      */
-    DialogMessage &message(const std::string &title, const std::string & message);
+    DialogMessage &message(const sf::String &title, const sf::String & message);
 
     /**
      * @brief question creates a yes-no question dialog
@@ -116,7 +124,7 @@ public:
      * @param question the question to show
      * @return a reference to the created dialogquestion
      */
-    DialogQuestion &question(const std::string &title, const std::string &question);
+    DialogQuestion &question(const sf::String &title, const sf::String &question);
 
     ~DialogManager();
 
