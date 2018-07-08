@@ -62,7 +62,7 @@ public:
      * @param app reference to the Client application
      * @param text the text to display inside the button
      */
-    Button(const std::string &text = "");
+    Button(const sf::String &text = "");
 
     /**
      * @brief Button constructor
@@ -71,7 +71,7 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos);
+    Button(const sf::String &text, float xPos, float yPos);
 
     /**
      * @brief Button constructor
@@ -80,7 +80,7 @@ public:
      * @param xpos x position of the button
      * @param yPos y position of the button
      */
-    Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+    Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
      * @brief setOrigin changes the origin of the button

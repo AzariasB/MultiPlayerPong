@@ -30,6 +30,7 @@
  */
 #include "Translator.hpp"
 #include "Provider.hpp"
+#include <iostream>
 
 namespace mp {
 
@@ -38,8 +39,11 @@ Translator::Translator()
 
 }
 
-sf::String Translator::translate(const std::string &translationName) const
+sf::String Translator::translate(const sf::String &translationName) const
 {
+    if(translationName.isEmpty())return translationName;
+
+    // std::wcout << translationName.toWideString() << "\n";
     const auto &tr = Assets::I18N::translations;
     const auto iterator = tr.find(m_currentTranslation);
     if( iterator == tr.end())return translationName;
@@ -55,7 +59,7 @@ void Translator::setCurrentTranslation(const std::string &trName)
     translationChangedSignal.trigger();
 }
 
-I18NText Translator::make(const std::string &translationName, int fontSize)
+I18NText Translator::make(const sf::String &translationName, int fontSize)
 {
     return I18NText(*this, translationName, fontSize);
 

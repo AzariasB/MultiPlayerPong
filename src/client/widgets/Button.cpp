@@ -45,7 +45,7 @@
 
 namespace mp {
 
-Button::Button(const std::string &text) :
+Button::Button(const sf::String &text) :
     m_text(pr::translator().make(text, 50)),
     m_width(text == "" ? 0 : m_text.width()),
     m_height(m_text.height() + 30),
@@ -59,7 +59,7 @@ Button::Button(const std::string &text) :
     init();
 }
 
-Button::Button(const std::string &text, float xPos, float yPos):
+Button::Button(const sf::String &text, float xPos, float yPos):
     m_text(pr::translator().make(text, 50)),
     m_width(text == "" ? 0 : m_text.width()),
     m_height(m_text.height() + 30),
@@ -74,7 +74,7 @@ Button::Button(const std::string &text, float xPos, float yPos):
     setPosition(sf::Vector2f(xPos, yPos));
 }
 
-Button::Button(const std::string &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
+Button::Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
     m_text(pr::translator().make(text, 50)),
     m_width(text == "" ? 0 :  m_text.width()),
     m_height(m_text.height() + 30),

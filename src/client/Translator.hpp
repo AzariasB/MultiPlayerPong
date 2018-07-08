@@ -42,11 +42,11 @@ class Translator
 public:
     Translator();
 
-    sf::String translate(const std::string &translationName) const;
+    sf::String translate(const sf::String &translationName) const;
 
     void setCurrentTranslation(const std::string &trName);
 
-    I18NText make(const std::string &translationName, int fontSize = 30);
+    I18NText make(const sf::String &translationName, int fontSize = 30);
 
     I18NText make(const std::vector<sf::String> &translations, int fontSize = 30);
 

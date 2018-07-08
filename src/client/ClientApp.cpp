@@ -31,7 +31,7 @@
 
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/Packet.hpp>
-#include <QDebug>
+#include <iostream>
 
 #include "ClientApp.hpp"
 #include "ClientConf.hpp"
@@ -183,6 +183,7 @@ void ClientApp::run(int argc, char** argv)
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
+    std::locale::global(std::locale(""));
 
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
