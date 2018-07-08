@@ -44,6 +44,7 @@
 		"press_key" : "Press a key",
 		"change_key" : "Change key",
 		"Up" : "Up",
-		"Down" : "Down"
+		"Down" : "Down",
+		"language" : "Language"
 	}
 }

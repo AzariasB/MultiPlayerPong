@@ -45,7 +45,7 @@ OptionState::OptionState():
     m_menu()
 {
     float startY = 50.f;
-    startY += m_menu.addCenteredLabel("Options",SF_ARENA_WIDTH/2, 50, 70)->getGlobalBounds().height + 50.f;
+    startY += m_menu.addCenteredLabel("Options",SF_CENTER_X, 50, 70)->height()+ 50.f;
 
     m_muteButton = &m_menu.addButton("toggle_sound", SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::audioOnIcon);
 
@@ -56,6 +56,18 @@ OptionState::OptionState():
 
     m_screenButton = &m_menu.addButton("fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
     startY += m_screenButton->getHeight() + 50.f;
+
+    startY += m_menu.addCenteredLabel("language", SF_CENTER_X, startY, 70)->height() + 50;
+
+    for(const auto &lang: Assets::I18N::translations){
+        auto &btn = m_menu.addButton(lang.second.name, SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::questionIcon);
+        startY += btn.getHeight();
+        btn.clickedSignal.add([lang](){
+            pr::translator().setCurrentTranslation(lang.first);
+        });
+    }
+
+    startY += 50;
 
     Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitLeftIcon);
 
