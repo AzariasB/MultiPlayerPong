@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RCC>
   <qresource prefix="/fonts">
-    <file alias="whateverittakes.ttf">res/fonts/WhateverItTakes.ttf</file>
-    <file alias="whateverittakesbold.ttf">res/fonts/WhateverItTakesBold.ttf</file>
+    <file alias="caveatbrushregular.ttf">res/fonts/CaveatBrushRegular.ttf</file>
     <file alias="quicksand.otf">res/fonts/quicksand.otf</file>
   </qresource>
   <qresource prefix="/sounds">

@@ -39,7 +39,7 @@
 namespace mp {
 
 ResourcesManager::ResourcesManager():
-    m_uncompressedQuicksandFont(":/fonts/whateverittakesbold.ttf")
+    m_uncompressedQuicksandFont(":/fonts/caveatbrushregular.ttf")
 {
 
     for(const auto &p: Assets::animations) registerTexture(p.second, p.first);
