@@ -98,7 +98,7 @@ public:
      * @param action the action
      * @return the action in the form of a string
      */
-    sf::String toString(KEY_ACTION action);
+    std::vector<sf::String> toString(KEY_ACTION action);
 
     /**
      * @brief setKeyAction changes the key for a given action

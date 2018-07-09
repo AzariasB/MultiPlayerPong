@@ -64,7 +64,7 @@ public:
         for(auto it = m_listeners.begin(); it != m_listeners.end();){
             if (it->maxCalls == 0){
                 it = m_listeners.erase(it);
-            } else {
+            } else if(it->func) {
                 it->func(argp...);
                 if (it->maxCalls > -1) it->maxCalls--;
                 ++it;

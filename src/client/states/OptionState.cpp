@@ -60,7 +60,7 @@ OptionState::OptionState():
     startY += m_menu.addCenteredLabel("language", SF_CENTER_X, startY, 70)->height() + 50;
 
     for(const auto &lang: Assets::I18N::translations){
-        auto &btn = m_menu.addButton(lang.second.name, SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::questionIcon);
+        auto &btn = m_menu.addButton(lang.second.name, SF_ARENA_WIDTH / 4.f, startY);
         startY += btn.getHeight();
         btn.clickedSignal.add([lang](){
             pr::translator().setCurrentTranslation(lang.first);
@@ -74,6 +74,9 @@ OptionState::OptionState():
     Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
 
     m_menu.normalizeButtons();
+    pr::translator().translationChangedSignal.add([this](){
+        m_menu.normalizeButtons();
+    });
 
     keyBindingButton.clickedSignal.add([](){ pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT); });
     backButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});

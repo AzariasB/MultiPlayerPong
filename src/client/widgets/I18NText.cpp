@@ -40,6 +40,7 @@ I18NText::I18NText(Translator &translator, const std::vector<sf::String> &transl
     m_translator(translator),
     m_translations(translations)
 {
+    m_translator.translationChangedSignal.add([this](){ updateString();});
     updateString();
 }
 
@@ -66,6 +67,12 @@ void I18NText::setString(const sf::String &str)
     updateString();
 }
 
+void I18NText::setString(const std::vector<sf::String> &str)
+{
+    m_translations = str;
+    updateString();
+}
+
 void I18NText::updateString()
 {
     bool wasEmpty = getString().isEmpty();
@@ -73,8 +80,8 @@ void I18NText::updateString()
     float ratioX = oldOrigin.x / width();
     float ratioY = oldOrigin.y / height();
 
-    sf::String total;
-    for(const auto &str: m_translations) total += m_translator.translate(str);
+    sf::String total = "";
+    for(const sf::String &str: m_translations) total += m_translator.translate(str);
     sf::Text::setString(total);
 
     if(!wasEmpty) setOrigin(ratioX * width(), ratioY * height());

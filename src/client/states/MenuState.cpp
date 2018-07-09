@@ -70,6 +70,9 @@ MenuState::MenuState() :
     Button &quitButton = m_menu.addButton("quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
 
     m_menu.normalizeButtons(margin);
+    pr::translator().translationChangedSignal.add([this, margin](){
+        m_menu.normalizeButtons(margin);
+    });
 
     soloButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);});
     optionButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});

@@ -76,6 +76,9 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
+
+    Button &addButton(const sf::String &content, float xPos, float yPos);
+
     /**
      * @brief addButton adds a button to the menu, with the given text, at the given position
      * returns the button if the caller wants to make additional changes, and store it for another usage
@@ -85,6 +88,16 @@ public:
      * @return the button newly created
      */
     Button &addButton(const sf::String &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+
+    /**
+     * @brief addButton adds a button with the given strings to translate
+     * @param content vector of string for the button
+     * @param xPos x position of the button
+     * @param yPos y position of the button
+     * @param icon icon of the button
+     * @return the created button
+     */
+    Button &addButton(const std::vector<sf::String> &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
      * @brief addLabel adds a label to the menu, with the given text, at the given result
@@ -133,6 +146,12 @@ private:
      * @param nwIndex
      */
     void setSeletedIndex(int nwIndex);
+
+    /**
+     * @brief selectIfFirst select the last inserted button
+     * if it's the first to be inserted
+     */
+    Button &configureButton(Button &inserted);
 
     /**
      * @brief m_labels all the labels of the menu

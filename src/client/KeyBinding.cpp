@@ -68,11 +68,11 @@ sf::Event KeyBinding::toGameEvent(const sf::Event &ev) const
     return copy;
 }
 
-sf::String KeyBinding::toString(KEY_ACTION action)
+std::vector<sf::String> KeyBinding::toString(KEY_ACTION action)
 {
-    if(m_keyActions.find(action) == m_keyActions.end()) return "";
+    if(m_keyActions.find(action) == m_keyActions.end()) return {""};
     const KeyAction &ka = m_keyActions.find(action)->second;
-    return pr::translator().translate(ka.title) + " : " +  toString(ka.actualKey);
+    return {ka.title, " : ",  toString(ka.actualKey)};
 }
 
 void KeyBinding::resetBindings()
@@ -83,7 +83,7 @@ void KeyBinding::resetBindings()
 
 sf::String KeyBinding::toString(sf::Keyboard::Key k) const
 {
-    return pr::translator().translate(m_keyMap.find(k)->second);
+    return m_keyMap.find(k)->second;
 }
 
 void KeyBinding::initKeyAction()

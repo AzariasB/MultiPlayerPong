@@ -90,6 +90,22 @@ Button::Button(const sf::String &text, float xPos, float yPos, const Assets::Ico
     setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
 }
 
+Button::Button(const std::vector<sf::String> &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
+    m_text(pr::translator().make(text, 50)),
+    m_width(m_text.width()),
+    m_height(m_text.height() + 30),
+    m_color(cc::Colors::fontColor),
+    m_background(),
+    m_border(),
+    // Signals
+    clickedSignal(),
+    selectedSignal()
+{
+    init();
+    setPosition(sf::Vector2f(xPos, yPos));
+    setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
+}
+
 void Button::setOrigin(const sf::Vector2f &origin)
 {
     m_origin = origin;
@@ -107,6 +123,9 @@ void Button::setOrigin(float x, float y)
 
 void Button::init()
 {
+    pr::translator().translationChangedSignal.add([this](){
+        setWidth(m_text.width() + m_icon.getGlobalBounds().width);
+    });
     m_rectColor = ColorTweening(cc::Colors::buttonColor);
     m_icon.setOrigin(m_icon.getGlobalBounds().width, m_icon.getGlobalBounds().height / 2.f);
 
@@ -121,12 +140,12 @@ void Button::init()
 
 float Button::getHeight() const
 {
-    return m_height + SF_BUTTON_BORDER * 2;
+    return m_height;
 }
 
 float Button::getWidth() const
 {
-    return m_width + SF_BUTTON_BORDER * 2;
+    return m_width;
 }
 
 void Button::update(const sf::Time &elapsed)
@@ -221,6 +240,11 @@ void Button::setText(const sf::String &text)
     m_text.setString(text);
 }
 
+void Button::setText(const std::vector<sf::String> &str)
+{
+    m_text.setString(str);
+}
+
 void Button::setSelected(bool selected)
 {
     if(m_hilighted == selected)return;
@@ -292,7 +316,6 @@ void Button::updateIcon()
     changeIconScale();
     setWidth(m_width + m_icon.getGlobalBounds().width);
 }
-
 
 
 void Button::updateText()

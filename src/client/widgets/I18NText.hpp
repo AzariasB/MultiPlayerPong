@@ -52,6 +52,8 @@ public:
 
     void setString(const sf::String &str);
 
+    void setString(const std::vector<sf::String> &str);
+
 private:
     void updateString();
 
