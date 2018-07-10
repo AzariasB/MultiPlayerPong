@@ -74,7 +74,7 @@ public:
      * @brief update inherited function
      * @param elapsed
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
 
     Button &addButton(const sf::String &content, float xPos, float yPos);

@@ -47,10 +47,11 @@ Menu::~Menu()
 
 }
 
-void Menu::update(const sf::Time &elapsed)
+bool Menu::update(const sf::Time &elapsed)
 {
     for(auto &it : m_buttons)
         it->update(elapsed);
+    return true;
 }
 
 

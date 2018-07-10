@@ -108,7 +108,7 @@ public:
      * @brief update inerited function
      * @param elapsed
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
     /**
      * @brief draw Function to draw the button
@@ -312,6 +312,8 @@ private:
      * @brief m_alignment button alignment
      */
     Alignment m_alignment = Center;
+
+    std::string m_listenerId;
 
 public:
     Signal<> clickedSignal;

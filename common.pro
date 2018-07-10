@@ -43,5 +43,4 @@ HEADERS +=\
     src/common/ContactListener.hpp \
     src/common/PhysicObject.hpp \
     src/common/Timer.hpp \
-    src/common/FunctionalUtils.hpp \
     src/common/Signal.hpp

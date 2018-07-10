@@ -72,9 +72,10 @@ void TextInput::render(Renderer &renderer) const
             .draw(m_pipe);
 }
 
-void TextInput::update(const sf::Time &elapsed)
+bool TextInput::update(const sf::Time &elapsed)
 {
     m_timer.update(elapsed);
+    return Widget::update(elapsed);
 }
 
 bool TextInput::handleEvent(const sf::Event& ev)

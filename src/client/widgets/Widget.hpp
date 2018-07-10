@@ -80,9 +80,15 @@ public:
      */
     virtual bool handleEvent(const sf::Event &ev) = 0;
 
-    virtual void update(const sf::Time &elapsed)
+    /**
+     * @brief update calls to update the internal state of the widget
+     * @param elapsed the time elapsed since the last update method was called
+     * @return true if the widget is still "alive" and must be updated at the next frame
+     * false if it does not need to be updated anymore (and can be destroyed)
+     */
+    virtual bool update(const sf::Time &elapsed)
     {
-
+        return true;
     }
 
     virtual ~Widget()

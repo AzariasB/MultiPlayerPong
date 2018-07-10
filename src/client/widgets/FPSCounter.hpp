@@ -54,7 +54,7 @@ public:
      * @brief update inherited function
      * @param elapsed
      */
-    void update(const sf::Time &elapsed);
+    bool update(const sf::Time &elapsed);
 
     /**
      * @brief draw inherited function

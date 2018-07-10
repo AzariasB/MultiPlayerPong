@@ -44,8 +44,7 @@ Dialog::Dialog(const sf::Uint64 id, const sf::String &title):
     m_title(pr::translator(), title, 50),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
-    closeSignal(),
-    hiddenSignal()
+    closeSignal()
 {
     m_title.setPosition(originX + 5,originY + 5);
     auto &closeBtn = m_menu.addButton("", originX + SF_DIALOG_WIDTH, originY + 4, Assets::IconAtlas::crossIcon);
@@ -69,7 +68,7 @@ const sf::Uint64 &Dialog::id() const
     return m_id;
 }
 
-void Dialog::update(const sf::Time &elapsed)
+bool Dialog::update(const sf::Time &elapsed)
 {
     if(m_state != DIALOG_HIDDEN){
         m_yTransition.step(elapsed);
@@ -80,13 +79,13 @@ void Dialog::update(const sf::Time &elapsed)
                 m_state = DIALOG_VISIBLE;
             else if(m_state == DIALOG_HIDING){
                 m_state = DIALOG_HIDDEN;
-                hiddenSignal.trigger();
-                return;
+                return false;
             }
 
         }
     }
     m_menu.update(elapsed);
+    return Widget::update(elapsed);
 }
 
 void Dialog::render(Renderer &renderer) const
@@ -188,10 +187,10 @@ DialogInput::~DialogInput()
 {
 }
 
-void DialogInput::update(const sf::Time &elapsed)
+bool DialogInput::update(const sf::Time &elapsed)
 {
     m_input.update(elapsed);
-    Dialog::update(elapsed);
+    return Dialog::update(elapsed);
 }
 
 void DialogInput::render(Renderer &renderer) const

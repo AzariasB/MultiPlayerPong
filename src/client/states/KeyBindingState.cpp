@@ -97,7 +97,7 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
             pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
             std::vector<sf::String> nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
-            // m_waitingAction->button->setText(nwBtnTitle);
+            m_waitingAction->button->setText(nwBtnTitle);
             m_waitingAction = 0;
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
@@ -134,12 +134,12 @@ void KeyBindingState::cancelDialog()
 
 void KeyBindingState::buttonClicked(ActionsButton *ab)
 {
-    // m_waitingAction = ab;
+    m_waitingAction = ab;
     DialogMessage &dm = pr::dialogManager().message("change_key","press_key");
     m_messageDialogId = dm.id();
-    /* auto cancel = [this](){cancelDialog();};
+    auto cancel = [this](){cancelDialog();};
     dm.okClickedSignal.add(cancel);
-    dm.closeSignal.add(cancel); */
+    dm.closeSignal.add(cancel);
 }
 
 

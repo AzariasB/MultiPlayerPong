@@ -55,9 +55,19 @@ bool DialogManager::handleEvent(const sf::Event &ev)
     return false;
 }
 
-void DialogManager::update(const sf::Time &elapsed)
+bool DialogManager::update(const sf::Time &elapsed)
 {
-    for(auto &ptr : m_dialogs) ptr.second->update(elapsed);
+    for(auto it = m_dialogs.begin(); it != m_dialogs.end();)
+    {
+        if(!it->second->update(elapsed)){
+            sf::Uint64 id = it->first;
+            it = m_dialogs.erase(it);
+            removeDialog(id);
+        } else {
+            ++it;
+        }
+    }
+    return true;
 }
 
 bool DialogManager::isActiveDialog(const sf::Uint64 &dialogId)
@@ -84,7 +94,6 @@ void DialogManager::hideDialog(sf::Uint64 dialogId)
 
 void DialogManager::removeDialog(sf::Uint64 dialogId)
 {
-    m_dialogs.erase(dialogId);
     if(dialogId == m_activeDialogId){
         if(m_dialogs.size() > 0){
             m_activeDialogId = (*std::prev(m_dialogs.end())).first;

@@ -38,19 +38,24 @@ namespace mp {
 I18NText::I18NText(Translator &translator, const std::vector<sf::String> &translations, int fontSize):
     sf::Text("", pr::resourceManager().getFont(), fontSize),
     m_translator(translator),
-    m_translations(translations)
+    m_translations(translations),
+    m_listenerId(m_translator.translationChangedSignal.add(m_erase))
 {
-    m_translator.translationChangedSignal.add([this](){ updateString();});
     updateString();
 }
 
 I18NText::I18NText(Translator &translator, const sf::String &translationName, int fontSize):
     sf::Text("", pr::resourceManager().getFont(), fontSize),
-    m_translator(translator)
+    m_translator(translator),
+    m_listenerId(m_translator.translationChangedSignal.add(m_erase))
 {
-    m_translator.translationChangedSignal.add([this](){ updateString();});
     m_translations.push_back(translationName);
     updateString();
+}
+
+I18NText::~I18NText()
+{
+    m_translator.translationChangedSignal.remove(m_listenerId);
 }
 
 I18NText& I18NText::operator +=(const sf::String &str)

@@ -106,6 +106,7 @@ Button::Button(const std::vector<sf::String> &text, float xPos, float yPos, cons
     setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
 }
 
+
 void Button::setOrigin(const sf::Vector2f &origin)
 {
     m_origin = origin;
@@ -123,7 +124,7 @@ void Button::setOrigin(float x, float y)
 
 void Button::init()
 {
-    pr::translator().translationChangedSignal.add([this](){
+    m_listenerId = pr::translator().translationChangedSignal.add([this](){
         setWidth(m_text.width() + m_icon.getGlobalBounds().width);
     });
     m_rectColor = ColorTweening(cc::Colors::buttonColor);
@@ -148,12 +149,13 @@ float Button::getWidth() const
     return m_width;
 }
 
-void Button::update(const sf::Time &elapsed)
+bool Button::update(const sf::Time &elapsed)
 {
     m_color.update(elapsed);
     m_rectWidth.step(elapsed);
     m_rectColor.update(elapsed);
     updateText();
+    return Widget::update(elapsed);
 }
 
 void Button::setPosition(const sf::Vector2f& position)
@@ -334,6 +336,7 @@ void Button::setAlignment(Alignment al)
 
 Button::~Button()
 {
+    pr::translator().translationChangedSignal.remove(m_listenerId);
 }
 
 }

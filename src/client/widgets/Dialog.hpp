@@ -89,7 +89,7 @@ public:
      * @brief update inherited function
      * @param elapsed elapsed time
      */
-    virtual void update(const sf::Time &elapsed);
+    virtual bool update(const sf::Time &elapsed);
 
 	/**
 	 * @brief isVisible wether the dialog is currently displayed
@@ -187,7 +187,6 @@ private:
 
 public:
     Signal<> closeSignal;
-    Signal<> hiddenSignal;
 };
 
 //END DIALOG
@@ -223,7 +222,7 @@ public:
      * @brief update inherited function
      * @param elapsed
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
     /**
      * @brief draw inherited function

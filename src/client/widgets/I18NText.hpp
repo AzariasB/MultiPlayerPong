@@ -46,6 +46,8 @@ public:
 
     I18NText &operator+=(const sf::String &add);
 
+    virtual ~I18NText();
+
     int width();
 
     int height();
@@ -60,6 +62,10 @@ private:
     Translator &m_translator;
 
     std::vector<sf::String> m_translations;
+
+    std::function<void()> m_erase = [this](){updateString();};
+
+    std::string m_listenerId;
 };
 
 
