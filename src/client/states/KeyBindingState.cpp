@@ -33,6 +33,7 @@
 #include "KeyBindingState.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/Provider.hpp"
+#include "src/client/Translator.hpp"
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/StateMachine.hpp"
 #include "src/client/widgets/DialogManager.hpp"
@@ -49,11 +50,10 @@ KeyBindingState::KeyBindingState():
 
     const int xSide = SF_ARENA_WIDTH / 4.f;
     for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
-        std::string btnTitle = pr::keyBinding().toString(ka);
-        Button &b = m_menu.addButton(btnTitle ,xSide, startY, actionIcon(ka));
+        Button &b = m_menu.addButton(pr::keyBinding().toString(ka) ,xSide, startY, actionIcon(ka));
         startY += b.getHeight() + 10;
         m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
-        auto action = m_actions.back().get();
+        auto *action = m_actions.back().get();
         b.clickedSignal.add([this, action](){
             buttonClicked(action);
         });
@@ -72,6 +72,7 @@ KeyBindingState::KeyBindingState():
             });
 
     m_menu.normalizeButtons();
+    pr::translator().translationChangedSignal.add([this](){m_menu.normalizeButtons();});
 }
 
 KeyBindingState::~KeyBindingState()
@@ -95,7 +96,7 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
     if(pr::dialogManager().isActiveDialog(m_messageDialogId)){
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
             pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
-            sf::String nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
+            std::vector<sf::String> nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
             m_waitingAction->button->setText(nwBtnTitle);
             m_waitingAction = 0;
             pr::dialogManager().hideDialog(m_messageDialogId);

@@ -30,17 +30,16 @@
  */
 #include "Menu.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/ClientConf.hpp"
-#include "src/client/ResourcesManager.hpp"
-#include "src/client/SoundEngine.hpp"
 #include "src/client/Renderer.hpp"
+#include "src/client/ClientConf.hpp"
+#include "src/client/SoundEngine.hpp"
+#include "src/client/ResourcesManager.hpp"
 
 namespace mp {
 
 
 Menu::Menu()
 {
-
 }
 
 Menu::~Menu()
@@ -48,21 +47,30 @@ Menu::~Menu()
 
 }
 
-void Menu::update(const sf::Time &elapsed)
+bool Menu::update(const sf::Time &elapsed)
 {
     for(auto &it : m_buttons)
         it->update(elapsed);
+    return true;
+}
+
+
+Button &Menu::addButton(const sf::String &content, float xPos, float yPos)
+{
+    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos));
+    return configureButton(*m_buttons.back());
 }
 
 Button &Menu::addButton(const sf::String &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
 {    
     m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
-    std::unique_ptr<Button> &inserted = m_buttons.back();
+    return configureButton(*m_buttons.back());
+}
 
-    int idx = m_buttons.size() -1;
-    inserted->selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
-    if(m_buttons.size() == 1) inserted->setSelected(true);
-    return *inserted;
+Button &Menu::addButton(const std::vector<sf::String> &content, float xPos, float yPos, const Assets::IconAtlas::Holder &icon)
+{
+    m_buttons.emplace_back(std::make_unique<Button>(content, xPos, yPos, icon));
+    return configureButton(*m_buttons.back());
 }
 
 std::unique_ptr<I18NText> &Menu::addCenteredLabel(const sf::String &content, float xCenter, float yCenter, unsigned int charSize)
@@ -86,6 +94,14 @@ std::unique_ptr<I18NText> &Menu::addLabel(const std::vector<sf::String> &content
     m_labels.back()->setFillColor(cc::Colors::fontColor);
     m_labels.back()->setPosition(xpOs, yPos);
     return m_labels.back();
+}
+
+Button &Menu::configureButton(Button &inserted)
+{
+    int idx = m_buttons.size() -1;
+    inserted.selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
+    if(m_buttons.size() == 1) inserted.setSelected(true);
+    return inserted;
 }
 
 void Menu::normalizeButtons(float additionalWidth)

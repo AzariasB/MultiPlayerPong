@@ -73,7 +73,7 @@ public:
      * blinking pipe at the end)
      * @param elapsed
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
     /**
      * @brief setText sets the text inside the text input

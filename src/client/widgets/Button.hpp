@@ -83,6 +83,15 @@ public:
     Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
 
     /**
+     * @brief Button constructor
+     * @param text the vector of translatable strings
+     * @param xPos x position of the button
+     * @param yPos y position of the button
+     * @param icon icon
+     */
+    Button(const std::vector<sf::String> &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon);
+
+    /**
      * @brief setOrigin changes the origin of the button
      * @param origin the new origin
      */
@@ -99,7 +108,7 @@ public:
      * @brief update inerited function
      * @param elapsed
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
     /**
      * @brief draw Function to draw the button
@@ -189,6 +198,12 @@ public:
      * @param text the new text to set
      */
     void setText(const sf::String &text);
+
+    /**
+     * @brief setText changes the text of the button, the dimensions will also change
+     * @param str the new text of the button
+     */
+    void setText(const std::vector<sf::String> &str);
 
     /**
      * @brief setSelected changes the selected state of the button
@@ -297,6 +312,8 @@ private:
      * @brief m_alignment button alignment
      */
     Alignment m_alignment = Center;
+
+    std::string m_listenerId;
 
 public:
     Signal<> clickedSignal;

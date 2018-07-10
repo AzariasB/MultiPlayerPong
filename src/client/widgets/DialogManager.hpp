@@ -71,7 +71,7 @@ public:
      * @brief update updates all the visible dialogs
      * @param elapsed time
      */
-    void update(const sf::Time &elapsed) override;
+    bool update(const sf::Time &elapsed) override;
 
     /**
      * @brief isActiveDialog checks wether the given dialog is the active dialog
@@ -175,7 +175,6 @@ private:
         std::unique_ptr<T> nwDialog = std::make_unique<T>(m_activeDialogId, args...);
 
         nwDialog->closeSignal.add([this](){closeDialog(m_activeDialogId); });
-        nwDialog->hiddenSignal.add([this](){removeDialog(m_activeDialogId); });
 
         nwDialog->show(true);
         m_dialogs[m_activeDialogId] = std::move(nwDialog);

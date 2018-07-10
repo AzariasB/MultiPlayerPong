@@ -33,6 +33,7 @@
 
 #include <vector>
 #include <functional>
+#include "Math.hpp"
 #include <SFML/Config.hpp>
 
 namespace  mp {
@@ -79,12 +80,30 @@ public:
      * @param listens the max number of listens for this signal
      * @return itself
      */
-    Signal &add(Signal<Args...> &other, sf::Int64 listens = -1)
+    std::string add(Signal<Args...> &other, sf::Int64 listens = -1)
     {
         std::function<void(Args...)> listener = [&other](Args ...argp){
               other.trigger(argp...);
         };
         m_listeners.emplace_back(listener, listens);
+
+        return m_listeners.back().id;
+    }
+
+    /**
+     * @brief remove removes the given listener
+     * @param listener the function to remove from the listeners list
+     * @return itself
+     */
+    Signal &remove(const std::string &id)
+    {
+        for(auto it = m_listeners.begin(); it != m_listeners.end();){
+            if(id == it->id){
+                it = m_listeners.erase(it);
+            } else {
+                ++it;
+            }
+        }
 
         return *this;
     }
@@ -96,11 +115,11 @@ public:
      * @param listens the number max of listens
      * @return itself
      */
-    Signal &add(const std::function<void(Args...)> listener, sf::Int64 listens = -1)
+    std::string add(const std::function<void(Args...)> listener, sf::Int64 listens = -1)
     {
         m_listeners.emplace_back(listener, listens);
 
-        return *this;
+        return m_listeners.back().id;
     }
 
     /**
@@ -134,7 +153,8 @@ private:
 
         Listener(const std::function<void(Args...)> f, sf::Int64 calls):
             func(f),
-            maxCalls(calls)
+            maxCalls(calls),
+            id(math::uuid())
         {}
 
         /**
@@ -146,6 +166,8 @@ private:
          * @brief maxCalls maximum number of calls
          */
         sf::Int64 maxCalls = -1;
+
+        std::string id;
     };
 
     /**
@@ -154,6 +176,7 @@ private:
      */
     std::vector<Listener> m_listeners;
 };
+
 
 }
 

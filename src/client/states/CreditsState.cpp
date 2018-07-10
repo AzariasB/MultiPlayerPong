@@ -46,12 +46,13 @@ CreditsState::CreditsState():
     he += mMenu.addLabel({"- ","programming"," : Azarias Boutin"}, leftPos, he)->height();
     he += mMenu.addLabel({"- ","drawing"," : Azarias Boutin"}, leftPos, he)->height();
     he += mMenu.addLabel({"- ","sounds","/", "icons"," : Kenney (www.kenney.nl)"}, leftPos, he)->height();
-    he += mMenu.addLabel({"- ","font"," : 'Whatever it takes' (brittneymurphydesign.com)"}, leftPos, he)->height();
+    he += mMenu.addLabel({"- ","font"," : 'Caveat brush regular' (Impallari Type)"}, leftPos, he)->height();
     he += mMenu.addLabel("- SFML " + sfmlVersion() + " (sfml-dev.org)", leftPos, he)->height();
     he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", leftPos, he)->height();
     he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", leftPos, he)->height();
 
-    Button &btn = mMenu.addButton("menu", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT - 150, Assets::IconAtlas::exitLeftIcon);
+    Button &btn = mMenu.addButton("menu", SF_CENTER_X, SF_ARENA_HEIGHT - 15, Assets::IconAtlas::exitLeftIcon);
+    btn.setOrigin(btn.getWidth() / 2.f, btn.getHeight());
     btn.setWidth(btn.getWidth() + 10);
     btn.clickedSignal.add([this](){ menu(); });
 }

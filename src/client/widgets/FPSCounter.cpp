@@ -49,10 +49,11 @@ FPSCounter::FPSCounter(const sf::Font &font):
     });
 }
 
-void FPSCounter::update(const sf::Time &elapsed)
+bool FPSCounter::update(const sf::Time &elapsed)
 {
     m_timer.update(elapsed);
     m_calls++;
+    return Widget::update(elapsed);
 }
 
 void FPSCounter::render(Renderer &renderer) const

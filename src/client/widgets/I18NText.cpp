@@ -38,18 +38,24 @@ namespace mp {
 I18NText::I18NText(Translator &translator, const std::vector<sf::String> &translations, int fontSize):
     sf::Text("", pr::resourceManager().getFont(), fontSize),
     m_translator(translator),
-    m_translations(translations)
+    m_translations(translations),
+    m_listenerId(m_translator.translationChangedSignal.add(m_erase))
 {
     updateString();
 }
 
 I18NText::I18NText(Translator &translator, const sf::String &translationName, int fontSize):
     sf::Text("", pr::resourceManager().getFont(), fontSize),
-    m_translator(translator)
+    m_translator(translator),
+    m_listenerId(m_translator.translationChangedSignal.add(m_erase))
 {
-    m_translator.translationChangedSignal.add([this](){ updateString();});
     m_translations.push_back(translationName);
     updateString();
+}
+
+I18NText::~I18NText()
+{
+    m_translator.translationChangedSignal.remove(m_listenerId);
 }
 
 I18NText& I18NText::operator +=(const sf::String &str)
@@ -66,6 +72,12 @@ void I18NText::setString(const sf::String &str)
     updateString();
 }
 
+void I18NText::setString(const std::vector<sf::String> &str)
+{
+    m_translations = str;
+    updateString();
+}
+
 void I18NText::updateString()
 {
     bool wasEmpty = getString().isEmpty();
@@ -73,8 +85,8 @@ void I18NText::updateString()
     float ratioX = oldOrigin.x / width();
     float ratioY = oldOrigin.y / height();
 
-    sf::String total;
-    for(const auto &str: m_translations) total += m_translator.translate(str);
+    sf::String total = "";
+    for(const sf::String &str: m_translations) total += m_translator.translate(str);
     sf::Text::setString(total);
 
     if(!wasEmpty) setOrigin(ratioX * width(), ratioY * height());
