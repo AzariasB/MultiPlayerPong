@@ -90,9 +90,10 @@ public:
     virtual ~TextInput();
 private:
     /**
-     * @brief updatePipePos update the blinking pipe position
+     * @brief movePipe moves the pipe in the given direction, while keeping it in the bounds
+     * @param direction direction of the pipe
      */
-    void updatePipePos();
+    bool movePipe(int direction);
 
     /**
      * @brief addString adds the given string to the actual string, without
@@ -105,7 +106,13 @@ private:
      * @brief removeLastChar clears out the last char
      * of the string (if there's any)
      */
-    void removeLastChar();
+    void removeChar();
+
+    /**
+     * @brief supprChar clears the character located
+     * after the curosr (if any)
+     */
+    bool supprChar();
 
     /**
      * @brief m_text the text to draw showing what the user typed
@@ -116,6 +123,8 @@ private:
      * @brief m_pipe the blinking pipe at the end of the text entered
      */
     sf::Text m_pipe;
+
+    int m_pipeIndex = 0;
 
     /**
      * @brief m_typed the actual text entered by the user

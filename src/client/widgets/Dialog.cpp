@@ -205,7 +205,7 @@ void DialogInput::render(Renderer &renderer) const
 bool DialogInput::handleEvent(const sf::Event &ev)
 {
     if(!isVisible()) return false;
-    return Dialog::handleEvent(ev) || m_input.handleEvent(ev);
+    return m_input.handleEvent(ev) || Dialog::handleEvent(ev);
 }
 
 // INPUT END
