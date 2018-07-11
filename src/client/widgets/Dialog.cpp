@@ -239,7 +239,7 @@ DialogQuestion::~DialogQuestion()
 
 const sf::String &DialogQuestion::getQuestion() const
 {
-    return m_questionText.getString().toAnsiString();
+    return m_questionText.getString();
 }
 
 void DialogQuestion::setQuestion(const sf::String &nwQuestion)

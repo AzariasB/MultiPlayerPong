@@ -79,7 +79,7 @@ public:
      * @brief onEnter inherited function
      * @param data
      */
-    void onEnter(BaseStateData *data) override;
+    void onEnter(BaseStateData *) override;
 
     /**
      * @brief onBeforeEnter inherited function

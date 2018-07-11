@@ -85,7 +85,7 @@ void Renderer::shake()
     //   m_shakeTimeout = sf::seconds(1.f);
 }
 
-void Renderer::update(const sf::Time &elapsed)
+void Renderer::update(const sf::Time &)
 {
     /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;

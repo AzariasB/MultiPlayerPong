@@ -113,7 +113,7 @@ void EndState::onBeforeEnter()
     m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
 }
 
-void EndState::onEnter(BaseStateData *data)
+void EndState::onEnter(BaseStateData *)
 {
     pr::game().reset();
     pr::socket().disconnect();

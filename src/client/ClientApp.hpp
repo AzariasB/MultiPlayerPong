@@ -236,15 +236,16 @@ private:
     void resizeEvent(const sf::Event &event);
 
     /**
-     * @brief m_cursor mouse cursor
-     */
-    sf::Cursor m_cursor;
-
-    /**
      * @brief window window to use to get events
      * and render stuff
      */
     sf::RenderWindow *window;
+
+
+    /**
+     * @brief m_cursor mouse cursor
+     */
+    sf::Cursor m_cursor;
 
     /**
      * @brief m_isFullscreen wether the current window
@@ -257,6 +258,11 @@ private:
      * used for the graphics and the sound (client related)
      */
     ResourcesManager rManager;
+
+    /**
+     * @brief m_translator main translator
+     */
+    Translator m_translator;
 
     /**
      * @brief renderer Object to use to render the game objects,
@@ -310,11 +316,6 @@ private:
      * the game's fps
      */
     FPSCounter m_counter;
-
-    /**
-     * @brief m_translator main translator
-     */
-    Translator m_translator;
 
 };
 

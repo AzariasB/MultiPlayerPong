@@ -57,7 +57,7 @@ public:
      * @param argc the number of argument
      * @param argv the arguments
      */
-    virtual void run(int argc, char **argv);
+    virtual void run(int, char **);
 
     /**
      * @brief instance returns and instance of the application

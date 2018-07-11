@@ -650,13 +650,13 @@ enum easing{
         //The value the tweening must reach
         BOUND to;
 
-        float totalProgress;//total progress  0 = begin, 1 = finished
-
         //The time it must take to reach the value
         sf::Time totalTime;
 
         //The current time value
         sf::Time advance;
+
+        float totalProgress;//total progress  0 = begin, 1 = finished
 
         //the function to call whenever the tweening is over
         F finishCallback;
