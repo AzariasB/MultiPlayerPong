@@ -32,6 +32,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Clipboard.hpp>
+#include <SFML/Graphics/Glyph.hpp>
 #include "TextInput.hpp"
 
 #include "src/client/Provider.hpp"
@@ -46,7 +47,7 @@ namespace mp {
 
 TextInput::TextInput(const sf::Vector2f &position) :
     m_text("", pr::resourceManager().getFont()),
-    m_pipe("|", pr::resourceManager().getFont()),
+    m_pipe(),
     m_pipeIndex(0),
     m_typed(""),
     m_background(sf::Vector2f(9 * SF_DIALOG_WIDTH / 10.f, 50)),
@@ -57,6 +58,8 @@ TextInput::TextInput(const sf::Vector2f &position) :
     m_background.setOutlineThickness(5);
     m_background.setPosition(position.x - 10, position.y);
     m_text.setPosition(position);
+    m_pipe.setFillColor(sf::Color::White);
+    m_pipe.setSize(sf::Vector2f(2, 40));
     movePipe(0);
 
     m_timer.setCallback([this](){
@@ -137,7 +140,7 @@ void TextInput::addString(const sf::String &toAdd)
     if(m_typed.isEmpty()){
         m_typed = toAdd;
     } else {
-         m_typed = m_typed.substring(0, m_pipeIndex) + toAdd + m_typed.substring(m_pipeIndex);
+         m_typed.insert(m_pipeIndex, toAdd);
     }
     m_typed = m_typed.substring(0, MAX_INPUT_CHARS);
     m_text.setString(m_typed);
@@ -148,8 +151,12 @@ bool TextInput::movePipe(int direction)
 {
     int oldIdx = m_pipeIndex;
     m_pipeIndex = math::clampf(0, (int)m_typed.getSize(), m_pipeIndex + direction);
-    float charWidth = m_text.getGlobalBounds().width / m_typed.getSize();
-    m_pipe.setPosition(m_text.getPosition().x + charWidth * m_pipeIndex - 5, m_text.getPosition().y );
+    float xPos = 0;
+    for(int i = 0; i < m_pipeIndex; ++i){
+        xPos += pr::resourceManager().getFont().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
+    }
+
+    m_pipe.setPosition(m_text.getPosition().x + xPos, m_text.getPosition().y );
     return oldIdx != m_pipeIndex;
 }
 

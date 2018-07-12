@@ -122,7 +122,7 @@ private:
     /**
      * @brief m_pipe the blinking pipe at the end of the text entered
      */
-    sf::Text m_pipe;
+    sf::RectangleShape m_pipe;
 
     int m_pipeIndex = 0;
 
