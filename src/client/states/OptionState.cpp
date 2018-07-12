@@ -59,19 +59,27 @@ OptionState::OptionState():
 
     startY += m_menu.addCenteredLabel("language", SF_CENTER_X, startY, 70)->height() + 50;
 
+    float xPos = SF_ARENA_WIDTH / 4.f;
+    float currentY = startY;
+    int idx = 0;
     for(const auto &lang: Assets::I18N::translations){
-        auto &btn = m_menu.addButton(lang.second.name, SF_ARENA_WIDTH / 4.f, startY);
-        startY += btn.getHeight();
+        auto &btn = m_menu.addButton(lang.second.name, xPos, currentY);
+        currentY += btn.getHeight() + 10;
         btn.clickedSignal.add([lang](){
             pr::translator().setCurrentTranslation(lang.first);
         });
+        idx++;
+        if(idx%3 == 0){
+            xPos += SF_ARENA_WIDTH / 2.f;
+            currentY = startY;
+        }
     }
 
-    startY += 50;
+    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , SF_ARENA_HEIGHT - 50, Assets::IconAtlas::exitLeftIcon);
+    backButton.setOrigin(0, backButton.getHeight());
 
-    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitLeftIcon);
-
-    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
+    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, SF_ARENA_HEIGHT - 50, Assets::IconAtlas::rightIcon);
+    playButton.setOrigin(0, playButton.getHeight());
 
     m_menu.normalizeButtons();
     pr::translator().translationChangedSignal.add([this](){

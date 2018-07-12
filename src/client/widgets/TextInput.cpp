@@ -103,7 +103,8 @@ bool TextInput::handleEvent(const sf::Event& ev)
         if(txt == 127)return false;
         if(txt == 8){//backspace
             removeChar();
-        } else {
+        } else if(txt != 13) {
+            //bug on linux : the 13 character (line cariage) is sent when pressing a character sometimes
             addString(sf::String(txt));
         }
         return true;
