@@ -38,6 +38,8 @@
 #include "src/client/widgets/Button.hpp"
 #include "src/client/widgets/Dialog.hpp"
 
+#include <iostream>
+
 namespace mp {
 
 MenuState::~MenuState()

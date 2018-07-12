@@ -41,8 +41,6 @@
 #include "src/client/ClientConf.hpp"
 #include "src/client/ResourcesManager.hpp"
 
-#include <iostream>
-
 namespace mp {
 
 TextInput::TextInput(const sf::Vector2f &position) :

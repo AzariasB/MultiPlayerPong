@@ -98,6 +98,11 @@ private:
     const sf::IntRect &getCurrentScreenRect() const;
 
     /**
+     * @brief updateLangButtonsIcon changes the buttons icons
+     */
+    void updateLangButtonsIcon();
+
+    /**
      * @brief m_menu the menu with all the options
      */
     Menu m_menu;
@@ -113,6 +118,8 @@ private:
      * to be able to change its icon
      */
     Button *m_screenButton;
+
+    std::unordered_map<std::string, Button*> m_langButtons;
 
 public:
     Signal<> fullScreenSignal;

@@ -64,9 +64,12 @@ OptionState::OptionState():
     int idx = 0;
     for(const auto &lang: Assets::I18N::translations){
         auto &btn = m_menu.addButton(lang.second.name, xPos, currentY);
+        m_langButtons[lang.first] = &btn;
+        btn.setAlignment(Button::Alignment::TopLeft);
         currentY += btn.getHeight() + 10;
-        btn.clickedSignal.add([lang](){
+        btn.clickedSignal.add([this, lang](){
             pr::translator().setCurrentTranslation(lang.first);
+            updateLangButtonsIcon();
         });
         idx++;
         if(idx%3 == 0){
@@ -74,6 +77,7 @@ OptionState::OptionState():
             currentY = startY;
         }
     }
+    updateLangButtonsIcon();
 
     Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , SF_ARENA_HEIGHT - 50, Assets::IconAtlas::exitLeftIcon);
     backButton.setOrigin(0, backButton.getHeight());
@@ -91,6 +95,17 @@ OptionState::OptionState():
     playButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
+}
+
+void OptionState::updateLangButtonsIcon()
+{
+    for(auto &btn : m_langButtons){
+        if(btn.first == pr::translator().currentTranslation()){
+            btn.second->setIcon(Assets::IconAtlas::checkmarkIcon);
+        } else {
+            btn.second->removeIcon();
+        }
+    }
 }
 
 void OptionState::toggleSound()

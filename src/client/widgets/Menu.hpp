@@ -138,14 +138,14 @@ public:
      * @brief changeSelection updates the selected button
      * @param dir
      */
-    void changeSelection(int dir);
+    bool changeSelection(int dir);
 private:
 
     /**
      * @brief setSeletedIndex changes the selected button index
      * @param nwIndex
      */
-    void setSeletedIndex(int nwIndex);
+    bool setSeletedIndex(int nwIndex);
 
     /**
      * @brief selectIfFirst select the last inserted button
