@@ -96,7 +96,7 @@ public:
      * @brief update updates the inner state of this object
      * @param elapsed the time elapsed since the last update
      */
-    void update(const sf::Time &elapsed);
+    void update(const sf::Time &);
 
     /**
      * @brief render renders any sfml drawable components, using it's inner renderstate

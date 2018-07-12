@@ -47,7 +47,7 @@ Dialog::Dialog(const sf::Uint64 id, const sf::String &title):
     closeSignal()
 {
     m_title.setPosition(originX + 5,originY + 5);
-    auto &closeBtn = m_menu.addButton("", originX + SF_DIALOG_WIDTH, originY + 4, Assets::IconAtlas::crossIcon);
+    auto &closeBtn = m_menu.addButton("", originX + SF_DIALOG_WIDTH - SF_BUTTON_MARGIN, originY + SF_BUTTON_MARGIN, Assets::IconAtlas::crossIcon);
     closeBtn.setOrigin(closeBtn.getWidth(), 0);
     closeBtn.clickedSignal
             .add(closeSignal);
@@ -165,14 +165,14 @@ DialogInput::DialogInput(const sf::Uint64 &id, const sf::String &title, const sf
     canceledSignal(),
     confirmedSignal()
 {
-   auto &confirmBtn = menu().addButton("confirm", originX + 4, originY + SF_DIALOG_HEIGHT, Assets::IconAtlas::checkmarkIcon);
+   auto &confirmBtn = menu().addButton("confirm", originX + 4, originY + SF_DIALOG_HEIGHT - SF_BUTTON_MARGIN, Assets::IconAtlas::checkmarkIcon);
    confirmBtn.setOrigin(0, confirmBtn.getHeight());
    confirmBtn.clickedSignal
             .add([this](){
                 confirmedSignal.trigger(m_input.getText());
             });
 
-    auto &cancelBtn = menu().addButton("cancel", originX + SF_DIALOG_WIDTH, originY + SF_DIALOG_HEIGHT , Assets::IconAtlas::crossIcon);
+    auto &cancelBtn = menu().addButton("cancel", originX + SF_DIALOG_WIDTH, originY + SF_DIALOG_HEIGHT - SF_BUTTON_MARGIN, Assets::IconAtlas::crossIcon);
     cancelBtn.setOrigin(cancelBtn.getWidth(), cancelBtn.getHeight());
     cancelBtn.clickedSignal
             .add(canceledSignal);
@@ -205,7 +205,7 @@ void DialogInput::render(Renderer &renderer) const
 bool DialogInput::handleEvent(const sf::Event &ev)
 {
     if(!isVisible()) return false;
-    return Dialog::handleEvent(ev) || m_input.handleEvent(ev);
+    return m_input.handleEvent(ev) || Dialog::handleEvent(ev);
 }
 
 // INPUT END
@@ -222,13 +222,13 @@ DialogQuestion::DialogQuestion(const sf::Uint64 &id, const sf::String &title, co
     m_questionText.setPosition(originX + 20, originY + (SF_DIALOG_HEIGHT  / 2.f));
 
 
-    auto &yesBtn = menu().addButton("yes", originX + 4, originY + SF_DIALOG_HEIGHT, Assets::IconAtlas::checkmarkIcon);
+    auto &yesBtn = menu().addButton("yes", originX + SF_BUTTON_MARGIN, originY + SF_DIALOG_HEIGHT - SF_BUTTON_MARGIN, Assets::IconAtlas::checkmarkIcon);
     yesBtn.setOrigin(0, yesBtn.getHeight());
     yesBtn.clickedSignal.add(yesClickedSignal);
 
     menu().changeSelection(1);
 
-    auto &noBtn = menu().addButton("no", originX + SF_DIALOG_WIDTH, originY + SF_DIALOG_HEIGHT, Assets::IconAtlas::crossIcon);
+    auto &noBtn = menu().addButton("no", originX + SF_DIALOG_WIDTH - SF_BUTTON_MARGIN, originY + SF_DIALOG_HEIGHT - SF_BUTTON_MARGIN, Assets::IconAtlas::crossIcon);
     noBtn.setOrigin(noBtn.getWidth(), noBtn.getHeight());
     noBtn.clickedSignal.add(noClickedSignal);
 }
@@ -239,7 +239,7 @@ DialogQuestion::~DialogQuestion()
 
 const sf::String &DialogQuestion::getQuestion() const
 {
-    return m_questionText.getString().toAnsiString();
+    return m_questionText.getString();
 }
 
 void DialogQuestion::setQuestion(const sf::String &nwQuestion)
@@ -266,7 +266,7 @@ DialogMessage::DialogMessage(const sf::Uint64 &id, const sf::String &title, cons
     m_messageText(pr::translator(), message, 40),
     okClickedSignal()
 {
-    auto &okBtn = menu().addButton("ok", originX + 4 , originY + SF_DIALOG_HEIGHT, Assets::IconAtlas::checkmarkIcon);
+    auto &okBtn = menu().addButton("ok", originX + SF_BUTTON_MARGIN, originY + SF_DIALOG_HEIGHT - SF_BUTTON_MARGIN, Assets::IconAtlas::checkmarkIcon);
     okBtn.setOrigin(0, okBtn.getHeight());
     okBtn.clickedSignal
             .add(okClickedSignal);

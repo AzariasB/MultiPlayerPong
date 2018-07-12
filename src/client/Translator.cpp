@@ -53,6 +53,11 @@ sf::String Translator::translate(const sf::String &translationName) const
     return (*val).second;
 }
 
+const std::string &Translator::currentTranslation() const
+{
+    return m_currentTranslation;
+}
+
 void Translator::setCurrentTranslation(const std::string &trName)
 {
     m_currentTranslation = trName;

@@ -86,7 +86,7 @@ public:
      * @return true if the widget is still "alive" and must be updated at the next frame
      * false if it does not need to be updated anymore (and can be destroyed)
      */
-    virtual bool update(const sf::Time &elapsed)
+    virtual bool update(const sf::Time &)
     {
         return true;
     }

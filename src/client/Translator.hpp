@@ -50,6 +50,8 @@ public:
 
     I18NText make(const std::vector<sf::String> &translations, int fontSize = 30);
 
+    const std::string &currentTranslation() const;
+
 private:
     std::string m_currentTranslation = "fr";
 

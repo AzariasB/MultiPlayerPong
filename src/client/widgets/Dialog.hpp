@@ -250,8 +250,8 @@ private:
     TextInput m_input;
 
 public:
-    Signal<sf::String> confirmedSignal;
     Signal<> canceledSignal;
+    Signal<sf::String> confirmedSignal;
 };
 //END INPUT DIALOG
 

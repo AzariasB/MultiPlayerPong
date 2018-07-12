@@ -78,8 +78,8 @@ private:
     bool userDataIsBall(PhysicObject &objA, PhysicObject &objB);
 
 public:
-    Signal<b2Vec2> ballHitWallSignal;
     Signal<std::size_t, b2Vec2> ballHitPaddleSignal;
+    Signal<b2Vec2> ballHitWallSignal;
 };
 
 

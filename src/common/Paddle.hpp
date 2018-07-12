@@ -133,6 +133,13 @@ private:
     void setYVelocity(float32 yVelocity);
 
     /**
+     * @brief mNum keep the number
+     * of the player in the paddle
+     * for when a contact happens
+     */
+    const std::size_t mNum;
+
+    /**
      * @brief mStartPos store the starting position
      * to use when reseting the paddle
      */
@@ -142,12 +149,6 @@ private:
 
     sf::Int32 m_widthBoost = 0;
 
-    /**
-     * @brief mNum keep the number
-     * of the player in the paddle
-     * for when a contact happens
-     */
-    const std::size_t mNum;
 
     /**
      * @brief isAI wether this paddle is controlled by an AI

@@ -176,6 +176,18 @@ public:
 
 
     /**
+     * @brief removeIcon removes the icon
+     */
+    void removeIcon();
+
+    /**
+     * @brief setIcon changes the icon, with the provided atlast sprite
+     * @param icon the new icon of the button
+     */
+    void setIcon(const Assets::IconAtlas::Holder &icon);
+
+
+    /**
      * @brief getWidth the width of the button
      * @return the width of the button
      */

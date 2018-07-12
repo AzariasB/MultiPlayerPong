@@ -59,19 +59,31 @@ OptionState::OptionState():
 
     startY += m_menu.addCenteredLabel("language", SF_CENTER_X, startY, 70)->height() + 50;
 
+    float xPos = SF_ARENA_WIDTH / 4.f;
+    float currentY = startY;
+    int idx = 0;
     for(const auto &lang: Assets::I18N::translations){
-        auto &btn = m_menu.addButton(lang.second.name, SF_ARENA_WIDTH / 4.f, startY);
-        startY += btn.getHeight();
-        btn.clickedSignal.add([lang](){
+        auto &btn = m_menu.addButton(lang.second.name, xPos, currentY);
+        m_langButtons[lang.first] = &btn;
+        btn.setAlignment(Button::Alignment::TopLeft);
+        currentY += btn.getHeight() + 10;
+        btn.clickedSignal.add([this, lang](){
             pr::translator().setCurrentTranslation(lang.first);
+            updateLangButtonsIcon();
         });
+        idx++;
+        if(idx%3 == 0){
+            xPos += SF_ARENA_WIDTH / 2.f;
+            currentY = startY;
+        }
     }
+    updateLangButtonsIcon();
 
-    startY += 50;
+    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , SF_ARENA_HEIGHT - 50, Assets::IconAtlas::exitLeftIcon);
+    backButton.setOrigin(0, backButton.getHeight());
 
-    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::exitLeftIcon);
-
-    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, startY, Assets::IconAtlas::rightIcon);
+    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, SF_ARENA_HEIGHT - 50, Assets::IconAtlas::rightIcon);
+    playButton.setOrigin(0, playButton.getHeight());
 
     m_menu.normalizeButtons();
     pr::translator().translationChangedSignal.add([this](){
@@ -83,6 +95,17 @@ OptionState::OptionState():
     playButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
+}
+
+void OptionState::updateLangButtonsIcon()
+{
+    for(auto &btn : m_langButtons){
+        if(btn.first == pr::translator().currentTranslation()){
+            btn.second->setIcon(Assets::IconAtlas::checkmarkIcon);
+        } else {
+            btn.second->removeIcon();
+        }
+    }
 }
 
 void OptionState::toggleSound()

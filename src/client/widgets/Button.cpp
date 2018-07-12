@@ -76,7 +76,7 @@ Button::Button(const sf::String &text, float xPos, float yPos):
 
 Button::Button(const sf::String &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
     m_text(pr::translator().make(text, 50)),
-    m_width(text == "" ? 0 :  m_text.width()),
+    m_width(text.isEmpty() ? 30 : m_text.width() + 90),
     m_height(m_text.height() + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
@@ -92,7 +92,7 @@ Button::Button(const sf::String &text, float xPos, float yPos, const Assets::Ico
 
 Button::Button(const std::vector<sf::String> &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
     m_text(pr::translator().make(text, 50)),
-    m_width(m_text.width()),
+    m_width(m_text.width() + 90),
     m_height(m_text.height() + 30),
     m_color(cc::Colors::fontColor),
     m_background(),
@@ -267,6 +267,11 @@ const sf::Sprite &Button::getIcon() const
     return m_icon;
 }
 
+void Button::setIcon(const Assets::IconAtlas::Holder &icon)
+{
+    setIcon(sf::Sprite(pr::resourceManager().getTexture(icon.textureId), icon.bounds));
+}
+
 void Button::setIcon(const sf::Sprite &sprite)
 {
     m_icon = sprite;
@@ -316,7 +321,7 @@ void Button::changeIconScale()
 void Button::updateIcon()
 {
     changeIconScale();
-    setWidth(m_width + m_icon.getGlobalBounds().width);
+    // setWidth(m_width + m_icon.getGlobalBounds().width - oldIconWidth);
 }
 
 
@@ -326,6 +331,11 @@ void Button::updateText()
     m_icon.setColor(m_color.get());
     m_background.setFillColor(m_rectColor.get());
     m_background.setSize(sf::Vector2f(m_rectWidth.get(), m_height));
+}
+
+void Button::removeIcon()
+{
+    m_icon = sf::Sprite();
 }
 
 void Button::setAlignment(Alignment al)

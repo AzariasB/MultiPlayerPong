@@ -130,11 +130,9 @@ void Menu::render(Renderer &renderer) const
 bool Menu::handleEvent(const sf::Event &ev)
 {
     if(ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right)){
-        changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
-        return true;
+        return changeSelection( (ev.key.code == sf::Keyboard::Up || ev.key.code == sf::Keyboard::Left) ? -1 : 1);
     }else if(ev.type == sf::Event::JoystickMoved && ev.joystickMove.axis == sf::Joystick::Axis::Y && std::abs(ev.joystickMove.position) > 95 ){
-        changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
-        return true;
+        return changeSelection(ev.joystickMove.position > 0 ? 1 : -1);
     }else{
         for(auto &ptr : m_buttons)
             if(ptr->handleEvent(ev)) return true;
@@ -143,24 +141,24 @@ bool Menu::handleEvent(const sf::Event &ev)
     }
 }
 
-void Menu::setSeletedIndex(int nwIndex)
+bool Menu::setSeletedIndex(int nwIndex)
 {
     if(nwIndex != m_selectedButton){
         m_buttons[m_selectedButton]->setSelected(false);
         m_selectedButton = nwIndex;
         m_buttons[m_selectedButton]->setSelected(true);
         pr::soundEngine().playSound(Assets::Sounds::Click1);
+        return true;
     }
+    return false;
 }
 
-void Menu::changeSelection(int dir)
+bool Menu::changeSelection(int dir)
 {
     if(dir == -1){
-        if(m_selectedButton == 0)return;
-        setSeletedIndex(m_selectedButton -1);
+        return m_selectedButton != 0 && setSeletedIndex(m_selectedButton - 1);
     }else{
-        if(m_selectedButton == m_buttons.size() -1)return;
-        setSeletedIndex(m_selectedButton + 1);
+        return m_selectedButton != m_buttons.size() - 1 && setSeletedIndex(m_selectedButton + 1);
     }
 }
 

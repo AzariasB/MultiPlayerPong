@@ -53,6 +53,8 @@ namespace mp
 
     constexpr int SF_BUTTON_BORDER = 2;
 
+    constexpr int SF_BUTTON_MARGIN = SF_BUTTON_BORDER * 2;
+
     constexpr int MAX_INPUT_CHARS = 65;
 
 
