@@ -35,6 +35,8 @@
 #include "src/client//State.hpp"
 #include "src/client/widgets/Menu.hpp"
 
+#include "src/client/widgets/Loading.hpp"
+
 namespace sf {
 class Event;
 }
@@ -115,6 +117,7 @@ private:
      * @brief m_menu Menu holding all the differents buttons
      */
     Menu m_menu;
+
 };
 
 

@@ -109,7 +109,8 @@ MenuState::MenuState() :
 
 void MenuState::render(Renderer& renderer) const
 {
-    m_menu.render(renderer);
+    renderer
+            .render(m_menu);
 }
 
 void MenuState::handleEvent(const sf::Event& ev)

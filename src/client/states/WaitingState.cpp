@@ -49,19 +49,27 @@ WaitingState::~WaitingState()
 WaitingState::WaitingState() :
     State(),
     m_menu(),
-    m_content(*m_menu.addCenteredLabel("connecting",SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f))
+    m_content(*m_menu.addCenteredLabel("connecting", SF_CENTER_X, SF_CENTER_Y - 100)),
+    m_loading(sf::Vector2f(SF_CENTER_X, SF_CENTER_Y), 300)
 {
-    m_menu.addButton("cancel", SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
+    m_menu.addButton("cancel", SF_CENTER_X, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
             .clickedSignal.add([](){
                 pr::socket().disconnect();
                 pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
             });
+
+    m_menu.normalizeButtons(10);
+    pr::translator().translationChangedSignal.add([this](){
+        m_menu.normalizeButtons(10);
+    });
 }
 
 
 void WaitingState::render(Renderer& renderer) const
 {
-    m_menu.render(renderer);
+    renderer
+            .render(m_menu)
+            .render(m_loading);
 }
 
 void WaitingState::handleEvent(const sf::Event& ev)
@@ -75,6 +83,7 @@ void WaitingState::update(const sf::Time &elapsed)
     if(pr::stateMachine().getCurrentStateIndex() != cc::WAITING)return;
 
     m_menu.update(elapsed);
+    m_loading.update(elapsed);
 
     //Blinking point
     bool startGame = false;
@@ -103,6 +112,7 @@ void WaitingState::update(const sf::Time &elapsed)
 void WaitingState::onEnter(BaseStateData *data)
 {
     c_state = CONNECTION_STATE::PENDING;
+    m_loading.setState(Loading::LD_INACTIVE);
 
     StateData<std::string> *ipData = 0;
     if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
@@ -118,6 +128,7 @@ void WaitingState::onEnter(BaseStateData *data)
         pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
     } else {
         m_content.setString("waiting_player");
+        m_loading.setState(Loading::LD_ACTIVE);
     }
 }
 
