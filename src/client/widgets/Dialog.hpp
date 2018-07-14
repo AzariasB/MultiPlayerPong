@@ -68,7 +68,7 @@ public:
      * @param message the message (if the dialog is a message dialog)
      * @param type the type of the dialog
      */
-    Dialog(const sf::Uint64 id, const sf::String &title);
+    Dialog(const sf::Uint64 id, const sf::String &title, const Assets::IconAtlas::Holder &icon);
 
     virtual ~Dialog();
 
@@ -169,6 +169,11 @@ private:
 	 * @brief m_title title of the dialog
 	 */
     I18NText m_title;
+
+    /**
+     * @brief m_icon icon of the dialog
+     */
+    sf::Sprite m_icon;
 
     /**
      * @brief background shape

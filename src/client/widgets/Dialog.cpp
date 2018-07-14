@@ -39,14 +39,18 @@
 namespace mp {
 
 // DIALOG BEGIN
-Dialog::Dialog(const sf::Uint64 id, const sf::String &title):
+Dialog::Dialog(const sf::Uint64 id, const sf::String &title, const Assets::IconAtlas::Holder &icon):
     m_menu(),
     m_title(pr::translator(), title, 50),
+    m_icon(pr::resourceManager().getTexture(icon.textureId), icon.bounds),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
     closeSignal()
 {
-    m_title.setPosition(originX + 5,originY + 5);
+    m_icon.setPosition(originX + 1, originY + 1);
+    float scale = (m_title.height() + 20) / m_icon.getGlobalBounds().height;
+    m_icon.setScale(scale, scale);
+    m_title.setPosition(originX + m_icon.getGlobalBounds().width + 5,originY + 5);
     auto &closeBtn = m_menu.addButton("", originX + SF_DIALOG_WIDTH - SF_BUTTON_MARGIN, originY + SF_BUTTON_MARGIN, Assets::IconAtlas::crossIcon);
     closeBtn.setOrigin(closeBtn.getWidth(), 0);
     closeBtn.clickedSignal
@@ -93,6 +97,7 @@ void Dialog::render(Renderer &renderer) const
     renderer
             .draw(m_background)
             .draw(m_title)
+            .draw(m_icon)
             .render(m_menu);
 }
 
@@ -159,7 +164,7 @@ Dialog::DIALOG_STATE Dialog::state() const
 //INPUT DIALOG
 
 DialogInput::DialogInput(const sf::Uint64 &id, const sf::String &title, const sf::String &question):
-    Dialog(id, title),
+    Dialog(id, title, Assets::IconAtlas::questionIcon),
     m_questionText(pr::translator(), question),
     m_input(sf::Vector2f(originX + 30, originY + (SF_DIALOG_HEIGHT / 2.f) )),
     canceledSignal(),
@@ -214,7 +219,7 @@ bool DialogInput::handleEvent(const sf::Event &ev)
 
 
 DialogQuestion::DialogQuestion(const sf::Uint64 &id, const sf::String &title, const sf::String &question):
-    Dialog(id, title),
+    Dialog(id, title, Assets::IconAtlas::questionIcon),
     m_questionText(pr::translator(), question, 40),
     yesClickedSignal(),
     noClickedSignal()
@@ -262,7 +267,7 @@ void DialogQuestion::render(Renderer &renderer) const
 // MESSAGE BEGIN
 
 DialogMessage::DialogMessage(const sf::Uint64 &id, const sf::String &title, const sf::String &message):
-    Dialog(id, title),
+    Dialog(id, title, Assets::IconAtlas::informationIcon),
     m_messageText(pr::translator(), message, 40),
     okClickedSignal()
 {
