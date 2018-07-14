@@ -236,6 +236,12 @@ private:
     void resizeEvent(const sf::Event &event);
 
     /**
+     * @brief setLocale detects the computer's local and change's the applications
+     * default is english ("en")
+     */
+    void setLocale();
+
+    /**
      * @brief window window to use to get events
      * and render stuff
      */

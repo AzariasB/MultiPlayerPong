@@ -183,8 +183,8 @@ void ClientApp::run(int argc, char** argv)
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
-    std::locale::global(std::locale(""));
 
+    this->setLocale();
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
 
@@ -215,6 +215,22 @@ void ClientApp::run(int argc, char** argv)
         window->display();
     }
     socket.disconnect();
+}
+
+void ClientApp::setLocale()
+{
+    std::string lName = std::locale("").name();
+    std::string target = "en";
+    auto begin = lName.find("=");
+    auto end = lName.find("_");
+    if(begin != std::string::npos && end != std::string::npos){
+        target = lName.substr(begin + 1, end);
+        auto &translations = Assets::I18N::translations;
+        if(translations.find(target) == translations.end()){
+            target = "en";
+        }
+    }
+    m_translator.setCurrentTranslation(target);
 }
 
 void ClientApp::quit()

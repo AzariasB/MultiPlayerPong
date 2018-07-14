@@ -122,6 +122,11 @@ void Button::setOrigin(float x, float y)
     setOrigin(sf::Vector2f(x,y));
 }
 
+sf::FloatRect Button::getGlobalBounds() const
+{
+    return m_background.getGlobalBounds();
+}
+
 void Button::init()
 {
     m_listenerId = pr::translator().translationChangedSignal.add([this](){

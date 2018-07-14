@@ -34,6 +34,7 @@
 #include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ClientConf.hpp"
+#include "src/client/Translator.hpp"
 #include "src/client/StateMachine.hpp"
 
 namespace mp {
@@ -66,8 +67,18 @@ PauseState::PauseState():
         pr::game().reset();
         pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
     });
+
+    pr::translator().translationChangedSignal.add([this](){
+        m_menu.normalizeButtons(10);
+    });
 }
 
+void PauseState::onAfterLeaving()
+{
+    if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO){
+        pr::stateMachine().getStateAt(cc::PLAY_SOLO).onAfterLeaving();
+    }
+}
 
 void PauseState::render(Renderer &renderer) const
 {

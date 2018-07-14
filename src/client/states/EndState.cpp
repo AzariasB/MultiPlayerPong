@@ -42,12 +42,15 @@ EndState::EndState():
     m_buffer(sf::PrimitiveType::Triangles, triangleNumber * 3),
     m_angle(0.f)
 {
-    m_menu.addCenteredLabel("finished", SF_CENTER_X, SF_CENTER_Y, 60);
+    m_menu.addCenteredLabel("finished", SF_CENTER_X, SF_ARENA_HEIGHT / 4.f, 60);
 
     m_menu.addButton("menu", SF_CENTER_X, 3*SF_ARENA_HEIGHT/4, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([this](){goToMenu(); });
-
+    m_menu.normalizeButtons(10);
+    pr::translator().translationChangedSignal.add([this](){
+        m_menu.normalizeButtons(10);
+    });
 }
 
 EndState::~EndState()
@@ -109,8 +112,8 @@ void EndState::onBeforeEnter()
     pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
     updateVerticesColor(winner);
     m_content.setString(winner ? "you_won" : "you_lost");
-    m_content.setOrigin(m_content.getLocalBounds().width/2.f, m_content.getLocalBounds().height / 2.f);
-    m_content.setPosition(SF_ARENA_WIDTH/2.f, SF_ARENA_HEIGHT/2.f);
+    math::centerOrigin(m_content);
+    m_content.setPosition(SF_CENTER_X, SF_CENTER_Y);
 }
 
 void EndState::onEnter(BaseStateData *)
