@@ -94,7 +94,7 @@ void ParticleGenerator::render(Renderer &renderer) const
 
 void ParticleGenerator::clear()
 {
-    m_particles.clear();
+    for(const auto &part : m_particles) part->isUsed = false;
 }
 
 void ParticleGenerator::update(const sf::Time &elapsed)

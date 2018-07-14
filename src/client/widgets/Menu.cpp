@@ -112,7 +112,7 @@ void Menu::normalizeButtons(float additionalWidth)
 
     for(auto &it : m_buttons){
         it->setWidth(max + additionalWidth);
-        it->setOrigin(it->getWidth() / 2.f, it->getHeight() / 2.f);
+        it->setOrigin(it->getWidth() / 2.f, 0);
     }
 }
 

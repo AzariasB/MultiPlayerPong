@@ -57,8 +57,7 @@ void PlaySoloState::onBeforeEnter()
         pr::game().getPlayer2().setIsWinner(!amWinner);
     });
 
-    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
-        B2_NOT_USED(position);
+    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2){
         (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2()).gainPoint();
     });
 }

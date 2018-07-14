@@ -66,6 +66,11 @@ public:
      */
     void handleEvent(const sf::Event &ev) override;
 
+    /**
+     * @brief onAfterLeaving inherited function
+     */
+    void onAfterLeaving() override;
+
 private:
 
     Menu m_menu;

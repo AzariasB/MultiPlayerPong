@@ -136,6 +136,12 @@ public:
     void setAlignment(Alignment al);
 
     /**
+     * @brief getGlobalBounds global bounds of the button
+     * @return a const reference to the bounds of this button
+     */
+    sf::FloatRect getGlobalBounds() const;
+
+    /**
      * @brief setWidth setter for the width
      * @param width
      */

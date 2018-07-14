@@ -79,20 +79,26 @@ OptionState::OptionState():
     }
     updateLangButtonsIcon();
 
-    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , SF_ARENA_HEIGHT - 50, Assets::IconAtlas::exitLeftIcon);
-    backButton.setOrigin(0, backButton.getHeight());
+    Button& backButton = m_menu.addButton("menu", SF_ARENA_WIDTH/4.f , SF_ARENA_HEIGHT - 6, Assets::IconAtlas::exitLeftIcon);
 
-    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, SF_ARENA_HEIGHT - 50, Assets::IconAtlas::rightIcon);
-    playButton.setOrigin(0, playButton.getHeight());
+    Button &playButton = m_menu.addButton("play", SF_ARENA_WIDTH * 3 / 4.f, SF_ARENA_HEIGHT - 6, Assets::IconAtlas::rightIcon);
 
     m_menu.normalizeButtons();
-    pr::translator().translationChangedSignal.add([this](){
+
+    backButton.setOrigin(backButton.getWidth() / 2.f, backButton.getHeight());
+    playButton.setOrigin(playButton.getWidth() / 2.f, playButton.getHeight());
+    pr::translator().translationChangedSignal.add([&](){
         m_menu.normalizeButtons();
+        backButton.setOrigin(backButton.getWidth() / 2.f, backButton.getHeight());
+        playButton.setOrigin(playButton.getWidth() / 2.f, playButton.getHeight());
     });
 
     keyBindingButton.clickedSignal.add([](){ pr::stateMachine().goToState(cc::KEY_BINDINGS, TransitionData::GO_RIGHT); });
     backButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);});
-    playButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);});
+    playButton.clickedSignal.add([](){
+        pr::stateMachine().getStateAt(cc::PLAY_SOLO).onBeforeEnter();
+        pr::stateMachine().goToState(cc::PAUSE, TransitionData::GO_RIGHT);
+    });
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
 }
