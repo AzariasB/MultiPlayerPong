@@ -34,6 +34,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
+#include "src/client/widgets/Loading.hpp"
 
 namespace sf {
 class Event;
@@ -106,6 +107,11 @@ private:
      * @brief m_content text containing
      */
     I18NText &m_content;
+
+    /**
+     * @brief m_loading loading widget
+     */
+    Loading m_loading;
 };
 
 
