@@ -41,11 +41,11 @@ namespace mp {
 
 Paddle::Paddle(const Game &game, std::size_t pNumber) :
     PhysicObject(game, PO_TYPE::PADDLE),
-    mNum(pNumber),
-    mStartPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
+    m_num(pNumber),
+    m_startPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
 {
     b2BodyDef bodyDef;
-    bodyDef.position = mStartPos;
+    bodyDef.position = m_startPos;
     bodyDef.type = b2_dynamicBody;
     mBody = mGame.world().CreateBody(&bodyDef);
     mBody->SetFixedRotation(true);
@@ -65,29 +65,15 @@ Paddle::Paddle(const Game &game, std::size_t pNumber) :
 
 void Paddle::reset()
 {
-    mBody->SetTransform(mStartPos, mBody->GetAngle());
+    mBody->SetTransform(m_startPos, mBody->GetAngle());
     mBody->SetLinearVelocity(b2Vec2());
-    mVelocity.y = 0;
+    m_velocity.y = 0;
 }
 
 Paddle::~Paddle()
 {
 }
 
-void Paddle::goDown()
-{
-    setYVelocity(1.f);
-}
-
-void Paddle::goUp()
-{
-    setYVelocity(-1.f);
-}
-
-void Paddle::stop()
-{
-    setYVelocity(0);
-}
 
 void Paddle::extend()
 {
@@ -101,13 +87,13 @@ void Paddle::retract()
 
 void Paddle::setYVelocity(float32 yVelocity)
 {
-    mVelocity.y = yVelocity;
-    mBody->SetLinearVelocity(mVelocity);
+    m_velocity.y = yVelocity;
+    mBody->SetLinearVelocity(m_velocity);
 }
 
 std::size_t Paddle::getNum() const
 {
-    return mNum;
+    return m_num;
 }
 
 
@@ -116,6 +102,10 @@ void Paddle::setIsAI(bool isAI)
     m_isAI = isAI;
 }
 
+bool Paddle::isAi() const
+{
+    return m_isAI;
+}
 
 void Paddle::update(const sf::Time &elapsed)
 {
@@ -126,11 +116,11 @@ void Paddle::update(const sf::Time &elapsed)
 
     float mYPosition = mBody->GetPosition().y;
     if(mYPosition < ballYPosition){
-        goDown();
+        setYVelocity(1);
     }else if(mYPosition > ballYPosition){
-        goUp();
+        setYVelocity(-1);
     }else{
-        stop();
+        setYVelocity(0);
     }
 }
 
@@ -138,14 +128,14 @@ void Paddle::update(const sf::Time &elapsed)
 
 sf::Packet &operator<<(sf::Packet &packet, const Paddle &paddle)
 {
-    return packet << paddle.mBody->GetPosition() << paddle.mBody->GetLinearVelocity() << paddle.m_widthBoost;
+    return packet << paddle.mBody->GetPosition() << paddle.mBody->GetLinearVelocity();
 }
 
 sf::Packet &operator>>(sf::Packet &packet, Paddle &paddle)
 {
     b2Vec2 position;
     b2Vec2 velocity;
-    packet >> position >>  velocity >> paddle.m_widthBoost;
+    packet >> position >>  velocity;
     paddle.mBody->SetTransform(position, paddle.mBody->GetAngle());
     paddle.mBody->SetLinearVelocity(velocity);
     return packet;

@@ -136,7 +136,7 @@ PlayState::~PlayState()
 void PlayState::handleEvent(const sf::Event &ev)
 {
     sf::Event realEv = pr::keyBinding().toGameEvent(ev);
-    pr::game().handleEvent(realEv, pr::player());
+    pr::game().handleEvent(realEv);
 }
 
 

@@ -38,28 +38,30 @@
 namespace mp {
 
 Game::Game() :
-    mPhysicWorld(mGravity),
-    mainBall(*this),
-    p1(*this, 1),
-    p2(*this, 2),
-    mUpperWall(*this, b2Vec2(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
-    mLowerWall(*this, b2Vec2(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
+    m_physicWorld(m_gravity),
+    m_ball(*this),
+    m_p1(*this, 1),
+    m_p2(*this, 2),
+    m_upperWall(*this, b2Vec2(WALL_WITDH/2.f,WALL_HEIGHT/2.f)),
+    m_lowerWall(*this, b2Vec2(WALL_WITDH/2.f , ARENA_HEIGHT - (WALL_HEIGHT/2.f))),
     m_countDownTime(sf::seconds(3)),
     m_state(GAMESTATE::COUNTDOWN),
-    mContactListener()
+    m_contactListener(),
+    m_input()
 {
-    mPhysicWorld.SetContactListener(&mContactListener);
+    m_physicWorld.SetContactListener(&m_contactListener);
 
-    mContactListener.ballHitPaddleSignal.add(hitPaddleSignal);
+    m_contactListener.ballHitPaddleSignal.add(hitPaddleSignal);
 }
 
 Game::~Game()
 {
 }
 
-void Game::handleEvent(const sf::Event& ev, Player &player)
+void Game::handleEvent(const sf::Event& ev)
 {
-    if (ev.type == sf::Event::KeyPressed) {
+    m_input.handleEvent(ev);
+    /* if (ev.type == sf::Event::KeyPressed) {
         if (ev.key.code == sf::Keyboard::Up) {
             player.getPaddle().goUp();
         } else if (ev.key.code == sf::Keyboard::Down) {
@@ -67,13 +69,19 @@ void Game::handleEvent(const sf::Event& ev, Player &player)
         }
     } else if (ev.type == sf::Event::KeyReleased) {
         player.getPaddle().stop();
-    }
+    } */
 }
 
 void Game::update(const sf::Time &elapsed)
 {
-    p1.getPaddle().update(elapsed);
-    p2.getPaddle().update(elapsed);
+    if(!m_p1.getPaddle().isAi())
+        m_p1.getPaddle().setYVelocity(m_input.getAxis(Input::Y_AXIS_1));
+
+    if(!m_p2.getPaddle().isAi())
+        m_p2.getPaddle().setYVelocity(m_input.getAxis(Input::Y_AXIS_2));
+
+    m_p1.getPaddle().update(elapsed);
+    m_p2.getPaddle().update(elapsed);
     if(m_state == GAMESTATE::COUNTDOWN){
         updateCountdown(elapsed);
     }else if(m_state == GAMESTATE::PLAYING){
@@ -101,31 +109,31 @@ void Game::updatePlaying(const sf::Time &elapsed)
     accumulator += dt;
 
     while(accumulator >= step){
-        mPhysicWorld.Step(step, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        m_physicWorld.Step(step, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         accumulator -= step;
     }
 
-    mainBall.update(elapsed);
+    m_ball.update(elapsed);
 
-    if (mainBall.getPosition().x < -BALL_RADIUS) {
+    if (m_ball.getPosition().x < -BALL_RADIUS) {
         lostSignal.trigger(1);
-    } else if (mainBall.getPosition().x > ARENA_WIDTH) {
+    } else if (m_ball.getPosition().x > ARENA_WIDTH) {
         lostSignal.trigger(2);
     }
 }
 
 void Game::reset()
 {
-    mainBall.reset();
-    p1.reset();
-    p2.reset();
+    m_ball.reset();
+    m_p1.reset();
+    m_p2.reset();
     m_state = GAMESTATE::COUNTDOWN;
     m_countDownTime = sf::seconds(3);
 }
 
 sf::Packet &operator<<(sf::Packet &packet, Game &game)
 {
-    packet << game.mainBall << game.p1 << game.p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds();
+    packet << game.m_ball << game.m_p1 << game.m_p2 << static_cast<sf::Int8>(game.m_state) << game.m_countDownTime.asMicroseconds();
     return packet;
 }
 
@@ -133,7 +141,7 @@ sf::Packet &operator>>(sf::Packet &packet, Game &game)
 {
     sf::Int8 gameState;
     sf::Int64 microSeconds;
-    packet >> game.mainBall >> game.p1 >> game.p2 >> gameState >> microSeconds;
+    packet >> game.m_ball >> game.m_p1 >> game.m_p2 >> gameState >> microSeconds;
     game.m_state = static_cast<GAMESTATE>(gameState);
     game.m_countDownTime = sf::microseconds(microSeconds);
     return packet;
@@ -146,12 +154,12 @@ void Game::setGameState(GAMESTATE gameState)
 
 int Game::getNumWinner() const
 {
-    return p1.isWinner() ? p1.getNum() : p2.isWinner() ? p2.getNum() : -1;
+    return m_p1.isWinner() ? m_p1.getNum() : m_p2.isWinner() ? m_p2.getNum() : -1;
 }
 
 bool Game::playerWon() const
 {
-    return p1.isWinner() || p2.isWinner();
+    return m_p1.isWinner() || m_p2.isWinner();
 }
 
 bool Game::isCountingDown() const
@@ -161,37 +169,37 @@ bool Game::isCountingDown() const
 
 const Ball& Game::getBall() const
 {
-    return mainBall;
+    return m_ball;
 }
 
 const Player& Game::getPlayer1() const
 {
-    return p1;
+    return m_p1;
 }
 
 Player& Game::getPlayer1()
 {
-    return p1;
+    return m_p1;
 }
 
 Player& Game::getPlayer2()
 {
-    return p2;
+    return m_p2;
 }
 
 const Wall &Game::upperWall() const
 {
-    return mUpperWall;
+    return m_upperWall;
 }
 
 const Wall &Game::lowerWall() const
 {
-    return mLowerWall;
+    return m_lowerWall;
 }
 
 const Player& Game::getPlayer2() const
 {
-    return p2;
+    return m_p2;
 }
 
 const sf::Time &Game::getCountdownTime() const
@@ -201,6 +209,12 @@ const sf::Time &Game::getCountdownTime() const
 
 b2World &Game::world() const
 {
-    return mPhysicWorld;
+    return m_physicWorld;
 }
+
+Input &Game::input()
+{
+    return m_input;
+}
+
 }

@@ -61,7 +61,7 @@ public:
     void setAxisButton(I_AXIS_DIRECTION dir, sf::Keyboard::Key k);
 
 private:
-    void handleKeyPress(const sf::Event &ev);
+    void handleKeyChange(const sf::Event &ev, int nwValue);
 
     void handleJoystick(const sf::Event &ev);
 

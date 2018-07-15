@@ -43,7 +43,10 @@ void Input::handleEvent(const sf::Event &ev)
 {
     switch (ev.type) {
     case sf::Event::KeyPressed:
-        handleKeyPress(ev);
+        handleKeyChange(ev, 1);
+        break;
+    case sf::Event::KeyReleased:
+        handleKeyChange(ev, 0);
         break;
     case sf::Event::JoystickMoved:
         handleJoystick(ev);
@@ -66,11 +69,11 @@ void Input::handleJoystick(const sf::Event &ev)
     }
 }
 
-void Input::handleKeyPress(const sf::Event &ev)
+void Input::handleKeyChange(const sf::Event &ev, int nwValue)
 {
     for(auto it : m_bindings){
         if(it.second == ev.key.code){
-            setAxisValue(it.first, 1);
+            setAxisValue(it.first, nwValue);
         }
     }
 }
@@ -79,16 +82,16 @@ void Input::setAxisValue(I_AXIS_DIRECTION d, int value)
 {
     switch (d) {
     case Y_AXIS_1_UP:
-        m_axes[Y_AXIS_1] = value;
-        break;
-    case Y_AXIS_2_UP:
-        m_axes[Y_AXIS_2] = value;
-        break;
-    case Y_AXIS_1_DOWN:
         m_axes[Y_AXIS_1] = -value;
         break;
-    case Y_AXIS_2_DOWN:
+    case Y_AXIS_2_UP:
         m_axes[Y_AXIS_2] = -value;
+        break;
+    case Y_AXIS_1_DOWN:
+        m_axes[Y_AXIS_1] = value;
+        break;
+    case Y_AXIS_2_DOWN:
+        m_axes[Y_AXIS_2] = value;
         break;
     default:
         break;
