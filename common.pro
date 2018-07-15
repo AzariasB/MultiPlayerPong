@@ -27,7 +27,8 @@ SOURCES +=\
     src/common/ContactListener.cpp \
     src/common/PhysicObject.cpp \
     src/common/Math.cpp \
-    src/common/Timer.cpp
+    src/common/Timer.cpp \
+    src/common/Input.cpp
 
 HEADERS +=\
     src/common/Application.hpp \
@@ -43,4 +44,5 @@ HEADERS +=\
     src/common/ContactListener.hpp \
     src/common/PhysicObject.hpp \
     src/common/Timer.hpp \
-    src/common/Signal.hpp
+    src/common/Signal.hpp \
+    src/common/Input.hpp
