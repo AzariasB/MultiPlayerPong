@@ -62,7 +62,7 @@ void PlayMultiplayerState::update(const sf::Time &elapsed)
 void PlayMultiplayerState::handleEvent(const sf::Event& ev)
 {
     PlayState::handleEvent(ev);
-    sf::Event realEv = pr::keyBinding().toGameEvent(ev);
+    sf::Event realEv = pr::game().input().toBaseEvent(ev);
     if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
         sf::Packet p;
         p << realEv.type << realEv.key.code;

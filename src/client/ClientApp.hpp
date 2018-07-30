@@ -39,7 +39,6 @@
 #include "src/common/Application.hpp"
 #include "src/common/Game.hpp"
 #include "Renderer.hpp"
-#include "KeyBinding.hpp"
 #include "Translator.hpp"
 #include "SoundEngine.hpp"
 #include "StateMachine.hpp"
@@ -152,19 +151,6 @@ public:
 
 
     /**
-     * @brief getKeyBindings access to the keybinding options
-     * @return a reference to the client's key binding
-     */
-    KeyBinding &getKeyBindings();
-
-    /**
-     * @brief getKeyBindings const access to key binding
-     * @return a const reference to the client's key bindings
-     */
-    const KeyBinding &getKeyBindings() const;
-
-
-    /**
      * @brief getDialogManager access to the dialogmanager
      * @return reference to the client's dialog manager
      */
@@ -199,7 +185,7 @@ public:
      */
     void toggleFullScreen();
 
-    virtual ~ClientApp();
+    virtual ~ClientApp() override;
 
     ClientApp(const ClientApp &) = delete;
     void operator=(const ClientApp &) = delete;
@@ -304,12 +290,6 @@ private:
      * access to play sounds
      */
     SoundEngine m_sEngine;
-
-    /**
-     * @brief m_keyBinding the objects that contains all
-     * the key bindings
-     */
-    KeyBinding m_keyBinding;
 
     /**
      * @brief m_dialogManager the dialog manager

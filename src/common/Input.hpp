@@ -56,10 +56,15 @@ public:
 
     void handleEvent(const sf::Event &ev);
 
+    sf::Event toBaseEvent(const sf::Event &ev);
+
     float getAxis(I_AXIS axis) const;
 
     void setAxisButton(I_AXIS_DIRECTION dir, sf::Keyboard::Key k);
 
+    sf::Keyboard::Key getAxisKey(I_AXIS_DIRECTION dir) const;
+
+    static const std::array<I_AXIS_DIRECTION, 4> allActions;
 private:
     void handleKeyChange(const sf::Event &ev, int nwValue);
 

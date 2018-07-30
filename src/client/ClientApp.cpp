@@ -69,7 +69,6 @@ ClientApp::ClientApp() :
     game(),
     stateMachine(),
     m_sEngine(rManager),
-    m_keyBinding(),
     m_dialogManager(),
     m_counter(rManager.getFont())
 {
@@ -310,10 +309,6 @@ sf::RenderWindow &ClientApp::getWindow()
     return *window;
 }
 
-KeyBinding &ClientApp::getKeyBindings()
-{
-    return m_keyBinding;
-}
 
 DialogManager &ClientApp::getDialogManager()
 {
@@ -328,11 +323,6 @@ const sf::RenderWindow &ClientApp::getWindow() const
 const ResourcesManager& ClientApp::getResourcesManager()
 {
     return rManager;
-}
-
-const KeyBinding &ClientApp::getKeyBindings() const
-{
-    return m_keyBinding;
 }
 
 Translator &ClientApp::getTranslator()

@@ -31,8 +31,11 @@
 #include "Input.hpp"
 #include <SFML/Window/Event.hpp>
 #include <vector>
+#include <iostream>
 
 namespace mp {
+
+const std::array<Input::I_AXIS_DIRECTION, 4> Input::allActions = {Input::Y_AXIS_1_DOWN, Input::Y_AXIS_1_UP, Input::Y_AXIS_2_DOWN, Input::Y_AXIS_2_UP };
 
 Input::Input()
 {
@@ -54,8 +57,27 @@ void Input::handleEvent(const sf::Event &ev)
     default:
         break;
     }
+}
 
+sf::Keyboard::Key Input::getAxisKey(Input::I_AXIS_DIRECTION dir) const
+{
+    auto found = m_bindings.find(dir);
+    return found == m_bindings.end() ? sf::Keyboard::Unknown : found->second;
+}
 
+sf::Event Input::toBaseEvent(const sf::Event &ev)
+{
+    if(ev.type == sf::Event::KeyPressed || ev.type == sf::Event::KeyReleased)
+    {
+        sf::Event realEv = ev;
+        for(auto it : m_bindings){
+            if(it.second == ev.key.code){
+                realEv.key.code = static_cast<sf::Keyboard::Key>(it.first);
+                return realEv;
+            }
+        }
+    }
+    return ev;
 }
 
 void Input::handleJoystick(const sf::Event &ev)
@@ -93,8 +115,6 @@ void Input::setAxisValue(I_AXIS_DIRECTION d, int value)
     case Y_AXIS_2_DOWN:
         m_axes[Y_AXIS_2] = value;
         break;
-    default:
-        break;
     }
 }
 
@@ -102,7 +122,7 @@ void Input::resetBindings()
 {
     std::vector<I_AXIS_DIRECTION> dirs = {Y_AXIS_1_UP, Y_AXIS_1_DOWN, Y_AXIS_2_DOWN, Y_AXIS_2_UP};
     for(auto d : dirs)
-        m_bindings[d] = (sf::Keyboard::Key)d;
+        m_bindings[d] = static_cast<sf::Keyboard::Key>(d);
 }
 
 void Input::setAxisButton(I_AXIS_DIRECTION dir, sf::Keyboard::Key k)

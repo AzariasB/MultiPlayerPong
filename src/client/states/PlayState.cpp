@@ -35,7 +35,6 @@
 #include "src/common/Config.hpp"
 #include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
-#include "src/client/KeyBinding.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/SoundEngine.hpp"
 #include "src/client/StateMachine.hpp"
@@ -94,8 +93,9 @@ void PlayState::update(const sf::Time &elapsed)
     m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
 
     if(pr::game().isCountingDown()){
-        if( m_lastCountdownValue != (int)pr::game().getCountdownTime().asSeconds()){
-            m_lastCountdownValue = (int)pr::game().getCountdownTime().asSeconds();
+        int secs = static_cast<int>(pr::game().getCountdownTime().asSeconds());
+        if( m_lastCountdownValue != secs){
+            m_lastCountdownValue = secs;
             m_particleGenerator.countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
             pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
         }
@@ -135,8 +135,8 @@ PlayState::~PlayState()
 
 void PlayState::handleEvent(const sf::Event &ev)
 {
-    sf::Event realEv = pr::keyBinding().toGameEvent(ev);
-    pr::game().handleEvent(realEv);
+    // sf::Event realEv = pr::keyBinding().toGameEvent(ev);
+    pr::game().handleEvent(ev);
 }
 
 
