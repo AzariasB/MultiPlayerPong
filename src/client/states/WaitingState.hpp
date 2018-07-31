@@ -89,7 +89,7 @@ public:
      */
     void onEnter(BaseStateData *data) override;
 
-    virtual ~WaitingState();
+    virtual ~WaitingState() override;
 private:
 
     /**

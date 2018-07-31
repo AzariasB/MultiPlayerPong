@@ -114,7 +114,7 @@ void WaitingState::onEnter(BaseStateData *data)
     c_state = CONNECTION_STATE::PENDING;
     m_loading.setState(Loading::LD_INACTIVE);
 
-    StateData<std::string> *ipData = 0;
+    StateData<std::string> *ipData = nullptr;
     if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
 
     sf::IpAddress serverAddr(ipData->data());

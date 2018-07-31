@@ -139,7 +139,7 @@ void Lobby::start()
         //        }
         std::pair<sf::Event, Player*> ev;
         while(pollEvent(ev)){
-            game.handleEvent(ev.first, *ev.second);
+            game.handleEvent(ev.first);
         }
 
         game.update(elapsed);

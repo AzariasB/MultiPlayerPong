@@ -92,6 +92,7 @@ std::vector<sf::String> KeyBindingState::actionToString(Input::I_AXIS_DIRECTION 
     case Input::Y_AXIS_2_UP: return {"Up", " P2 : ", kStr};
     case Input::Y_AXIS_2_DOWN: return {"Down", " P2 : ", kStr};
     }
+    return {};
 }
 
 void KeyBindingState::resetKeys()
@@ -164,8 +165,8 @@ void KeyBindingState::buttonClicked(ActionsButton *ab)
 
 sf::String KeyBindingState::keyToString(sf::Keyboard::Key k) const
 {
-    if(m_keyMap.find(k) == m_keyMap.end()) return "";
-    return m_keyMap.find(k)->second;
+    auto found = m_keyMap.find(k);
+    return found == m_keyMap.end() ? "" : found->second;
 }
 
 void KeyBindingState::initKeyMap()

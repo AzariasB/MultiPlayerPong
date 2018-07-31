@@ -56,7 +56,7 @@ public:
 
     void handleEvent(const sf::Event &ev);
 
-    sf::Event toBaseEvent(const sf::Event &ev);
+    sf::Event toBaseEvent(const sf::Event &ev, int playerNum) const;
 
     float getAxis(I_AXIS axis) const;
 
@@ -71,6 +71,10 @@ private:
     void handleJoystick(const sf::Event &ev);
 
     void setAxisValue(I_AXIS_DIRECTION d, int value);
+
+    bool playerNumberMatches(int pNum, I_AXIS_DIRECTION dir) const;
+
+    sf::Keyboard::Key getP2Equivalent(I_AXIS_DIRECTION dir) const;
 
     std::unordered_map<I_AXIS, float> m_axes;
 

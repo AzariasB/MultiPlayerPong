@@ -100,7 +100,7 @@ MenuState::MenuState() :
         });
     });
 
-    quitButton.clickedSignal.add([this](){
+    quitButton.clickedSignal.add([](){
         DialogQuestion &leave = pr::dialogManager().question("quit","really_quit");
         leave.yesClickedSignal.add([](){ ClientApp::getInstance().quit(); });
         leave.noClickedSignal.add([&leave](){pr::dialogManager().hideDialog(leave.id()); });

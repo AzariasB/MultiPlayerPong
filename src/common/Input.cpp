@@ -65,19 +65,40 @@ sf::Keyboard::Key Input::getAxisKey(Input::I_AXIS_DIRECTION dir) const
     return found == m_bindings.end() ? sf::Keyboard::Unknown : found->second;
 }
 
-sf::Event Input::toBaseEvent(const sf::Event &ev)
+sf::Event Input::toBaseEvent(const sf::Event &ev, int playerNum) const
 {
     if(ev.type == sf::Event::KeyPressed || ev.type == sf::Event::KeyReleased)
     {
         sf::Event realEv = ev;
-        for(auto it : m_bindings){
-            if(it.second == ev.key.code){
-                realEv.key.code = static_cast<sf::Keyboard::Key>(it.first);
-                return realEv;
+        for(const auto &it : m_bindings){
+            if(ev.key.code == it.second){
+                if(playerNum == 1){
+                    realEv.key.code = static_cast<sf::Keyboard::Key>(it.first);
+                    return realEv;
+                } else {
+                    realEv.key.code = getP2Equivalent(it.first);
+                    return realEv;
+                }
             }
         }
     }
     return ev;
+}
+
+sf::Keyboard::Key Input::getP2Equivalent(Input::I_AXIS_DIRECTION dir) const
+{
+    if(dir == Input::Y_AXIS_1_DOWN) {
+        return static_cast<sf::Keyboard::Key>(m_bindings.find(Input::Y_AXIS_2_DOWN)->first);
+    } else if(dir == Input::Y_AXIS_1_UP){
+        return static_cast<sf::Keyboard::Key>(m_bindings.find(Input::Y_AXIS_2_UP)->first);
+    }
+    return {};
+}
+
+bool Input::playerNumberMatches(int pNum, Input::I_AXIS_DIRECTION dir) const
+{
+    return (pNum == 1 && (dir == Input::Y_AXIS_1_DOWN || dir == Input::Y_AXIS_1_UP)) ||
+           (pNum == 2 && (dir == Input::Y_AXIS_2_DOWN || dir == Input::Y_AXIS_2_UP));
 }
 
 void Input::handleJoystick(const sf::Event &ev)
@@ -133,7 +154,7 @@ void Input::setAxisButton(I_AXIS_DIRECTION dir, sf::Keyboard::Key k)
 float Input::getAxis(I_AXIS axis) const
 {
     auto f = m_axes.find(axis);
-    return f == m_axes.end() ? 0 : (*f).second;
+    return f == m_axes.end() ? 0 : f->second;
 }
 
 }
