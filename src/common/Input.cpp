@@ -95,12 +95,6 @@ sf::Keyboard::Key Input::getP2Equivalent(Input::I_AXIS_DIRECTION dir) const
     return {};
 }
 
-bool Input::playerNumberMatches(int pNum, Input::I_AXIS_DIRECTION dir) const
-{
-    return (pNum == 1 && (dir == Input::Y_AXIS_1_DOWN || dir == Input::Y_AXIS_1_UP)) ||
-           (pNum == 2 && (dir == Input::Y_AXIS_2_DOWN || dir == Input::Y_AXIS_2_UP));
-}
-
 void Input::handleJoystick(const sf::Event &ev)
 {
     if(ev.joystickMove.axis != sf::Joystick::Y) return;

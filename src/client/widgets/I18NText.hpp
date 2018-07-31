@@ -37,34 +37,93 @@
 namespace mp {
 class Translator;
 
+/**
+ * @brief The I18NText class used to create a text widget
+ * that will automatically translates when the user changes
+ * the settings
+ */
 class I18NText : public sf::Text
 {
 public:
-    I18NText(Translator &translator, const std::vector<sf::String> &translations, int fontSize);
+    /**
+     * @brief I18NText first constructor : with a vector of string, the text will try
+     * to translate each string of the vector and concatanate the results
+     * @param translator a reference to the translator
+     * @param translations the vector of all the strings to try to translate
+     * @param fontSize the size of the text's font
+     */
+    I18NText(Translator &translator, const std::vector<sf::String> &translations, unsigned int fontSize);
 
-    I18NText(Translator &translator, const sf::String &translationName, int fontSize = 30);
+    /**
+     * @brief I18NText second constructor: just takes a string and tries to translate it
+     * @param translator reference to the translator
+     * @param translationName the string to try to translate
+     * @param fontSize the font size
+     */
+    I18NText(Translator &translator, const sf::String &translationName, unsigned int fontSize = 30);
 
+    /**
+     * @brief operator += appends the given string to the existing list, will try to translate the
+     * added string
+     * @param add the string to add
+     * @return itself
+     */
     I18NText &operator+=(const sf::String &add);
 
     virtual ~I18NText();
 
-    int width();
+    /**
+     * @brief width the width of this text
+     * @return
+     */
+    float width();
 
-    int height();
+    /**
+     * @brief height
+     * @return  the height of this text
+     */
+    float height();
 
+    /**
+     * @brief setString removes the current string and changes it with the given string
+     * @param str the new string
+     */
     void setString(const sf::String &str);
 
+    /**
+     * @brief setString changes the current string with the given one
+     * @param str the new string
+     */
     void setString(const std::vector<sf::String> &str);
 
 private:
+    /**
+     * @brief updateString update the position of the string,
+     * and tries to translate each substring it contains
+     */
     void updateString();
 
+    /**
+     * @brief m_translator keep a reference to the translator,
+     * to use it when a translation is needed
+     */
     Translator &m_translator;
 
+    /**
+     * @brief m_translations the whole string in itself
+     */
     std::vector<sf::String> m_translations;
 
+    /**
+      * function called whenever the translation is changing
+    */
     std::function<void()> m_erase = [this](){updateString();};
 
+    /**
+     * @brief m_listenerId keep the id of the listener,
+     * to be able to remove it when the text is destroyed
+     * (in the dialogs for exemple)
+     */
     std::string m_listenerId;
 };
 
