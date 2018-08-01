@@ -37,20 +37,23 @@
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/StateMachine.hpp"
 #include "src/client/widgets/DialogManager.hpp"
+#include "src/common/Game.hpp"
 
 namespace mp {
 
 KeyBindingState::KeyBindingState():
     m_menu()
 {
-    const int startX = SF_CENTER_X;
+    initKeyMap();
+
+    const float startX = SF_CENTER_X;
     int startY = 100;
     startY += m_menu.addCenteredLabel("key_bindings", startX, startY, 70)->height() + 50;
 
 
-    const int xSide = SF_ARENA_WIDTH / 4.f;
-    for(KeyBinding::KEY_ACTION ka : KeyBinding::allActions){
-        Button &b = m_menu.addButton(pr::keyBinding().toString(ka) ,xSide, startY, actionIcon(ka));
+    const float xSide = SF_ARENA_WIDTH / 4.f;
+    for(auto ka : Input::allActions){
+        Button &b = m_menu.addButton(actionToString(ka) ,xSide, startY, actionIcon(ka));
         startY += b.getHeight() + 10;
         m_actions.emplace_back(std::make_unique<ActionsButton>(&b, ka));
         auto *action = m_actions.back().get();
@@ -79,11 +82,25 @@ KeyBindingState::~KeyBindingState()
 {
 }
 
+std::vector<sf::String> KeyBindingState::actionToString(Input::I_AXIS_DIRECTION dir)
+{
+    sf::Keyboard::Key k = pr::game().input().getAxisKey(dir);
+    sf::String kStr = keyToString(k);
+    switch (dir) {
+    case Input::Y_AXIS_1_UP:return {"Up", " P1 : ", kStr};
+    case Input::Y_AXIS_1_DOWN: return {"Down", " P1 : ", kStr};
+    case Input::Y_AXIS_2_UP: return {"Up", " P2 : ", kStr};
+    case Input::Y_AXIS_2_DOWN: return {"Down", " P2 : ", kStr};
+    }
+    return {};
+}
+
 void KeyBindingState::resetKeys()
 {
-    pr::keyBinding().resetBindings();
+    pr::game().input().resetBindings();
     for(auto &it : m_actions)
-        it->button->setText(pr::keyBinding().toString(it->action));
+        it->button->setText(actionToString(it->action));
+
 }
 
 void KeyBindingState::render(Renderer &renderer) const
@@ -95,10 +112,10 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
 {
     if(pr::dialogManager().isActiveDialog(m_messageDialogId)){
         if(ev.type == sf::Event::KeyPressed && m_waitingAction){
-            pr::keyBinding().setKeyAction(m_waitingAction->action, ev.key.code);
-            std::vector<sf::String> nwBtnTitle = pr::keyBinding().toString(m_waitingAction->action);
+            pr::game().input().setAxisButton(m_waitingAction->action, ev.key.code);
+            std::vector<sf::String> nwBtnTitle = actionToString(m_waitingAction->action);
             m_waitingAction->button->setText(nwBtnTitle);
-            m_waitingAction = 0;
+            m_waitingAction = nullptr;
             pr::dialogManager().hideDialog(m_messageDialogId);
         }
     }else{
@@ -110,11 +127,15 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
     }
 }
 
-const Assets::IconAtlas::Holder &KeyBindingState::actionIcon(KeyBinding::KEY_ACTION action) const
+const Assets::IconAtlas::Holder &KeyBindingState::actionIcon(int action) const
 {
     switch (action) {
-    case KeyBinding::GO_DOWN: return Assets::IconAtlas::arrowDownIcon;
-    case KeyBinding::GO_UP: return Assets::IconAtlas::arrowUpIcon;
+    case Input::I_AXIS_DIRECTION::Y_AXIS_1_DOWN:
+    case Input::I_AXIS_DIRECTION::Y_AXIS_2_DOWN:
+        return Assets::IconAtlas::arrowDownIcon;
+    case Input::I_AXIS_DIRECTION::Y_AXIS_1_UP:
+    case Input::I_AXIS_DIRECTION::Y_AXIS_2_UP:
+        return Assets::IconAtlas::arrowUpIcon;
     default: return Assets::IconAtlas::crossIcon;
     }
 }
@@ -127,7 +148,7 @@ void KeyBindingState::update(const sf::Time &elapsed)
 void KeyBindingState::cancelDialog()
 {
     pr::dialogManager().hideDialog(m_messageDialogId);
-    m_waitingAction = 0;
+    m_waitingAction = nullptr;
     m_messageDialogId = 0;
 }
 
@@ -141,6 +162,122 @@ void KeyBindingState::buttonClicked(ActionsButton *ab)
     dm.okClickedSignal.add(cancel);
     dm.closeSignal.add(cancel);
 }
+
+sf::String KeyBindingState::keyToString(sf::Keyboard::Key k) const
+{
+    auto found = m_keyMap.find(k);
+    return found == m_keyMap.end() ? "" : found->second;
+}
+
+void KeyBindingState::initKeyMap()
+{
+#define MAP_KEY(key_id) m_keyMap[sf::Keyboard::key_id] = #key_id
+
+    MAP_KEY(Unknown);
+    MAP_KEY(A);
+    MAP_KEY(B);
+    MAP_KEY(C);
+    MAP_KEY(D);
+    MAP_KEY(E);
+    MAP_KEY(F);
+    MAP_KEY(G);
+    MAP_KEY(H);
+    MAP_KEY(I);
+    MAP_KEY(J);
+    MAP_KEY(K);
+    MAP_KEY(L);
+    MAP_KEY(M);
+    MAP_KEY(N);
+    MAP_KEY(O);
+    MAP_KEY(P);
+    MAP_KEY(Q);
+    MAP_KEY(R);
+    MAP_KEY(S);
+    MAP_KEY(T);
+    MAP_KEY(U);
+    MAP_KEY(V);
+    MAP_KEY(W);
+    MAP_KEY(X);
+    MAP_KEY(Y);
+    MAP_KEY(Z);
+    MAP_KEY(Num0);
+    MAP_KEY(Num1);
+    MAP_KEY(Num2);
+    MAP_KEY(Num3);
+    MAP_KEY(Num4);
+    MAP_KEY(Num5);
+    MAP_KEY(Num6);
+    MAP_KEY(Num7);
+    MAP_KEY(Num8);
+    MAP_KEY(Num9);
+    MAP_KEY(LControl);
+    MAP_KEY(LShift);
+    MAP_KEY(LAlt);
+    MAP_KEY(LSystem);
+    MAP_KEY(RControl);
+    MAP_KEY(RShift);
+    MAP_KEY(RAlt);
+    MAP_KEY(RSystem);
+    MAP_KEY(Menu);
+    MAP_KEY(LBracket);
+    MAP_KEY(RBracket);
+    MAP_KEY(SemiColon);
+    MAP_KEY(Comma);
+    MAP_KEY(Period);
+    MAP_KEY(Quote);
+    MAP_KEY(Slash);
+    MAP_KEY(BackSlash);
+    MAP_KEY(Tilde);
+    MAP_KEY(Equal);
+    MAP_KEY(Dash);
+    MAP_KEY(Space);
+    MAP_KEY(Return);
+    MAP_KEY(BackSpace);
+    MAP_KEY(Tab);
+    MAP_KEY(PageUp);
+    MAP_KEY(PageDown);
+    MAP_KEY(End);
+    MAP_KEY(Home);
+    MAP_KEY(Insert);
+    MAP_KEY(Delete);
+    MAP_KEY(Add);
+    MAP_KEY(Subtract);
+    MAP_KEY(Multiply);
+    MAP_KEY(Divide);
+    MAP_KEY(Left);
+    MAP_KEY(Right);
+    MAP_KEY(Up);
+    MAP_KEY(Down);
+    MAP_KEY(Numpad0);
+    MAP_KEY(Numpad1);
+    MAP_KEY(Numpad2);
+    MAP_KEY(Numpad3);
+    MAP_KEY(Numpad4);
+    MAP_KEY(Numpad5);
+    MAP_KEY(Numpad6);
+    MAP_KEY(Numpad7);
+    MAP_KEY(Numpad8);
+    MAP_KEY(Numpad9);
+    MAP_KEY(F1);
+    MAP_KEY(F2);
+    MAP_KEY(F3);
+    MAP_KEY(F4);
+    MAP_KEY(F5);
+    MAP_KEY(F6);
+    MAP_KEY(F7);
+    MAP_KEY(F8);
+    MAP_KEY(F9);
+    MAP_KEY(F10);
+    MAP_KEY(F11);
+    MAP_KEY(F12);
+    MAP_KEY(F13);
+    MAP_KEY(F14);
+    MAP_KEY(F15);
+    MAP_KEY(Pause);
+
+#undef MAP_KEY
+}
+
 
 
 }

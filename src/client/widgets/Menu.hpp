@@ -145,7 +145,7 @@ private:
      * @brief setSeletedIndex changes the selected button index
      * @param nwIndex
      */
-    bool setSeletedIndex(int nwIndex);
+    bool setSeletedIndex(std::size_t nwIndex);
 
     /**
      * @brief selectIfFirst select the last inserted button

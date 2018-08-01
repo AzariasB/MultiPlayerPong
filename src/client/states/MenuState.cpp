@@ -59,8 +59,10 @@ MenuState::MenuState() :
     Button &soloButton = m_menu.addButton("solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
     currentHeight += soloButton.getHeight() + margin;
 
+    Button &solo1v1 = m_menu.addButton({"solo", " 1v1"}, halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon );
+    currentHeight += solo1v1.getHeight() + margin;
 
-    Button &multiPlayerButton = m_menu.addButton("multi", halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon);
+    Button &multiPlayerButton = m_menu.addButton("multi", halfWay, currentHeight, Assets::IconAtlas::massiveMultiplayerIcon);
     currentHeight += multiPlayerButton.getHeight() + margin;
 
     Button &optionButton = m_menu.addButton("options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
@@ -77,6 +79,10 @@ MenuState::MenuState() :
     });
 
     soloButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);});
+    solo1v1.clickedSignal.add([](){
+        ClientApp::getInstance().setPNumber(3);
+        pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);
+    });
     optionButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
     creditsButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
 
@@ -100,7 +106,7 @@ MenuState::MenuState() :
         });
     });
 
-    quitButton.clickedSignal.add([this](){
+    quitButton.clickedSignal.add([](){
         DialogQuestion &leave = pr::dialogManager().question("quit","really_quit");
         leave.yesClickedSignal.add([](){ ClientApp::getInstance().quit(); });
         leave.noClickedSignal.add([&leave](){pr::dialogManager().hideDialog(leave.id()); });

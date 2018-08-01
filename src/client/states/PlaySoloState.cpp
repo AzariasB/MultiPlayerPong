@@ -46,18 +46,22 @@ void PlaySoloState::onBeforeEnter()
 {
     PlayState::onBeforeEnter();
 
-    ClientApp::getInstance().setPNumber(1);
-    pr::game().getPlayer2().getPaddle().setIsAI(true);
+    if(ClientApp::getInstance().getPNumber() == 3) {
+        pr::game().getPlayer2().getPaddle().setIsAI(false);
+    } else {
+        ClientApp::getInstance().setPNumber(1);
+        pr::game().getPlayer2().getPaddle().setIsAI(true);
+    }
 
     pr::game().countdownEndedSignal.add([](){pr::game().setGameState(GAMESTATE::PLAYING);});
 
-    pr::game().lostSignal.add([this](int looser){
+    pr::game().lostSignal.add([](int looser){
         bool amWinner = looser == 2;
         pr::game().getPlayer1().setIsWinner(amWinner);
         pr::game().getPlayer2().setIsWinner(!amWinner);
     });
 
-    pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2){
+    pr::game().hitPaddleSignal.add([](std::size_t pNum, b2Vec2){
         (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2()).gainPoint();
     });
 }

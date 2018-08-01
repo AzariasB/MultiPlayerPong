@@ -37,6 +37,7 @@
 #include <Box2D/Box2D.h>
 
 #include "Wall.hpp"
+#include "Input.hpp"
 #include "Config.hpp"
 #include "Paddle.hpp"
 #include "Player.hpp"
@@ -84,7 +85,7 @@ public:
      * @param ev the sfml event
      * @param player the player who trigerred the event
      */
-    void handleEvent(const sf::Event &ev, Player &player);
+    void handleEvent(const sf::Event &ev);
 
     /**
      * @brief getBall const reference to the ball object
@@ -188,23 +189,10 @@ public:
     b2World &world() const;
 
     /**
-     * @brief clearNewPowerUps clears the list of newly added powerups
+     * @brief input gets the input to change/get its values
+     * @return the input manager of the game
      */
-    void clearNewPowerUps();
-
-    /**
-     * @brief powerupHitPaddle whenever a powerup hits a paddle
-     * @param powerUpId the id of the power hitting
-     * @param paddleNum the number of the paddled hitted
-     */
-    void powerupHitPaddle(sf::Uint64 powerUpId, int paddleNum);
-
-    /**
-     * @brief powerupEffectFinished whenever the effect of a powerup ended
-     * @param powerupId the id of the powerup
-     * @param paddleNum the paddle that originally hit the the powerup
-     */
-    void powerupEffectFinished(std::pair<sf::Uint64, int> data);
+    Input &input();
 
 
 private:
@@ -223,38 +211,38 @@ private:
     /**
      * @brief gravity world gravity
      */
-    b2Vec2 mGravity = b2Vec2(0.f,0.f);
+    b2Vec2 m_gravity = b2Vec2(0.f,0.f);
 
 
     /**
      * @brief mPhysicWorld the box2d world
      */
-    mutable b2World mPhysicWorld;
+    mutable b2World m_physicWorld;
 
     /**
      * @brief mainBall the ball object for the game
      */
-    Ball mainBall;
+    Ball m_ball;
 
     /**
      * @brief p1 the first player
      */
-    Player p1;
+    Player m_p1;
 
     /**
      * @brief p2 the second player
      */
-    Player p2;
+    Player m_p2;
 
     /**
      * @brief upperWall upper wall of the arena
      */
-    Wall mUpperWall;
+    Wall m_upperWall;
 
     /**
      * @brief lowerWall lower wall of the arena
      */
-    Wall mLowerWall;
+    Wall m_lowerWall;
 
     /**
      * @brief m_countDownTime time before we can start the game
@@ -271,7 +259,13 @@ private:
      * listens at the contacts between
      * the bodies in the world
      */
-    ContactListener mContactListener;
+    ContactListener m_contactListener;
+
+    /**
+     * @brief m_input input manager
+     * for the game, contains the bindings
+     */
+    Input m_input;
 
     //"signals"
 public:

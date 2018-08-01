@@ -83,7 +83,7 @@ public:
      */
     void onBeforeLeaving() override;
 
-    virtual ~PlayMultiplayerState();
+    virtual ~PlayMultiplayerState() override;
 
 private:
 

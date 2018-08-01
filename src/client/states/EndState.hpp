@@ -93,7 +93,7 @@ public:
      */
     void goToMenu();
 
-    virtual ~EndState();
+    virtual ~EndState() override;
 
 private:
     void updateVerticesColor(bool win);

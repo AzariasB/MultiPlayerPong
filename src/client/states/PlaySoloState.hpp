@@ -69,7 +69,7 @@ public:
      */
     void onAfterLeaving() override;
 
-    virtual ~PlaySoloState();
+    virtual ~PlaySoloState() override;
 };
 
 }

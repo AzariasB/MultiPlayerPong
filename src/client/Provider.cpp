@@ -32,7 +32,6 @@
 #include "ClientApp.hpp"
 #include "particles/ParticleGenerator.hpp"
 #include "Renderer.hpp"
-#include "KeyBinding.hpp"
 #include "Translator.hpp"
 #include "SoundEngine.hpp"
 #include "src/common/Game.hpp"
@@ -58,11 +57,6 @@ StateMachine &pr::stateMachine()
 sf::Vector2f pr::mapPixelToCoords(const sf::Vector2i &coords)
 {
     return ClientApp::getInstance().getWindow().mapPixelToCoords(coords);
-}
-
-KeyBinding &pr::keyBinding()
-{
-    return ClientApp::getInstance().getKeyBindings();
 }
 
 SoundEngine &pr::soundEngine()

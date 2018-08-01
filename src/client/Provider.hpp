@@ -58,8 +58,6 @@ const ResourcesManager &resourceManager();
 
 sf::Vector2f mapPixelToCoords(const sf::Vector2i &coords);
 
-KeyBinding &keyBinding();
-
 SoundEngine &soundEngine();
 
 Renderer &renderer();

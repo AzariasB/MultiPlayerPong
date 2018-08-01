@@ -7,3 +7,4 @@ bin
 Makefile
 *.a
 *.lib
+lib/Box2D/Build

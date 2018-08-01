@@ -45,6 +45,7 @@
 		"change_key" : "Changer de touche",
 		"Up" : "Haut",
 		"Down" : "Bas",
-		"language" : "Langue"
+		"language" : "Langue",
+		"won" : "a gagné"
 	}
 }

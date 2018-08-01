@@ -45,6 +45,7 @@
 		"change_key" : "Cambiare tasto",
 		"Up" : "Alto",
 		"Down" : "basso",
-		"language" : "Lingua"
+		"language" : "Lingua",
+		"won": "a vinto"
 	}
 }

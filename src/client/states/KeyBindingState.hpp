@@ -31,12 +31,24 @@
 #pragma once
 
 #include "src/client/widgets/Menu.hpp"
-#include "src/client/KeyBinding.hpp"
 #include "src/client/State.hpp"
 #include "src/client/Assets.hpp"
-
+#include "src/common/Input.hpp"
 
 namespace mp {
+
+
+/**
+ * @brief The EnumClassHash struct
+ */
+struct EnumClassHash
+{
+    template <typename T>
+    std::size_t operator()(T t) const
+    {
+        return static_cast<std::size_t>(t);
+    }
+};
 
 class Dialog;
 
@@ -56,7 +68,7 @@ public:
      */
     KeyBindingState();
 
-    virtual ~KeyBindingState();
+    virtual ~KeyBindingState() override;
 
     /**
      * @brief handleEvent inherited function
@@ -78,6 +90,14 @@ public:
     void update(const sf::Time &elapsed) override;
 
 private:
+
+    /**
+     * @brief actionToString returns the string descripting the action of the axis
+     * @param dir
+     * @return
+     */
+    std::vector<sf::String> actionToString(Input::I_AXIS_DIRECTION dir);
+
     /**
      * @brief The ActionsButton struct
      * struct used internally to associate every
@@ -89,7 +109,7 @@ private:
          * @param b a pointer to the button
          * @param ka the action
          */
-        ActionsButton(Button *b, KeyBinding::KEY_ACTION ka):
+        ActionsButton(Button *b, Input::I_AXIS_DIRECTION ka):
             button(b),
             action(ka)
         {
@@ -104,10 +124,10 @@ private:
         /**
          * @brief action the action associated with the button
          */
-        KeyBinding::KEY_ACTION action;
+        Input::I_AXIS_DIRECTION action;
     };
 
-    const Assets::IconAtlas::Holder &actionIcon(KeyBinding::KEY_ACTION action) const;
+    const Assets::IconAtlas::Holder &actionIcon(int action) const;
 
     /**
      * @brief buttonClicked whenever a button is clicked, to change the binding
@@ -122,10 +142,21 @@ private:
     void cancelDialog();
 
     /**
+     * @brief initKeyMap
+     */
+    void initKeyMap();
+
+    /**
      * @brief resetKeys resets all the key bindings
      * and updates the view
      */
     void resetKeys();
+
+    /**
+     * @brief keyToString the key to translate to a string
+     * @return the string associated with the key
+     */
+    sf::String keyToString(sf::Keyboard::Key k) const;
 
 
     sf::Uint64 m_messageDialogId = 0;
@@ -144,7 +175,12 @@ private:
      * @brief m_waitingAction the currently action
      * waiting to have a key binding
      */
-    ActionsButton *m_waitingAction = 0;
+    ActionsButton *m_waitingAction = nullptr;
+
+    /**
+     * @brief m_keyMap the name of each key
+     */
+    std::unordered_map<sf::Keyboard::Key, sf::String, EnumClassHash> m_keyMap;
 
 };
 

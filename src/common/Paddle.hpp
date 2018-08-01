@@ -62,21 +62,6 @@ public:
     Paddle(const Game &game, std::size_t pNumber);
 
     /**
-     * @brief goUp changes the direction in order to go up
-     */
-    void goUp();
-
-    /**
-     * @brief goDown changes the direction in order to go down
-     */
-    void goDown();
-
-    /**
-     * @brief stop sets the direction to the null vector in order to stop moving
-     */
-    void stop();
-
-    /**
      * @brief extend when the "extend" boost was taken
      */
     void extend();
@@ -127,28 +112,38 @@ public:
      */
     friend sf::Packet &operator>>(sf::Packet &packet, Paddle &paddle);
 
+    /**
+     * @brief setYVelocity changes the Y velocity of this paddle
+     * @param yVelocity the new velocity
+     */
+    void setYVelocity(float32 yVelocity);
+
+    /**
+     * @brief isAi if this paddle is an AI
+     * @return
+     */
+    bool isAi() const;
 
     virtual ~Paddle();
 private:
-    void setYVelocity(float32 yVelocity);
 
     /**
      * @brief mNum keep the number
      * of the player in the paddle
      * for when a contact happens
      */
-    const std::size_t mNum;
+    const std::size_t m_num;
 
     /**
      * @brief mStartPos store the starting position
      * to use when reseting the paddle
      */
-    const b2Vec2 mStartPos;
+    const b2Vec2 m_startPos;
 
-    b2Vec2 mVelocity;
-
-    sf::Int32 m_widthBoost = 0;
-
+    /**
+     * @brief m_velocity current velocity of this paddle
+     */
+    b2Vec2 m_velocity;
 
     /**
      * @brief isAI wether this paddle is controlled by an AI

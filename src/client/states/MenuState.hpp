@@ -89,7 +89,7 @@ public:
      */
     void onAfterLeaving() override;
 
-    virtual ~MenuState();
+    virtual ~MenuState() override;
 private:
 
     /**

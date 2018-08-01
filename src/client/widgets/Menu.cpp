@@ -98,7 +98,7 @@ std::unique_ptr<I18NText> &Menu::addLabel(const std::vector<sf::String> &content
 
 Button &Menu::configureButton(Button &inserted)
 {
-    int idx = m_buttons.size() -1;
+    std::size_t idx = m_buttons.size() -1;
     inserted.selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
     if(m_buttons.size() == 1) inserted.setSelected(true);
     return inserted;
@@ -141,7 +141,7 @@ bool Menu::handleEvent(const sf::Event &ev)
     }
 }
 
-bool Menu::setSeletedIndex(int nwIndex)
+bool Menu::setSeletedIndex(std::size_t nwIndex)
 {
     if(nwIndex != m_selectedButton){
         m_buttons[m_selectedButton]->setSelected(false);

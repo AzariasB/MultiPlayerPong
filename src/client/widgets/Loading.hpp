@@ -65,7 +65,7 @@ public:
 
     void render(Renderer &renderer) const override;
 
-    bool update(const sf::Time &delta);
+    bool update(const sf::Time &delta) override;
 
     bool handleEvent(const sf::Event &) override;
 

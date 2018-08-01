@@ -39,7 +39,6 @@
 #include "src/common/Application.hpp"
 #include "src/common/Game.hpp"
 #include "Renderer.hpp"
-#include "KeyBinding.hpp"
 #include "Translator.hpp"
 #include "SoundEngine.hpp"
 #include "StateMachine.hpp"
@@ -113,10 +112,20 @@ public:
     sf::TcpSocket &getSocket();
 
     /**
-     * @brief setPNumber sets the player number (1 or 2)
+     * @brief setPNumber sets the player number (1, 2 or 3)
+     * 3 being solo 1v1
      * @param pNumber the number of the player
      */
     void setPNumber(int pNumber);
+
+    /**
+     * @brief getPNumber access to the player number
+     * 1 is player 1,
+     * 2 is player 2
+     * 3 is 1v1 local
+     * @return
+     */
+    int getPNumber() const;
 
     /**
      * @brief getStateMachine reference to the state machine
@@ -149,19 +158,6 @@ public:
      * @return const reference to the resource manager
      */
     const ResourcesManager &getResourcesManager();
-
-
-    /**
-     * @brief getKeyBindings access to the keybinding options
-     * @return a reference to the client's key binding
-     */
-    KeyBinding &getKeyBindings();
-
-    /**
-     * @brief getKeyBindings const access to key binding
-     * @return a const reference to the client's key bindings
-     */
-    const KeyBinding &getKeyBindings() const;
 
 
     /**
@@ -199,7 +195,7 @@ public:
      */
     void toggleFullScreen();
 
-    virtual ~ClientApp();
+    virtual ~ClientApp() override;
 
     ClientApp(const ClientApp &) = delete;
     void operator=(const ClientApp &) = delete;
@@ -304,12 +300,6 @@ private:
      * access to play sounds
      */
     SoundEngine m_sEngine;
-
-    /**
-     * @brief m_keyBinding the objects that contains all
-     * the key bindings
-     */
-    KeyBinding m_keyBinding;
 
     /**
      * @brief m_dialogManager the dialog manager
