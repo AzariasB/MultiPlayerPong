@@ -39,6 +39,15 @@ namespace sf {
 
 namespace mp {
 
+struct EnumClassHash
+{
+    template <typename T>
+    std::size_t operator()(T t) const
+    {
+        return static_cast<std::size_t>(t);
+    }
+};
+
 /**
  * @brief The Input class used to
  * easily handle inputs, axes, multiplayer inputs
@@ -148,12 +157,12 @@ private:
     /**
      * @brief m_axes value of each axes
      */
-    std::unordered_map<I_AXIS, float> m_axes;
+    std::unordered_map<I_AXIS, float, EnumClassHash> m_axes;
 
     /**
      * @brief m_bindings binding for each axis direction
      */
-    std::unordered_map<I_AXIS_DIRECTION, sf::Keyboard::Key> m_bindings;
+    std::unordered_map<I_AXIS_DIRECTION, sf::Keyboard::Key, EnumClassHash> m_bindings;
 };
 
 
