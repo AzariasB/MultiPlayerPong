@@ -112,10 +112,20 @@ public:
     sf::TcpSocket &getSocket();
 
     /**
-     * @brief setPNumber sets the player number (1 or 2)
+     * @brief setPNumber sets the player number (1, 2 or 3)
+     * 3 being solo 1v1
      * @param pNumber the number of the player
      */
     void setPNumber(int pNumber);
+
+    /**
+     * @brief getPNumber access to the player number
+     * 1 is player 1,
+     * 2 is player 2
+     * 3 is 1v1 local
+     * @return
+     */
+    int getPNumber() const;
 
     /**
      * @brief getStateMachine reference to the state machine

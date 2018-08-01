@@ -45,6 +45,7 @@
 		"change_key" : "Cambiar tecla",
 		"Up" : "Arriba",
 		"Down" : "Abajo",
-		"language" : "Idioma"
+		"language" : "Idioma",
+		"won": "ganado"
 	}
 }

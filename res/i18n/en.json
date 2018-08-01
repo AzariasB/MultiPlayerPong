@@ -45,6 +45,7 @@
 		"change_key" : "Change key",
 		"Up" : "Up",
 		"Down" : "Down",
-		"language" : "Language"
+		"language" : "Language",
+		"won": "won"
 	}
 }

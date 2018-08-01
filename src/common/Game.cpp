@@ -99,12 +99,12 @@ void Game::updateCountdown(const sf::Time &elapsed)
 
 void Game::updatePlaying(const sf::Time &elapsed)
 {
-    static const double step = 1.0 / 70.0;
-    static double accumulator = 0.f;
+    static const float step = 1.0f / 70.0f;
+    static float accumulator = 0.0f;
 
     float dt = elapsed.asSeconds();
-    if(dt > 0.25)
-        dt = 0.25;
+    if(dt > 0.25f)
+        dt = 0.25f;
 
     accumulator += dt;
 

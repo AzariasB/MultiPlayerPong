@@ -269,6 +269,11 @@ bool ClientApp::isFullScreen() const
     return m_isFullscreen;
 }
 
+int ClientApp::getPNumber() const
+{
+    return m_number;
+}
+
 Renderer& ClientApp::getRenderer()
 {
     return renderer;

@@ -59,7 +59,7 @@ EndState::~EndState()
 
 sf::Vector2f EndState::toVertexPosition(int index) const
 {
-    float angle = (2 * M_PI) * (index / (float)triangleNumber);
+    float angle = (2 * M_PI) * (index / static_cast<float>(triangleNumber));
     return sf::Vector2f(
                 std::cos(angle) * SF_CENTER_X + SF_CENTER_X,
                 std::sin(angle) * SF_CENTER_X + SF_CENTER_Y
@@ -108,10 +108,17 @@ void EndState::handleEvent(const sf::Event& ev)
 
 void EndState::onBeforeEnter()
 {
-    bool winner = ClientApp::getInstance().isWinner();
-    pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
-    updateVerticesColor(winner);
-    m_content.setString(winner ? "you_won" : "you_lost");
+    if(ClientApp::getInstance().getPNumber() == 3){
+        pr::soundEngine().playSound(Assets::Sounds::Win);
+        sf::String res = "Player " + std::to_string(pr::game().getNumWinner()) + " ";
+        m_content.setString({res, "won"});
+        updateVerticesColor(true);
+    } else {
+        bool winner = ClientApp::getInstance().isWinner();
+        pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
+        updateVerticesColor(winner);
+        m_content.setString(winner ? "you_won" : "you_lost");
+    }
     math::centerOrigin(m_content);
     m_content.setPosition(SF_CENTER_X, SF_CENTER_Y);
 }
@@ -120,6 +127,7 @@ void EndState::onEnter(BaseStateData *)
 {
     pr::game().reset();
     pr::socket().disconnect();
+    ClientApp::getInstance().setPNumber(-1);
 }
 
 void EndState::update(const sf::Time &elapsed)
