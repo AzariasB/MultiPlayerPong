@@ -98,7 +98,7 @@ public:
 private:
     void updateVerticesColor(bool win);
 
-    sf::Vector2f toVertexPosition(int index) const;
+    sf::Vector2f toVertexPosition(std::size_t index) const;
 
     /**
      * @brief m_menu the menu of the state, to show

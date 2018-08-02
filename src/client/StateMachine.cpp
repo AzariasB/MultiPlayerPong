@@ -31,16 +31,76 @@
 
 #include "StateMachine.hpp"
 #include "SoundEngine.hpp"
+#include "Renderer.hpp"
 
 namespace mp {
 
 StateMachine::StateMachine()
 {
-
 }
 
 StateMachine::~StateMachine()
 {
+}
+
+void StateMachine::initiliaze()
+{
+    m_blackboard = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Blackboard));
+    m_blackboard.setPosition(SF_CENTER_X, SF_CENTER_Y);
+    math::centerOrigin(m_blackboard);
+}
+
+State &StateMachine::getStateAt(int index) const
+{
+    if(states.find(index) == states.end())
+        throw std::out_of_range("Index not found");
+
+    auto found = states.find(index);
+    if(found == states.end()) throw "State index not found";
+    return *found->second;
+}
+
+const State &StateMachine::getCurrentState() const
+{
+    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
+    auto found = states.find(currentStateIndex);
+    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    return *found->second;
+}
+
+
+State &StateMachine::getCurrentState()
+{
+    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
+    auto found = states.find(currentStateIndex);
+    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    return *found->second;
+}
+
+void StateMachine::render(Renderer &renderer) const
+{
+    //find start x, start y translations
+
+    // push
+    // for y in all ys
+    // for x in all xs
+    // translate the sprite
+    // draw it
+
+    // end for / end for
+    // pop
+
+   renderer
+           .push()
+            .draw(m_blackboard)
+            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
+            .draw(m_blackboard)
+            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
+            .draw(m_blackboard)
+            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
+            .draw(m_blackboard)
+           .pop()
+            .render(getCurrentState());
 }
 
 void StateMachine::setCurrentState(int stateLabel)

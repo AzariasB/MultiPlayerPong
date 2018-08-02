@@ -95,6 +95,8 @@ ClientApp::~ClientApp()
 
 void ClientApp::initStates()
 {
+    stateMachine.initiliaze();
+
     stateMachine.addState<WaitingState>(cc::WAITING);
     stateMachine.addState<PlayMultiplayerState>(cc::PLAY_MULTIPLAYER);
     stateMachine.addState<EndState>(cc::FINISHED);
@@ -184,6 +186,7 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argv);
 
     this->setLocale();
+    static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).updateLangButtonsIcon();
     stateMachine.setCurrentState(cc::MENU);
     sf::Clock clock;
 
@@ -206,10 +209,11 @@ void ClientApp::run(int argc, char** argv)
 
         stateMachine.getCurrentState().update(elapsed);
 
-        renderer.render(stateMachine.getCurrentState());
-        renderer.render(m_dialogManager);
-        renderer.render(m_counter);
-        renderer.draw(rect);
+        renderer
+                .render(stateMachine)
+                .render(m_dialogManager)
+                .render(m_counter)
+                .draw(rect);
 
         window->display();
     }

@@ -80,7 +80,12 @@ public:
      */
     void toggleFullScreen();
 
-    virtual ~OptionState();
+    /**
+     * @brief updateLangButtonsIcon changes the buttons icons
+     */
+    void updateLangButtonsIcon();
+
+    virtual ~OptionState() override;
 
 private:
     /**
@@ -96,11 +101,6 @@ private:
      * @return
      */
     const sf::IntRect &getCurrentScreenRect() const;
-
-    /**
-     * @brief updateLangButtonsIcon changes the buttons icons
-     */
-    void updateLangButtonsIcon();
 
     /**
      * @brief m_menu the menu with all the options
