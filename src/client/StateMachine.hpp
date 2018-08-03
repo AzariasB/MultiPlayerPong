@@ -40,6 +40,7 @@
 #include "SoundEngine.hpp"
 #include "State.hpp"
 #include "Provider.hpp"
+#include "widgets/BackgroundParallax.hpp"
 
 namespace mp {
 
@@ -67,6 +68,8 @@ public:
      * @brief initiliaze initializes the blackboard background
      */
     void initiliaze();
+
+    void translate(float nwX, float nwY);
 
     /**
      * @brief goToState expanded version of the previous method
@@ -183,7 +186,7 @@ private:
     /**
      * @brief m_blackboard the blackboard background
      */
-    sf::Sprite m_blackboard;
+    BackgroundParallax m_background;
 
 };
 

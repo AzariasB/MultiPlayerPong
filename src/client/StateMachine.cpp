@@ -45,9 +45,7 @@ StateMachine::~StateMachine()
 
 void StateMachine::initiliaze()
 {
-    m_blackboard = sf::Sprite(pr::resourceManager().getTexture(Assets::Icons::Blackboard));
-    m_blackboard.setPosition(SF_CENTER_X, SF_CENTER_Y);
-    math::centerOrigin(m_blackboard);
+    m_background = BackgroundParallax(pr::resourceManager().getTexture(Assets::Icons::Blackboard), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
 }
 
 State &StateMachine::getStateAt(int index) const
@@ -68,6 +66,10 @@ const State &StateMachine::getCurrentState() const
     return *found->second;
 }
 
+void StateMachine::translate(float nwX, float nwY)
+{
+    m_background.translate(nwX / 5.f, nwY / 5.f);
+}
 
 State &StateMachine::getCurrentState()
 {
@@ -91,16 +93,8 @@ void StateMachine::render(Renderer &renderer) const
     // pop
 
    renderer
-           .push()
-            .draw(m_blackboard)
-            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
-            .draw(m_blackboard)
-            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
-            .draw(m_blackboard)
-            .translate(sf::Vector2f(m_blackboard.getGlobalBounds().width, 0))
-            .draw(m_blackboard)
-           .pop()
-            .render(getCurrentState());
+           .render(m_background)
+           .render(getCurrentState());
 }
 
 void StateMachine::setCurrentState(int stateLabel)
