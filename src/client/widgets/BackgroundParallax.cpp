@@ -30,6 +30,9 @@
  */
 #include "BackgroundParallax.hpp"
 #include "src/client/Renderer.hpp"
+#include "src/common/VectorsUtils.hpp"
+
+#include <iostream>
 #include <cmath>
 
 namespace mp {
@@ -46,10 +49,16 @@ BackgroundParallax::BackgroundParallax(const sf::Texture &texture, const sf::Vec
 
 }
 
+void BackgroundParallax::setOffset()
+{
+    std::cout << m_offset;
+
+}
+
 void BackgroundParallax::translate(float nwX, float nwY)
 {
-    m_translate.x = fmodf(nwX, m_sprite.getGlobalBounds().width);
-    m_translate.y = fmodf(nwY, m_sprite.getGlobalBounds().height);
+    m_translate.x = fmodf(nwX + m_offset.x , m_sprite.getGlobalBounds().width);
+    m_translate.y = fmodf(nwY + m_offset.y, m_sprite.getGlobalBounds().height);
 }
 
 void BackgroundParallax::render(Renderer &renderer) const
@@ -60,7 +69,7 @@ void BackgroundParallax::render(Renderer &renderer) const
 
     renderer
             .push()
-            .translate(sf::Vector2f(-m_translate.x - sWidth, -m_translate.y - sHeight));
+            .translate(sf::Vector2f(m_translate.x - sWidth, m_translate.y - sHeight));
 
     int horiz = static_cast<int>(m_bounds.x / sWidth) + 3;
     int vert = static_cast<int>(m_bounds.y / sHeight) + 3;

@@ -137,6 +137,7 @@ public:
      */
     void setCurrentState(int stateLabel, BaseStateData &data)
     {
+        m_background.setOffset();
         if(currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
         currentStateIndex = stateLabel;
         states[currentStateIndex]->onEnter(&data);

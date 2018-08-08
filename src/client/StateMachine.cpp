@@ -99,6 +99,7 @@ void StateMachine::render(Renderer &renderer) const
 
 void StateMachine::setCurrentState(int stateLabel)
 {
+    m_background.setOffset();
     if (currentStateIndex > -1)
         states[currentStateIndex]->onBeforeLeaving();
     currentStateIndex = stateLabel;

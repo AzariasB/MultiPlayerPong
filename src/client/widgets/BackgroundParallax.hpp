@@ -40,24 +40,70 @@ namespace sf {
 
 namespace mp {
 
+/**
+ * @brief The BackgroundParallax class
+ * widget used to have a background parallax
+ * it's just a single texture that is repeating itself
+ * over and over, on the window's view.
+ * It's using a single sprite and translates it
+ */
 class BackgroundParallax : public Renderable
 {
 public:
+    /**
+     * @brief BackgroundParallax empty constructor
+     */
     BackgroundParallax();
 
+    /**
+     * @brief BackgroundParallax better constructor
+     * @param texture the texture to use to draw the background
+     * @param bounds the bounds where to draw the texture
+     * (the texture is used as a whole)
+     */
     BackgroundParallax(const sf::Texture &texture, const sf::Vector2f &bounds);
 
+    /**
+     * @brief render inherited function
+     * @param renderer
+     */
     void render(Renderer &renderer) const;
 
+    /**
+     * @brief setOffset to call when a transition is over,
+     * avoids to have a jump of the background when the next
+     * transistion starts
+     */
+    void setOffset();
+
+    /**
+     * @brief translate moves the background to the new given position
+     * @param nwX x position
+     * @param nwY y position
+     */
     void translate(float nwX, float nwY);
 
 private:
+    /**
+     * @brief m_sprite the sprite thats drawn
+     */
     sf::Sprite m_sprite;
 
+    /**
+     * @brief m_bounds bounds where to draw
+     * the sprite
+     */
     sf::Vector2f m_bounds;
 
+    /**
+     * @brief m_translate current translation
+     */
     sf::Vector2f m_translate;
 
+    /**
+      Current offset
+    */
+    sf::Vector2f m_offset = {0, 0};
 };
 
 
