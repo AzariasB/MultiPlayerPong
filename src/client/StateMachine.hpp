@@ -33,12 +33,14 @@
 
 
 #include <SFML/System/NonCopyable.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <unordered_map>
 
 #include "ClientConf.hpp"
 #include "SoundEngine.hpp"
 #include "State.hpp"
 #include "Provider.hpp"
+#include "widgets/BackgroundParallax.hpp"
 
 namespace mp {
 
@@ -48,12 +50,26 @@ class ClientApp;
  * @brief The StateMachine class class that holds all the different possible states
  * of the application. it will also handle the states changes
  */
-class StateMachine : public sf::NonCopyable {
+class StateMachine : public sf::NonCopyable, public Renderable {
 public:
     /**
      * @brief StateMachine constructor
      */
     StateMachine();
+
+
+    /**
+     * @brief render inherited function
+     * @param renderer
+     */
+    void render(Renderer &renderer) const override;
+
+    /**
+     * @brief initiliaze initializes the blackboard background
+     */
+    void initiliaze();
+
+    void translate(float nwX, float nwY);
 
     /**
      * @brief goToState expanded version of the previous method
@@ -121,6 +137,7 @@ public:
      */
     void setCurrentState(int stateLabel, BaseStateData &data)
     {
+        m_background.setOffset();
         if(currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
         currentStateIndex = stateLabel;
         states[currentStateIndex]->onEnter(&data);
@@ -130,19 +147,20 @@ public:
      * @brief getCurrentState a reference to the current state
      * @return a reference to the current state
      */
-    State &getCurrentState()
-    {
-        if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
-        return *states[currentStateIndex];
-    }
+    const State &getCurrentState() const;
 
-    State &getStateAt(int index)
-    {
-        if(states.find(index) == states.end())
-            throw std::out_of_range("Index not found");
+    /**
+     * @brief getCurrentState
+     * @return non-const version of getCurrentState
+     */
+    State &getCurrentState();
 
-        return *states[index];
-    }
+    /**
+     * @brief getStateAt
+     * @param index
+     * @return
+     */
+    State &getStateAt(int index) const;
 
     /**
      * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
@@ -153,7 +171,7 @@ public:
         return currentStateIndex;
     }
 
-    virtual ~StateMachine();
+    virtual ~StateMachine() override;
 private:
     /**
      * @brief states keep in memory all the newly created states
@@ -165,6 +183,11 @@ private:
      * @brief currentStateIndex index of the current state
      */
     int currentStateIndex = -1;
+
+    /**
+     * @brief m_blackboard the blackboard background
+     */
+    BackgroundParallax m_background;
 
 };
 

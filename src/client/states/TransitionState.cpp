@@ -75,10 +75,12 @@ void TransitionState::updateCenters()
         int vertMult = mDirection == TransitionData::GO_UP ? 1 : -1;
         mExitingTranslate.y = vertMult * tVal;
         mEnteringTranslate.y = vertMult *(-SF_ARENA_HEIGHT + tVal);
+        pr::stateMachine().translate(0, vertMult * tVal);
     }else{
-        float horiztontalMult = mDirection == TransitionData::GO_LEFT ? 1.f : -1.f;
+        int horiztontalMult = mDirection == TransitionData::GO_LEFT ? 1 : -1;
         mExitingTranslate.x = horiztontalMult * tVal;
         mEnteringTranslate.x = horiztontalMult * (-SF_ARENA_WIDTH + tVal);
+        pr::stateMachine().translate(horiztontalMult * tVal, 0);
     }
 
 }
@@ -87,7 +89,7 @@ void TransitionState::onEnter(BaseStateData *data)
 {
     mEnteringTranslate = sf::Vector2f();
     mExitingTranslate = sf::Vector2f();
-    StateData<TransitionData*> *stData  = 0;
+    StateData<TransitionData*> *stData  = nullptr;
     if(!(stData = dynamic_cast<StateData<TransitionData*>*>(data)))return;
 
     TransitionData &transition = *stData->data();

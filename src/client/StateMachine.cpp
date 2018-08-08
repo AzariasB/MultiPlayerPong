@@ -31,20 +31,75 @@
 
 #include "StateMachine.hpp"
 #include "SoundEngine.hpp"
+#include "Renderer.hpp"
 
 namespace mp {
 
 StateMachine::StateMachine()
 {
-
 }
 
 StateMachine::~StateMachine()
 {
 }
 
+void StateMachine::initiliaze()
+{
+    m_background = BackgroundParallax(pr::resourceManager().getTexture(Assets::Icons::Blackboard), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+}
+
+State &StateMachine::getStateAt(int index) const
+{
+    if(states.find(index) == states.end())
+        throw std::out_of_range("Index not found");
+
+    auto found = states.find(index);
+    if(found == states.end()) throw "State index not found";
+    return *found->second;
+}
+
+const State &StateMachine::getCurrentState() const
+{
+    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
+    auto found = states.find(currentStateIndex);
+    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    return *found->second;
+}
+
+void StateMachine::translate(float nwX, float nwY)
+{
+    m_background.translate(nwX / 5.f, nwY / 5.f);
+}
+
+State &StateMachine::getCurrentState()
+{
+    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
+    auto found = states.find(currentStateIndex);
+    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    return *found->second;
+}
+
+void StateMachine::render(Renderer &renderer) const
+{
+    //find start x, start y translations
+
+    // push
+    // for y in all ys
+    // for x in all xs
+    // translate the sprite
+    // draw it
+
+    // end for / end for
+    // pop
+
+   renderer
+           .render(m_background)
+           .render(getCurrentState());
+}
+
 void StateMachine::setCurrentState(int stateLabel)
 {
+    m_background.setOffset();
     if (currentStateIndex > -1)
         states[currentStateIndex]->onBeforeLeaving();
     currentStateIndex = stateLabel;

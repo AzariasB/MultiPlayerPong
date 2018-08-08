@@ -57,9 +57,9 @@ EndState::~EndState()
 {
 }
 
-sf::Vector2f EndState::toVertexPosition(int index) const
+sf::Vector2f EndState::toVertexPosition(std::size_t index) const
 {
-    float angle = (2 * M_PI) * (index / static_cast<float>(triangleNumber));
+    float angle = (2 * static_cast<float>(M_PI)) * (index / static_cast<float>(triangleNumber));
     return sf::Vector2f(
                 std::cos(angle) * SF_CENTER_X + SF_CENTER_X,
                 std::sin(angle) * SF_CENTER_X + SF_CENTER_Y

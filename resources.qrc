@@ -28,6 +28,7 @@
   </qresource>
   <qresource prefix="/icons">
     <file alias="qt.png">res/icons/qt.png</file>
+    <file alias="blackboard.png">res/icons/blackboard.png</file>
     <file alias="box2d.png">res/icons/Box2d.png</file>
     <file alias="sfml32x32.png">res/icons/sfml32x32.png</file>
     <file alias="sfml.png">res/icons/sfml.png</file>

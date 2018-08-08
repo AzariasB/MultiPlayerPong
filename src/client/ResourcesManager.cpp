@@ -90,7 +90,8 @@ sf::Shader *ResourcesManager::createShader(const sf::Uint64 &shaderId) const
 
 const sf::Texture &ResourcesManager::getTexture(const sf::Uint64 &textureID) const
 {
-    if(m_textures.find(textureID) != m_textures.end()){
+    auto found = m_textures.find(textureID);
+    if(found != m_textures.end()){
         return m_textures.find(textureID)->second;
     }else{
         std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
