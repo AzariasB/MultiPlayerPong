@@ -40,7 +40,8 @@
 namespace mp {
 
 PauseState::PauseState():
-    m_menu()
+    m_menu(),
+    m_alpha(0.f, 1.f, sf::milliseconds(1000), twin::easing::linear)
 {
     m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
@@ -82,11 +83,23 @@ void PauseState::onAfterLeaving()
 
 void PauseState::render(Renderer &renderer) const
 {
-    pr::stateMachine()
-            .getStateAt(cc::PLAY_SOLO)
-            .render(renderer);
-
     renderer.push()
+            .createShader(Assets::Shaders::Alpha);
+    sf::Texture from = renderer.useTextureTarget()
+            .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+            .useWindowTarget()
+            .getTextureTarget();
+
+    sf::Texture to = renderer.useTextureTarget()
+                    .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+                    .render(m_menu)
+                    .useWindowTarget()
+                    .getTextureTarget();
+
+    renderer.setUniform("from", from)
+            .setUniform("to", to)
+            .setUniform("progress", m_alpha.get())
+            .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
             .render(m_menu)
             .pop();
 }
@@ -94,6 +107,7 @@ void PauseState::render(Renderer &renderer) const
 void PauseState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
+    m_alpha.step(elapsed);
 }
 
 void PauseState::handleEvent(const sf::Event &ev)

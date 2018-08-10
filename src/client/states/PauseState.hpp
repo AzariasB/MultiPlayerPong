@@ -74,6 +74,8 @@ public:
 private:
 
     Menu m_menu;
+
+    twin::Twin<float> m_alpha;
 };
 
 

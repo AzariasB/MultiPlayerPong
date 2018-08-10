@@ -32,6 +32,7 @@
 #pragma once
 
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/System.hpp>
 #include <unordered_map>
@@ -144,15 +145,6 @@ public:
     Renderer &rotate(float angle);
 
     /**
-     * @brief alpha changes the alpha value of the rendering
-     * @param alpha the new alpha value
-     * @return the renderer itself
-     * uses a shader to change the alpha value of the items to render
-     * if the
-     */
-    Renderer &alpha(sf::Uint8 alpha);
-
-    /**
      * @brief push pushes the current renderstate
      * on the stack, all the data of the last renderstate
      * is kept and can be modified without changing
@@ -166,6 +158,52 @@ public:
      * throws exception if stack only contains one renderstate
      */
     Renderer &pop();
+
+    /**
+     * @brief createShader creates a shader and adds it to the current
+     * render state
+     * @param shaderId id of the shader in the assets
+     * @return
+     */
+    Renderer &createShader(const sf::Uint64 &shaderId);
+
+    /**
+     * @brief setUniform sets a float uniform
+     * to the current shader
+     * @param name name of the uniform
+     * @param value float value of the uniform
+     * @return
+     */
+    Renderer &setUniform(const std::string &name, float value);
+
+    /**
+     * @brief setUniform sets a texture uniform
+     * @param name name of the uniform
+     * @param texture value of the texture
+     * @return
+     */
+    Renderer &setUniform(const std::string &name, const sf::Texture &texture);
+
+    /**
+     * @brief useTextureTarget changes the render target
+     * to use a texture
+     * @return
+     */
+    Renderer &useTextureTarget();
+
+    /**
+     * @brief getTextureTarget returns a copy
+     * to the texture that was painted (if it was painted
+     * @return
+     */
+    sf::Texture getTextureTarget();
+
+    /**
+     * @brief useWindowTarget changes the render target
+     * to directly draw on the window
+     * @return
+     */
+    Renderer &useWindowTarget();
 
     virtual ~Renderer();
 private:
@@ -204,8 +242,19 @@ private:
 
     /**
      * @brief target the target to use to draw stuff on it
+     * (can be a window or a texture)
      */
     sf::RenderTarget *m_target;
+
+    /**
+     * @brief m_windowTarget directly draw on the window
+     */
+    sf::RenderTarget *m_windowTarget;
+
+    /**
+     * @brief m_texture texture that can be used to render stuff
+     */
+    sf::RenderTexture m_textureTarget;
 
     /**
      * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
@@ -230,6 +279,12 @@ private:
      * render state, push it or pop it
      */
     std::stack<sf::RenderStates> m_stack;
+
+    /**
+     * @brief m_shaders all the
+     * shaders creatd by the user
+     */
+    std::stack<sf::Shader*> m_shaders;
 };
 
 

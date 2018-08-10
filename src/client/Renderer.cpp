@@ -30,6 +30,7 @@
  */
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 #include "Assets.hpp"
 #include "Renderer.hpp"
@@ -50,6 +51,7 @@ namespace mp {
 
 Renderer::Renderer(sf::RenderTarget *target) :
     m_target(target),
+    m_windowTarget(target),
     m_stack()
 {
     m_stack.push(sf::RenderStates::Default);
@@ -58,6 +60,7 @@ Renderer::Renderer(sf::RenderTarget *target) :
 void Renderer::updateRenderTarget(sf::RenderTarget *target)
 {
     m_target = target;
+    m_windowTarget = target;
 }
 
 Renderer::~Renderer()
@@ -69,6 +72,13 @@ Renderer &Renderer::pop()
     if(m_stack.size() == 1){
         std::out_of_range("The stack contains only one element");
     }
+    const sf::Shader *topS = m_stack.top().shader;
+    if(topS != nullptr && m_shaders.size() > 0){
+        sf::Shader* sh = m_shaders.top();
+        delete sh;
+        m_shaders.pop();
+    }
+
     m_stack.pop();
 
     return *this;
@@ -151,6 +161,52 @@ Renderer &Renderer::renderWall(const Wall &wall)
 Renderer &Renderer::renderBall(const Ball& ball)
 {
     return draw(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+}
+
+Renderer &Renderer::createShader(const sf::Uint64 &shaderId)
+{
+    sf::Shader *sh = pr::resourceManager().createShader(shaderId);
+    m_shaders.emplace(sh);
+    sf::RenderStates rs = m_stack.top();
+    pop();
+    m_stack.emplace(rs.blendMode, rs.transform, rs.texture, sh);
+    return *this;
+}
+
+Renderer &Renderer::setUniform(const std::string &name, float value)
+{
+    if(m_shaders.size() > 0 && m_shaders.top() != nullptr)
+        m_shaders.top()->setUniform(name, value);
+
+    return *this;
+}
+
+Renderer &Renderer::setUniform(const std::string &name, const sf::Texture &texture)
+{
+    if(m_shaders.size() > 0 && m_shaders.top() != nullptr)
+        m_shaders.top()->setUniform(name, texture);
+
+    return *this;
+}
+
+Renderer &Renderer::useTextureTarget()
+{
+    m_textureTarget.create(SF_ARENA_WIDTH, SF_ARENA_HEIGHT);
+    m_textureTarget.clear(sf::Color::Transparent);
+    m_target = &m_textureTarget;
+    return *this;
+}
+
+Renderer &Renderer::useWindowTarget()
+{
+    m_target = m_windowTarget;
+    return *this;
+}
+
+sf::Texture Renderer::getTextureTarget()
+{
+    m_textureTarget.display();
+    return m_textureTarget.getTexture();
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
