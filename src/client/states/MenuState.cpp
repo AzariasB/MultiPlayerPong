@@ -78,7 +78,10 @@ MenuState::MenuState() :
         m_menu.normalizeButtons(margin);
     });
 
-    soloButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);});
+    soloButton.clickedSignal.add([](){
+        ClientApp::getInstance().setPNumber(1);
+        pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);
+    });
     solo1v1.clickedSignal.add([](){
         ClientApp::getInstance().setPNumber(3);
         pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);
