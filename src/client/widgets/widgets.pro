@@ -18,4 +18,4 @@ HEADERS += $$PWD/TextInput.hpp \
     $$PWD/FPSCounter.hpp \
     $$PWD/I18NText.hpp \
     $$PWD/Loading.hpp \
-    $PWD/BackgroundParallax.hpp
+    $$PWD/BackgroundParallax.hpp

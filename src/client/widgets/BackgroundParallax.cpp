@@ -51,7 +51,7 @@ BackgroundParallax::BackgroundParallax(const sf::Texture &texture, const sf::Vec
 
 void BackgroundParallax::setOffset()
 {
-    std::cout << m_offset;
+    m_offset = m_translate;
 
 }
 

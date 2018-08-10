@@ -115,7 +115,7 @@ public:
      * @param target the target to use to draw the shapes
      * @param states the states to use when rendering
      */
-    void render(Renderer &renderer) const;
+    void render(Renderer &renderer) const override;
 
     /**
      * @brief setPosition sets the position of the button
@@ -127,7 +127,7 @@ public:
      * @brief handleEvent handles a SFML input/event
      * @param ev the sfml object for the event
      */
-    bool handleEvent(const sf::Event &ev);
+    bool handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief setAlignment setter for the alignment
@@ -229,7 +229,7 @@ public:
      */
     void setSelected(bool selected);
 
-    virtual ~Button();
+    virtual ~Button() override;
 
 private:
 
