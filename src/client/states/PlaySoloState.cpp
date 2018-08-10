@@ -49,7 +49,6 @@ void PlaySoloState::onBeforeEnter()
     if(ClientApp::getInstance().getPNumber() == 3) {
         pr::game().getPlayer2().getPaddle().setIsAI(false);
     } else {
-        ClientApp::getInstance().setPNumber(1);
         pr::game().getPlayer2().getPaddle().setIsAI(true);
     }
 
