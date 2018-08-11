@@ -32,16 +32,13 @@ uniform sampler2D to;
 uniform float progress;
 uniform vec2 resolution;
 
-uniform vec3 color;
-uniform float colorPhase;
-
 void main()
 {
-    vec2 p = gl_FragCoord.xy / resolution.xy;
+    vec2 p = vec2(gl_FragCoord.x, resolution.y - gl_FragCoord.y) / resolution.xy;
     gl_FragColor = mix
     (
-        mix(vec4(color, 1.0), texture2D(from, p), smoothstep(1.0-colorPhase, 0.0, progress)),
-        mix(vec4(color, 1.0), texture2D(to,   p), smoothstep(    colorPhase, 1.0, progress)),
-        progress
+                texture2D(from, p),
+                texture2D(to, p),
+                progress
     );
 }

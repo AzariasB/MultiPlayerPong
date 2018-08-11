@@ -153,36 +153,19 @@ public:
     Renderer &push();
 
     /**
+     * @brief pushShader pushes the current state, and adds
+     * the given shader
+     * @param shader the shader to use for the state
+     * @return itself
+     */
+    Renderer &pushShader(const sf::Shader *shader);
+
+    /**
      * @brief pop pops the current render states,
      * and changes the current render state to the one under the current
      * throws exception if stack only contains one renderstate
      */
     Renderer &pop();
-
-    /**
-     * @brief createShader creates a shader and adds it to the current
-     * render state
-     * @param shaderId id of the shader in the assets
-     * @return
-     */
-    Renderer &createShader(const sf::Uint64 &shaderId);
-
-    /**
-     * @brief setUniform sets a float uniform
-     * to the current shader
-     * @param name name of the uniform
-     * @param value float value of the uniform
-     * @return
-     */
-    Renderer &setUniform(const std::string &name, float value);
-
-    /**
-     * @brief setUniform sets a texture uniform
-     * @param name name of the uniform
-     * @param texture value of the texture
-     * @return
-     */
-    Renderer &setUniform(const std::string &name, const sf::Texture &texture);
 
     /**
      * @brief useTextureTarget changes the render target
@@ -279,12 +262,6 @@ private:
      * render state, push it or pop it
      */
     std::stack<sf::RenderStates> m_stack;
-
-    /**
-     * @brief m_shaders all the
-     * shaders creatd by the user
-     */
-    std::stack<sf::Shader*> m_shaders;
 };
 
 

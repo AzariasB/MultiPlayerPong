@@ -37,11 +37,13 @@
 #include "src/client/Translator.hpp"
 #include "src/client/StateMachine.hpp"
 
+#include <iostream>
+
 namespace mp {
 
 PauseState::PauseState():
     m_menu(),
-    m_alpha(0.f, 1.f, sf::milliseconds(1000), twin::easing::linear)
+    m_shader(pr::resourceManager().createShader(Assets::Shaders::Alpha))
 {
     m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
@@ -74,6 +76,11 @@ PauseState::PauseState():
     });
 }
 
+PauseState::~PauseState()
+{
+    delete m_shader;
+}
+
 void PauseState::onAfterLeaving()
 {
     if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO){
@@ -81,33 +88,57 @@ void PauseState::onAfterLeaving()
     }
 }
 
-void PauseState::render(Renderer &renderer) const
+void PauseState::onEnter(BaseStateData *)
 {
-    renderer.push()
-            .createShader(Assets::Shaders::Alpha);
-    sf::Texture from = renderer.useTextureTarget()
-            .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-            .useWindowTarget()
-            .getTextureTarget();
+    m_fromTexture = pr::renderer()
+                        .useTextureTarget()
+                        .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+                        .useWindowTarget()
+                        .getTextureTarget();
 
-    sf::Texture to = renderer.useTextureTarget()
+    m_shader->setUniform("from", m_fromTexture);
+    m_shader->setUniform("progress", 0.f);
+    m_shader->setUniform("resolution", sf::Vector2f(m_fromTexture.getSize().x, m_fromTexture.getSize().y));
+    m_alpha = twin::makeTwin(0.f, 1.f, sf::milliseconds(500), twin::easing::quadOut);
+
+    m_toTexture = pr::renderer()
+                    .useTextureTarget()
                     .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
                     .render(m_menu)
                     .useWindowTarget()
                     .getTextureTarget();
+    m_shader->setUniform("to", m_toTexture);
 
-    renderer.setUniform("from", from)
-            .setUniform("to", to)
-            .setUniform("progress", m_alpha.get())
-            .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-            .render(m_menu)
-            .pop();
+    m_background = sf::Sprite(m_fromTexture);
+    m_background.setPosition(0,0);
+    m_background.setOrigin(0,0);
+}
+
+void PauseState::render(Renderer &renderer) const
+{
+    if(m_alpha.progress() == 1.f) {
+        renderer.render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+                .render(m_menu);
+    } else{
+        renderer.pushShader(m_shader)
+                .draw(m_background)
+                .pop();
+    }
 }
 
 void PauseState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
     m_alpha.step(elapsed);
+
+    m_toTexture = pr::renderer()
+                    .useTextureTarget()
+                    .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+                    .render(m_menu)
+                    .useWindowTarget()
+                    .getTextureTarget();
+    m_shader->setUniform("to", m_toTexture);
+    m_shader->setUniform("progress", m_alpha.get());
 }
 
 void PauseState::handleEvent(const sf::Event &ev)

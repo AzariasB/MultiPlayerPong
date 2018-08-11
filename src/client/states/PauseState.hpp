@@ -31,6 +31,9 @@
 
 #pragma once
 
+#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 #include "src/lib/twin.hpp"
@@ -47,6 +50,8 @@ class PauseState : public State
 {
 public:
     PauseState();
+
+    virtual ~PauseState() override;
 
     /**
      * @brief draw inherited function
@@ -71,11 +76,24 @@ public:
      */
     void onAfterLeaving() override;
 
+    /**
+     * @brief onBeforeEnter inherited function
+     */
+    void onEnter(BaseStateData *) override;
+
 private:
 
     Menu m_menu;
 
     twin::Twin<float> m_alpha;
+
+    sf::Shader *m_shader;
+
+    sf::Texture m_fromTexture;
+
+    sf::Texture m_toTexture;
+
+    sf::Sprite m_background;
 };
 
 
