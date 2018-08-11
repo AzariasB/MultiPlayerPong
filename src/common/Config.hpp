@@ -39,11 +39,11 @@ constexpr float ARENA_WIDTH = 18.75;
 constexpr float ARENA_HEIGHT = 14.0625;
 
 //Paddle
-constexpr float PADDLE_WIDTH = 0.1;
+constexpr float PADDLE_WIDTH = 0.1F;
 constexpr float PADDLE_HEIGHT = 1;
 
 //Ball
-constexpr float BALL_RADIUS = 0.2;
+constexpr float BALL_RADIUS = 0.2F;
 constexpr float BALL_START_X = ARENA_WIDTH / 2.f;
 constexpr float BALL_START_Y = ARENA_HEIGHT  / 2.f;
 
