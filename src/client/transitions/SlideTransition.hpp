@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,63 +23,66 @@
  */
 
 /*
- * File:   PauseState.hpp
+ * File:   SlideTransition.hpp
  * Author: azarias
  *
- * Created on 7/5/2018
+ * Created on 11/8/2018
  */
-
 #pragma once
 
-#include <SFML/Graphics/Shader.hpp>
-#include <SFML/Graphics/Texture.hpp>
-
-#include "src/client/State.hpp"
-#include "src/client/widgets/Menu.hpp"
+#include "Transition.hpp"
+#include <SFML/System/Vector2.hpp>
 #include "src/lib/twin.hpp"
 
-namespace mp {
+namespace mp
+{
 
-/**
- * @brief The PauseState class
- * State used only when playing solo
- * allows the user to pause the game to quit,
- * or to change some options
- */
-class PauseState : public State
+class Renderer;
+
+class SlideTransition  : public Transition
 {
 public:
-    PauseState();
+    SlideTransition();
 
-    virtual ~PauseState() override;
-
-    /**
-     * @brief draw inherited function
-     * @param renderer
-     */
     void render(Renderer &renderer) const override;
 
-    /**
-     * @brief update inherited function
-     * @param elapsed
-     */
-    void update(const sf::Time &elapsed) override;
+    bool progress(const sf::Time &elapsed) override;
 
-    /**
-     * @brief handleEvent inherited function
-     * @param ev
-     */
-    void handleEvent(const sf::Event &ev) override;
-
-    /**
-     * @brief onAfterLeaving inherited function
-     */
-    void onAfterLeaving() override;
-
+    void onEnter(BaseStateData *data) override;
 
 private:
 
-    Menu m_menu;
+
+    /**
+     * @brief mEnteringTranslate current translating of the
+     * entering state
+     */
+    sf::Vector2f m_enteringTranslate;
+
+    /**
+     * @brief mExitingTranslate current translating
+     * of the exiting state
+     */
+    sf::Vector2f m_exitingTranslate;
+
+    /**
+     * @brief updateCenters called to update
+     * the translation of the transitionning
+     * states
+     */
+    void updateCenters();
+
+
+    /**
+     * @brief mTweening tweening for the
+     * center position of the states
+     */
+    twin::Twin<float> m_tweening;
+
+    /**
+     * @brief m_direction direction of the slide
+     */
+    SlideData::SLIDE_DIRECTION m_direction;
 };
 
 

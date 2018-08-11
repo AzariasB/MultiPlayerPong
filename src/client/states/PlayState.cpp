@@ -74,6 +74,8 @@ void PlayState::onBeforeEnter()
         m_particleGenerator.explode(b2VecToSfVect(position));
         pr::renderer().shake();
     });
+
+
 }
 
 void PlayState::update(const sf::Time &elapsed)
@@ -81,7 +83,7 @@ void PlayState::update(const sf::Time &elapsed)
     if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
 
     if (pr::game().playerWon()){
-        pr::stateMachine().goToState(cc::FINISHED, TransitionData::GO_UP);
+        pr::stateMachine().slideTo(cc::FINISHED, SlideData::GO_UP);
         return;
     }
 
@@ -126,16 +128,15 @@ void PlayState::render(Renderer &renderer) const
             .pop()
             .draw(m_p1ScoreText)
             .draw(m_p2ScoreText);
+
 }
 
 PlayState::~PlayState()
 {
-
 }
 
 void PlayState::handleEvent(const sf::Event &ev)
 {
-    // sf::Event realEv = pr::keyBinding().toGameEvent(ev);
     pr::game().handleEvent(ev);
 }
 

@@ -76,7 +76,7 @@ struct StateData : public BaseStateData{
      * @brief reference to the data hold by the object
      * @return reference to the data hold by the object
      */
-    const T &data() const
+    T &data()
     {
         return m_data;
     }
@@ -89,15 +89,18 @@ private:
     T m_data;
 };
 
-
 struct TransitionData {
     int enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
     updateExistingState = false;
 
     std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
+};
 
-    enum DIRECTION {
+
+struct SlideData : public TransitionData {
+
+    enum SLIDE_DIRECTION {
         GO_UP,
         GO_LEFT,
         GO_DOWN,
@@ -174,7 +177,7 @@ public:
 
     }
 
-    virtual ~State()
+    virtual ~State() override
     {
     }
 

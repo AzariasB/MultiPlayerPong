@@ -74,7 +74,8 @@ namespace mp
             KEY_BINDINGS,
             WAITING,
             FINISHED,
-            TRANSITION,
+            TRANSITION_SLIDE,
+            TRANSITION_FADE,
             SPLASH_SCREEN
         };
 

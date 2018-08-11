@@ -77,7 +77,7 @@ void PlaySoloState::handleEvent(const sf::Event &ev)
 {
     PlayState::handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().setCurrentState(cc::PAUSE);
+        pr::stateMachine().fadeTo(cc::PAUSE);
     }
 }
 

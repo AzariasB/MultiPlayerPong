@@ -42,8 +42,7 @@
 namespace mp {
 
 PauseState::PauseState():
-    m_menu(),
-    m_shader(pr::resourceManager().createShader(Assets::Shaders::Alpha))
+    m_menu()
 {
     m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
 
@@ -64,8 +63,8 @@ PauseState::PauseState():
     m_menu.normalizeButtons(10);
 
     resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
-    options.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
-    menuBtn.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
+    options.clickedSignal.add([](){pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_RIGHT);});
+    menuBtn.clickedSignal.add([](){pr::stateMachine().slideTo(cc::MENU, SlideData::GO_DOWN);});
     restart.clickedSignal.add([](){
         pr::game().reset();
         pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
@@ -78,7 +77,6 @@ PauseState::PauseState():
 
 PauseState::~PauseState()
 {
-    delete m_shader;
 }
 
 void PauseState::onAfterLeaving()
@@ -88,64 +86,23 @@ void PauseState::onAfterLeaving()
     }
 }
 
-void PauseState::onEnter(BaseStateData *)
-{
-    m_fromTexture = pr::renderer()
-                        .useTextureTarget()
-                        .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-                        .useWindowTarget()
-                        .getTextureTarget();
-
-    m_shader->setUniform("from", m_fromTexture);
-    m_shader->setUniform("progress", 0.f);
-    m_shader->setUniform("resolution", sf::Vector2f(m_fromTexture.getSize().x, m_fromTexture.getSize().y));
-    m_alpha = twin::makeTwin(0.f, 1.f, sf::milliseconds(500), twin::easing::quadOut);
-
-    m_toTexture = pr::renderer()
-                    .useTextureTarget()
-                    .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-                    .render(m_menu)
-                    .useWindowTarget()
-                    .getTextureTarget();
-    m_shader->setUniform("to", m_toTexture);
-
-    m_background = sf::Sprite(m_fromTexture);
-    m_background.setPosition(0,0);
-    m_background.setOrigin(0,0);
-}
 
 void PauseState::render(Renderer &renderer) const
 {
-    if(m_alpha.progress() == 1.f) {
-        renderer.render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-                .render(m_menu);
-    } else{
-        renderer.pushShader(m_shader)
-                .draw(m_background)
-                .pop();
-    }
+    renderer.render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+            .render(m_menu);
 }
 
 void PauseState::update(const sf::Time &elapsed)
 {
     m_menu.update(elapsed);
-    m_alpha.step(elapsed);
-
-    m_toTexture = pr::renderer()
-                    .useTextureTarget()
-                    .render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
-                    .render(m_menu)
-                    .useWindowTarget()
-                    .getTextureTarget();
-    m_shader->setUniform("to", m_toTexture);
-    m_shader->setUniform("progress", m_alpha.get());
 }
 
 void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+        pr::stateMachine().fadeTo(cc::PLAY_SOLO);
 }
 
 

@@ -55,7 +55,7 @@ WaitingState::WaitingState() :
     m_menu.addButton("cancel", SF_CENTER_X, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
             .clickedSignal.add([](){
                 pr::socket().disconnect();
-                pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
+                pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
             });
 
     m_menu.normalizeButtons(10);
@@ -105,7 +105,7 @@ void WaitingState::update(const sf::Time &elapsed)
     }
 
     if (startGame)
-        pr::stateMachine().goToState(cc::PLAY_MULTIPLAYER, TransitionData::GO_LEFT);
+        pr::stateMachine().slideTo(cc::PLAY_MULTIPLAYER, SlideData::GO_LEFT);
 
 }
 
@@ -125,7 +125,7 @@ void WaitingState::onEnter(BaseStateData *data)
     if (status != sf::Socket::Done) {
         DialogMessage& msg = pr::dialogManager().message("error","failed_connect");
         msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
-        pr::stateMachine().goToState(cc::MENU, TransitionData::GO_LEFT);
+        pr::stateMachine().slideTo(cc::MENU, SlideData::GO_LEFT);
     } else {
         m_content.setString("waiting_player");
         m_loading.setState(Loading::LD_ACTIVE);

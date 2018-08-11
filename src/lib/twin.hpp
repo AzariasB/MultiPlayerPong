@@ -537,7 +537,7 @@ enum easing{
             to(0),
             totalTime(),
             advance(),
-            totalProgress(0.f),
+            totalProgress(1.f),
             finishCallback(noop),
             easingF(getEasing(linear))
         {

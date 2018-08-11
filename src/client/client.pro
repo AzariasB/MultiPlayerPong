@@ -1,6 +1,7 @@
 include(states/states.pro)
 include(particles/particles.pro)
 include(widgets/widgets.pro)
+include(transitions/transitions.pro)
 
 SOURCES +=\
     $$PWD/ClientApp.cpp \
