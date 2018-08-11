@@ -72,11 +72,17 @@ public:
     void translate(float nwX, float nwY);
 
     /**
-     * @brief goToState expanded version of the previous method
+     * @brief slideTo expanded version of the previous method
      * @param statelabel
      * @param dir
      */
-    void goToState(int statelabel, TransitionData::DIRECTION dir);
+    void slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir);
+
+    /**
+     * @brief fadeTo does a fade between the current state and the next state
+     * @param stateLabel the state to go to while fading
+     */
+    void fadeTo(int stateLabel);
 
     /**
      * @brief goToState changes the state, with an animation
@@ -85,14 +91,14 @@ public:
      * @param data data to pass to the next state
      */
     template<typename T>
-    void goToState(int statelabel, TransitionData::DIRECTION dir, const T & data)
+    void slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir, const T & data)
     {
-        TransitionData td;
+        SlideData td;
         td.enteringStateLabel = statelabel;
         td.exitingStateLabel = currentStateIndex;
         td.direction = dir;
         td.enteringData = std::make_unique<StateData<T>>(data);
-        setCurrentState(cc::TRANSITION, &td);
+        setCurrentState(cc::TRANSITION_SLIDE, &td);
         pr::soundEngine().playSound(Assets::Sounds::Rollover1);
     }
 

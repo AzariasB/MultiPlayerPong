@@ -45,9 +45,10 @@
 #include "states/PauseState.hpp"
 #include "states/OptionState.hpp"
 #include "states/KeyBindingState.hpp"
-#include "states/TransitionState.hpp"
 #include "states/CreditsState.hpp"
 #include "states/SplashScreenState.hpp"
+#include "transitions/SlideTransition.hpp"
+#include "transitions/FadeTransition.hpp"
 
 namespace mp {
 
@@ -103,7 +104,8 @@ void ClientApp::initStates()
     stateMachine.addState<MenuState>(cc::MENU);
     stateMachine.addState<OptionState>(cc::OPTIONS);
     stateMachine.addState<KeyBindingState>(cc::KEY_BINDINGS);
-    stateMachine.addState<TransitionState>(cc::TRANSITION);
+    stateMachine.addState<SlideTransition>(cc::TRANSITION_SLIDE);
+    stateMachine.addState<FadeTransition>(cc::TRANSITION_FADE);
     stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
     stateMachine.addState<PauseState>(cc::PAUSE);
     stateMachine.addState<CreditsState>(cc::CREDITS);

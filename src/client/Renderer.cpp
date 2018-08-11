@@ -30,6 +30,7 @@
  */
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 #include "Assets.hpp"
 #include "Renderer.hpp"
@@ -50,14 +51,18 @@ namespace mp {
 
 Renderer::Renderer(sf::RenderTarget *target) :
     m_target(target),
+    m_windowTarget(target),
     m_stack()
 {
     m_stack.push(sf::RenderStates::Default);
+    m_textureTarget.create(target->getSize().x, target->getSize().y);
 }
 
 void Renderer::updateRenderTarget(sf::RenderTarget *target)
 {
     m_target = target;
+    m_windowTarget = target;
+    m_textureTarget.create(target->getSize().x, target->getSize().y);
 }
 
 Renderer::~Renderer()
@@ -77,6 +82,13 @@ Renderer &Renderer::pop()
 Renderer &Renderer::push()
 {
     m_stack.push(m_stack.top());
+    return *this;
+}
+
+Renderer &Renderer::pushShader(const sf::Shader *shader)
+{
+    sf::RenderStates &top = m_stack.top();
+    m_stack.emplace(top.blendMode, top.transform, top.texture, shader);
     return *this;
 }
 
@@ -151,6 +163,25 @@ Renderer &Renderer::renderWall(const Wall &wall)
 Renderer &Renderer::renderBall(const Ball& ball)
 {
     return draw(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+}
+
+Renderer &Renderer::useTextureTarget()
+{
+    m_textureTarget.clear(sf::Color::Transparent);
+    m_target = &m_textureTarget;
+    return *this;
+}
+
+Renderer &Renderer::useWindowTarget()
+{
+    m_target = m_windowTarget;
+    return *this;
+}
+
+sf::Texture Renderer::getTextureTarget()
+{
+    m_textureTarget.display();
+    return m_textureTarget.getTexture();
 }
 
 std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)

@@ -32,6 +32,7 @@
 #pragma once
 
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/System.hpp>
 #include <unordered_map>
@@ -144,15 +145,6 @@ public:
     Renderer &rotate(float angle);
 
     /**
-     * @brief alpha changes the alpha value of the rendering
-     * @param alpha the new alpha value
-     * @return the renderer itself
-     * uses a shader to change the alpha value of the items to render
-     * if the
-     */
-    Renderer &alpha(sf::Uint8 alpha);
-
-    /**
      * @brief push pushes the current renderstate
      * on the stack, all the data of the last renderstate
      * is kept and can be modified without changing
@@ -161,11 +153,40 @@ public:
     Renderer &push();
 
     /**
+     * @brief pushShader pushes the current state, and adds
+     * the given shader
+     * @param shader the shader to use for the state
+     * @return itself
+     */
+    Renderer &pushShader(const sf::Shader *shader);
+
+    /**
      * @brief pop pops the current render states,
      * and changes the current render state to the one under the current
      * throws exception if stack only contains one renderstate
      */
     Renderer &pop();
+
+    /**
+     * @brief useTextureTarget changes the render target
+     * to use a texture
+     * @return
+     */
+    Renderer &useTextureTarget();
+
+    /**
+     * @brief getTextureTarget returns a copy
+     * to the texture that was painted (if it was painted
+     * @return
+     */
+    sf::Texture getTextureTarget();
+
+    /**
+     * @brief useWindowTarget changes the render target
+     * to directly draw on the window
+     * @return
+     */
+    Renderer &useWindowTarget();
 
     virtual ~Renderer();
 private:
@@ -204,8 +225,19 @@ private:
 
     /**
      * @brief target the target to use to draw stuff on it
+     * (can be a window or a texture)
      */
     sf::RenderTarget *m_target;
+
+    /**
+     * @brief m_windowTarget directly draw on the window
+     */
+    sf::RenderTarget *m_windowTarget;
+
+    /**
+     * @brief m_texture texture that can be used to render stuff
+     */
+    sf::RenderTexture m_textureTarget;
 
     /**
      * @brief m_shakeTimeout the shake timeout, when at 0 (or less) no need to shake,
