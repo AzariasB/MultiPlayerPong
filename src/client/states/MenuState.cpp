@@ -80,14 +80,14 @@ MenuState::MenuState() :
 
     soloButton.clickedSignal.add([](){
         ClientApp::getInstance().setPNumber(1);
-        pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);
+        pr::stateMachine().slideTo(cc::PLAY_SOLO, SlideData::GO_UP);
     });
     solo1v1.clickedSignal.add([](){
         ClientApp::getInstance().setPNumber(3);
-        pr::stateMachine().goToState(cc::PLAY_SOLO, TransitionData::GO_UP);
+        pr::stateMachine().slideTo(cc::PLAY_SOLO, SlideData::GO_UP);
     });
-    optionButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
-    creditsButton.clickedSignal.add([](){pr::stateMachine().goToState(cc::CREDITS, TransitionData::GO_LEFT);});
+    optionButton.clickedSignal.add([](){pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_RIGHT);});
+    creditsButton.clickedSignal.add([](){pr::stateMachine().slideTo(cc::CREDITS, SlideData::GO_LEFT);});
 
     multiPlayerButton.clickedSignal.add([this](){
         DialogInput &ip = pr::dialogManager().input("Ip","enter_ip");
@@ -101,7 +101,7 @@ MenuState::MenuState() :
         ip.confirmedSignal.add([this, &ip](std::string entered){
             if(isValidIp(entered)){
                 pr::dialogManager().hideDialog(ip.id());
-                pr::stateMachine().goToState(cc::WAITING, TransitionData::GO_UP, entered);
+                pr::stateMachine().slideTo(cc::WAITING, SlideData::GO_UP, entered);
             }else{
                 DialogMessage &msg = pr::dialogManager().message("invalid_ip", "entered_invalid_id");
                 msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});

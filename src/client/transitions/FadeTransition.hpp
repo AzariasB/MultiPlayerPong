@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 azarias.
+ * Copyright 2017-2018 azarias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,63 +23,48 @@
  */
 
 /*
- * File:   PauseState.hpp
+ * File:   FadeTransition.hpp
  * Author: azarias
  *
- * Created on 7/5/2018
+ * Created on 11/8/2018
  */
-
 #pragma once
 
-#include <SFML/Graphics/Shader.hpp>
+#include "Transition.hpp"
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
-#include "src/client/State.hpp"
-#include "src/client/widgets/Menu.hpp"
 #include "src/lib/twin.hpp"
 
-namespace mp {
+namespace mp
+{
 
-/**
- * @brief The PauseState class
- * State used only when playing solo
- * allows the user to pause the game to quit,
- * or to change some options
- */
-class PauseState : public State
+class Renderer;
+
+class FadeTransition : public Transition
 {
 public:
-    PauseState();
+    FadeTransition();
 
-    virtual ~PauseState() override;
-
-    /**
-     * @brief draw inherited function
-     * @param renderer
-     */
     void render(Renderer &renderer) const override;
 
-    /**
-     * @brief update inherited function
-     * @param elapsed
-     */
-    void update(const sf::Time &elapsed) override;
+    bool progress(const sf::Time &elapsed) override;
 
-    /**
-     * @brief handleEvent inherited function
-     * @param ev
-     */
-    void handleEvent(const sf::Event &ev) override;
+    void onEnter(BaseStateData *data) override;
 
-    /**
-     * @brief onAfterLeaving inherited function
-     */
-    void onAfterLeaving() override;
-
+    ~FadeTransition() override;
 
 private:
+    sf::Shader *m_shader;
 
-    Menu m_menu;
+    sf::Texture m_fromTexture;
+
+    sf::Texture m_toTexture;
+
+    twin::Twin<float> m_alpha;
+
+    sf::Sprite m_background;
 };
 
 

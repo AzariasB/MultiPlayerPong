@@ -37,6 +37,7 @@
 #include "src/client/State.hpp"
 #include "src/client/particles/ParticleGenerator.hpp"
 #include "src/common/Timer.hpp"
+#include "src/lib/twin.hpp"
 
 namespace mp {
 
@@ -85,7 +86,7 @@ public:
      */
     virtual void onAfterLeaving() override;
 
-    virtual ~PlayState();
+    virtual ~PlayState() override;
 
 private:
     /**

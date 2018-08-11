@@ -107,14 +107,23 @@ void StateMachine::setCurrentState(int stateLabel)
     states[currentStateIndex]->onEnter(&dat);
 }
 
-void StateMachine::goToState(int statelabel, TransitionData::DIRECTION dir)
+void StateMachine::fadeTo(int stateLabel)
+{
+    getStateAt(stateLabel).onBeforeEnter();
+    TransitionData td;
+    td.enteringStateLabel = stateLabel;
+    td.exitingStateLabel = currentStateIndex;
+    setCurrentState(cc::TRANSITION_FADE, &td);
+}
+
+void StateMachine::slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir)
 {
     getStateAt(statelabel).onBeforeEnter();
-    TransitionData td;
+    SlideData td;
     td.enteringStateLabel = statelabel;
     td.exitingStateLabel = currentStateIndex;
     td.direction = dir;
-    setCurrentState(cc::TRANSITION, &td);
+    setCurrentState(cc::TRANSITION_SLIDE, &td);
     pr::soundEngine().playSound(Assets::Sounds::Rollover1);
 }
 

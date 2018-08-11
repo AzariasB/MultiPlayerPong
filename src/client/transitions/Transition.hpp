@@ -24,10 +24,7 @@
 
 #pragma once
 
-#include <SFML/System/Vector2.hpp>
 #include "src/client/State.hpp"
-#include "src/lib/twin.hpp"
-#include <queue>
 
 
 namespace mp {
@@ -38,19 +35,19 @@ namespace mp {
  * between two states, in order to create
  * an animation
  */
-class TransitionState : public State
+class Transition : public State
 {
 public:
     /**
      * @brief TransitionState constructor
      */
-    TransitionState();
+    Transition();
 
     /**
      * @brief draw draws the two currently transitioning states
      * @param renderer
      */
-    void render(Renderer &renderer) const override;
+   virtual  void render(Renderer &renderer) const override = 0;
 
     /**
      * @brief update updates the current transition
@@ -59,33 +56,42 @@ public:
     void update(const sf::Time &elapsed) override;
 
     /**
-     * @brief onEnter setup data for the transition
-     * @param data data to use for the transition
+     * @brief progress method that must be delcared
+     * in the sub-functions in order to progress
+     * the transition state, it must
+     * return a boolean to tell wether the progress is finished
+     * @param elapsed
+     * @return true when the transition is over
      */
-    void onEnter(BaseStateData *data) override;
-
-    /**
-     * @brief onBeforeLeaving before leaving this state
-     * (whenever the transition is over)
-     */
-    void onBeforeLeaving() override;
+    virtual bool progress(const sf::Time &elapsed) = 0;
 
     /**
      * @brief handleEvent handles the event : the entering state is the one handling the event
      * @param ev
      */
-    void handleEvent(const sf::Event &ev) override;
-private:
+    virtual void handleEvent(const sf::Event &ev) override;
+
+    /**
+     * @brief onEnter inherited function
+     * @param data
+     */
+    void setup(TransitionData &data);
+
+    /**
+     * @brief onBeforeLeaving inherited function
+     */
+    virtual void onBeforeLeaving() override;
+protected:
     /**
      * @brief mExitingStateLabel label of the state
      * that is going to leave the scene
      */
-    int mExitingStateLabel = -1,
+    int m_exitingStateLabel = -1,
     /**
      * @brief mEnteringStateLabel label of the state
      * that is going to enter on the scene
      */
-    mEnteringStateLabel = -1;
+    m_enteringStateLabel = -1;
 
     /**
      * @brief m_tickEnteringState if we need to start
@@ -97,39 +103,9 @@ private:
 
 
     /**
-     * @brief mEnteringTranslate current translating of the
-     * entering state
-     */
-    sf::Vector2f mEnteringTranslate;
-
-    /**
-     * @brief mExitingTranslate current translating
-     * of the exiting state
-     */
-    sf::Vector2f mExitingTranslate;
-
-    /**
-     * @brief updateCenters called to update
-     * the translation of the transitionning
-     * states
-     */
-    void updateCenters();
-
-    /**
-     * @brief mDirection the direction of the transition
-     */
-    TransitionData::DIRECTION mDirection;
-
-    /**
-     * @brief mTweening tweening for the
-     * center position of the states
-     */
-    twin::Twin<float> mTweening;
-
-    /**
       * data to pass to the entering state
       */
-    std::unique_ptr<BaseStateData> mEnteringData = {};
+    std::unique_ptr<BaseStateData> m_enteringData = {};
 };
 
 

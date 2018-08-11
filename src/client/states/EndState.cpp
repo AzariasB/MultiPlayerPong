@@ -83,7 +83,7 @@ void EndState::updateVerticesColor(bool win)
 
 void EndState::goToMenu()
 {
-    pr::stateMachine().goToState(cc::MENU, TransitionData::GO_RIGHT);
+    pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
 }
 
 void EndState::render(Renderer& renderer) const

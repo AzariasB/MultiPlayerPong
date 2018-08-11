@@ -37,6 +37,8 @@
 #include "src/client/Translator.hpp"
 #include "src/client/StateMachine.hpp"
 
+#include <iostream>
+
 namespace mp {
 
 PauseState::PauseState():
@@ -61,8 +63,8 @@ PauseState::PauseState():
     m_menu.normalizeButtons(10);
 
     resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
-    options.clickedSignal.add([](){pr::stateMachine().goToState(cc::OPTIONS, TransitionData::GO_RIGHT);});
-    menuBtn.clickedSignal.add([](){pr::stateMachine().goToState(cc::MENU, TransitionData::GO_DOWN);});
+    options.clickedSignal.add([](){pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_RIGHT);});
+    menuBtn.clickedSignal.add([](){pr::stateMachine().slideTo(cc::MENU, SlideData::GO_DOWN);});
     restart.clickedSignal.add([](){
         pr::game().reset();
         pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
@@ -73,6 +75,10 @@ PauseState::PauseState():
     });
 }
 
+PauseState::~PauseState()
+{
+}
+
 void PauseState::onAfterLeaving()
 {
     if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO){
@@ -80,15 +86,11 @@ void PauseState::onAfterLeaving()
     }
 }
 
+
 void PauseState::render(Renderer &renderer) const
 {
-    pr::stateMachine()
-            .getStateAt(cc::PLAY_SOLO)
-            .render(renderer);
-
-    renderer.push()
-            .render(m_menu)
-            .pop();
+    renderer.render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+            .render(m_menu);
 }
 
 void PauseState::update(const sf::Time &elapsed)
@@ -100,7 +102,7 @@ void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+        pr::stateMachine().fadeTo(cc::PLAY_SOLO);
 }
 
 

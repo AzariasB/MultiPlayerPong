@@ -6,7 +6,6 @@ SOURCES +=\
     $$PWD/OptionState.cpp \
     $$PWD/PlayState.cpp \
     $$PWD/PlaySoloState.cpp \
-    $$PWD/TransitionState.cpp \
     $$PWD/PlayMultiplayerState.cpp \
     $$PWD/WaitingState.cpp \
     $$PWD/PauseState.cpp \
@@ -20,7 +19,6 @@ HEADERS +=\
     $$PWD/OptionState.hpp \
     $$PWD/PlayState.hpp \
     $$PWD/PlaySoloState.hpp \
-    $$PWD/TransitionState.hpp \
     $$PWD/PlayMultiplayerState.hpp \
     $$PWD/WaitingState.hpp \
     $$PWD/PauseState.hpp \
