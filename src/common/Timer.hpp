@@ -50,8 +50,9 @@ public:
     /**
      * @brief update updates the timer
      * @param delta the time passed since last time
+     * @return if the timer restarted
      */
-    void update(const sf::Time &delta);
+    bool update(const sf::Time &delta);
 
     /**
      * @brief restart restarts the timer to its

@@ -7,7 +7,8 @@ SOURCES += $$PWD/TextInput.cpp \
     $$PWD/FPSCounter.cpp \
     $$PWD/I18NText.cpp \
     $$PWD/Loading.cpp \
-    $$PWD/BackgroundParallax.cpp
+    $$PWD/BackgroundParallax.cpp \
+    $$PWD/RandomAnimation.cpp
 
 HEADERS += $$PWD/TextInput.hpp \
     $$PWD/Dialog.hpp \
@@ -18,4 +19,5 @@ HEADERS += $$PWD/TextInput.hpp \
     $$PWD/FPSCounter.hpp \
     $$PWD/I18NText.hpp \
     $$PWD/Loading.hpp \
-    $$PWD/BackgroundParallax.hpp
+    $$PWD/BackgroundParallax.hpp \
+    $$PWD/RandomAnimation.hpp

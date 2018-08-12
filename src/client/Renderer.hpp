@@ -38,7 +38,8 @@
 #include <unordered_map>
 #include <stack>
 
-#include "Animation.hpp"
+#include "widgets/RandomAnimation.hpp"
+#include "Assets.hpp"
 
 namespace mp {
 
@@ -97,7 +98,7 @@ public:
      * @brief update updates the inner state of this object
      * @param elapsed the time elapsed since the last update
      */
-    void update(const sf::Time &);
+    void update(const sf::Time &delta);
 
     /**
      * @brief render renders any sfml drawable components, using it's inner renderstate
@@ -118,6 +119,13 @@ public:
      */
     Renderer &scale(float nwScale);
 
+    /**
+     * @brief scale scales x and y axis
+     * @param xScale x value for the scale
+     * @param yScale y value for the scale
+     * @return  itself
+     */
+    Renderer &scale(float xScale, float yScale);
 
     /**
      * @brief translateY translates the current render states by the given y
@@ -204,24 +212,13 @@ private:
     void destroyAnimation(sf::Uint64 animationId);
 
     /**
-     * @brief assertRectExist
-     * @param obj
-     * @param width
-     * @param height
-     * @param fillColor
+     * @brief assertCircleExist asserts that the ball exsits
+     * creates one if not found
+     * @param obj the ball to be drawn
      * @return
      */
-    std::unique_ptr<sf::Shape> &assertRectExist(const PhysicObject *obj, float width, float height, const sf::Color &fillColor);
+    RandomAnimation &assertObjectExist(const PhysicObject *obj, Assets::Animations animation, const sf::Vector2i &sprites, const sf::Vector2f &size);
 
-
-    /**
-     * @brief assertCircleExist
-     * @param obj
-     * @param radius
-     * @param fillColor
-     * @return
-     */
-    std::unique_ptr<sf::Shape> &assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor);
 
     /**
      * @brief target the target to use to draw stuff on it
@@ -246,16 +243,11 @@ private:
     sf::Time m_shakeTimeout;
 
     /**
-     * @brief m_powerupAnimations the animations of all the powerups
+     * @brief m_powerupAnimations the animations of all the objects
+     * to draw on the scene
+     * To avoid having to instanciate them at every frame
      */
-    std::unordered_map<sf::Uint64, Animation> m_powerupAnimations;
-
-    /**
-     * @brief m_shapes store the shapes to draw
-     * in order to avoid having to instanciate
-     * them at every draw call
-     */
-    std::unordered_map<const PhysicObject*, std::unique_ptr<sf::Shape>> m_shapes;
+    std::unordered_map<const PhysicObject*, RandomAnimation> m_objectsAnimations;
 
     /**
      * @brief m_stack stack system to be able to modify a
