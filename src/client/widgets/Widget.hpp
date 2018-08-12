@@ -91,7 +91,7 @@ public:
         return true;
     }
 
-    virtual ~Widget()
+    virtual ~Widget() override
     {
 
     }

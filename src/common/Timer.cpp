@@ -56,15 +56,18 @@ void Timer::restart()
     m_time = m_totalTime;
 }
 
-void Timer::update(const sf::Time &delta)
+bool Timer::update(const sf::Time &delta)
 {
-    if(m_time <= sf::Time::Zero)return;
+    if(m_time <= sf::Time::Zero)return false;
 
     m_time -= delta;
     if(m_time <= sf::Time::Zero){
         if(m_callback) m_callback();
         if(m_repeat) m_time = m_totalTime;
+        return true;
     }
+
+    return false;
 }
 
 void Timer::setCallback(const std::function<void ()> callback)

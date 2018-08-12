@@ -43,6 +43,7 @@
 #include "ResourcesManager.hpp"
 #include "ClientConf.hpp"
 #include "Renderable.hpp"
+#include "widgets/RandomAnimation.hpp"
 
 #include <math.h>
 #include <functional>
@@ -97,7 +98,7 @@ void Renderer::shake()
     //   m_shakeTimeout = sf::seconds(1.f);
 }
 
-void Renderer::update(const sf::Time &)
+void Renderer::update(const sf::Time &delta)
 {
     /*  if(m_shakeTimeout > sf::Time::Zero){
         m_shakeTimeout -= elapsed;
@@ -107,12 +108,12 @@ void Renderer::update(const sf::Time &)
         top().transform.translate(offset);
     }else{
         top().transform.
-    }
 
-    //update all powerup animations
-    for(auto it = m_powerupAnimations.begin(); it != m_powerupAnimations.end(); ++it){
-        it->second.update(elapsed);
     }*/
+
+    for(auto &it : m_objectsAnimations){
+       it.second.update(delta);
+    }
 }
 
 sf::RenderStates &Renderer::top()
@@ -122,7 +123,12 @@ sf::RenderStates &Renderer::top()
 
 Renderer &Renderer::scale(float nwScale)
 {
-    top().transform.scale(nwScale, nwScale);
+    return scale(nwScale, nwScale);
+}
+
+Renderer &Renderer::scale(float xScale, float yScale)
+{
+    top().transform.scale(xScale, yScale);
     return *this;
 }
 
@@ -152,17 +158,18 @@ Renderer &Renderer::rotate(float angle)
 
 Renderer &Renderer::renderPaddle(const Paddle& paddle)
 {
-    return draw(*assertRectExist(&paddle, PADDLE_WIDTH, PADDLE_HEIGHT, cc::Colors::paddleColor));
+    Assets::Animations anim = paddle.getNum() == 1 ? Assets::Animations::Paddle1 : Assets::Animations::Paddle2;
+    return render(assertObjectExist(&paddle, anim, sf::Vector2i(20, 1), sf::Vector2f(PADDLE_WIDTH, PADDLE_HEIGHT)));
 }
 
 Renderer &Renderer::renderWall(const Wall &wall)
 {
-    return draw(*assertRectExist(&wall, WALL_WITDH, WALL_HEIGHT, cc::Colors::wallColor));
+    return render(assertObjectExist(&wall, Assets::Animations::Wall, sf::Vector2i(1, 20), sf::Vector2f(WALL_WITDH, WALL_HEIGHT)));
 }
 
 Renderer &Renderer::renderBall(const Ball& ball)
 {
-    return draw(*assertCircleExist(&ball, BALL_RADIUS, cc::Colors::ballColor));
+    return render(assertObjectExist(&ball, Assets::Animations::Ball, sf::Vector2i(20, 1), sf::Vector2f(BALL_RADIUS * 2, BALL_RADIUS * 2)));
 }
 
 Renderer &Renderer::useTextureTarget()
@@ -184,35 +191,22 @@ sf::Texture Renderer::getTextureTarget()
     return m_textureTarget.getTexture();
 }
 
-std::unique_ptr<sf::Shape> &Renderer::assertCircleExist(const PhysicObject *obj, float radius, const sf::Color &fillColor)
+RandomAnimation &Renderer::assertObjectExist(const PhysicObject *obj, Assets::Animations animation, const sf::Vector2i &sprites, const sf::Vector2f &size)
 {
-    if(m_shapes.find(obj) == m_shapes.end()){
-        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::CircleShape>(radius));
-        target->setOrigin(radius, radius);
-        target->setFillColor(fillColor);
-        const b2Vec2 &pos = obj->getPosition();
-        target->setPosition(pos.x, pos.y);
-    }else if(!obj->isStatic()){
-        const b2Vec2 &pos = obj->getPosition();
-        m_shapes[obj]->setPosition(pos.x, pos.y);
+    auto found = m_objectsAnimations.find(obj);
+    if(found == m_objectsAnimations.end()){
+        RandomAnimation &ra = m_objectsAnimations.insert(std::make_pair(obj, RandomAnimation(
+                                                      pr::resourceManager().getTexture(animation),
+                                                      sprites,
+                                                      sf::milliseconds(50)
+                                                      ))).first->second;
+        ra.setPosition(b2VecToSfVect(obj->getPosition()));
+        ra.setSize(size);
+        return ra;
     }
-    return m_shapes[obj];
-}
 
-
-std::unique_ptr<sf::Shape> &Renderer::assertRectExist(const PhysicObject *obj, float width, float height, const sf::Color &fillColor)
-{
-    if(m_shapes.find(obj) == m_shapes.end()){//not found
-        std::unique_ptr<sf::Shape> &target = (m_shapes[obj] = std::make_unique<sf::RectangleShape>(sf::Vector2f(width, height)));
-        target->setOrigin(width/2, height/2);
-        target->setFillColor(fillColor);
-        const b2Vec2 &pos = obj->getPosition();
-        target->setPosition(pos.x, pos.y);
-    }else if(!obj->isStatic()){//object can move
-        const b2Vec2 &pos = obj->getPosition();
-        m_shapes[obj]->setPosition(pos.x, pos.y);
-    }
-    return m_shapes[obj];
+    found->second.setPosition(b2VecToSfVect(obj->getPosition()));
+    return found->second;
 }
 
 Renderer &Renderer::draw(const sf::Drawable &drawable)

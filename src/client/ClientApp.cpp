@@ -66,7 +66,7 @@ ClientApp::ClientApp() :
     m_cursor(),
     rManager(),
     m_translator(),
-    renderer(window),
+    m_renderer(window),
     game(),
     stateMachine(),
     m_sEngine(rManager),
@@ -154,7 +154,7 @@ void ClientApp::toggleFullScreen()
         window->setView(v);
     }
     configureWindow();
-    renderer.updateRenderTarget(window);
+    m_renderer.updateRenderTarget(window);
 
     m_isFullscreen = !m_isFullscreen;
 }
@@ -207,11 +207,12 @@ void ClientApp::run(int argc, char** argv)
 
         sf::Time elapsed = clock.restart();
         m_counter.update(elapsed);
+        m_renderer.update(elapsed);
         m_dialogManager.update(elapsed);
 
         stateMachine.getCurrentState().update(elapsed);
 
-        renderer
+        m_renderer
                 .render(stateMachine)
                 .render(m_dialogManager)
                 .render(m_counter)
@@ -282,7 +283,7 @@ int ClientApp::getPNumber() const
 
 Renderer& ClientApp::getRenderer()
 {
-    return renderer;
+    return m_renderer;
 }
 
 const Game& ClientApp::getGame() const

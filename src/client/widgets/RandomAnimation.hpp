@@ -31,41 +31,48 @@
 #pragma once
 
 
-#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System/Time.hpp>
+#include "src/common/Timer.hpp"
+#include "src/client/Renderable.hpp"
+
+namespace sf {
+    class Texture;
+}
 
 namespace mp {
 
-class Animation : public sf::Drawable
+class RandomAnimation : public Renderable
 {
 public:
-    Animation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop = true);
+    RandomAnimation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop = true);
 
-    virtual ~Animation();
+    virtual ~RandomAnimation() override;
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    void render(Renderer &renderer) const override;
 
     void update(const sf::Time &delta);
 
     void setPosition(const sf::Vector2f &position);
 
-    const sf::Vector2f &getPosition() const;
+    void setSize(const sf::Vector2f &size);
 
 private:
     void nextFrame();
 
+
     sf::Sprite m_sprite;
 
-    sf::Time m_time;
-
-    sf::Time m_frameTime;
-
-    sf::Vector2i m_rectPos;
+    Timer m_nextFrameTimer;
 
     sf::Vector2i m_animSize;
 
     sf::IntRect m_textureRect;
+
+    sf::Vector2i m_rectPos = {0, 0};
+
+    sf::Vector2f m_scale = {1.f, 1.f};
+
+    sf::Vector2f m_translate = {0.f, 0.f};
 
     bool m_loop;
 };

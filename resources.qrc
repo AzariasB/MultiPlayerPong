@@ -21,10 +21,10 @@
     <file alias="alpha.frag">res/shaders/alpha.frag</file>
   </qresource>
   <qresource prefix="/animations">
-    <file alias="ball_retract.png">res/animations/ball_retract.png</file>
-    <file alias="ball_extend.png">res/animations/ball_extend.png</file>
-    <file alias="paddle_extend.png">res/animations/paddle_extend.png</file>
-    <file alias="paddle_retract.png">res/animations/paddle_retract.png</file>
+    <file alias="wall.png">res/animations/wall.png</file>
+    <file alias="paddle_2.png">res/animations/paddle_2.png</file>
+    <file alias="ball.png">res/animations/ball.png</file>
+    <file alias="paddle_1.png">res/animations/paddle_1.png</file>
   </qresource>
   <qresource prefix="/icons">
     <file alias="qt.png">res/icons/qt.png</file>

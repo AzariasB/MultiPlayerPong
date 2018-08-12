@@ -28,68 +28,66 @@
  *
  * Created on 17/11/2017
  */
-#include "Animation.hpp"
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <iostream>
+#include "src/common/VectorsUtils.hpp"
+
+#include "RandomAnimation.hpp"
+#include <SFML/Graphics/Texture.hpp>
+#include "src/client/Renderer.hpp"
+
+#include "src/common/Math.hpp"
 
 namespace mp {
 
-Animation::Animation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop):
+RandomAnimation::RandomAnimation(const sf::Texture &texture, sf::Vector2i sprites, const sf::Time &animTime, bool loop):
     m_sprite(texture),
-    m_time(animTime),
-    m_frameTime(m_time /static_cast<sf::Int64>(sprites.x * sprites.y)),
+    m_nextFrameTimer(animTime, true),
     m_animSize(sprites),
     m_textureRect(0, 0, texture.getSize().x/sprites.x, texture.getSize().y / sprites.y),
     m_loop(loop)
 {
     m_sprite.setTextureRect(m_textureRect);
+    math::centerOrigin(m_sprite);
 }
 
-void Animation::setPosition(const sf::Vector2f &position)
+void RandomAnimation::setSize(const sf::Vector2f &size)
 {
-    m_sprite.setPosition(position);
+   m_scale.x =  size.x / m_sprite.getGlobalBounds().width;
+   m_scale.y =  size.y / m_sprite.getGlobalBounds().height;
 }
 
-const sf::Vector2f &Animation::getPosition() const
+void RandomAnimation::setPosition(const sf::Vector2f &position)
 {
-    return m_sprite.getPosition();
+    m_translate = position;
 }
 
-void Animation::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void RandomAnimation::render(Renderer &renderer) const
 {
-    target.draw(m_sprite, states);
+    renderer
+            .push()
+            .translate(m_translate)
+            .scale(m_scale.x, m_scale.y)
+            .draw(m_sprite)
+            .pop();
 }
 
-void Animation::update(const sf::Time &delta)
+void RandomAnimation::update(const sf::Time &delta)
 {
-    m_time += delta;
-    if(m_time > m_frameTime){
-        m_time = sf::Time();
+    if(m_nextFrameTimer.update(delta)){
         nextFrame();
     }
 }
 
-void Animation::nextFrame()
+void RandomAnimation::nextFrame()
 {
-    m_rectPos.x++;
-    if(m_rectPos.x == m_animSize.x){
-        m_rectPos.x = 0;
-        m_rectPos.y++;
-
-        if(m_rectPos.y == m_animSize.y){
-            if(m_loop){
-                m_rectPos.x = 0;
-                m_rectPos.y = 0;
-            }else{
-                //send "animation end" signal
-            }
-        }
-    }
-    m_textureRect.left = m_rectPos.x*m_textureRect.width;
-    m_textureRect.top = m_rectPos.y *m_textureRect.height;
+    int xAnim = m_animSize.x > 1 ? rand()  % m_animSize.x : 0;
+    int yAnim = m_animSize.y > 1 ? rand() % m_animSize.y : 0;
+    m_textureRect.left = xAnim * m_textureRect.width;
+    m_textureRect.top  = yAnim * m_textureRect.height;
     m_sprite.setTextureRect(m_textureRect);
 }
 
-Animation::~Animation()
+RandomAnimation::~RandomAnimation()
 {
 
 }

@@ -270,7 +270,7 @@ private:
      * @brief renderer Object to use to render the game objects,
      * and all the drawable objects
      */
-    Renderer renderer;
+    Renderer m_renderer;
 
     /**
      * @brief game the game
