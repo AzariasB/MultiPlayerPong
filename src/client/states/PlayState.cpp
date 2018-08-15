@@ -111,7 +111,8 @@ void PlayState::update(const sf::Time &elapsed)
 
 void PlayState::onAfterLeaving()
 {
-    m_particleGenerator.clear();
+    if(pr::stateMachine().getCurrentStateIndex() != cc::PAUSE)
+        m_particleGenerator.clear();
     pr::game().hitPaddleSignal.clear();
 }
 

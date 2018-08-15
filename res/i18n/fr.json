@@ -13,6 +13,8 @@
 		"invalid_ip": "IP invalide",
 		"entered_invalid_id": "L'IP entrée est invalide",
 		"toggle_sound": "Changer son",
+		"toggle_music" : "Changer musique",
+		"music" : "Musique",
 		"key_bindings": "Contrôles clavier",
 		"fullscreen": "Plein écran",
 		"menu": "Menu",

@@ -49,12 +49,12 @@ OptionState::OptionState():
 
     m_muteButton = &m_menu.addButton("toggle_sound", SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::audioOnIcon);
 
+    m_musicButton = &m_menu.addButton("toggle_music", 3 * SF_ARENA_WIDTH / 4.f, startY, Assets::IconAtlas::musicOnIcon);
     startY += m_muteButton->getHeight() + 10;
 
     Button &keyBindingButton = m_menu.addButton("key_bindings", SF_ARENA_WIDTH/4.f , startY, Assets::IconAtlas::wrenchIcon);
-    startY += keyBindingButton.getHeight() + 10;
 
-    m_screenButton = &m_menu.addButton("fullscreen", SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
+    m_screenButton = &m_menu.addButton("fullscreen", 3 * SF_ARENA_WIDTH / 4.F, startY, Assets::IconAtlas::largerIcon);
     startY += m_screenButton->getHeight() + 50.f;
 
     startY += m_menu.addCenteredLabel("language", SF_CENTER_X, startY, 70)->height() + 50;
@@ -101,6 +101,7 @@ OptionState::OptionState():
     });
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
+    m_musicButton->clickedSignal.add([this](){this->toggleMusic();});
 }
 
 void OptionState::updateLangButtonsIcon()
@@ -114,6 +115,13 @@ void OptionState::updateLangButtonsIcon()
     }
 }
 
+void OptionState::toggleMusic()
+{
+    musicSignal.trigger();
+    m_musicButton->setIconTextureRect(getCurrentMusicRect());
+}
+
+
 void OptionState::toggleSound()
 {
     soundSignal.trigger();
@@ -126,9 +134,14 @@ void OptionState::toggleFullScreen()
     m_screenButton->setIconTextureRect(getCurrentScreenRect());
 }
 
+const sf::IntRect &OptionState::getCurrentMusicRect() const
+{
+    return pr::soundEngine().isMusicStoped() ? Assets::IconAtlas::musicOffIcon.bounds : Assets::IconAtlas::musicOnIcon.bounds;
+}
+
 const sf::IntRect &OptionState::getCurrentSoundRect() const
 {
-    return pr::soundEngine().isMuted() ? Assets::IconAtlas::audioOffIcon.bounds : Assets::IconAtlas::audioOnIcon.bounds;
+    return pr::soundEngine().isSoundMuted() ? Assets::IconAtlas::audioOffIcon.bounds : Assets::IconAtlas::audioOnIcon.bounds;
 }
 
 const sf::IntRect &OptionState::getCurrentScreenRect() const

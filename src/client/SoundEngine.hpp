@@ -57,21 +57,40 @@ public:
      */
     void playSound(Assets::Sounds s, const sf::Vector3f &position = {0,0,0});
 
+    /**
+     * @brief update updates the sound (and plays the next song if needed)
+     * @param delta time since last update
+     */
+    void update(const sf::Time &delta);
 
-    void mute()
+    /**
+     * @brief startMusic plays background music
+     * and loop between all the available tracks
+     */
+    void startMusic();
+
+    /**
+     * @brief stopMusic stops the music
+     */
+    void stopMusic();
+
+
+    void muteSound()
     {
-        m_isMuted = true;
+        m_isSoundMuted = true;
     }
 
-    void unmute()
+    void unmuteSound()
     {
-        m_isMuted = false;
+        m_isSoundMuted = false;
     }
 
-    bool isMuted() const
+    bool isSoundMuted() const
     {
-        return m_isMuted;
+        return m_isSoundMuted;
     }
+
+    bool isMusicStoped() const;
 
     virtual ~SoundEngine();
 private:
@@ -85,7 +104,14 @@ private:
     /**
      * @brief isMuted wether the game's sound is muted
      */
-    bool m_isMuted = false;
+    bool m_isSoundMuted = false;
+
+    /**
+     * @brief m_isMusicMuted wether the music is muted
+     */
+    bool m_isMusicMuted = false;
+
+    sf::Music m_music;
 };
 
 
