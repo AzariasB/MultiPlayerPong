@@ -193,7 +193,7 @@ void ClientApp::run(int argc, char** argv)
 
     this->setLocale();
     static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).updateLangButtonsIcon();
-    stateMachine.setCurrentState(cc::MENU);
+    stateMachine.setCurrentState(cc::SPLASH_SCREEN);
     sf::Clock clock;
 
     //temp rect
