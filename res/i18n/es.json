@@ -13,6 +13,8 @@
 		"invalid_ip": "IP no es válida",
 		"entered_invalid_id": "La ip que escribiste no es válida",
 		"toggle_sound": "Alternar el sonido",
+		"toggle_music" : "Alternar la música",
+		"music" : "Música",
 		"key_bindings": "Asociaciones de teclas",
 		"fullscreen": "Pantalla completa",
 		"menu": "Menú",

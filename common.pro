@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT              -= gui
-CONFIG          += c++14
+CONFIG          += c++14 resources_big
 QMAKE_CXXFLAGS  += -std=c++14
 
 win32:INCLUDEPATH += C:\SFML-2.5.0\include C:\Box2D\include

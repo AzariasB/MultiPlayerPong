@@ -76,6 +76,11 @@ public:
     void toggleSound();
 
     /**
+     * @brief toggleMusic changes the music state
+     */
+    void toggleMusic();
+
+    /**
      * @brief toggleFullScreen toggles the fullscreen
      */
     void toggleFullScreen();
@@ -96,6 +101,13 @@ private:
     const sf::IntRect &getCurrentSoundRect() const;
 
     /**
+     * @brief getCurrentMusicRect the textureRect corresponding to the current
+     * music state
+     * @return
+     */
+    const sf::IntRect &getCurrentMusicRect() const;
+
+    /**
      * @brief getCurrentScreenRect texture rectangle corresponding to the
      * current screen (fullscreen or not)
      * @return
@@ -114,6 +126,12 @@ private:
     Button *m_muteButton;
 
     /**
+     * @brief m_musicButton keep pointer to the button
+     * to be able to change its icon when the music is toggled
+     */
+    Button *m_musicButton;
+
+    /**
      * @brief m_screeButton keep a reference to the screen button
      * to be able to change its icon
      */
@@ -124,6 +142,7 @@ private:
 public:
     Signal<> fullScreenSignal;
     Signal<> soundSignal;
+    Signal<> musicSignal;
 };
 
 

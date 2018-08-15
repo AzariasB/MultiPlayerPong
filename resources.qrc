@@ -26,6 +26,13 @@
     <file alias="ball.png">res/animations/ball.png</file>
     <file alias="paddle_1.png">res/animations/paddle_1.png</file>
   </qresource>
+  <qresource prefix="/musics">
+    <file alias="music_2.wav">res/musics/music_2.wav</file>
+    <file alias="music_3.wav">res/musics/music_3.wav</file>
+    <file alias="music_5.wav">res/musics/music_5.wav</file>
+    <file alias="music_4.wav">res/musics/music_4.wav</file>
+    <file alias="music_1.wav">res/musics/music_1.wav</file>
+  </qresource>
   <qresource prefix="/icons">
     <file alias="qt.png">res/icons/qt.png</file>
     <file alias="blackboard.png">res/icons/blackboard.png</file>

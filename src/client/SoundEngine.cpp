@@ -41,16 +41,43 @@ SoundEngine::SoundEngine(ResourcesManager& sManager) :
 
 }
 
+void SoundEngine::update(const sf::Time &delta)
+{
+    if(m_music.getStatus() == sf::Music::Status::Stopped && !m_isMusicMuted)
+    {
+        startMusic();
+    }
+}
+
 void SoundEngine::playSound(Assets::Sounds s, const sf::Vector3f &position)
 {
-    if(m_isMuted)return;
+    if(m_isSoundMuted)return;
     sf::Sound &sound = m_manager.getSound(s);
 
 
-    sound.setRelativeToListener(math::length(position) != 0);
+    sound.setRelativeToListener(math::length(position) != 0.f);
     sound.setPosition(position);
 
     sound.play();
+}
+
+void SoundEngine::startMusic()
+{
+    m_isMusicMuted = false;
+    m_music.stop();
+    m_music.openFromStream(m_manager.getRandomMusic());
+    m_music.play();
+}
+
+bool SoundEngine::isMusicStoped() const
+{
+    return m_isMusicMuted;
+}
+
+void SoundEngine::stopMusic()
+{
+    m_music.stop();
+    m_isMusicMuted = true;
 }
 
 

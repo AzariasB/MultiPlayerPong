@@ -52,10 +52,20 @@ ResourcesManager::ResourcesManager():
 
     for(const auto &s : Assets::shaders) registerShader(s.second, s.first);
 
+    for(const auto &m : Assets::musics) registerMusic(m.second, m.first);
+
     if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
         std::cerr << "Fail to load Whatever it takes font\n";
         exit(-1);
     }
+}
+
+sf::MemoryInputStream & ResourcesManager::getRandomMusic()
+{
+    int rand = static_cast<int>(std::rand()) % m_musics.size();
+    auto item = m_musics.begin();
+    std::advance(item, rand);
+    return item->second;
 }
 
 sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
@@ -65,6 +75,15 @@ sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
         std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
         return m_emptySound;
     }
+}
+
+void ResourcesManager::registerMusic(const std::string &filename, const sf::Uint64 &musicId)
+{
+    QResource sRes(filename.c_str());
+
+    sf::MemoryInputStream mis;
+    mis.open(sRes.data(), sRes.size());
+    m_musics[musicId] = mis;
 }
 
 void ResourcesManager::registerShader(const std::string &filename, const sf::Uint64 &shaderId)

@@ -42,28 +42,71 @@ namespace mp
 
 class Renderer;
 
+/**
+ * @brief The FadeTransition class
+ * used to create a fade transition between two states
+ * starts with creating two textures and uses a shader
+ * to create the fade effect
+ */
 class FadeTransition : public Transition
 {
 public:
+    /**
+     * @brief FadeTransition empty constructor
+     */
     FadeTransition();
 
+    /**
+     * @brief render inherited function
+     * @param renderer renders the fade effect
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief progress update the fade effect
+     * @param elapsed time since las frame
+     * @return true if the fade effect is over
+     */
     bool progress(const sf::Time &elapsed) override;
 
+    /**
+     * @brief onEnter when the transition starts
+     * @param data the data used to  configure the transition and the state
+     */
     void onEnter(BaseStateData *data) override;
 
     ~FadeTransition() override;
 
 private:
+    /**
+     * @brief m_shader the shader used
+     * to create the fade effect
+     * is destroyed at the same time as the transition
+     */
     sf::Shader *m_shader;
 
+    /**
+     * @brief m_fromTexture keep the texture of the state
+     * we come from
+     */
     sf::Texture m_fromTexture;
 
+    /**
+     * @brief m_toTexture keep the texture of the state
+     * we go to
+     */
     sf::Texture m_toTexture;
 
+    /**
+     * @brief m_alpha tweening used
+     * to change the alpha uniform of the shader
+     */
     twin::Twin<float> m_alpha;
 
+    /**
+     * @brief m_background using a sprite
+     * to render the texture with the shader
+     */
     sf::Sprite m_background;
 };
 

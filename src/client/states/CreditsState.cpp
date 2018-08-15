@@ -50,6 +50,7 @@ CreditsState::CreditsState():
     he += mMenu.addLabel("- SFML " + sfmlVersion() + " (sfml-dev.org)", leftPos, he)->height();
     he += mMenu.addLabel("- Box2D " + box2dVersion() + " (box2d.org)", leftPos, he)->height();
     he += mMenu.addLabel("- Qt " + qtVersion() + " (qt.io)", leftPos, he)->height();
+    he += mMenu.addLabel({"- ","music", " :  Preludes from Chris Zabriske"}, leftPos, he)->height();
 
     Button &btn = mMenu.addButton("menu", SF_CENTER_X, SF_ARENA_HEIGHT - 15, Assets::IconAtlas::exitLeftIcon);
     btn.setOrigin(btn.getWidth() / 2.f, btn.getHeight());

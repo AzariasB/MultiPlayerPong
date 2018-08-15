@@ -13,6 +13,7 @@
 		"invalid_ip": "Invalid IP",
 		"entered_invalid_id": "The IP you entered is invalid",
 		"toggle_sound": "Toggle sound",
+		"music" : "Music",
 		"key_bindings": "Key bindings",
 		"fullscreen": "Fullscreen",
 		"menu": "Menu",
@@ -46,6 +47,7 @@
 		"Up" : "Up",
 		"Down" : "Down",
 		"language" : "Language",
-		"won": "won"
+		"won": "won",
+		"toggle_music" : "Toggle music"
 	}
 }
