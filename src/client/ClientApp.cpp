@@ -221,7 +221,7 @@ void ClientApp::run(int argc, char** argv)
         m_renderer
                 .render(stateMachine)
                 .render(m_dialogManager)
-                .render(m_counter)
+                //.render(m_counter)
                 .draw(rect);
 
         window->display();
