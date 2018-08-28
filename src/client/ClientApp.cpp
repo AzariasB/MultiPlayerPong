@@ -82,6 +82,7 @@ ClientApp::ClientApp() :
 
 void ClientApp::configureWindow()
 {
+    window->setFramerateLimit(120);
     window->setMouseCursor(m_cursor);
     window->setKeyRepeatEnabled(false);
 
@@ -114,7 +115,10 @@ void ClientApp::initStates()
     OptionState &os = static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS));
     os.fullScreenSignal.add([this](){this->toggleFullScreen();});
     os.soundSignal.add([this](){
-        m_sEngine.isMuted() ? m_sEngine.unmute() : m_sEngine.mute();
+        m_sEngine.isSoundMuted() ? m_sEngine.unmuteSound() : m_sEngine.muteSound();
+    });
+    os.musicSignal.add([this](){
+        m_sEngine.isMusicStoped() ? m_sEngine.startMusic() : m_sEngine.stopMusic();
     });
 }
 
@@ -189,7 +193,7 @@ void ClientApp::run(int argc, char** argv)
 
     this->setLocale();
     static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).updateLangButtonsIcon();
-    stateMachine.setCurrentState(cc::MENU);
+    stateMachine.setCurrentState(cc::SPLASH_SCREEN);
     sf::Clock clock;
 
     //temp rect
@@ -198,6 +202,7 @@ void ClientApp::run(int argc, char** argv)
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(2);
     rect.setPosition(2, 2);
+    m_sEngine.startMusic();
 
     while (window->isOpen()) {
         sf::Event ev;
@@ -209,13 +214,14 @@ void ClientApp::run(int argc, char** argv)
         m_counter.update(elapsed);
         m_renderer.update(elapsed);
         m_dialogManager.update(elapsed);
+        m_sEngine.update(elapsed);
 
         stateMachine.getCurrentState().update(elapsed);
 
         m_renderer
                 .render(stateMachine)
                 .render(m_dialogManager)
-                .render(m_counter)
+                //.render(m_counter)
                 .draw(rect);
 
         window->display();

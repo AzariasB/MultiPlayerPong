@@ -39,15 +39,38 @@ namespace mp
 
 class Renderer;
 
+/**
+ * @brief The SlideTransition class used
+ * to create a sliding transition between two states
+ * the transition receives the direction data
+ * with the 'onEnter' method
+ */
 class SlideTransition  : public Transition
 {
 public:
+    /**
+     * @brief SlideTransition empty constructor
+     */
     SlideTransition();
 
+    /**
+     * @brief render renders the current sliding transition
+     * @param renderer
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief progress moves the current transition
+     * @param elapsed
+     * @return
+     */
     bool progress(const sf::Time &elapsed) override;
 
+    /**
+     * @brief onEnter function called when starting the transition
+     * @param data containing the information about where to slide
+     * and what data to pass to the next state
+     */
     void onEnter(BaseStateData *data) override;
 
 private:

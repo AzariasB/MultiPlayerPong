@@ -38,6 +38,7 @@
 #include <unordered_map>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/Music.hpp>
 #include <memory>
 #include <QResource>
 
@@ -58,28 +59,6 @@ public:
      */
     ResourcesManager();
     virtual ~ResourcesManager();
-
-    /**
-     * @brief registerSound creates the soundbuffer and keep it in memory
-     * @param filename name of the file to read from
-     * @param soundName the name of the sound to register, so it can be retrieved later
-     */
-    void registerSound(const std::string &filename, const sf::Uint64 &soundId);
-
-    /**
-     * @brief regsiterTexture saves a texture to the memroy
-     * @param filename the name of the file where the texture is located
-     * @param textureName name of the texture, to retreive it later
-     */
-    void registerTexture(const std::string &filename, const sf::Uint64 &textureID);
-
-    /**
-     * @brief registerShader saves the shader in memory, making it available at runtime
-     * @param filename the name of the file where to find the shader
-     * @param shaderName the name of the shader to use in the program
-     * @return the created shader
-     */
-    void registerShader(const std::string &filename, const sf::Uint64 &shaderId);
 
     /**
      * @brief getSound returns the sound associated with the name given when registered
@@ -104,6 +83,12 @@ public:
     sf::Shader *createShader(const sf::Uint64 &shaderId) const;
 
     /**
+     * @brief getRandomMusic
+     * @return  a random music
+     */
+    sf::MemoryInputStream &getRandomMusic();
+
+    /**
      * @brief getFont the font for the game
      * @return the game's font
      */
@@ -113,6 +98,34 @@ public:
     }
 
 private:
+    /**
+     * @brief registerSound creates the soundbuffer and keep it in memory
+     * @param filename name of the file to read from
+     * @param soundName the name of the sound to register, so it can be retrieved later
+     */
+    void registerSound(const std::string &filename, const sf::Uint64 &soundId);
+
+    /**
+     * @brief regsiterTexture saves a texture to the memroy
+     * @param filename the name of the file where the texture is located
+     * @param textureName name of the texture, to retreive it later
+     */
+    void registerTexture(const std::string &filename, const sf::Uint64 &textureID);
+
+    /**
+     * @brief registerShader saves the shader in memory, making it available at runtime
+     * @param filename the name of the file where to find the shader
+     * @param shaderName the name of the shader to use in the program
+     * @return the created shader
+     */
+    void registerShader(const std::string &filename, const sf::Uint64 &shaderId);
+
+    /**
+     * @brief registerMusic saves a music
+     * @param filename name of the file where the music is located
+     */
+    void registerMusic(const std::string &filename, const sf::Uint64 &musicId);
+
     /**
      * @brief mQuicksandFont font used
      * for 'small' texts
@@ -148,6 +161,11 @@ private:
      * @brief m_shaders keep all the shaders in memory
      */
     std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_shadersContent;
+
+    /**
+     * @brief m_musics all the available musics for the game
+     */
+    std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_musics;
 };
 
 

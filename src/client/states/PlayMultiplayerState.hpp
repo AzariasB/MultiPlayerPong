@@ -87,10 +87,7 @@ public:
 
 private:
 
-    /**
-     * @brief gameFinisehd wether the game ended
-     */
-    bool gameFinisehd = false;
+
 };
 
 
