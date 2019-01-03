@@ -124,7 +124,7 @@ private:
      */
     sf::RectangleShape m_pipe;
 
-    int m_pipeIndex = 0;
+    std::size_t m_pipeIndex = 0;
 
     /**
      * @brief m_typed the actual text entered by the user

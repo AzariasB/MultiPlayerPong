@@ -39,7 +39,7 @@
 namespace mp {
 
 ExplosionParticle::ExplosionParticle():
-    Particle(PARTICLE_TYPE::Explosion)
+    Particle(this)
 {
 }
 

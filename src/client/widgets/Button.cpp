@@ -210,8 +210,8 @@ bool Button::handleEvent(const sf::Event& ev)
 
 bool Button::isSelectionEvent(const sf::Event &ev) const
 {
-    return (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return ||
-            ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0) && m_hilighted;
+    return ( (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return) ||
+            (ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0)) && m_hilighted;
 }
 
 void Button::render(Renderer &renderer) const

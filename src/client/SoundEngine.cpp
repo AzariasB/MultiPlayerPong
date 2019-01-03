@@ -41,7 +41,7 @@ SoundEngine::SoundEngine(ResourcesManager& sManager) :
 
 }
 
-void SoundEngine::update(const sf::Time &delta)
+void SoundEngine::update(const sf::Time&)
 {
     if(m_music.getStatus() == sf::Music::Status::Stopped && !m_isMusicMuted)
     {

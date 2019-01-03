@@ -30,6 +30,8 @@
  */
 #pragma once
 
+#include <typeindex>
+#include <typeinfo>
 #include "src/client/Renderable.hpp"
 
 namespace sf {
@@ -51,20 +53,12 @@ class Particle : public Renderable
 {
 public:
 
-    const enum PARTICLE_TYPE {
-        BallTrail,
-        Countdown,
-        Explosion,
-        GainPoint
-    } type;
-
     /**
      * @brief Particle empty constructor
      */
-    Particle(PARTICLE_TYPE sonType):
-        type(sonType)
+    template<typename PARTICLE>
+    Particle(const PARTICLE *): type(typeid (PARTICLE))
     {
-
     }
 
     /**
@@ -89,6 +83,12 @@ public:
     {
 
     }
+
+    /**
+     * @brief type store the underlying type
+     * of this particle
+     */
+    const std::type_info& type;
 
     bool isUsed = false;
 };

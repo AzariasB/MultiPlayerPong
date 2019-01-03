@@ -43,47 +43,33 @@ namespace mp {
 
 ParticleGenerator::ParticleGenerator()
 {
-    for(int i = 0; i < 2; ++i)
-        m_particles.emplace_back(std::make_unique<ExplosionParticle>());
-
-    for(int i = 0; i < 200; ++i)
-        m_particles.emplace_back(std::make_unique<BallTrailParticle>());
-
-    for(int i = 0; i < 2; ++i)
-        m_particles.emplace_back(std::make_unique<GainPointParticle>());
-
-    for(int i = 0; i  < 2; ++i)
-        m_particles.emplace_back(std::make_unique<CountdownParticle>());
+    fillParticles<ExplosionParticle, 2>();
+    fillParticles<BallTrailParticle, 200>();
+    fillParticles<GainPointParticle, 2>();
+    fillParticles<CountdownParticle, 2>();
 }
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
 {    
-   instanciateParticle<ExplosionParticle>(Particle::Explosion, explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
+   instanciateParticle<ExplosionParticle>(explosionPosition, (std::rand()%10) + 10 , cc::Times::explosionLifeTime);
 }
 
 
 void ParticleGenerator::ballTrail(const sf::Vector2f &ballCenter)
 {
-    instanciateParticle<BallTrailParticle>(Particle::BallTrail, ballCenter, cc::Times::trailLifeTime, BALL_RADIUS, sf::Color::White);
+    instanciateParticle<BallTrailParticle>(ballCenter, cc::Times::trailLifeTime, BALL_RADIUS, sf::Color::White);
 }
 
 void ParticleGenerator::gainPoint(const sf::Vector2f &position)
 {
-    instanciateParticle<GainPointParticle>(Particle::GainPoint, position, cc::Times::gainPointLifeTime);
+    instanciateParticle<GainPointParticle>(position, cc::Times::gainPointLifeTime);
 }
 
 void ParticleGenerator::countdown(const std::string & countdownValue, const sf::Vector2f &position)
 {
-    instanciateParticle<CountdownParticle>(Particle::Countdown, countdownValue, position, sf::seconds(1));
+    instanciateParticle<CountdownParticle>(countdownValue, position, sf::seconds(1));
 }
 
-std::unique_ptr<Particle> &ParticleGenerator::findUnusedParticle(Particle::PARTICLE_TYPE type)
-{
-    for(auto &p: m_particles)
-        if(!p->isUsed && p->type == type) return p;
-
-    return m_emptyParticle;
-}
 
 void ParticleGenerator::render(Renderer &renderer) const
 {

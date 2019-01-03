@@ -41,7 +41,7 @@
 namespace mp {
 
 BallTrailParticle::BallTrailParticle():
-    Particle(PARTICLE_TYPE::BallTrail)
+    Particle(this)
 {
 }
 

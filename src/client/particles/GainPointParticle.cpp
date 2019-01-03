@@ -40,7 +40,7 @@
 namespace mp {
 
 GainPointParticle::GainPointParticle():
-    Particle(PARTICLE_TYPE::GainPoint)
+    Particle(this)
 {
 }
 

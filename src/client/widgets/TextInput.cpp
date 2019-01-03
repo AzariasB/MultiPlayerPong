@@ -88,8 +88,8 @@ bool TextInput::handleEvent(const sf::Event& ev)
         switch (ev.key.code) {
         case sf::Keyboard::Left: return movePipe(-1);
         case sf::Keyboard::Right: return movePipe(1);
-        case sf::Keyboard::End: return movePipe(m_typed.getSize());
-        case sf::Keyboard::Home: return movePipe(-m_typed.getSize());
+        case sf::Keyboard::End: return movePipe(static_cast<int>(m_typed.getSize()));
+        case sf::Keyboard::Home: return movePipe(-static_cast<int>(m_typed.getSize()));
         case sf::Keyboard::Delete: return supprChar();
         case sf::Keyboard::V:
             if(ev.key.control) addString(sf::Clipboard::getString());
@@ -142,15 +142,18 @@ void TextInput::addString(const sf::String &toAdd)
     }
     m_typed = m_typed.substring(0, MAX_INPUT_CHARS);
     m_text.setString(m_typed);
-    movePipe(toAdd.getSize());
+    movePipe(static_cast<int>(toAdd.getSize()));
 }
 
 bool TextInput::movePipe(int direction)
 {
-    int oldIdx = m_pipeIndex;
-    m_pipeIndex = math::clampf(0, (int)m_typed.getSize(), m_pipeIndex + direction);
+    std::size_t oldIdx = m_pipeIndex;
+    std::size_t minValue = m_pipeIndex > 0 ?
+                        static_cast<std::size_t>(static_cast<int>(m_pipeIndex) - direction) :
+                        0;
+    m_pipeIndex = math::clampf<std::size_t>(0, m_typed.getSize(), minValue);
     float xPos = 0;
-    for(int i = 0; i < m_pipeIndex; ++i){
+    for(std::size_t i = 0; i < m_pipeIndex; ++i){
         xPos += pr::resourceManager().getFont().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
     }
 

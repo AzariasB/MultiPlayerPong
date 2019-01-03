@@ -109,18 +109,34 @@ private:
      * @param type the type of the particle to find
      * @return the particle if one was found, nullptr otherwise
      */
-    std::unique_ptr<Particle> &findUnusedParticle(Particle::PARTICLE_TYPE type);
+    template<typename PARTICLE>
+    std::unique_ptr<Particle> &findUnusedParticle()
+    {
+        const std::type_info &target = typeid (PARTICLE);
+        for(auto &p: m_particles)
+            if(!p->isUsed && p->type == target) return p;
+
+        return m_emptyParticle;
+    }
 
     template<typename PARTICLE, typename ...Args>
-    void instanciateParticle(Particle::PARTICLE_TYPE type, Args ...argp)
+    void instanciateParticle(Args ...argp)
     {
-        auto &p = findUnusedParticle(type);
+        auto &p = findUnusedParticle<PARTICLE>();
         if(p == m_emptyParticle) return;
 
         PARTICLE *part = static_cast<PARTICLE*>(p.get());
 
         part->init(argp...);
         part->isUsed = true;
+    }
+
+    template<typename PARTICLE, std::size_t COUNT>
+    void fillParticles()
+    {
+        for(std::size_t i = 0; i < COUNT; ++i){
+            m_particles.emplace_back(std::make_unique<PARTICLE>());
+        }
     }
 
     /**

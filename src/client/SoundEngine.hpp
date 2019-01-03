@@ -61,7 +61,7 @@ public:
      * @brief update updates the sound (and plays the next song if needed)
      * @param delta time since last update
      */
-    void update(const sf::Time &delta);
+    void update(const sf::Time &);
 
     /**
      * @brief startMusic plays background music
