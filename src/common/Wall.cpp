@@ -39,7 +39,7 @@
 namespace mp {
 
 Wall::Wall(const Game &g, const b2Vec2 &startingPos):
-    PhysicObject(g, PO_TYPE::WALL)
+    PhysicObject(g, this)
 {
     b2BodyDef def;
     def.position = startingPos;

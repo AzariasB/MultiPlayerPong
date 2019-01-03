@@ -40,7 +40,7 @@
 namespace mp {
 
 Paddle::Paddle(const Game &game, std::size_t pNumber) :
-    PhysicObject(game, PO_TYPE::PADDLE),
+    PhysicObject(game, this),
     m_num(pNumber),
     m_startPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
 {

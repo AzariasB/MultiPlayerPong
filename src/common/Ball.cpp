@@ -39,7 +39,7 @@
 namespace mp {
 
 Ball::Ball(const Game& game) :
-    PhysicObject(game, PO_TYPE::BALL)
+    PhysicObject(game, this)
 {
     b2BodyDef mBodyDef;
     mBodyDef.position = b2Vec2(BALL_START_X, BALL_START_Y);

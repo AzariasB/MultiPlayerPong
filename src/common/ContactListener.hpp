@@ -65,7 +65,7 @@ public:
      */
     void BeginContact(b2Contact *contact) override;
 
-    virtual ~ContactListener();
+    virtual ~ContactListener() override;
 
 private:
 

@@ -70,14 +70,14 @@ public:
      */
     Dialog(const sf::Uint64 id, const sf::String &title, const Assets::IconAtlas::Holder &icon);
 
-    virtual ~Dialog();
+    virtual ~Dialog() override;
 
 	/**
 	 * @brief draw draws the dialog and all its sub-components
 	 * @param target the target in which to draw
 	 * @param states the states to use to draw
 	 */
-    virtual void render(Renderer &renderer) const;
+    virtual void render(Renderer &renderer) const override;
 	/**
 	 * @brief handleEvent inherited function
 	 * @param ev
@@ -89,7 +89,7 @@ public:
      * @brief update inherited function
      * @param elapsed elapsed time
      */
-    virtual bool update(const sf::Time &elapsed);
+    virtual bool update(const sf::Time &elapsed) override;
 
 	/**
 	 * @brief isVisible wether the dialog is currently displayed
@@ -215,7 +215,7 @@ public:
      */
     DialogInput(const sf::Uint64 &id, const sf::String &title, const sf::String &question);
 
-    virtual ~DialogInput();
+    virtual ~DialogInput() override;
 
     /**
      * @brief getValue gets the value typed by the user
@@ -278,7 +278,7 @@ public:
      */
     DialogQuestion(const sf::Uint64 &id, const sf::String &title, const sf::String &question);
 
-    virtual ~DialogQuestion();
+    virtual ~DialogQuestion() override;
 
     /**
      * @brief getQuestion getter for the question asked
@@ -328,7 +328,7 @@ public:
      */
     DialogMessage(const sf::Uint64 &id, const sf::String &title, const sf::String &message);
 
-    virtual ~DialogMessage();
+    virtual ~DialogMessage() override;
 
     /**
      * @brief getMessage returns the message shown to the user

@@ -51,8 +51,8 @@ ContactListener::~ContactListener()
 
 bool ContactListener::userDataIsBall(PhysicObject &objA, PhysicObject &objB)
 {
-    if(objA.type == PhysicObject::BALL){
-        if(objB.type == PhysicObject::PADDLE){
+    if(objA.type == typeid (Ball)){
+        if(objB.type == typeid(Paddle)){
             Paddle &paddle = static_cast<Paddle&>(objB);
             b2Vec2 pos = objA.getPosition();
             ballHitPaddleSignal.trigger(paddle.getNum(), pos);

@@ -36,26 +36,78 @@
 
 namespace mp {
 
-
+/**
+ * @brief The Translator class
+ * Used to translate all the possible strings of the application
+ * using the translation files found in the resources
+ * Whenever the translation is changed by the user
+ * a signal is emitted, so all the string of the application can be
+ * updated
+ */
 class Translator
 {
 public:
+    /**
+     * @brief Translator
+     * empty constructor
+     */
     Translator();
 
+    /**
+     * @brief translate tries to translate the given string using its internal
+     * dictionnary, if the translation fails (no equivalence found) the string
+     * itself is returned
+     * @param translationName the name of the translation to find (or a normal string if
+     * there is no need for a translation)
+     * @return the translated string of the original string
+     */
     sf::String translate(const sf::String &translationName) const;
 
+    /**
+     * @brief setCurrentTranslation sets the current language for the application,
+     * this will trigger the "translationChangedSignal"
+     * @param trName the name of the translation
+     */
     void setCurrentTranslation(const std::string &trName);
 
+    /**
+     * @brief make creates a translatable text, with the given translation name and
+     * the given font size
+     * @param translationName name of the translation (can also be a non-translatable string)
+     * @param fontSize size of the font for the text to create
+     * @return the text linked with this translator, so that when the language changes
+     * the string updates if necessary
+     */
     I18NText make(const sf::String &translationName, int fontSize = 30);
 
+    /**
+     * @brief make creates a translatable text, with the given translation strings and the given font
+     * size
+     * @param translations vector of string to translate
+     * @param fontSize size of the font
+     * @return the text linked with this translator, so that when the language changes,
+     *  the string updates if necessary
+     */
     I18NText make(const std::vector<sf::String> &translations, int fontSize = 30);
 
+    /**
+     * @brief currentTranslation accessor to the current translation name
+     * @return string representing the current translation name
+     */
     const std::string &currentTranslation() const;
 
 private:
+    /**
+     * @brief m_currentTranslation short name of the current translation
+     */
     std::string m_currentTranslation = "fr";
 
 public:
+    /**
+     * @brief translationChangedSignal
+     * signal that is triggered wheneverthe current translation
+     * is changed
+     */
     Signal<> translationChangedSignal;
 };
 

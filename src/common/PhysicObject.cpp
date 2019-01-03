@@ -36,13 +36,6 @@
 
 namespace mp {
 
-PhysicObject::PhysicObject(const Game &game, PO_TYPE poType):
-    type(poType),
-    mGame(game)
-{
-}
-
-
 const b2Vec2 &PhysicObject::getPosition() const
 {
     return mBody->GetPosition();
@@ -56,7 +49,7 @@ bool PhysicObject::isStatic() const
 PhysicObject::~PhysicObject()
 {
     mGame.world().DestroyBody(mBody);
-    mBody = 0;
+    mBody = nullptr;
 }
 
 }

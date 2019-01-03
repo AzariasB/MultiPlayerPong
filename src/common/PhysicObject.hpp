@@ -31,6 +31,7 @@
 #pragma once
 
 #include <SFML/System/Vector2.hpp>
+#include <typeinfo>
 
 class b2Body;
 class b2Vec2;
@@ -46,17 +47,19 @@ class Game;
 class PhysicObject
 {
 public:
-    /**
-      * Different types of physic objects
-      */
-    const enum PO_TYPE{WALL, BALL, PADDLE} type;
 
     /**
      * @brief PhysicObject constructor
      * @param game the game in which the object is added
      * @param poType the type of physic object this represents
      */
-    PhysicObject(const Game& game, PO_TYPE poType);
+    template<typename TYPE>
+    PhysicObject(const Game& game, const TYPE *):
+        type(typeid(TYPE)),
+        mGame(game)
+    {
+
+    }
 
     /**
      * @brief getPosition the current position of the body
@@ -69,6 +72,8 @@ public:
      * @return
      */
     bool isStatic() const;
+
+    const std::type_info &type;
 
     virtual ~PhysicObject();
 protected:
