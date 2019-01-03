@@ -126,7 +126,7 @@ public:
      */
     DialogQuestion &question(const sf::String &title, const sf::String &question);
 
-    ~DialogManager();
+    ~DialogManager() override;
 
 private:
     /**

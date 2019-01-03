@@ -38,6 +38,8 @@
 #include "Particle.hpp"
 #include "src/client/Renderable.hpp"
 
+#include <iostream>
+
 namespace mp {
 class Renderer;
 class ExplosionParticle;
@@ -134,9 +136,9 @@ private:
     template<typename PARTICLE, std::size_t COUNT>
     void fillParticles()
     {
-        for(std::size_t i = 0; i < COUNT; ++i){
-            m_particles.emplace_back(std::make_unique<PARTICLE>());
-        }
+        std::generate_n(std::back_inserter(m_particles), COUNT, [](){
+           return std::make_unique<PARTICLE>();
+        });
     }
 
     /**

@@ -148,16 +148,15 @@ void TextInput::addString(const sf::String &toAdd)
 bool TextInput::movePipe(int direction)
 {
     std::size_t oldIdx = m_pipeIndex;
-    std::size_t minValue = m_pipeIndex > 0 ?
-                        static_cast<std::size_t>(static_cast<int>(m_pipeIndex) - direction) :
-                        0;
-    m_pipeIndex = math::clampf<std::size_t>(0, m_typed.getSize(), minValue);
-    float xPos = 0;
-    for(std::size_t i = 0; i < m_pipeIndex; ++i){
-        xPos += pr::resourceManager().getFont().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
+    if(direction > -1 || m_pipeIndex > 0){
+        std::size_t nwVal = static_cast<std::size_t>(static_cast<int>(m_pipeIndex) + direction);
+        m_pipeIndex = math::clampf<std::size_t>(0, m_typed.getSize(), nwVal);
+        float xPos = 0;
+        for(std::size_t i = 0; i < m_pipeIndex; ++i){
+            xPos += pr::resourceManager().getFont().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
+        }
+        m_pipe.setPosition(m_text.getPosition().x + xPos, m_text.getPosition().y );
     }
-
-    m_pipe.setPosition(m_text.getPosition().x + xPos, m_text.getPosition().y );
     return oldIdx != m_pipeIndex;
 }
 

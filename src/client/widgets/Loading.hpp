@@ -58,49 +58,126 @@ constexpr float SQ_RADIUS = 5.f;
 class Loading : public Widget
 {
 public:
-
+    /**
+     * @brief The LD_STATE enum
+     * The possible states of the loading widget
+     */
     enum LD_STATE { LD_INACTIVE, LD_ACTIVE };
 
+    /**
+     * @brief Loading constructor
+     * @param center center point of the widget
+     * @param width the total width available for the widget
+     */
     Loading(const sf::Vector2f &center, float width);
 
+    /**
+     * @brief render overriden function
+     * @param renderer object to use to render the widget
+     */
     void render(Renderer &renderer) const override;
 
+    /**
+     * @brief update overriden function
+     * @param delta time elapsed since last update
+     * @return if the widget still needs to be updated
+     */
     bool update(const sf::Time &delta) override;
 
+    /**
+     * @brief handleEvent overriden function
+     * @return
+     */
     bool handleEvent(const sf::Event &) override;
 
+    /**
+     * @brief setState changes the state of the loading bar
+     * @param nwState nw satet
+     */
     void setState(LD_STATE nwState);
 
 private:
 
+    /**
+     * @brief nextSquare higlights the next square
+     */
     void nextSquare();
 
+    /**
+     * @brief The Square class private utility class
+     * to display a single part of the widget
+     */
     class Square
     {
     public:
+        /**
+         * @brief Square default constructor
+         */
+        Square();
+
+        /**
+         * @brief Square constructor
+         * @param center center point of the square
+         */
         Square(const sf::Vector2f &center);
 
+        /**
+         * @brief on turns on the square
+         * @param fast if it must be turned on 'fast'
+         */
         void on(bool fast);
 
+        /**
+         * @brief off turns off the square
+         * @param fast if it must be turned off 'fast'
+         */
         void off(bool fast);
 
+        /**
+         * @brief update updates the squares color
+         * @param delta time since last update
+         */
         void update(const sf::Time &delta);
 
+        /**
+         * @brief render renders the square
+         * @param renderer the objec to use to render it
+         */
         void render(Renderer &renderer) const;
 
+        void setPosition(const sf::Vector2f &center);
+
     private:
+        /**
+         * @brief m_innerRect shape of the square
+         */
         sf::RectangleShape m_innerRect;
 
+        /**
+         * @brief m_color current color of the square
+         */
         ColorTweening m_color;
 
     };
 
+    /**
+     * @brief m_timer to regularly move to the next square to draw
+     */
     Timer m_timer;
 
-    std::vector<Square> m_squares;
+    /**
+     * @brief m_squares all the squares to be drawn
+     */
+    std::array<Square, SQUARES> m_squares;
 
-    int m_currentSquare = 0;
+    /**
+     * @brief m_currentSquare square that is hilighted
+     */
+    std::size_t m_currentSquare = 0;
 
+    /**
+     * @brief m_state current state of the widget
+     */
     LD_STATE m_state = LD_INACTIVE;
 };
 

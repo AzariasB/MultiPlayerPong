@@ -40,8 +40,8 @@ Loading::Loading(const sf::Vector2f &center, float width):
 {
     float step = width / SQUARES;
     sf::Vector2f startPos(center.x - width / 2.f, center.y);
-    for(int i = 0; i < SQUARES; ++i){
-       m_squares.emplace_back(startPos);
+    for(std::size_t i = 0; i < SQUARES; ++i){
+       m_squares[i].setPosition(startPos);
        startPos.x += step;
     }
 
@@ -78,9 +78,19 @@ bool Loading::handleEvent(const sf::Event&)
     return false;
 }
 
+Loading::Square::Square():
+    m_color(sf::Color::White)
+{
+}
+
 Loading::Square::Square(const sf::Vector2f &center):
     m_innerRect(sf::Vector2f(SQ_SIDE, SQ_SIDE)),
     m_color(sf::Color::White)
+{
+    setPosition(center);
+}
+
+void Loading::Square::setPosition(const sf::Vector2f &center)
 {
     m_innerRect.setPosition(center);
     math::centerOrigin(m_innerRect);
@@ -88,12 +98,12 @@ Loading::Square::Square(const sf::Vector2f &center):
 
 void Loading::Square::off(bool fast)
 {
-    m_color = ColorTweening(m_color.get(), sf::Color::White, sf::seconds(fast ? 0.3 : 0.5), twin::easing::linear);
+    m_color = ColorTweening(m_color.get(), sf::Color::White, sf::seconds(fast ? 0.3f : 0.5f), twin::easing::linear);
 }
 
 void Loading::Square::on(bool fast)
 {
-    m_color = ColorTweening(m_color.get(), cc::Colors::endWinColor[0], sf::seconds(fast ? 0.2 : 0.5), twin::easing::quartOut, [this, fast](){off(fast);});
+    m_color = ColorTweening(m_color.get(), cc::Colors::endWinColor[0], sf::seconds(fast ? 0.2f : 0.5f), twin::easing::quartOut, [this, fast](){off(fast);});
 }
 
 void Loading::Square::update(const sf::Time &delta)
