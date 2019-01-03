@@ -83,6 +83,8 @@ public:
      */
     void render(Renderer &renderer) const override;
 
+    void test(const std::string &str) const;
+
 private:
     /**
      * @brief m_center center point of the particle

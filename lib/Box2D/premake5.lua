@@ -18,10 +18,6 @@ workspace 'Box2D'
         defaultplatform 'x86_64'
 		defines { '_CRT_SECURE_NO_WARNINGS' }
 	filter {}
-
-	filter 'configurations:Debug'
-	 	defines { 'DEBUG' }
-		optimize 'Off'
 	filter 'configurations:Release'
 		defines { 'NDEBUG' }
 		optimize 'On'

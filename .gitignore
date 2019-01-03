@@ -4,6 +4,7 @@ build
 bin
 .qmake.stash
 *.pro.user
+*.pro.user.*
 Makefile
 *.a
 *.lib

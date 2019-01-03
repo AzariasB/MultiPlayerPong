@@ -79,7 +79,7 @@ float math::length(const sf::Vector3f &orig)
 sf::Vector2f math::normalize(const sf::Vector2f &orig)
 {
     float length = sqrtf((orig.x * orig.x) + (orig.y * orig.y));
-    if (length != 0)
+    if (length != 0.f)
         return sf::Vector2f(orig.x / length, orig.y / length);
     else
         return orig;
