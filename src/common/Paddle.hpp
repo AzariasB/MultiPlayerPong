@@ -149,6 +149,8 @@ private:
      * @brief isAI wether this paddle is controlled by an AI
      */
     bool m_isAI = false;
+
+    static b2Vec2 toPosition(std::size_t pNumber);
 };
 
 }

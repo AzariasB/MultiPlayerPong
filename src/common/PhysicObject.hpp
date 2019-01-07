@@ -31,15 +31,13 @@
 #pragma once
 
 #include <SFML/System/Vector2.hpp>
+#include <Box2D/Dynamics/b2Body.h>
 #include <typeinfo>
 
-class b2Body;
-class b2Vec2;
 
 namespace mp {
 
 class Game;
-
 /**
  * @brief The PhysicObject class a physicobject
  * is an object with a body, that can collide
@@ -50,16 +48,15 @@ public:
 
     /**
      * @brief PhysicObject constructor
-     * @param game the game in which the object is added
-     * @param poType the type of physic object this represents
+     * @param game reference to the game
+     * @param self the child object being constructed
+     * the object is passed to the body constructed as user data
+     * @param infos unique type_info identifier for the type passed
+     * the template is not used here because if it were, "Game.hpp" would
+     * be included, creating a cyclic include dependency and then impossible to compile
+     * @param def definition of the body to create
      */
-    template<typename TYPE>
-    PhysicObject(const Game& game, const TYPE *):
-        type(typeid(TYPE)),
-        mGame(game)
-    {
-
-    }
+    PhysicObject(const Game& game, void * self, const std::type_info &infos, const b2BodyDef &def);
 
     /**
      * @brief getPosition the current position of the body
@@ -86,6 +83,17 @@ protected:
      * @brief mBody body of the object
      */
     b2Body *mBody;
+
+    /**
+     * @brief toBodyDef easier way of creating an initializing a b2BodyDef object
+     * used when constructed by a subclass of physicobject to pass the object
+     * to the constructor
+     * @param pos center position of the body
+     * @param type type of the body
+     * @param fixedRotation wether the body has a fixed rotation
+     * @return the body definition created with the given parameters
+     */
+    static b2BodyDef toBodyDef(const b2Vec2 &pos, b2BodyType type, bool fixedRotation = false);
 };
 
 

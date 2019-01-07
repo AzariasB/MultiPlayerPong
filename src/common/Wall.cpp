@@ -39,15 +39,8 @@
 namespace mp {
 
 Wall::Wall(const Game &g, const b2Vec2 &startingPos):
-    PhysicObject(g, this)
+    PhysicObject(g, this, typeid (Wall), toBodyDef(startingPos, b2_staticBody, true))
 {
-    b2BodyDef def;
-    def.position = startingPos;
-    def.type = b2_staticBody;
-    def.fixedRotation = true;
-    mBody = mGame.world().CreateBody(&def);
-    mBody->SetUserData(this);
-
     b2PolygonShape boxShape;
     boxShape.SetAsBox(WALL_WITDH/2.f, WALL_HEIGHT/2.f);
 

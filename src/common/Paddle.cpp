@@ -40,17 +40,10 @@
 namespace mp {
 
 Paddle::Paddle(const Game &game, std::size_t pNumber) :
-    PhysicObject(game, this),
+    PhysicObject(game, this, typeid (Paddle), toBodyDef(toPosition(pNumber), b2_dynamicBody, true )),
     m_num(pNumber),
     m_startPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
 {
-    b2BodyDef bodyDef;
-    bodyDef.position = m_startPos;
-    bodyDef.type = b2_dynamicBody;
-    mBody = mGame.world().CreateBody(&bodyDef);
-    mBody->SetFixedRotation(true);
-    mBody->SetUserData(this);
-
     b2PolygonShape mShape;
     mShape.SetAsBox(PADDLE_WIDTH/2.f, PADDLE_HEIGHT/2.f);
 
@@ -69,6 +62,14 @@ void Paddle::reset()
     mBody->SetLinearVelocity(b2Vec2());
     m_velocity.y = 0;
 }
+
+b2Vec2 Paddle::toPosition(std::size_t pNumber)
+{
+    return pNumber == 1 ?
+                b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) :
+                b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f);
+}
+
 
 Paddle::~Paddle()
 {

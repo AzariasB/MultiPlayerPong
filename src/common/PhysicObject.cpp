@@ -52,4 +52,21 @@ PhysicObject::~PhysicObject()
     mBody = nullptr;
 }
 
+PhysicObject::PhysicObject(const Game& game, void * self, const std::type_info &infos, const b2BodyDef &def):
+    type(infos),
+    mGame(game)
+{
+    mBody = game.world().CreateBody(&def);
+    mBody->SetUserData(self);
+}
+
+b2BodyDef PhysicObject::toBodyDef(const b2Vec2 &pos, b2BodyType type, bool fixedRotation)
+{
+    b2BodyDef def;
+    def.position = pos;
+    def.type = type;
+    def.fixedRotation = fixedRotation;
+    return def;
+}
+
 }

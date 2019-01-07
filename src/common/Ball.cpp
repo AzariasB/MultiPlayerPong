@@ -30,7 +30,6 @@
  */
 
 #include <SFML/Network/Packet.hpp>
-#include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Collision/Shapes/b2CircleShape.h>
 
 #include "Ball.hpp"
@@ -39,15 +38,9 @@
 namespace mp {
 
 Ball::Ball(const Game& game) :
-    PhysicObject(game, this)
+    PhysicObject(game, this, typeid (Ball), toBodyDef(b2Vec2(BALL_START_X, BALL_START_Y), b2_dynamicBody))
 {
-    b2BodyDef mBodyDef;
-    mBodyDef.position = b2Vec2(BALL_START_X, BALL_START_Y);
-    mBodyDef.type = b2_dynamicBody;
-    mBody = mGame.world().CreateBody(&mBodyDef);
-
     mBody->ApplyLinearImpulse(b2Vec2(BALL_DIR_X, BALL_DIR_Y), mBody->GetWorldCenter(), false);
-    mBody->SetUserData(this);
 
     b2CircleShape mShape;
     mShape.m_p.Set(0,0);
