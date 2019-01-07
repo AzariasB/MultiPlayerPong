@@ -34,25 +34,21 @@
 
 #include "Ball.hpp"
 #include "Game.hpp"
+#include "Jay.hpp"
 
 namespace mp {
 
 Ball::Ball(const Game& game) :
-    PhysicObject(game, this, typeid (Ball), toBodyDef(b2Vec2(BALL_START_X, BALL_START_Y), b2_dynamicBody))
+    PhysicObject(game, this, declareBody(game))
 {
     mBody->ApplyLinearImpulse(b2Vec2(BALL_DIR_X, BALL_DIR_Y), mBody->GetWorldCenter(), false);
+}
 
-    b2CircleShape mShape;
-    mShape.m_p.Set(0,0);
-    mShape.m_radius = BALL_RADIUS;
-
-    b2FixtureDef def;
-    def.shape = &mShape;
-    def.restitution = 1.f;
-    def.density = 0.f;
-    def.friction = 0.f;
-
-    mBody->CreateFixture(&def);
+b2Body *Ball::declareBody(const Game &game)
+{
+    return Jay::define(game, b2Vec2(BALL_START_X, BALL_START_Y), b2_dynamicBody)
+                .addCircleFixture(b2Vec2(0,0), BALL_RADIUS, 1.f, .0f)
+                .body();
 }
 
 Ball::~Ball()

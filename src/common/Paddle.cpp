@@ -36,31 +36,31 @@
 #include "Ball.hpp"
 #include "Paddle.hpp"
 #include "Game.hpp"
+#include "Jay.hpp"
 
 namespace mp {
 
 Paddle::Paddle(const Game &game, std::size_t pNumber) :
-    PhysicObject(game, this, typeid (Paddle), toBodyDef(toPosition(pNumber), b2_dynamicBody, true )),
+    PhysicObject(game, this, declareBody(game, pNumber)),
     m_num(pNumber),
-    m_startPos(pNumber == 1 ? b2Vec2(PADDLE_WIDTH/2.f, ARENA_HEIGHT/2.f) : b2Vec2(ARENA_WIDTH - PADDLE_WIDTH/2.f,  ARENA_HEIGHT/2.f))
+    m_startPos(toPosition(pNumber))
 {
-    b2PolygonShape mShape;
-    mShape.SetAsBox(PADDLE_WIDTH/2.f, PADDLE_HEIGHT/2.f);
-
-    b2FixtureDef fDef;
-    fDef.restitution = 0.f;
-    fDef.friction = 0.f;
-    fDef.density = 100000.f;
-
-    fDef.shape = &mShape;
-    mBody->CreateFixture(&fDef);
 }
+
+
 
 void Paddle::reset()
 {
     mBody->SetTransform(m_startPos, mBody->GetAngle());
     mBody->SetLinearVelocity(b2Vec2());
     m_velocity.y = 0;
+}
+
+b2Body *Paddle::declareBody(const Game &game, std::size_t pNumber)
+{
+    return Jay::define(game, toPosition(pNumber), b2_dynamicBody, true)
+                .addBoxFixture(PADDLE_WIDTH / 2.f, PADDLE_HEIGHT / 2.f, 0.f, 0.f, 100000.f)
+                .body();
 }
 
 b2Vec2 Paddle::toPosition(std::size_t pNumber)

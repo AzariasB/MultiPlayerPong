@@ -150,6 +150,21 @@ private:
      */
     bool m_isAI = false;
 
+
+    /**
+     * @brief declareBody create the body of this paddle
+     * @param game
+     * @param pNumber
+     * @return
+     */
+    static b2Body *declareBody(const Game &game, std::size_t pNumber);
+
+    /**
+     * @brief toPosition determines the position depending on the player number
+     * 1 is left 2 is right
+     * @param pNumber
+     * @return the position of the paddle
+     */
     static b2Vec2 toPosition(std::size_t pNumber);
 };
 

@@ -102,7 +102,12 @@ public:
 
     virtual ~Ball();
 private:
+    /**
+     * @brief m_radiusBoost not used for now
+     */
     sf::Int32 m_radiusBoost;
+
+    static b2Body *declareBody(const Game &game);
 };
 
 

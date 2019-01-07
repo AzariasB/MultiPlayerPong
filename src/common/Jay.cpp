@@ -23,33 +23,67 @@
  */
 
 /*
- * File:   Powerup.hpp
+ * File:   Jay.cpp
  * Author: azarias
  *
- * Created on 09/03/2018
+ * Created on 07/01/2019
  */
 
-#include <SFML/System/Vector2.hpp>
-#include <Box2D/Dynamics/b2Body.h>
-#include <limits>
-
-#include "Wall.hpp"
-#include "Game.hpp"
 #include "Jay.hpp"
+#include "src/common/Game.hpp"
 
 namespace mp {
 
-Wall::Wall(const Game &g, const b2Vec2 &startingPos):
-    PhysicObject(g, this,
-         Jay::define(g, startingPos, b2_staticBody, true)
-         .addBoxFixture(WALL_WITDH / 2.f, WALL_HEIGHT /2.f, 0.f, 0.f)
-         .body()
-    )
+Jay::Jay(b2Body *body):
+    m_body(body)
 {
+
 }
 
-Wall::~Wall()
+Jay &Jay::addCircleFixture(const b2Vec2 &offset, float radius, float restitution, float friction, float density)
 {
+    b2CircleShape shape;
+    shape.m_p.Set(offset.x, offset.y);
+    shape.m_radius = radius;
+
+    b2FixtureDef def;
+    def.shape = &shape;
+    def.restitution = restitution;
+    def.friction = friction;
+    def.density = density;
+    m_body->CreateFixture(&def);
+
+    return *this;
+}
+
+Jay &Jay::addBoxFixture(float width, float height, float restitution, float friction, float density)
+{
+    b2PolygonShape shape;
+    shape.SetAsBox(width, height);
+
+    b2FixtureDef def;
+    def.shape = &shape;
+    def.restitution = restitution;
+    def.friction = friction;
+    def.density = density;
+    m_body->CreateFixture(&def);
+
+    return *this;
+}
+
+b2Body *Jay::body()
+{
+    return m_body;
+}
+
+Jay Jay::define(const Game &game, const b2Vec2 &position, b2BodyType type, bool fixedRotation)
+{
+    b2BodyDef def;
+    def.position = position;
+    def.type = type;
+    def.fixedRotation = fixedRotation;
+
+    return Jay(game.world().CreateBody(&def));
 }
 
 }

@@ -51,12 +51,16 @@ public:
      * @param game reference to the game
      * @param self the child object being constructed
      * the object is passed to the body constructed as user data
-     * @param infos unique type_info identifier for the type passed
-     * the template is not used here because if it were, "Game.hpp" would
-     * be included, creating a cyclic include dependency and then impossible to compile
      * @param def definition of the body to create
      */
-    PhysicObject(const Game& game, void * self, const std::type_info &infos, const b2BodyDef &def);
+    template<typename OBJECT>
+    PhysicObject(const Game& game, OBJECT * self, b2Body *body):
+    type(typeid (OBJECT)),
+    mGame(game),
+    mBody(body)
+    {
+        mBody->SetUserData(self);
+    }
 
     /**
      * @brief getPosition the current position of the body
@@ -84,16 +88,6 @@ protected:
      */
     b2Body *mBody;
 
-    /**
-     * @brief toBodyDef easier way of creating an initializing a b2BodyDef object
-     * used when constructed by a subclass of physicobject to pass the object
-     * to the constructor
-     * @param pos center position of the body
-     * @param type type of the body
-     * @param fixedRotation wether the body has a fixed rotation
-     * @return the body definition created with the given parameters
-     */
-    static b2BodyDef toBodyDef(const b2Vec2 &pos, b2BodyType type, bool fixedRotation = false);
 };
 
 

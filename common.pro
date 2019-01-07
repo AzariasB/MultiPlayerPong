@@ -28,7 +28,8 @@ SOURCES +=\
     src/common/PhysicObject.cpp \
     src/common/Math.cpp \
     src/common/Timer.cpp \
-    src/common/Input.cpp
+    src/common/Input.cpp \
+    src/common/Jay.cpp
 
 HEADERS +=\
     src/common/Application.hpp \
@@ -45,4 +46,5 @@ HEADERS +=\
     src/common/PhysicObject.hpp \
     src/common/Timer.hpp \
     src/common/Signal.hpp \
-    src/common/Input.hpp
+    src/common/Input.hpp \
+    src/common/Jay.hpp
