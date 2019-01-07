@@ -54,6 +54,12 @@ bool FadeTransition::progress(const sf::Time &time)
 {
     m_alpha.step(time);
     m_shader->setUniform("progress", m_alpha.get());
+    m_toTexture = pr::renderer()
+                        .useTextureTarget()
+                        .render(pr::stateMachine().getStateAt(m_enteringStateLabel))
+                        .useWindowTarget()
+                        .getTextureTarget();
+    m_shader->setUniform("to", m_toTexture);
 
     return m_alpha.progress() == 1.f;
 
