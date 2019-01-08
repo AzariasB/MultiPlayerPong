@@ -82,30 +82,47 @@ public:
      */
     virtual void onBeforeLeaving() override;
 protected:
+
     /**
-     * @brief mExitingStateLabel label of the state
-     * that is going to leave the scene
+     * @brief enteringState access to all the childs transition directly
+     * to the state currently entering the transition
+     * @return the state associated with the entering state
      */
-    int m_exitingStateLabel = -1,
+    State &enteringState() const;
+
     /**
-     * @brief mEnteringStateLabel label of the state
-     * that is going to enter on the scene
+     * @brief exitingState access to all the childs transition
+     * to the state currently exiting the transition
+     * @return the state associated with the exiting state id
      */
-    m_enteringStateLabel = -1;
+    State &exitingState() const;
 
     /**
      * @brief m_tickEnteringState if we need to start
      * updating the state that's going to enter
      * same for the exiting state
      */
-    bool m_tickEnteringState = false,
-    m_tickExistingState = false;
+    bool m_tickEnteringState = false;
+    bool m_tickExistingState = false;
 
 
     /**
       * data to pass to the entering state
       */
     std::unique_ptr<BaseStateData> m_enteringData = {};
+
+private:
+    /**
+     * @brief mExitingStateLabel label of the state
+     * that is going to leave the scene
+     */
+    std::size_t m_exitingStateLabel = 0;
+
+    /**
+     * @brief mEnteringStateLabel label of the state
+     * that is going to enter on the scene
+     */
+    std::size_t m_enteringStateLabel = 0;
 };
 
 

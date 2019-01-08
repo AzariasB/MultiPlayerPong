@@ -31,6 +31,7 @@
 
 #include <qglobal.h>
 #include "KeyBindingState.hpp"
+#include "OptionState.hpp"
 #include "src/client/ClientConf.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Translator.hpp"
@@ -71,7 +72,7 @@ KeyBindingState::KeyBindingState():
     m_menu.addButton("back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([](){
-                pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_LEFT);
+                pr::stateMachine().slideTo<OptionState>(SlideData::GO_LEFT);
             });
 
     m_menu.normalizeButtons();
@@ -120,7 +121,7 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
         }
     }else{
         if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-            pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_LEFT);
+            pr::stateMachine().slideTo<OptionState>(SlideData::GO_LEFT);
         }else{
             m_menu.handleEvent(ev);
         }

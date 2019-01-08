@@ -70,11 +70,11 @@ void SlideTransition::render(Renderer &renderer) const
 {
     renderer.push()
             .translate(m_exitingTranslate)
-            .render(pr::stateMachine().getStateAt(m_exitingStateLabel))
+            .render(exitingState())
             .pop()
             .push()
             .translate(m_enteringTranslate)
-            .render(pr::stateMachine().getStateAt(m_enteringStateLabel))
+            .render(enteringState())
             .pop();
 }
 
@@ -82,8 +82,8 @@ void SlideTransition::render(Renderer &renderer) const
 bool SlideTransition::progress(const sf::Time &elapsed)
 {
     m_tweening.step(elapsed);
-    pr::stateMachine().getStateAt(m_exitingStateLabel).update(elapsed);
-    pr::stateMachine().getStateAt(m_enteringStateLabel).update(elapsed);
+    exitingState().update(elapsed);
+    enteringState().update(elapsed);
     updateCenters();
     return m_tweening.progress() == 1.f;
 }

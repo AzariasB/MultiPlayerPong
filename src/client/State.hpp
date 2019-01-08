@@ -90,7 +90,7 @@ private:
 };
 
 struct TransitionData {
-    int enteringStateLabel, exitingStateLabel;
+    std::size_t enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
     updateExistingState = false;
 

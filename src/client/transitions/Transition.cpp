@@ -41,11 +41,11 @@ void Transition::update(const sf::Time &elapsed)
 {
     if(progress(elapsed)){
         if(m_enteringData){
-            pr::stateMachine().setCurrentState(m_enteringStateLabel, *m_enteringData);
+            pr::stateMachine().setStateFromId(m_enteringStateLabel, *m_enteringData);
         }else{
-            pr::stateMachine().setCurrentState(m_enteringStateLabel);
+            pr::stateMachine().setStateFromId(m_enteringStateLabel);
         }
-        pr::stateMachine().getStateAt(m_exitingStateLabel).onAfterLeaving();
+        pr::stateMachine().getStateFromId(m_exitingStateLabel).onAfterLeaving();
     }
 }
 
@@ -65,8 +65,18 @@ void Transition::onBeforeLeaving()
 
 void Transition::handleEvent(const sf::Event &ev)
 {
-    if(m_enteringStateLabel != -1)
-        pr::stateMachine().getStateAt(m_enteringStateLabel).handleEvent(ev);
+    if(m_enteringStateLabel != 0)
+        pr::stateMachine().getStateFromId(m_enteringStateLabel).handleEvent(ev);
+}
+
+State &Transition::enteringState() const
+{
+    return pr::stateMachine().getStateFromId(m_enteringStateLabel);
+}
+
+State &Transition::exitingState() const
+{
+    return pr::stateMachine().getStateFromId(m_exitingStateLabel);
 }
 
 

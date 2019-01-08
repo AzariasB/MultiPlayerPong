@@ -29,6 +29,8 @@
  * Created on 17/5/2018
  */
 #include "CreditsState.hpp"
+#include "MenuState.hpp"
+
 #include "src/client/Provider.hpp"
 #include "src/client/StateMachine.hpp"
 
@@ -101,7 +103,7 @@ void CreditsState::render(Renderer &renderer) const
 
 void CreditsState::menu()
 {
-    pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
+    pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
 }
 
 }

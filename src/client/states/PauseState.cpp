@@ -29,6 +29,10 @@
  * Created on 7/5/2018
  */
 #include "PauseState.hpp"
+#include "PlaySoloState.hpp"
+#include "OptionState.hpp"
+#include "MenuState.hpp"
+
 #include "src/common/Game.hpp"
 #include "src/common/Config.hpp"
 #include "src/client/Renderer.hpp"
@@ -62,12 +66,12 @@ PauseState::PauseState():
 
     m_menu.normalizeButtons(10);
 
-    resume.clickedSignal.add([](){pr::stateMachine().setCurrentState(cc::PLAY_SOLO);});
-    options.clickedSignal.add([](){pr::stateMachine().slideTo(cc::OPTIONS, SlideData::GO_RIGHT);});
-    menuBtn.clickedSignal.add([](){pr::stateMachine().slideTo(cc::MENU, SlideData::GO_DOWN);});
+    resume.clickedSignal.add([](){pr::stateMachine().setCurrentState<PlaySoloState>();});
+    options.clickedSignal.add([](){pr::stateMachine().slideTo<OptionState>(SlideData::GO_RIGHT);});
+    menuBtn.clickedSignal.add([](){pr::stateMachine().slideTo<MenuState>(SlideData::GO_DOWN);});
     restart.clickedSignal.add([](){
         pr::game().reset();
-        pr::stateMachine().setCurrentState(cc::PLAY_SOLO);
+        pr::stateMachine().setCurrentState<PlaySoloState>();
     });
 
     pr::translator().translationChangedSignal.add([this](){
@@ -81,15 +85,15 @@ PauseState::~PauseState()
 
 void PauseState::onAfterLeaving()
 {
-    if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO){
-        pr::stateMachine().getStateAt(cc::PLAY_SOLO).onAfterLeaving();
+    if(!pr::stateMachine().currentIs<PlaySoloState>()){
+        pr::stateMachine().get<PlaySoloState>().onAfterLeaving();
     }
 }
 
 
 void PauseState::render(Renderer &renderer) const
 {
-    renderer.render(pr::stateMachine().getStateAt(cc::PLAY_SOLO))
+    renderer.render(pr::stateMachine().get<PlaySoloState>())
             .render(m_menu);
 }
 
@@ -102,7 +106,7 @@ void PauseState::handleEvent(const sf::Event &ev)
 {
     m_menu.handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape)
-        pr::stateMachine().fadeTo(cc::PLAY_SOLO);
+        pr::stateMachine().fadeTo<PlaySoloState>();
 }
 
 

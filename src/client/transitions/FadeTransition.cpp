@@ -56,7 +56,7 @@ bool FadeTransition::progress(const sf::Time &time)
     m_shader->setUniform("progress", m_alpha.get());
     m_toTexture = pr::renderer()
                         .useTextureTarget()
-                        .render(pr::stateMachine().getStateAt(m_enteringStateLabel))
+                        .render(enteringState())
                         .useWindowTarget()
                         .getTextureTarget();
     m_shader->setUniform("to", m_toTexture);
@@ -81,13 +81,13 @@ void FadeTransition::onEnter(BaseStateData *data)
 
     m_toTexture = pr::renderer()
                         .useTextureTarget()
-                        .render(pr::stateMachine().getStateAt(m_enteringStateLabel))
+                        .render(enteringState())
                         .useWindowTarget()
                         .getTextureTarget();
 
     m_fromTexture = pr::renderer()
                         .useTextureTarget()
-                        .render(pr::stateMachine().getStateAt(m_exitingStateLabel))
+                        .render(exitingState())
                         .useWindowTarget()
                         .getTextureTarget();
 

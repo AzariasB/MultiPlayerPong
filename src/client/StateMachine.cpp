@@ -51,21 +51,12 @@ void StateMachine::initiliaze()
     );
 }
 
-State &StateMachine::getStateAt(int index) const
-{
-    if(states.find(index) == states.end())
-        throw std::out_of_range("Index not found");
-
-    auto found = states.find(index);
-    if(found == states.end()) throw "State index not found";
-    return *found->second;
-}
 
 const State &StateMachine::getCurrentState() const
 {
-    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
-    auto found = states.find(currentStateIndex);
-    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    if (m_currentState == 0)throw std::out_of_range("The current state index is not set");
+    auto found = m_states.find(m_currentState);
+    if(found == m_states.end()) throw std::out_of_range("The given state index does not exist");
     return *found->second;
 }
 
@@ -76,58 +67,35 @@ void StateMachine::translate(float nwX, float nwY)
 
 State &StateMachine::getCurrentState()
 {
-    if (currentStateIndex < 0)throw std::out_of_range("The current state index is not set");
-    auto found = states.find(currentStateIndex);
-    if(found == states.end()) throw std::out_of_range("The given state index does not exist");
+    if (m_currentState == 0)throw std::out_of_range("The current state index is not set");
+    auto found = m_states.find(m_currentState);
+    if(found == m_states.end()) throw std::out_of_range("The given state index does not exist");
     return *found->second;
+}
+
+void StateMachine::setStateFromId(std::size_t classId)
+{
+    m_background.setOffset();
+    m_states[m_currentState]->onBeforeLeaving();
+    m_currentState = classId;
+    m_states[m_currentState]->onEnter(nullptr);
 }
 
 void StateMachine::render(Renderer &renderer) const
 {
-    //find start x, start y translations
-
-    // push
-    // for y in all ys
-    // for x in all xs
-    // translate the sprite
-    // draw it
-
-    // end for / end for
-    // pop
-
    renderer
            .render(m_background)
            .render(getCurrentState());
 }
 
-void StateMachine::setCurrentState(int stateLabel)
+State &StateMachine::getStateFromId(std::size_t index) const
 {
-    m_background.setOffset();
-    if (currentStateIndex > -1)
-        states[currentStateIndex]->onBeforeLeaving();
-    currentStateIndex = stateLabel;
-    BaseStateData dat;
-    states[currentStateIndex]->onEnter(&dat);
-}
+    if(m_states.find(index) == m_states.end())
+        throw std::out_of_range("Index not found");
 
-void StateMachine::fadeTo(int stateLabel)
-{
-    getStateAt(stateLabel).onBeforeEnter();
-    TransitionData td;
-    td.enteringStateLabel = stateLabel;
-    td.exitingStateLabel = currentStateIndex;
-    setCurrentState(cc::TRANSITION_FADE, &td);
-}
-
-void StateMachine::slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir)
-{
-    getStateAt(statelabel).onBeforeEnter();
-    SlideData td;
-    td.enteringStateLabel = statelabel;
-    td.exitingStateLabel = currentStateIndex;
-    td.direction = dir;
-    setCurrentState(cc::TRANSITION_SLIDE, &td);
-    pr::soundEngine().playSound(Assets::Sounds::Rollover1);
+    auto found = m_states.find(index);
+    if(found == m_states.end()) throw "State index not found";
+    return *found->second;
 }
 
 }

@@ -30,6 +30,8 @@
  */
 
 #include "PlaySoloState.hpp"
+#include "PauseState.hpp"
+
 #include "src/client/Provider.hpp"
 #include "src/client/ClientApp.hpp"
 
@@ -77,7 +79,7 @@ void PlaySoloState::handleEvent(const sf::Event &ev)
 {
     PlayState::handleEvent(ev);
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().fadeTo(cc::PAUSE);
+        pr::stateMachine().fadeTo<PauseState>();
     }
 }
 

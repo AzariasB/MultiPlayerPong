@@ -41,6 +41,8 @@
 #include "State.hpp"
 #include "Provider.hpp"
 #include "widgets/BackgroundParallax.hpp"
+#include "transitions/SlideTransition.hpp"
+#include "transitions/FadeTransition.hpp"
 
 namespace mp {
 
@@ -76,13 +78,33 @@ public:
      * @param statelabel
      * @param dir
      */
-    void slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir);
+    template<typename STATE>
+    void slideTo(SlideData::SLIDE_DIRECTION dir)
+    {
+        std::size_t statelabel = typeid(STATE).hash_code();
+        get<STATE>().onBeforeEnter();
+        SlideData td;
+        td.enteringStateLabel = statelabel;
+        td.exitingStateLabel = m_currentState;
+        td.direction = dir;
+        setCurrentState<SlideTransition>(&td);
+        pr::soundEngine().playSound(Assets::Sounds::Rollover1);
+    }
 
     /**
      * @brief fadeTo does a fade between the current state and the next state
      * @param stateLabel the state to go to while fading
      */
-    void fadeTo(int stateLabel);
+    template<typename STATE>
+    void fadeTo()
+    {
+        std::size_t stateLabel = typeid(STATE).hash_code();
+        get<STATE>().onBeforeEnter();
+        TransitionData td;
+        td.enteringStateLabel = stateLabel;
+        td.exitingStateLabel = m_currentState;
+        setCurrentState<FadeTransition>(&td);
+    }
 
     /**
      * @brief goToState changes the state, with an animation
@@ -90,15 +112,15 @@ public:
      * @param dir direction of animation
      * @param data data to pass to the next state
      */
-    template<typename T>
-    void slideTo(int statelabel, SlideData::SLIDE_DIRECTION dir, const T & data)
+    template<typename STATE, typename T>
+    void slideTo(SlideData::SLIDE_DIRECTION dir, const T & data)
     {
         SlideData td;
-        td.enteringStateLabel = statelabel;
-        td.exitingStateLabel = currentStateIndex;
+        td.enteringStateLabel = typeid (STATE).hash_code();
+        td.exitingStateLabel = m_currentState;
         td.direction = dir;
         td.enteringData = std::make_unique<StateData<T>>(data);
-        setCurrentState(cc::TRANSITION_SLIDE, &td);
+        setCurrentState<SlideTransition>(&td);
         pr::soundEngine().playSound(Assets::Sounds::Rollover1);
     }
 
@@ -108,30 +130,47 @@ public:
      */
     template<typename T>
     typename std::enable_if<std::is_base_of<State,T>::value, State&>::type
-    addState(int stateLabel)
+    addState()
     {
-        return *(states[stateLabel] = std::make_unique<T>());
+        return *(m_states[typeid(T).hash_code()] = std::make_unique<T>());
+    }
+
+    template<typename STATE>
+    bool currentIs()
+    {
+        return m_currentState == typeid(STATE).hash_code();
     }
 
     /**
      * @brief setCurrentState changes the current state, calls onLeave and onEnter for the current state and the new state
      * @param stateLabel id of the label to set, if the id is not in the bound of the known states, throws an error
      */
-    void setCurrentState(int stateLabel);
+    template<typename STATE>
+    void setCurrentState()
+    {
+        std::size_t stateLabel = typeid(STATE).hash_code();
+        m_background.setOffset();
+        if (m_currentState != 0)
+            m_states[m_currentState]->onBeforeLeaving();
+        m_currentState = stateLabel;
+        BaseStateData dat;
+        m_states[m_currentState]->onEnter(&dat);
+    }
 
     /**
      * @brief setCurrentState sets the current state, and passes some data to the entering state
      * @param stateLabel id of the label to set
      * @param data data to pass to the entering state
      */
-    template<typename T>
-    void setCurrentState(int stateLabel, const T &data)
+    template<typename STATE, typename T>
+    void setCurrentState(const T &data)
     {
-        if (currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
-        currentStateIndex = stateLabel;
+        std::size_t stateLabel = typeid (STATE).hash_code();
+        if (m_currentState != 0) m_states[stateLabel]->onBeforeLeaving();
+        m_currentState = stateLabel;
 
         StateData<T> dat(data);
-        states[currentStateIndex]->onEnter(&dat);
+        m_states[m_currentState]->onEnter(&dat);
     }
 
     /**
@@ -141,12 +180,13 @@ public:
      * @param stateLabel
      * @param data
      */
-    void setCurrentState(int stateLabel, BaseStateData &data)
+    template<typename STATE>
+    void setCurrentState(BaseStateData &data)
     {
         m_background.setOffset();
-        if(currentStateIndex > -1) states[currentStateIndex]->onBeforeLeaving();
-        currentStateIndex = stateLabel;
-        states[currentStateIndex]->onEnter(&data);
+        m_states[m_currentState]->onBeforeLeaving();
+        m_currentState = typeid (STATE).hash_code();
+        m_states[m_currentState]->onEnter(&data);
     }
 
     /**
@@ -166,15 +206,25 @@ public:
      * @param index
      * @return
      */
-    State &getStateAt(int index) const;
+    template<typename STATE>
+    State &get() const
+    {
+        std::size_t index = typeid(STATE).hash_code();
+        if(m_states.find(index) == m_states.end())
+            throw std::out_of_range("Index not found");
+
+        auto found = m_states.find(index);
+        if(found == m_states.end()) throw "State index not found";
+        return *found->second;
+    }
 
     /**
      * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
      * @return the index of the current state (-1 if no states was set)
      */
-    int getCurrentStateIndex()
+    std::size_t getCurrentStateIndex()
     {
-        return currentStateIndex;
+        return m_currentState;
     }
 
     virtual ~StateMachine() override;
@@ -183,18 +233,46 @@ private:
      * @brief states keep in memory all the newly created states
      * using smart pointers in order to delete them when getting out of scope
      */
-    std::unordered_map<int, std::unique_ptr<State>> states;
+    std::unordered_map<std::size_t, std::unique_ptr<State>> m_states;
 
     /**
      * @brief currentStateIndex index of the current state
      */
-    int currentStateIndex = -1;
+    std::size_t m_currentState = 0;
 
     /**
      * @brief m_blackboard the blackboard background
      */
     BackgroundParallax m_background;
 
+    /**
+     * @brief setStateFromId used only by friend classes who know what they are doing
+     * to change the current state, based on the id of the state
+     * @param classId id of the class to change
+     */
+    void setStateFromId(std::size_t classId);
+
+    template<typename T>
+    void setStateFromId(std::size_t index, const T &data)
+    {
+        m_background.setOffset();
+        m_states[m_currentState]->onBeforeLeaving();
+        m_currentState = index;
+
+        StateData<T> dat(data);
+        m_states[m_currentState]->onEnter(&dat);
+    }
+
+    /**
+     * @brief getStateFromId used only by friend class who know what they are doing
+     * to get a reference to a state, from the state's ID
+     * @param index index of the class searched for
+     * @return a reference to the class if found, an exception otherwise
+     */
+    State &getStateFromId(std::size_t index) const;
+
+
+    friend Transition;
 };
 
 }

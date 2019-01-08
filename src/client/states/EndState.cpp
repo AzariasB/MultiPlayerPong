@@ -33,6 +33,7 @@
 #include "src/client/Provider.hpp"
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/ClientConf.hpp"
+#include "MenuState.hpp"
 
 namespace mp {
 
@@ -83,7 +84,7 @@ void EndState::updateVerticesColor(bool win)
 
 void EndState::goToMenu()
 {
-    pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
+    pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
 }
 
 void EndState::render(Renderer& renderer) const

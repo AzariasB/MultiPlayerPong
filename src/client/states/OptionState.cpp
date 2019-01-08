@@ -29,8 +29,14 @@
  * Created on 1/11/2017
  */
 #include <qglobal.h>
-#include "src/common/Config.hpp"
+
 #include "OptionState.hpp"
+#include "PlaySoloState.hpp"
+#include "MenuState.hpp"
+#include "PauseState.hpp"
+#include "KeyBindingState.hpp"
+
+#include "src/common/Config.hpp"
 #include "KeyBindingState.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/Assets.hpp"
@@ -93,11 +99,11 @@ OptionState::OptionState():
         playButton.setOrigin(playButton.getWidth() / 2.f, playButton.getHeight());
     });
 
-    keyBindingButton.clickedSignal.add([](){ pr::stateMachine().slideTo(cc::KEY_BINDINGS, SlideData::GO_RIGHT); });
-    backButton.clickedSignal.add([](){pr::stateMachine().slideTo(cc::MENU, SlideData::GO_LEFT);});
+    keyBindingButton.clickedSignal.add([](){ pr::stateMachine().slideTo<KeyBindingState>(SlideData::GO_RIGHT); });
+    backButton.clickedSignal.add([](){pr::stateMachine().slideTo<MenuState>(SlideData::GO_LEFT);});
     playButton.clickedSignal.add([](){
-        pr::stateMachine().getStateAt(cc::PLAY_SOLO).onBeforeEnter();
-        pr::stateMachine().slideTo(cc::PAUSE, SlideData::GO_RIGHT);
+        pr::stateMachine().get<PlaySoloState>().onBeforeEnter();
+        pr::stateMachine().slideTo<PauseState>(SlideData::GO_RIGHT);
     });
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
@@ -166,10 +172,10 @@ void OptionState::update(const sf::Time &elapsed)
 
 void OptionState::handleEvent(const sf::Event &ev)
 {
-    if(pr::stateMachine().getCurrentStateIndex() != (int)cc::OPTIONS) return;
+    if(pr::stateMachine().getCurrentStateIndex() != typeid(OptionState).hash_code()) return;
 
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().slideTo(cc::MENU, SlideData::GO_LEFT);
+        pr::stateMachine().slideTo<MenuState>(SlideData::GO_LEFT);
     }else{
         m_menu.handleEvent(ev);
     }

@@ -30,6 +30,10 @@
  */
 
 #include "PlayState.hpp"
+#include "PlayMultiplayerState.hpp"
+#include "PlaySoloState.hpp"
+#include "PauseState.hpp"
+#include "EndState.hpp"
 
 #include "src/common/Game.hpp"
 #include "src/common/Config.hpp"
@@ -80,10 +84,11 @@ void PlayState::onBeforeEnter()
 
 void PlayState::update(const sf::Time &elapsed)
 {
-    if(pr::stateMachine().getCurrentStateIndex() != cc::PLAY_MULTIPLAYER && pr::stateMachine().getCurrentStateIndex() != cc::PLAY_SOLO)return;
+    if(!pr::stateMachine().currentIs<PlayMultiplayerState>()
+        && !pr::stateMachine().currentIs<PlaySoloState>()) return;
 
     if (pr::game().playerWon()){
-        pr::stateMachine().slideTo(cc::FINISHED, SlideData::GO_UP);
+        pr::stateMachine().slideTo<EndState>(SlideData::GO_UP);
         return;
     }
 
@@ -111,7 +116,7 @@ void PlayState::update(const sf::Time &elapsed)
 
 void PlayState::onAfterLeaving()
 {
-    if(pr::stateMachine().getCurrentStateIndex() != cc::PAUSE)
+    if(!pr::stateMachine().currentIs<PauseState>())
         m_particleGenerator.clear();
     pr::game().hitPaddleSignal.clear();
 }

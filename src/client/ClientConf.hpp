@@ -60,25 +60,6 @@ namespace mp
 
     namespace cc//namespace client conf
     {
-        /**
-         * @brief The STATE_TYPE enum associate with each state, an int (enum)
-         * to store these in the state machine, and retrieve them later
-         */
-        enum STATE_TYPE {
-            MENU,//First state
-            PLAY_MULTIPLAYER,
-            PLAY_SOLO,
-            PAUSE,
-            CREDITS,
-            OPTIONS,
-            KEY_BINDINGS,
-            WAITING,
-            FINISHED,
-            TRANSITION_SLIDE,
-            TRANSITION_FADE,
-            SPLASH_SCREEN
-        };
-
         struct Colors {
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;

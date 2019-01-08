@@ -99,20 +99,20 @@ void ClientApp::initStates()
 {
     stateMachine.initiliaze();
 
-    stateMachine.addState<WaitingState>(cc::WAITING);
-    stateMachine.addState<PlayMultiplayerState>(cc::PLAY_MULTIPLAYER);
-    stateMachine.addState<EndState>(cc::FINISHED);
-    stateMachine.addState<MenuState>(cc::MENU);
-    stateMachine.addState<OptionState>(cc::OPTIONS);
-    stateMachine.addState<KeyBindingState>(cc::KEY_BINDINGS);
-    stateMachine.addState<SlideTransition>(cc::TRANSITION_SLIDE);
-    stateMachine.addState<FadeTransition>(cc::TRANSITION_FADE);
-    stateMachine.addState<PlaySoloState>(cc::PLAY_SOLO);
-    stateMachine.addState<PauseState>(cc::PAUSE);
-    stateMachine.addState<CreditsState>(cc::CREDITS);
-    stateMachine.addState<SplashScreenState>(cc::SPLASH_SCREEN);
+    stateMachine.addState<WaitingState>();
+    stateMachine.addState<PlayMultiplayerState>();
+    stateMachine.addState<EndState>();
+    stateMachine.addState<MenuState>();
+    stateMachine.addState<OptionState>();
+    stateMachine.addState<KeyBindingState>();
+    stateMachine.addState<SlideTransition>();
+    stateMachine.addState<FadeTransition>();
+    stateMachine.addState<PlaySoloState>();
+    stateMachine.addState<PauseState>();
+    stateMachine.addState<CreditsState>();
+    stateMachine.addState<SplashScreenState>();
 
-    OptionState &os = static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS));
+    OptionState &os = static_cast<OptionState&>(stateMachine.get<OptionState>());
     os.fullScreenSignal.add([this](){this->toggleFullScreen();});
     os.soundSignal.add([this](){
         m_sEngine.isSoundMuted() ? m_sEngine.unmuteSound() : m_sEngine.muteSound();
@@ -129,7 +129,7 @@ void ClientApp::handleEvent(const sf::Event& event)
     } else if(event.type == sf::Event::Resized){
         resizeEvent(event);
     } else if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F11) {
-        static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).toggleFullScreen();
+        static_cast<OptionState&>(stateMachine.get<OptionState>()).toggleFullScreen();
     } else {
         if(!m_dialogManager.handleEvent(event))
             stateMachine.getCurrentState().handleEvent(event);
@@ -192,8 +192,8 @@ void ClientApp::run(int argc, char** argv)
     Q_UNUSED(argv);
 
     this->setLocale();
-    static_cast<OptionState&>(stateMachine.getStateAt(cc::OPTIONS)).updateLangButtonsIcon();
-    stateMachine.setCurrentState(cc::SPLASH_SCREEN);
+    static_cast<OptionState&>(stateMachine.get<OptionState>()).updateLangButtonsIcon();
+    stateMachine.setCurrentState<SplashScreenState>();
     sf::Clock clock;
 
     //temp rect

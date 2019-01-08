@@ -31,6 +31,8 @@
 #include <SFML/Window/Event.hpp>
 
 #include "SplashScreenState.hpp"
+#include "MenuState.hpp"
+
 #include "src/client/Provider.hpp"
 #include "src/client/StateMachine.hpp"
 #include "src/client/Renderer.hpp"
@@ -54,7 +56,7 @@ SplashScreenState::SplashScreenState():
         m_timer.restart();
 
         m_timer.setCallback([](){
-            pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
+            pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
         });
     });
 
@@ -87,7 +89,7 @@ sf::Sprite &SplashScreenState::insertSprite(const sf::Uint64 &id, float xCenter)
 
 void SplashScreenState::update(const sf::Time &elapsed)
 {
-    if(pr::stateMachine().getCurrentStateIndex() != cc::SPLASH_SCREEN)return;
+    if(!pr::stateMachine().currentIs<SplashScreenState>())return;
 
     m_timer.update(elapsed);
     m_emaPos.step(elapsed);
@@ -109,7 +111,7 @@ void SplashScreenState::render(Renderer &renderer) const
 void SplashScreenState::handleEvent(const sf::Event &ev)
 {    
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().slideTo(cc::MENU, SlideData::GO_RIGHT);
+        pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
     }
 }
 
