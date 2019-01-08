@@ -44,7 +44,7 @@
 namespace mp {
 
 TextInput::TextInput(const sf::Vector2f &position) :
-    m_text("", pr::resourceManager().getFont()),
+    m_text("", pr::resourceManager().get<const sf::Font&>()),
     m_pipe(),
     m_pipeIndex(0),
     m_typed(""),
@@ -153,7 +153,7 @@ bool TextInput::movePipe(int direction)
         m_pipeIndex = math::clampf<std::size_t>(0, m_typed.getSize(), nwVal);
         float xPos = 0;
         for(std::size_t i = 0; i < m_pipeIndex; ++i){
-            xPos += pr::resourceManager().getFont().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
+            xPos += pr::resourceManager().get<const sf::Font&>().getGlyph(m_typed[i], m_text.getCharacterSize(), false).advance;
         }
         m_pipe.setPosition(m_text.getPosition().x + xPos, m_text.getPosition().y );
     }

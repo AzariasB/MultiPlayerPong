@@ -47,7 +47,7 @@ void CountdownParticle::init(const std::string &text, const sf::Vector2f &positi
 {
     m_textScale = twin::makeTwin(0.1f, 1.f, lifetime, twin::linear);
     m_textAlpha = twin::makeTwin(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(0), lifetime, twin::linear);
-    m_text = sf::Text(text, pr::resourceManager().getFont(), 60);
+    m_text = sf::Text(text, pr::resourceManager().get<const sf::Font&>(), 60);
     math::centerOrigin(m_text).setPosition(position);
     m_textColor = m_text.getFillColor();
 }

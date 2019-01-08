@@ -71,11 +71,11 @@ ClientApp::ClientApp() :
     stateMachine(),
     m_sEngine(rManager),
     m_dialogManager(),
-    m_counter(rManager.getFont())
+    m_counter(cRManager().get<const sf::Font&>())
 {
     socket.setBlocking(false);
 
-    sf::Image img = rManager.getTexture(Assets::Icons::Cursor).copyToImage();
+    sf::Image img = cRManager().get<const sf::Texture&>(Assets::Icons::Cursor).copyToImage();
     m_cursor.loadFromPixels(img.getPixelsPtr(), img.getSize(), sf::Vector2u(img.getSize().x / 2, img.getSize().y / 2));
     configureWindow();
 }
@@ -86,7 +86,7 @@ void ClientApp::configureWindow()
     window->setMouseCursor(m_cursor);
     window->setKeyRepeatEnabled(false);
 
-    sf::Image img = rManager.getTexture(Assets::Icons::Sfml32x32).copyToImage();
+    sf::Image img = cRManager().get<const sf::Texture&>(Assets::Icons::Sfml32x32).copyToImage();
     window->setIcon(img.getSize().x, img.getSize().y, img.getPixelsPtr());
 }
 

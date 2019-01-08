@@ -45,8 +45,8 @@
 namespace mp {
 
 PlayState::PlayState():
-    m_p1ScoreText("0", pr::resourceManager().getFont()),
-    m_p2ScoreText("0", pr::resourceManager().getFont()),
+    m_p1ScoreText("0", pr::resourceManager().get<const sf::Font&>()),
+    m_p2ScoreText("0", pr::resourceManager().get<const sf::Font&>()),
     m_nextParticle(cc::Times::trailCountdownTime, true)
 {
     m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);

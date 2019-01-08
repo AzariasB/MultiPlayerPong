@@ -32,8 +32,11 @@
 #pragma once
 
 
+#include <iostream>
+#include <type_traits>
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <SFML/System/MemoryInputStream.hpp>
 #include <unordered_map>
 #include <SFML/Audio/SoundBuffer.hpp>
@@ -58,46 +61,19 @@ public:
      * @brief ResourcesManager constructor
      */
     ResourcesManager();
+
     virtual ~ResourcesManager();
 
-    /**
-     * @brief getSound returns the sound associated with the name given when registered
-     * @param soundName name of the sound
-     * @return sound associated with the name, reference to the empty_sound object if not found
-     */
-    sf::Sound &getSound(const sf::Uint64 &soundID);
+    template<typename RESOURCE>
+    RESOURCE get(const sf::Uint64 & = 0);
 
-    /**
-     * @brief getTexture the texture with the given name
-     * @param textureName name of the texture
-     * @return a reference to the texture reserved with
-     * the given name
-     */
-    const sf::Texture &getTexture(const sf::Uint64 &textureID) const;
+    template<typename RESOURCE>
+    RESOURCE get(const sf::Uint64 & = 0) const;
 
-    /**
-     * @brief getShader access to the shader with the given name
-     * @param shaderName name of the shader
-     * @return  reference to the shader saved with the given name
-     */
-    sf::Shader *createShader(const sf::Uint64 &shaderId) const;
-
-    /**
-     * @brief getRandomMusic
-     * @return  a random music
-     */
-    sf::MemoryInputStream &getRandomMusic();
-
-    /**
-     * @brief getFont the font for the game
-     * @return the game's font
-     */
-    const sf::Font &getFont() const
-    {
-        return mQuicksandFont;
-    }
 
 private:
+
+
     /**
      * @brief registerSound creates the soundbuffer and keep it in memory
      * @param filename name of the file to read from
@@ -130,7 +106,7 @@ private:
      * @brief mQuicksandFont font used
      * for 'small' texts
      */
-    sf::Font mQuicksandFont;
+    sf::Font m_quicksandfont;
 
     /**
      * @brief m_uncompressedQuicksandFont uncompressed quicksand font
@@ -168,5 +144,57 @@ private:
     std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_musics;
 };
 
+//--------------
+// GETTER
+//--------------
+
+template<>
+inline sf::MemoryInputStream &ResourcesManager::get<sf::MemoryInputStream&>(const sf::Uint64&)
+{
+    int rand = static_cast<int>(std::rand()) % m_musics.size();
+    auto item = m_musics.begin();
+    std::advance(item, rand);
+    return item->second;
+}
+
+template<>
+inline sf::Sound& ResourcesManager::get<sf::Sound&>(const sf::Uint64& soundID) {
+    if (m_sounds.find(soundID) != m_sounds.end()) {
+        return m_sounds[soundID].second;
+    } else {
+        std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
+        return m_emptySound;
+    }
+}
+
+template<>
+inline sf::Shader * ResourcesManager::get<sf::Shader*>(const sf::Uint64 &shaderId) const
+{
+    if(m_shadersContent.find(shaderId) != m_shadersContent.end()){
+        sf::Shader *shader = new sf::Shader;
+        sf::MemoryInputStream mis = m_shadersContent.find(shaderId)->second;
+        shader->loadFromStream(mis, sf::Shader::Fragment);
+        return shader;
+    }
+    return nullptr;
+}
+
+template<>
+inline const sf::Texture &ResourcesManager::get<const sf::Texture&>(const sf::Uint64 &textureID) const
+{
+    auto found = m_textures.find(textureID);
+    if(found != m_textures.end()){
+        return m_textures.find(textureID)->second;
+    }else{
+        std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
+        return m_emptyTexture;
+    }
+}
+
+template<>
+inline const sf::Font &ResourcesManager::get<const sf::Font&>(const sf::Uint64 &) const
+{
+    return m_quicksandfont;
+}
 
 }

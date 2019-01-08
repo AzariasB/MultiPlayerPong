@@ -40,7 +40,7 @@ namespace mp
 {
 
 FadeTransition::FadeTransition():
-    m_shader(pr::resourceManager().createShader(Assets::Shaders::Alpha))
+    m_shader(pr::resourceManager().get<sf::Shader*>(Assets::Shaders::Alpha))
 {
 
 }

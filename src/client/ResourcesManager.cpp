@@ -29,12 +29,9 @@
  * Created on 16 octobre 2017, 22:08
  */
 
-#include <iostream>
 #include "ResourcesManager.hpp"
 #include "Assets.hpp"
 #include <QResource>
-#include <SFML/System/MemoryInputStream.hpp>
-#include <SFML/Graphics/Shader.hpp>
 
 namespace mp {
 
@@ -54,29 +51,16 @@ ResourcesManager::ResourcesManager():
 
     for(const auto &m : Assets::musics) registerMusic(m.second, m.first);
 
-    if(!mQuicksandFont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
+    if(!m_quicksandfont.loadFromMemory(m_uncompressedQuicksandFont.data(), m_uncompressedQuicksandFont.size())){
         std::cerr << "Fail to load Whatever it takes font\n";
         exit(-1);
     }
 }
 
-sf::MemoryInputStream & ResourcesManager::getRandomMusic()
-{
-    int rand = static_cast<int>(std::rand()) % m_musics.size();
-    auto item = m_musics.begin();
-    std::advance(item, rand);
-    return item->second;
-}
 
-sf::Sound& ResourcesManager::getSound(const sf::Uint64& soundID) {
-    if (m_sounds.find(soundID) != m_sounds.end()) {
-        return m_sounds[soundID].second;
-    } else {
-        std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
-        return m_emptySound;
-    }
-}
-
+//--------------
+// REGISTER
+//--------------
 void ResourcesManager::registerMusic(const std::string &filename, const sf::Uint64 &musicId)
 {
     QResource sRes(filename.c_str());
@@ -95,28 +79,7 @@ void ResourcesManager::registerShader(const std::string &filename, const sf::Uin
     m_shadersContent[shaderId] = mis;
 }
 
-sf::Shader *ResourcesManager::createShader(const sf::Uint64 &shaderId) const
-{
-    if(m_shadersContent.find(shaderId) != m_shadersContent.end()){
-        sf::Shader *shader = new sf::Shader;
-        sf::MemoryInputStream mis = m_shadersContent.find(shaderId)->second;
-        shader->loadFromStream(mis, sf::Shader::Fragment);
-        return shader;
-    }
-    return nullptr;
-}
 
-
-const sf::Texture &ResourcesManager::getTexture(const sf::Uint64 &textureID) const
-{
-    auto found = m_textures.find(textureID);
-    if(found != m_textures.end()){
-        return m_textures.find(textureID)->second;
-    }else{
-        std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
-        return m_emptyTexture;
-    }
-}
 
 void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId)
 {

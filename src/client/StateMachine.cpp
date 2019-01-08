@@ -45,7 +45,10 @@ StateMachine::~StateMachine()
 
 void StateMachine::initiliaze()
 {
-    m_background = BackgroundParallax(pr::resourceManager().getTexture(Assets::Icons::Blackboard), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+    m_background = BackgroundParallax(
+                pr::resourceManager().get<const sf::Texture&>(Assets::Icons::Blackboard),
+                sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT)
+    );
 }
 
 State &StateMachine::getStateAt(int index) const

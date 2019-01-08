@@ -208,6 +208,15 @@ private:
     void configureWindow();
 
     /**
+     * @brief cRManager constant accessor for the resource manager
+     * @return the resource manager
+     */
+    const ResourcesManager &cRManager() const
+    {
+        return rManager;
+    }
+
+    /**
      * @brief ClientApp default constructor, no data to input
      */
     ClientApp();

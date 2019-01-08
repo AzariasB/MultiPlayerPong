@@ -48,7 +48,7 @@ void GainPointParticle::init(const sf::Vector2f &position, const sf::Time &lifet
 {
     m_positionTwin = twin::makeTwin(position.y, position.y - 20.f, lifetime, twin::linear);
     m_alphaTwin = twin::makeTwin((sf::Uint8)255, (sf::Uint8)0, lifetime, twin::linear);
-    m_text = sf::Text("+1", pr::resourceManager().getFont(), 20);
+    m_text = sf::Text("+1", pr::resourceManager().get<const sf::Font&>(), 20);
     m_text.setPosition(position);
 }
 
