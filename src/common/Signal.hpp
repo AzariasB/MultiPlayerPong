@@ -60,18 +60,7 @@ public:
      * is decremented, and when it reaches 0 the listener is not notified anymore
      * @param argp all the argument to provide to the listeners
      */
-    void trigger(Args ...argp)
-    {
-        for(auto it = m_listeners.begin(); it != m_listeners.end();){
-            if (it->maxCalls == 0){
-                it = m_listeners.erase(it);
-            } else {
-                it->func(argp...);
-                if (it->maxCalls > -1) it->maxCalls--;
-                ++it;
-            }
-        }
-    }
+    void trigger(Args ...argp);
 
     /**
      * @brief add adds a signal with the same arguments needed to the list
@@ -80,33 +69,14 @@ public:
      * @param listens the max number of listens for this signal
      * @return itself
      */
-    std::string add(Signal<Args...> &other, sf::Int64 listens = -1)
-    {
-        std::function<void(Args...)> listener = [&other](Args ...argp){
-              other.trigger(argp...);
-        };
-        m_listeners.emplace_back(listener, listens);
-
-        return m_listeners.back().id;
-    }
+    std::string add(Signal<Args...> &other, sf::Int64 listens = -1);
 
     /**
      * @brief remove removes the given listener
      * @param listener the function to remove from the listeners list
      * @return itself
      */
-    Signal &remove(const std::string &id)
-    {
-        for(auto it = m_listeners.begin(); it != m_listeners.end();){
-            if(id == it->id){
-                it = m_listeners.erase(it);
-            } else {
-                ++it;
-            }
-        }
-
-        return *this;
-    }
+    Signal &remove(const std::string &id);
 
     /**
      * @brief add adds a function to the list of listeners, with the given
@@ -115,12 +85,7 @@ public:
      * @param listens the number max of listens
      * @return itself
      */
-    std::string add(const std::function<void(Args...)> listener, sf::Int64 listens = -1)
-    {
-        m_listeners.emplace_back(listener, listens);
-
-        return m_listeners.back().id;
-    }
+    std::string add(const std::function<void(Args...)> listener, sf::Int64 listens = -1);
 
     /**
      * @brief addOnce adds a function that will be only trigerred the first
@@ -128,20 +93,12 @@ public:
      * @param listener the function to call the first time the signal is trigerred
      * @return itself
      */
-    Signal &addOnce(const std::function<void(Args...)> listener)
-    {
-        m_listeners.emplace_back(listener, 1);
-
-        return *this;
-    }
+    Signal &addOnce(const std::function<void(Args...)> listener);
 
     /**
      * @brief clear removes all the listeners
      */
-    void clear()
-    {
-        m_listeners.clear();
-    }
+    void clear();
 
 private:
     /**
@@ -177,6 +134,66 @@ private:
     std::vector<Listener> m_listeners;
 };
 
+template<typename ...Args>
+void Signal<Args...>::trigger(Args ...argp)
+{
+    for(auto it = m_listeners.begin(); it != m_listeners.end();){
+        if (it->maxCalls == 0){
+            it = m_listeners.erase(it);
+        } else {
+            it->func(argp...);
+            if (it->maxCalls > -1) it->maxCalls--;
+            ++it;
+        }
+    }
+}
+
+template<typename ...Args>
+std::string Signal<Args...>::add(Signal<Args...> &other, sf::Int64 listens)
+{
+    std::function<void(Args...)> listener = [&other](Args ...argp){
+          other.trigger(argp...);
+    };
+    m_listeners.emplace_back(listener, listens);
+
+    return m_listeners.back().id;
+}
+
+template<typename ...Args>
+Signal<Args...> &Signal<Args...>::remove(const std::string &id)
+{
+    for(auto it = m_listeners.begin(); it != m_listeners.end();){
+        if(id == it->id){
+            it = m_listeners.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    return *this;
+}
+
+template<typename ...Args>
+std::string Signal<Args...>::add(const std::function<void(Args...)> listener, sf::Int64 listens)
+{
+    m_listeners.emplace_back(listener, listens);
+
+    return m_listeners.back().id;
+}
+
+template<typename ...Args>
+Signal<Args...> &Signal<Args...>::addOnce(const std::function<void(Args...)> listener)
+{
+    m_listeners.emplace_back(listener, 1);
+
+    return *this;
+}
+
+template<typename ...Args>
+void Signal<Args...>::clear()
+{
+    m_listeners.clear();
+}
 
 }
 

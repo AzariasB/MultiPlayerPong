@@ -112,34 +112,24 @@ private:
      * @return the particle if one was found, nullptr otherwise
      */
     template<typename PARTICLE>
-    std::unique_ptr<Particle> &findUnusedParticle()
-    {
-        const std::type_info &target = typeid (PARTICLE);
-        for(auto &p: m_particles)
-            if(!p->isUsed && p->type == target) return p;
+    typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value, std::unique_ptr<Particle>&>::type
+    findUnusedParticle();
 
-        return m_emptyParticle;
-    }
-
+    /**
+     * @brief instanciateParticle instanciate a particle, and construct it with the given arguments
+     * @param argp the arguments to pass to the created particle
+     */
     template<typename PARTICLE, typename ...Args>
-    void instanciateParticle(Args ...argp)
-    {
-        auto &p = findUnusedParticle<PARTICLE>();
-        if(p == m_emptyParticle) return;
+    typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value>::type
+    instanciateParticle(Args ...argp);
 
-        PARTICLE *part = static_cast<PARTICLE*>(p.get());
-
-        part->init(argp...);
-        part->isUsed = true;
-    }
-
+    /**
+     * @brief fillParticles fills the particle buffer of the given
+     * particle class, with COUNT empty particles
+     */
     template<typename PARTICLE, std::size_t COUNT>
-    void fillParticles()
-    {
-        std::generate_n(std::back_inserter(m_particles), COUNT, [](){
-           return std::make_unique<PARTICLE>();
-        });
-    }
+    typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value>::type
+    fillParticles();
 
     /**
      * @brief m_particles all the particles
@@ -154,6 +144,37 @@ private:
     std::unique_ptr<Particle> m_emptyParticle;
 };
 
+template<typename PARTICLE>
+typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value, std::unique_ptr<Particle>&>::type
+ParticleGenerator::findUnusedParticle()
+{
+    const std::type_info &target = typeid (PARTICLE);
+    for(auto &p: m_particles)
+        if(!p->isUsed && p->type == target) return p;
 
+    return m_emptyParticle;
+}
+
+template<typename PARTICLE, typename ...Args>
+typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value>::type
+ParticleGenerator::instanciateParticle(Args ...argp)
+{
+    auto &p = findUnusedParticle<PARTICLE>();
+    if(p == m_emptyParticle) return;
+
+    PARTICLE *part = static_cast<PARTICLE*>(p.get());
+
+    part->init(argp...);
+    part->isUsed = true;
+}
+
+template<typename PARTICLE, std::size_t COUNT>
+typename std::enable_if<std::is_base_of<Particle, PARTICLE>::value>::type
+ParticleGenerator::fillParticles()
+{
+    std::generate_n(std::back_inserter(m_particles), COUNT, [](){
+       return std::make_unique<PARTICLE>();
+    });
+}
 
 }
