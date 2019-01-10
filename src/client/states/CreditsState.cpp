@@ -103,7 +103,7 @@ void CreditsState::render(Renderer &renderer) const
 
 void CreditsState::menu()
 {
-    pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
+    pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
 }
 
 }

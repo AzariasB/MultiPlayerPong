@@ -87,7 +87,7 @@ public:
      * @brief onEnter inherited function
      * @param data inherited function
      */
-    void onEnter(BaseStateData *data) override;
+    void onEnter(std::string &ip);
 
     virtual ~WaitingState() override;
 private:

@@ -59,7 +59,7 @@ WaitingState::WaitingState() :
     m_menu.addButton("cancel", SF_CENTER_X, SF_ARENA_HEIGHT * 3 / 4.f, Assets::IconAtlas::crossIcon)
             .clickedSignal.add([](){
                 pr::socket().disconnect();
-                pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
+                pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
             });
 
     m_menu.normalizeButtons(10);
@@ -109,19 +109,16 @@ void WaitingState::update(const sf::Time &elapsed)
     }
 
     if (startGame)
-        pr::stateMachine().slideTo<PlayMultiplayerState>(SlideData::GO_LEFT);
+        pr::stateMachine().slideTo<PlayMultiplayerState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
 
 }
 
-void WaitingState::onEnter(BaseStateData *data)
+void WaitingState::onEnter(std::string &data)
 {
     c_state = CONNECTION_STATE::PENDING;
     m_loading.setState(Loading::LD_INACTIVE);
 
-    StateData<std::string> *ipData = nullptr;
-    if(!(ipData = static_cast<StateData<std::string>*>(data)))return;
-
-    sf::IpAddress serverAddr(ipData->data());
+    sf::IpAddress serverAddr(data);
 
     pr::socket().setBlocking(true);
     sf::Socket::Status status = pr::socket().connect(serverAddr, DEFAULT_PORT);
@@ -129,7 +126,7 @@ void WaitingState::onEnter(BaseStateData *data)
     if (status != sf::Socket::Done) {
         DialogMessage& msg = pr::dialogManager().message("error","failed_connect");
         msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});
-        pr::stateMachine().slideTo<MenuState>(SlideData::GO_LEFT);
+        pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
     } else {
         m_content.setString("waiting_player");
         m_loading.setState(Loading::LD_ACTIVE);

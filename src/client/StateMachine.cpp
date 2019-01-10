@@ -73,14 +73,6 @@ State &StateMachine::getCurrentState()
     return *found->second;
 }
 
-void StateMachine::setStateFromId(std::size_t classId)
-{
-    m_background.setOffset();
-    m_states[m_currentState]->onBeforeLeaving();
-    m_currentState = classId;
-    m_states[m_currentState]->onEnter(nullptr);
-}
-
 void StateMachine::render(Renderer &renderer) const
 {
    renderer

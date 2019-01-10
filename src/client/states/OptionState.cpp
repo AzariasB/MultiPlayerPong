@@ -99,11 +99,15 @@ OptionState::OptionState():
         playButton.setOrigin(playButton.getWidth() / 2.f, playButton.getHeight());
     });
 
-    keyBindingButton.clickedSignal.add([](){ pr::stateMachine().slideTo<KeyBindingState>(SlideData::GO_RIGHT); });
-    backButton.clickedSignal.add([](){pr::stateMachine().slideTo<MenuState>(SlideData::GO_LEFT);});
+    keyBindingButton.clickedSignal.add([](){
+        pr::stateMachine().slideTo<KeyBindingState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
+    });
+    backButton.clickedSignal.add([](){
+        pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
+    });
     playButton.clickedSignal.add([](){
         pr::stateMachine().get<PlaySoloState>().onBeforeEnter();
-        pr::stateMachine().slideTo<PauseState>(SlideData::GO_RIGHT);
+        pr::stateMachine().slideTo<PauseState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
     });
     m_muteButton->clickedSignal.add([this](){toggleSound();});
     m_screenButton->clickedSignal.add([this](){toggleFullScreen();});
@@ -175,7 +179,7 @@ void OptionState::handleEvent(const sf::Event &ev)
     if(pr::stateMachine().getCurrentStateIndex() != typeid(OptionState).hash_code()) return;
 
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().slideTo<MenuState>(SlideData::GO_LEFT);
+        pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
     }else{
         m_menu.handleEvent(ev);
     }

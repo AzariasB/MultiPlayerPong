@@ -84,7 +84,7 @@ void EndState::updateVerticesColor(bool win)
 
 void EndState::goToMenu()
 {
-    pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
+    pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
 }
 
 void EndState::render(Renderer& renderer) const
@@ -124,7 +124,7 @@ void EndState::onBeforeEnter()
     m_content.setPosition(SF_CENTER_X, SF_CENTER_Y);
 }
 
-void EndState::onEnter(BaseStateData *)
+void EndState::onEnter()
 {
     pr::game().reset();
     pr::socket().disconnect();

@@ -40,30 +40,74 @@
 
 namespace mp {
 
+/**
+ * @brief The SplashScreenState class state used
+ * to show differents informations about the game
+ * and the techs used
+ */
 class SplashScreenState : public State
 {
 public:
+    /**
+     * @brief SplashScreenState constructor
+     */
     SplashScreenState();
 
-    void update(const sf::Time &elapsed);
+    /**
+     * @brief update overriden method
+     * @param elapsed time since last update
+     */
+    void update(const sf::Time &elapsed) override;
 
-    void render(Renderer &renderer) const;
+    /**
+     * @brief render overriden method
+     * @param renderer object to draw object on screen
+     */
+    void render(Renderer &renderer) const override;
 
-    void handleEvent(const sf::Event &ev);
+    /**
+     * @brief handleEvent overriden method
+     * @param ev event trigerred by the user
+     */
+    void handleEvent(const sf::Event &ev) override;
 
 private:
+    /**
+     * @brief insertSprite adds a sprite to draw
+     * @param id id of the texture to use
+     * @param xCenter center of the sprite
+     * @return
+     */
     sf::Sprite &insertSprite(const sf::Uint64 &id, float xCenter);
 
+    /**
+     * @brief m_timer timer to do different action within the splashscreen state
+     */
     Timer m_timer;
 
+    /**
+      * The sprites to draw an screen
+      */
     std::vector<sf::Sprite> m_sprites = {};
 
+    /**
+     * @brief m_games text for 'games' text
+     */
     sf::Text m_games;
 
+    /**
+     * @brief m_ema text for 'ema' text
+     */
     sf::Text m_ema;
 
+    /**
+     * @brief m_emaPos tweening for the position of 'ema' text
+     */
     twin::Twin<float> m_emaPos;
 
+    /**
+     * @brief m_emaScale tweening for the scale of 'ema' text
+     */
     twin::Twin<float> m_emaScale;
 };
 

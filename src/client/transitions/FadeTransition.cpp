@@ -28,13 +28,12 @@
  *
  * Created on 11/8/2018
  */
-#include "FadeTransition.hpp"
-
+#include "src/client/StateMachine.hpp"
+#include "src/client/Renderer.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/ResourcesManager.hpp"
 #include "src/client/Assets.hpp"
 #include "src/client/StateMachine.hpp"
-#include "src/client/Renderer.hpp"
 
 namespace mp
 {
@@ -70,33 +69,6 @@ void FadeTransition::render(Renderer &renderer) const
     renderer.pushShader(m_shader)
             .draw(m_background)
             .pop();
-}
-
-
-void FadeTransition::onEnter(BaseStateData *data)
-{
-    StateData<TransitionData*> *tr = nullptr;
-    if((tr = dynamic_cast<StateData<TransitionData*>*>(data)) == nullptr  ) return;
-    Transition::setup(*tr->data());
-
-    m_toTexture = pr::renderer()
-                        .useTextureTarget()
-                        .render(enteringState())
-                        .useWindowTarget()
-                        .getTextureTarget();
-
-    m_fromTexture = pr::renderer()
-                        .useTextureTarget()
-                        .render(exitingState())
-                        .useWindowTarget()
-                        .getTextureTarget();
-
-    m_alpha = twin::makeTwin(0.f, 1.f, sf::milliseconds(400), twin::easing::circOut);
-    m_shader->setUniform("progress", 0.f);
-    m_shader->setUniform("resolution", sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
-    m_shader->setUniform("from", m_fromTexture);
-    m_shader->setUniform("to", m_toTexture);
-    m_background = sf::Sprite(m_fromTexture);
 }
 
 

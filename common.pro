@@ -5,8 +5,8 @@
 #-------------------------------------------------
 
 QT              -= gui
-CONFIG          += c++14 resources_big
-QMAKE_CXXFLAGS  += -std=c++14
+CONFIG          += c++17 resources_big
+QMAKE_CXXFLAGS  += -std=c++17
 
 win32:INCLUDEPATH += C:\SFML-2.5.1\include C:\Box2D\include
 win32:DEFINES += "SFML_STATIC"

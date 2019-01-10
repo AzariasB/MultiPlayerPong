@@ -85,14 +85,18 @@ MenuState::MenuState() :
 
     soloButton.clickedSignal.add([](){
         ClientApp::getInstance().setPNumber(1);
-        pr::stateMachine().slideTo<PlaySoloState>(SlideData::GO_UP);
+        pr::stateMachine().slideTo<PlaySoloState>(cc::SLIDE_DIRECTION::SLIDE_UP);
     });
     solo1v1.clickedSignal.add([](){
         ClientApp::getInstance().setPNumber(3);
-        pr::stateMachine().slideTo<PlaySoloState>(SlideData::GO_UP);
+        pr::stateMachine().slideTo<PlaySoloState>(cc::SLIDE_DIRECTION::SLIDE_UP);
     });
-    optionButton.clickedSignal.add([](){pr::stateMachine().slideTo<OptionState>(SlideData::GO_RIGHT);});
-    creditsButton.clickedSignal.add([](){pr::stateMachine().slideTo<CreditsState>(SlideData::GO_LEFT);});
+    optionButton.clickedSignal.add([](){
+        pr::stateMachine().slideTo<OptionState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
+    });
+    creditsButton.clickedSignal.add([](){
+        pr::stateMachine().slideTo<CreditsState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
+    });
 
     multiPlayerButton.clickedSignal.add([this](){
         DialogInput &ip = pr::dialogManager().input("Ip","enter_ip");
@@ -106,7 +110,7 @@ MenuState::MenuState() :
         ip.confirmedSignal.add([this, &ip](std::string entered){
             if(isValidIp(entered)){
                 pr::dialogManager().hideDialog(ip.id());
-                pr::stateMachine().slideTo<WaitingState>(SlideData::GO_UP, entered);
+                pr::stateMachine().slideTo<WaitingState>(cc::SLIDE_DIRECTION::SLIDE_UP, entered);
             }else{
                 DialogMessage &msg = pr::dialogManager().message("invalid_ip", "entered_invalid_id");
                 msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});

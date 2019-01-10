@@ -39,11 +39,11 @@ namespace mp
 {
     //Dimensions (all in meters)
     //Arena
-    constexpr int SF_ARENA_WIDTH = ARENA_WIDTH * M_TO_P;
-    constexpr int SF_ARENA_HEIGHT = ARENA_HEIGHT * M_TO_P;
+    constexpr int SF_ARENA_WIDTH = static_cast<int>(ARENA_WIDTH * M_TO_P);
+    constexpr int SF_ARENA_HEIGHT = static_cast<int>(ARENA_HEIGHT * M_TO_P);
 
     constexpr int SF_DIALOG_WIDTH =  4 * SF_ARENA_WIDTH / 5;
-    constexpr int SF_DIALOG_HEIGHT = SF_ARENA_HEIGHT / 3.f;
+    constexpr int SF_DIALOG_HEIGHT = static_cast<int>(SF_ARENA_HEIGHT / 3.f);
 
     constexpr float SF_CENTER_X = SF_ARENA_WIDTH  / 2.f;
     constexpr float SF_CENTER_Y = SF_ARENA_HEIGHT / 2.f;
@@ -60,6 +60,13 @@ namespace mp
 
     namespace cc//namespace client conf
     {
+        enum SLIDE_DIRECTION {
+            SLIDE_LEFT,
+            SLIDE_RIGHT,
+            SLIDE_UP,
+            SLIDE_DOWN
+        };
+
         struct Colors {
             static const sf::Color backgroundColor;
             static const sf::Color buttonColor;

@@ -70,11 +70,6 @@ void PlayMultiplayerState::handleEvent(const sf::Event& ev)
     }
 }
 
-void PlayMultiplayerState::onEnter(BaseStateData *data)
-{
-    Q_UNUSED(data);
-}
-
 void PlayMultiplayerState::onBeforeLeaving()
 {
 }

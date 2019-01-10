@@ -72,7 +72,7 @@ KeyBindingState::KeyBindingState():
     m_menu.addButton("back", startX, startY + 10, Assets::IconAtlas::exitLeftIcon)
             .clickedSignal
             .add([](){
-                pr::stateMachine().slideTo<OptionState>(SlideData::GO_LEFT);
+                pr::stateMachine().slideTo<OptionState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
             });
 
     m_menu.normalizeButtons();
@@ -121,7 +121,7 @@ void KeyBindingState::handleEvent(const sf::Event &ev)
         }
     }else{
         if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-            pr::stateMachine().slideTo<OptionState>(SlideData::GO_LEFT);
+            pr::stateMachine().slideTo<OptionState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
         }else{
             m_menu.handleEvent(ev);
         }

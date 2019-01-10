@@ -72,11 +72,6 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
-    /**
-     * @brief onEnter inherited function
-     * @param data
-     */
-    void onEnter(BaseStateData *data) override;
 
     /**
      * @brief onLeave inherited function

@@ -88,7 +88,7 @@ void PlayState::update(const sf::Time &elapsed)
         && !pr::stateMachine().currentIs<PlaySoloState>()) return;
 
     if (pr::game().playerWon()){
-        pr::stateMachine().slideTo<EndState>(SlideData::GO_UP);
+        pr::stateMachine().slideTo<EndState>(cc::SLIDE_DIRECTION::SLIDE_UP);
         return;
     }
 

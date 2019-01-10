@@ -47,8 +47,6 @@
 #include "states/KeyBindingState.hpp"
 #include "states/CreditsState.hpp"
 #include "states/SplashScreenState.hpp"
-#include "transitions/SlideTransition.hpp"
-#include "transitions/FadeTransition.hpp"
 
 namespace mp {
 

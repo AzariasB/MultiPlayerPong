@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include "Transition.hpp"
+#include "src/client/StateMachine.hpp"
 
 #include "src/common/Config.hpp"
 #include "src/client/Provider.hpp"
@@ -40,27 +40,15 @@ Transition::Transition()
 void Transition::update(const sf::Time &elapsed)
 {
     if(progress(elapsed)){
-        if(m_enteringData){
-            pr::stateMachine().setStateFromId(m_enteringStateLabel, *m_enteringData);
-        }else{
-            pr::stateMachine().setStateFromId(m_enteringStateLabel);
-        }
+        m_switchState();
         pr::stateMachine().getStateFromId(m_exitingStateLabel).onAfterLeaving();
     }
 }
 
-void Transition::setup(TransitionData &data)
-{
-    m_enteringStateLabel = data.enteringStateLabel;
-    m_exitingStateLabel = data.exitingStateLabel;
-    m_tickEnteringState = data.updateEnteringState;
-    m_tickExistingState = data.updateExistingState;
-    m_enteringData.swap(data.enteringData);
-}
 
 void Transition::onBeforeLeaving()
 {
-    m_enteringData = {};
+    m_switchState = {};
 }
 
 void Transition::handleEvent(const sf::Event &ev)

@@ -36,6 +36,7 @@
 #include <memory>
 #include <qglobal.h>
 #include "Renderable.hpp"
+#include "ClientConf.hpp"
 
 namespace sf {
 class Event;
@@ -47,65 +48,19 @@ namespace mp {
 
 class Renderer;
 
-/**
- * @brief The BaseStateData struct base struct given to the states
- * when the function "onEnter" is called
- */
-struct BaseStateData{
-    virtual ~BaseStateData()
-    {
-
-    }
-
-};
-
-
-/**
- * @brief The StateData struct struct with data to pass it between the states
- * when onEnter is called
- */
-template<typename T>
-struct StateData : public BaseStateData{
-    StateData(const T &data):
-        m_data(data)
-    {
-    }
-
-
-    /**
-     * @brief reference to the data hold by the object
-     * @return reference to the data hold by the object
-     */
-    T &data()
-    {
-        return m_data;
-    }
-
-    virtual ~StateData() {}
-private:
-    /**
-     * @brief m_data data held by this object
-     */
-    T m_data;
-};
-
+template<typename STATE, typename ...Args>
 struct TransitionData {
     std::size_t enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
     updateExistingState = false;
 
-    std::unique_ptr<BaseStateData> enteringData;//data to pass to the entering state
+    std::tuple<Args...> enteringData;//data to pass to the entering state
 };
 
+template<typename STATE, typename ...Args>
+struct SlideData : public TransitionData<STATE, Args...> {
 
-struct SlideData : public TransitionData {
-
-    enum SLIDE_DIRECTION {
-        GO_UP,
-        GO_LEFT,
-        GO_DOWN,
-        GO_RIGHT
-    } direction;
+    cc::SLIDE_DIRECTION direction;
 };
 
 /**
@@ -152,9 +107,9 @@ public:
      * is used to init some data
      * @param data data passed by the previous state (if any) can be null
      */
-    virtual void onEnter(BaseStateData *data)
+    template<typename ...Args>
+    void onEnter(Args&&...)
     {
-        Q_UNUSED(data);
     }
 
     /**

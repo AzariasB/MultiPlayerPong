@@ -56,7 +56,7 @@ SplashScreenState::SplashScreenState():
         m_timer.restart();
 
         m_timer.setCallback([](){
-            pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
+            pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
         });
     });
 
@@ -111,7 +111,7 @@ void SplashScreenState::render(Renderer &renderer) const
 void SplashScreenState::handleEvent(const sf::Event &ev)
 {    
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
-        pr::stateMachine().slideTo<MenuState>(SlideData::GO_RIGHT);
+        pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
     }
 }
 

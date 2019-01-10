@@ -67,8 +67,12 @@ PauseState::PauseState():
     m_menu.normalizeButtons(10);
 
     resume.clickedSignal.add([](){pr::stateMachine().setCurrentState<PlaySoloState>();});
-    options.clickedSignal.add([](){pr::stateMachine().slideTo<OptionState>(SlideData::GO_RIGHT);});
-    menuBtn.clickedSignal.add([](){pr::stateMachine().slideTo<MenuState>(SlideData::GO_DOWN);});
+    options.clickedSignal.add([](){
+        pr::stateMachine().slideTo<OptionState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
+    });
+    menuBtn.clickedSignal.add([](){
+        pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_DOWN);
+    });
     restart.clickedSignal.add([](){
         pr::game().reset();
         pr::stateMachine().setCurrentState<PlaySoloState>();
