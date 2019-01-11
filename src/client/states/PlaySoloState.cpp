@@ -54,7 +54,9 @@ void PlaySoloState::onBeforeEnter()
         pr::game().getPlayer2().getPaddle().setIsAI(true);
     }
 
-    pr::game().countdownEndedSignal.add([](){pr::game().setGameState(GAMESTATE::PLAYING);});
+    pr::game().countdownEndedSignal.add([](){
+        pr::game().setGameState(GAMESTATE::PLAYING);
+    });
 
     pr::game().lostSignal.add([](int looser){
         bool amWinner = looser == 2;

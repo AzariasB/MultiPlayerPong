@@ -128,7 +128,7 @@ public:
      * @return
      */
     template<typename STATE>
-    State &get() const;
+    STATE &get() const;
 
     /**
      * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
@@ -491,6 +491,7 @@ template<typename STATE, typename ...Args>
 void StateMachine::slideTo(cc::SLIDE_DIRECTION dir, Args ...data)
 {
     SlideData<STATE, Args...> td;
+    get<STATE>().onBeforeEnter();
     td.enteringStateLabel = typeid (STATE).hash_code();
     td.exitingStateLabel = m_currentState;
     td.direction = dir;
@@ -517,13 +518,13 @@ void StateMachine::setCurrentState(Args...data)
 {
     m_background.setOffset();
     if(m_currentState != 0)
-        m_states[m_currentState]->onBeforeLeaving();
+        static_cast<STATE*>(m_states[m_currentState].get())->onBeforeLeaving();
     m_currentState = typeid (STATE).hash_code();
     static_cast<STATE*>(m_states[m_currentState].get())->onEnter(data...);
 }
 
 template<typename STATE>
-State &StateMachine::get() const
+STATE &StateMachine::get() const
 {
     std::size_t index = typeid(STATE).hash_code();
     if(m_states.find(index) == m_states.end())
@@ -531,7 +532,7 @@ State &StateMachine::get() const
 
     auto found = m_states.find(index);
     if(found == m_states.end()) throw "State index not found";
-    return *found->second;
+    return static_cast<STATE&>(*found->second);
 }
 
 }

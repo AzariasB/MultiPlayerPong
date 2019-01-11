@@ -204,7 +204,7 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
     class #{at_name}Atlas {
       public:
         struct Holder {
-          const int textureId = #{atlas_id};
+          const sf::Uint64 textureId = #{atlas_id};
           const sf::IntRect bounds;
         };
 
