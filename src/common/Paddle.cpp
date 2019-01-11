@@ -88,7 +88,7 @@ void Paddle::retract()
 
 void Paddle::setYVelocity(float32 yVelocity)
 {
-    m_velocity.y = yVelocity;
+    m_velocity.y = yVelocity * PADDLE_SPEED;
     mBody->SetLinearVelocity(m_velocity);
 }
 

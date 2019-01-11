@@ -66,7 +66,9 @@ PauseState::PauseState():
 
     m_menu.normalizeButtons(10);
 
-    resume.clickedSignal.add([](){pr::stateMachine().setCurrentState<PlaySoloState>();});
+    resume.clickedSignal.add([](){
+        pr::stateMachine().fadeTo<PlaySoloState>();
+    });
     options.clickedSignal.add([](){
         pr::stateMachine().slideTo<OptionState>(cc::SLIDE_DIRECTION::SLIDE_RIGHT);
     });
@@ -75,7 +77,7 @@ PauseState::PauseState():
     });
     restart.clickedSignal.add([](){
         pr::game().reset();
-        pr::stateMachine().setCurrentState<PlaySoloState>();
+        pr::stateMachine().fadeTo<PlaySoloState>();
     });
 
     pr::translator().translationChangedSignal.add([this](){
@@ -85,13 +87,6 @@ PauseState::PauseState():
 
 PauseState::~PauseState()
 {
-}
-
-void PauseState::onAfterLeaving()
-{
-    if(!pr::stateMachine().currentIs<PlaySoloState>()){
-        pr::stateMachine().get<PlaySoloState>().onAfterLeaving();
-    }
 }
 
 

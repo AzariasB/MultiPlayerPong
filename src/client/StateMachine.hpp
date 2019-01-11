@@ -519,8 +519,11 @@ void StateMachine::setCurrentState(Args...data)
     m_background.setOffset();
     if(m_currentState != 0)
         static_cast<STATE*>(m_states[m_currentState].get())->onBeforeLeaving();
+    std::size_t  oldState = m_currentState;
     m_currentState = typeid (STATE).hash_code();
     static_cast<STATE*>(m_states[m_currentState].get())->onEnter(data...);
+    if(oldState != 0)
+        m_states[oldState]->onAfterLeaving();
 }
 
 template<typename STATE>

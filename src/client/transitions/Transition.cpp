@@ -41,7 +41,6 @@ void Transition::update(const sf::Time &elapsed)
 {
     if(progress(elapsed)){
         m_switchState();
-        pr::stateMachine().getStateFromId(m_exitingStateLabel).onAfterLeaving();
     }
 }
 
