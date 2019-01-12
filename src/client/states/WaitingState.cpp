@@ -113,7 +113,7 @@ void WaitingState::update(const sf::Time &elapsed)
 
 }
 
-void WaitingState::onEnter(std::string &data)
+void WaitingState::onEnter(std::string &&data)
 {
     c_state = CONNECTION_STATE::PENDING;
     m_loading.setState(Loading::LD_INACTIVE);

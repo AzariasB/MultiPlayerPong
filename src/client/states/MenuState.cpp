@@ -110,7 +110,7 @@ MenuState::MenuState() :
         ip.confirmedSignal.add([this, &ip](std::string entered){
             if(isValidIp(entered)){
                 pr::dialogManager().hideDialog(ip.id());
-                pr::stateMachine().slideTo<WaitingState>(cc::SLIDE_DIRECTION::SLIDE_UP, entered);
+                pr::stateMachine().slideTo<WaitingState>(cc::SLIDE_DIRECTION::SLIDE_UP, std::move(entered));
             }else{
                 DialogMessage &msg = pr::dialogManager().message("invalid_ip", "entered_invalid_id");
                 msg.okClickedSignal.add([&msg](){pr::dialogManager().hideDialog(msg.id());});

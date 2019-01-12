@@ -50,6 +50,12 @@ class Renderer;
 
 template<typename STATE, typename ...Args>
 struct TransitionData {
+
+    TransitionData(Args&&... data):
+        enteringData(std::forward<Args>(data)...)
+    {
+    }
+
     std::size_t enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
     updateExistingState = false;
@@ -59,6 +65,11 @@ struct TransitionData {
 
 template<typename STATE, typename ...Args>
 struct SlideData : public TransitionData<STATE, Args...> {
+
+    SlideData(Args&& ...data):
+        TransitionData<STATE, Args...> (std::forward<Args>(data)...)
+    {
+    }
 
     cc::SLIDE_DIRECTION direction;
 };

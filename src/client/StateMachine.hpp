@@ -78,7 +78,7 @@ public:
      * @param stateLabel the state to go to while fading
      */
     template<typename STATE, typename ...Args>
-    void fadeTo(Args ...args);
+    void fadeTo(Args&& ...args);
 
     /**
      * @brief goToState changes the state, with an animation
@@ -87,7 +87,7 @@ public:
      * @param data data to pass to the next state
      */
     template<typename STATE, typename ...Args>
-    void slideTo(cc::SLIDE_DIRECTION dir, Args... data);
+    void slideTo(cc::SLIDE_DIRECTION dir, Args&&... data);
 
     /**
      * @brief addState adds the state given as template parameter to the list of states (creates a new state object)
@@ -108,7 +108,7 @@ public:
      * @param data
      */
     template<typename STATE, typename ...Args>
-    void setCurrentState(Args ...data);
+    void setCurrentState(Args&& ...data);
 
     /**
      * @brief getCurrentState a reference to the current state
@@ -465,9 +465,11 @@ void Transition::setup(TransitionData<STATE, Args...> &data)
     m_tickExistingState = data.updateExistingState;
     m_switchState = [data, this](){
         std::apply(&StateMachine::setCurrentState<STATE, Args...>,
-           std::tuple_cat(std::make_tuple(std::ref(pr::stateMachine())),
-           data.enteringData
-        ));
+            std::tuple_cat(
+                std::make_tuple(std::ref(pr::stateMachine())),
+                data.enteringData
+            )
+        );
     };
 }
 
@@ -476,26 +478,24 @@ void Transition::setup(TransitionData<STATE, Args...> &data)
 // STATEMACHINE
 //-------------
 template<typename STATE, typename ...Args>
-void StateMachine::fadeTo(Args ...args)
+void StateMachine::fadeTo(Args&& ...args)
 {
     std::size_t stateLabel = typeid(STATE).hash_code();
     get<STATE>().onBeforeEnter();
-    TransitionData<STATE, Args...> td;
+    TransitionData<STATE, Args...> td(std::forward<Args>(args)...);
     td.enteringStateLabel = stateLabel;
     td.exitingStateLabel = m_currentState;
-    td.enteringData = std::make_tuple(std::forward(args)...);
     setCurrentState<FadeTransition>(td);
 }
 
 template<typename STATE, typename ...Args>
-void StateMachine::slideTo(cc::SLIDE_DIRECTION dir, Args ...data)
+void StateMachine::slideTo(cc::SLIDE_DIRECTION dir, Args&& ...data)
 {
-    SlideData<STATE, Args...> td;
+    SlideData<STATE, Args...> td(std::forward<Args>(data)...);
     get<STATE>().onBeforeEnter();
     td.enteringStateLabel = typeid (STATE).hash_code();
     td.exitingStateLabel = m_currentState;
     td.direction = dir;
-    td.enteringData = std::make_tuple(std::forward<Args>(data)...);
     setCurrentState<SlideTransition>(td);
     pr::soundEngine().playSound(Assets::Sounds::Rollover1);
 }
@@ -514,14 +514,14 @@ bool StateMachine::currentIs()
 }
 
 template<typename STATE, typename ...Args>
-void StateMachine::setCurrentState(Args...data)
+void StateMachine::setCurrentState(Args&&...data)
 {
     m_background.setOffset();
     if(m_currentState != 0)
         static_cast<STATE*>(m_states[m_currentState].get())->onBeforeLeaving();
     std::size_t  oldState = m_currentState;
     m_currentState = typeid (STATE).hash_code();
-    static_cast<STATE*>(m_states[m_currentState].get())->onEnter(data...);
+    static_cast<STATE*>(m_states[m_currentState].get())->onEnter(std::forward<Args>(data)...);
     if(oldState != 0)
         m_states[oldState]->onAfterLeaving();
 }
