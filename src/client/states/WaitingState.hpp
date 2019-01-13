@@ -31,7 +31,7 @@
 
 #pragma once
 
-
+#include <SFML/Network/TcpSocket.hpp>
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 #include "src/client/widgets/Loading.hpp"
@@ -114,6 +114,8 @@ private:
     Loading m_loading;
 
     int m_pNumber = -1;
+
+    std::unique_ptr<sf::TcpSocket> m_socket;
 };
 
 

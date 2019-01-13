@@ -71,8 +71,6 @@ ClientApp::ClientApp() :
     m_dialogManager(),
     m_counter(cRManager().get<const sf::Font&>())
 {
-    socket.setBlocking(false);
-
     sf::Image img = cRManager().get<const sf::Texture&>(Assets::Icons::Cursor).copyToImage();
     m_cursor.loadFromPixels(img.getPixelsPtr(), img.getSize(), sf::Vector2u(img.getSize().x / 2, img.getSize().y / 2));
     configureWindow();
@@ -224,7 +222,6 @@ void ClientApp::run(int argc, char** argv)
 
         window->display();
     }
-    socket.disconnect();
 }
 
 void ClientApp::setLocale()
@@ -268,11 +265,6 @@ const Game& ClientApp::getGame() const
 Game& ClientApp::getGame()
 {
     return game;
-}
-
-sf::TcpSocket& ClientApp::getSocket()
-{
-    return socket;
 }
 
 StateMachine& ClientApp::getStateMachine()

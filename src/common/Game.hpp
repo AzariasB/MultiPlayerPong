@@ -169,6 +169,8 @@ public:
      */
     int getNumWinner() const;
 
+    const Player &getWinner() const;
+
     /**
      * @brief isCountingDown
      * @return wether the game is currently doing the countdown before the start

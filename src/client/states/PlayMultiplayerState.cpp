@@ -52,9 +52,12 @@ PlayMultiplayerState::~PlayMultiplayerState()
 
 void PlayMultiplayerState::update(const sf::Time &elapsed)
 {
+    if(!pr::stateMachine().currentIs<PlayMultiplayerState>()) return;
     PlayState::update(elapsed);
+    if(!m_socket) return;
+
     sf::Packet rcvPacket;
-    if(pr::socket().receive(rcvPacket) == sf::Socket::Done){
+    if(m_socket->receive(rcvPacket) == sf::Socket::Done){
         rcvPacket >> pr::game();
     }
 }
@@ -64,26 +67,30 @@ int PlayMultiplayerState::playerNum()
     return m_pNumber;
 }
 
-void PlayMultiplayerState::onEnter(int pNumber)
+void PlayMultiplayerState::onEnter(int pNumber, std::unique_ptr<sf::TcpSocket> &socket)
 {
     m_pNumber = pNumber;
+    m_socket.swap(socket);
 }
 
 void PlayMultiplayerState::handleEvent(const sf::Event& ev)
 {
     if(!pr::stateMachine().currentIs<PlayMultiplayerState>()) return;
-
     PlayState::handleEvent(ev);
+    if(!m_socket) return;
+
     sf::Event realEv = pr::game().input().toBaseEvent(ev, m_pNumber);
     if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
         sf::Packet p;
         p << realEv.type << realEv.key.code;
-        pr::socket().send(p);
+        m_socket->send(p);
     }
 }
 
 void PlayMultiplayerState::onBeforeLeaving()
 {
+    m_socket->disconnect();
+    m_socket = {};
 }
 
 

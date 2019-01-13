@@ -69,11 +69,6 @@ Renderer &pr::renderer()
     return ClientApp::getInstance().getRenderer();
 }
 
-sf::TcpSocket &pr::socket()
-{
-    return ClientApp::getInstance().getSocket();
-}
-
 DialogManager &pr::dialogManager()
 {
     return ClientApp::getInstance().getDialogManager();

@@ -93,12 +93,6 @@ public:
     Renderer &getRenderer();
 
     /**
-     * @brief getSocket reference to the client's socket
-     * @return a reference to the socket
-     */
-    sf::TcpSocket &getSocket();
-
-    /**
      * @brief getStateMachine reference to the state machine
      * @return a reference to the state machine
      */
@@ -116,6 +110,10 @@ public:
      */
     const SoundEngine &getSoundEngine() const;
 
+    /**
+     * @brief getWindow reference to the window used to draw stuff
+     * @return
+     */
     sf::RenderWindow &getWindow();
 
     /**
@@ -250,12 +248,6 @@ private:
      * all our states
      */
     StateMachine stateMachine;
-
-    /**
-     * @brief socket the socket used to connect to the
-     * server
-     */
-    sf::TcpSocket socket;
 
     /**
      * @brief m_sEngine the sound engine : to have an easy

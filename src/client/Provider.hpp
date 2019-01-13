@@ -62,8 +62,6 @@ SoundEngine &soundEngine();
 
 Renderer &renderer();
 
-sf::TcpSocket &socket();
-
 DialogManager &dialogManager();
 
 Translator &translator();

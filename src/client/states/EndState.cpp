@@ -117,18 +117,20 @@ void EndState::onEnter(int playerNum)
     if(gm == GAME_MODE::SOLO_1V1){
         pr::soundEngine().playSound(Assets::Sounds::Win);
         sf::String res = "Player " + std::to_string(pr::game().getNumWinner()) + " ";
-        m_content.setString({res, "won"});
+        sf::String score = "\n Score : " + std::to_string(pr::game().getWinner().getScore());
+        m_content.setString({res, "won", score});
         updateVerticesColor(true);
     } else {
         bool winner = pr::game().getNumWinner() == playerNum;
+        const Player& p = playerNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
+        std::string yourScore =  " \n Score : " + std::to_string(p.getScore());
         pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
         updateVerticesColor(winner);
-        m_content.setString(winner ? "you_won" : "you_lost");
+        m_content.setString({winner ? "you_won" : "you_lost", yourScore});
     }
     math::centerOrigin(m_content);
     m_content.setPosition(SF_CENTER_X, SF_CENTER_Y);
     pr::game().reset();
-    pr::socket().disconnect();
 }
 
 void EndState::update(const sf::Time &elapsed)

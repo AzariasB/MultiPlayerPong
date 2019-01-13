@@ -50,10 +50,9 @@ void Transition::onBeforeLeaving()
     m_switchState = {};
 }
 
-void Transition::handleEvent(const sf::Event &ev)
+void Transition::handleEvent(const sf::Event &)
 {
-    if(m_enteringStateLabel != 0)
-        pr::stateMachine().getStateFromId(m_enteringStateLabel).handleEvent(ev);
+    // Ignore to preven all bugs
 }
 
 State &Transition::enteringState() const

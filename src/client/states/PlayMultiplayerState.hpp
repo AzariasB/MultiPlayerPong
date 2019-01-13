@@ -31,8 +31,7 @@
 
 #pragma once
 
-
-#include <SFML/System/Thread.hpp>
+#include <SFML/Network/TcpSocket.hpp>
 #include "PlayState.hpp"
 
 namespace sf{
@@ -77,7 +76,7 @@ public:
      * @param mode game mode (multiplayer)
      * @param pNumber player number
      */
-    void onEnter(int pNumber);
+    void onEnter(int pNumber, std::unique_ptr<sf::TcpSocket> &socket);
 
     /**
      * @brief playerNum inherited function
@@ -94,6 +93,8 @@ public:
 
 private:
     int m_pNumber = -1;
+
+    std::unique_ptr<sf::TcpSocket> m_socket;
 
 };
 

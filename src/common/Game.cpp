@@ -152,6 +152,11 @@ void Game::setGameState(GAMESTATE gameState)
     m_state = gameState;
 }
 
+const Player &Game::getWinner() const
+{
+    return m_p1.isWinner() ? m_p1 : m_p2;
+}
+
 int Game::getNumWinner() const
 {
     return m_p1.isWinner() ? m_p1.getNum() : m_p2.isWinner() ? m_p2.getNum() : -1;
