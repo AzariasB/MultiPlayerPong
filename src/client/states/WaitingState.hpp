@@ -112,6 +112,8 @@ private:
      * @brief m_loading loading widget
      */
     Loading m_loading;
+
+    int m_pNumber = -1;
 };
 
 

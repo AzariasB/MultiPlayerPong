@@ -91,7 +91,6 @@ void WaitingState::update(const sf::Time &elapsed)
 
     //Blinking point
     bool startGame = false;
-    int playerNumber = -1;
     sf::Packet rcvPacket;
     sf::Socket::Status rcvStatus = pr::socket().receive(rcvPacket);
 
@@ -99,7 +98,7 @@ void WaitingState::update(const sf::Time &elapsed)
     if(rcvStatus == sf::Socket::Done){
         if(c_state == PENDING){
             c_state = CONNECTED;
-            rcvPacket >> playerNumber;
+            rcvPacket >> m_pNumber;
         }else if(c_state == CONNECTED){
             startGame = true;
         }
@@ -109,13 +108,14 @@ void WaitingState::update(const sf::Time &elapsed)
 
     if (startGame){
         pr::game().setGameMode(GAME_MODE::STANDARD_MULTIPLAYER);
-        pr::stateMachine().slideTo<PlayMultiplayerState>(cc::SLIDE_DIRECTION::SLIDE_LEFT, playerNumber);
+        pr::stateMachine().slideTo<PlayMultiplayerState>(cc::SLIDE_DIRECTION::SLIDE_LEFT, m_pNumber);
     }
 
 }
 
 void WaitingState::onEnter(std::string &&data)
 {
+    m_pNumber = -1;
     c_state = CONNECTION_STATE::PENDING;
     m_loading.setState(Loading::LD_INACTIVE);
 
