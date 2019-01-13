@@ -69,6 +69,9 @@ public:
      */
     void onAfterLeaving() override;
 
+    int playerNum() override;
+
+
     virtual ~PlaySoloState() override;
 };
 

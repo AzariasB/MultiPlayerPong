@@ -194,6 +194,18 @@ public:
      */
     Input &input();
 
+    /**
+     * @brief setGameMode setter for the game mode
+     * @param mode
+     */
+    void setGameMode(GAME_MODE mode);
+
+    /**
+     * @brief gameMode getter for the game mode
+     * @return
+     */
+    GAME_MODE gameMode() const;
+
 
 private:
     /**
@@ -266,6 +278,11 @@ private:
      * for the game, contains the bindings
      */
     Input m_input;
+
+    /**
+     * @brief m_gameMode current game mode
+     */
+    GAME_MODE m_gameMode;
 
     //"signals"
 public:

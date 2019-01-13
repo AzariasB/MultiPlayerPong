@@ -72,6 +72,18 @@ public:
      */
     void update(const sf::Time &elapsed) override;
 
+    /**
+     * @brief onEnter inherited function
+     * @param mode game mode (multiplayer)
+     * @param pNumber player number
+     */
+    void onEnter(int pNumber);
+
+    /**
+     * @brief playerNum inherited function
+     * @return number of the player
+     */
+    int playerNum() override;
 
     /**
      * @brief onLeave inherited function
@@ -81,7 +93,7 @@ public:
     virtual ~PlayMultiplayerState() override;
 
 private:
-
+    int m_pNumber = -1;
 
 };
 

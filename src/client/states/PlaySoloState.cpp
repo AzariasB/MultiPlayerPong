@@ -44,15 +44,14 @@ PlaySoloState::PlaySoloState():
 {
 }
 
+int PlaySoloState::playerNum()
+{
+    return pr::game().gameMode() == GAME_MODE::SOLO_AI ? 1 : 0;
+}
+
 void PlaySoloState::onBeforeEnter()
 {
     PlayState::onBeforeEnter();
-
-    if(ClientApp::getInstance().getPNumber() == 3) {
-        pr::game().getPlayer2().getPaddle().setIsAI(false);
-    } else {
-        pr::game().getPlayer2().getPaddle().setIsAI(true);
-    }
 
     pr::game().countdownEndedSignal.add([](){
         pr::game().setGameState(GAMESTATE::PLAYING);
@@ -68,6 +67,7 @@ void PlaySoloState::onBeforeEnter()
         (pNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2()).gainPoint();
     });
 }
+
 
 void PlaySoloState::onAfterLeaving()
 {

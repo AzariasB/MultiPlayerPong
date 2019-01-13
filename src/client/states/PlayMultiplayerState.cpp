@@ -59,10 +59,22 @@ void PlayMultiplayerState::update(const sf::Time &elapsed)
     }
 }
 
+int PlayMultiplayerState::playerNum()
+{
+    return m_pNumber;
+}
+
+void PlayMultiplayerState::onEnter(int pNumber)
+{
+    m_pNumber = pNumber;
+}
+
 void PlayMultiplayerState::handleEvent(const sf::Event& ev)
 {
+    if(!pr::stateMachine().currentIs<PlayMultiplayerState>()) return;
+
     PlayState::handleEvent(ev);
-    sf::Event realEv = pr::game().input().toBaseEvent(ev, ClientApp::getInstance().getPlayer().getNum());
+    sf::Event realEv = pr::game().input().toBaseEvent(ev, m_pNumber);
     if (realEv.type == sf::Event::KeyPressed || realEv.type == sf::Event::KeyReleased) {
         sf::Packet p;
         p << realEv.type << realEv.key.code;

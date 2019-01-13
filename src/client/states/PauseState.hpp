@@ -71,9 +71,11 @@ public:
      */
     void handleEvent(const sf::Event &ev) override;
 
-
 private:
 
+    /**
+     * @brief m_menu Menu displayed
+     */
     Menu m_menu;
 };
 

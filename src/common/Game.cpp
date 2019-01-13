@@ -217,4 +217,24 @@ Input &Game::input()
     return m_input;
 }
 
+void Game::setGameMode(GAME_MODE mode)
+{
+    m_gameMode = mode;
+    switch (mode) {
+    case GAME_MODE::SOLO_AI:
+        m_p1.getPaddle().setIsAI(false);
+        m_p2.getPaddle().setIsAI(true);
+        break;
+    case GAME_MODE::SOLO_1V1:
+    case GAME_MODE::STANDARD_MULTIPLAYER:
+        m_p1.getPaddle().setIsAI(false);
+        m_p2.getPaddle().setIsAI(false);
+    }
+}
+
+GAME_MODE Game::gameMode() const
+{
+    return m_gameMode;
+}
+
 }

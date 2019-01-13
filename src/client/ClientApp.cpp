@@ -248,41 +248,11 @@ void ClientApp::quit()
     window->close();
 }
 
-const Player& ClientApp::getPlayer() const
-{
-    if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
-    return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
-}
 
-Player& ClientApp::getPlayer()
-{
-    if (!hasPNumber())throw std::out_of_range("player number is out of range equals (" + std::to_string(m_number) + ")");
-    return m_number == 1 ? game.getPlayer1() : game.getPlayer2();
-}
-
-bool ClientApp::isWinner() const
-{
-    return hasPNumber() && getPlayer().isWinner();
-}
-
-void ClientApp::setPNumber(int pNumber)
-{
-    m_number = pNumber;
-}
-
-bool ClientApp::hasPNumber() const
-{
-    return m_number == 1 || m_number == 2;
-}
 
 bool ClientApp::isFullScreen() const
 {
     return m_isFullscreen;
-}
-
-int ClientApp::getPNumber() const
-{
-    return m_number;
 }
 
 Renderer& ClientApp::getRenderer()

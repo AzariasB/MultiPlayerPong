@@ -63,4 +63,10 @@ constexpr float POWERUP_SIDE = 50;
 constexpr int VELOCITY_ITERATIONS = 8;
 constexpr int POSITION_ITERATIONS = 3;
 
+enum GAME_MODE {
+    SOLO_1V1,
+    SOLO_AI,
+    STANDARD_MULTIPLAYER
+};
+
 }

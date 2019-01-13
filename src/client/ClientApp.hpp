@@ -93,39 +93,10 @@ public:
     Renderer &getRenderer();
 
     /**
-     * @brief getPlayer the player for this client application (could be player1 or player2 of the
-     * game object)
-     * @return the player associated with this application
-     */
-    Player &getPlayer();
-
-    /**
-     * @brief getPlayer const version of getPlayer
-     * @return a const reference to the player
-     */
-    const Player &getPlayer() const;
-
-    /**
      * @brief getSocket reference to the client's socket
      * @return a reference to the socket
      */
     sf::TcpSocket &getSocket();
-
-    /**
-     * @brief setPNumber sets the player number (1, 2 or 3)
-     * 3 being solo 1v1
-     * @param pNumber the number of the player
-     */
-    void setPNumber(int pNumber);
-
-    /**
-     * @brief getPNumber access to the player number
-     * 1 is player 1,
-     * 2 is player 2
-     * 3 is 1v1 local
-     * @return
-     */
-    int getPNumber() const;
 
     /**
      * @brief getStateMachine reference to the state machine
@@ -173,12 +144,6 @@ public:
     Translator &getTranslator();
 
     /**
-     * @brief isWinner wether the app's client is the winner (false if the game is still running)
-     * @return wether the app's client won the game
-     */
-    bool isWinner() const;
-
-    /**
      * @brief isFullScreen if the window is fullscreen
      * @return
      */
@@ -220,12 +185,6 @@ private:
      * @brief ClientApp default constructor, no data to input
      */
     ClientApp();
-
-    /**
-     * @brief hasPNumber if the current number of the app is 1 or 2
-     * @return wether the client number is a valid client number
-     */
-    bool hasPNumber() const;
 
     /**
      * @brief handleEvent handles the sfml event (closes the window if necessary)
@@ -291,12 +250,6 @@ private:
      * all our states
      */
     StateMachine stateMachine;
-
-    /**
-     * @brief m_number the number of the player
-     * is sent by the server
-     */
-    int m_number = -1;
 
     /**
      * @brief socket the socket used to connect to the

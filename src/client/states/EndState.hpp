@@ -79,7 +79,7 @@ public:
      * @brief onEnter inherited function
      * @param data
      */
-    void onEnter();
+    void onEnter(int playerNum = 0);
 
     /**
      * @brief onBeforeEnter inherited function

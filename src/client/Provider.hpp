@@ -64,8 +64,6 @@ Renderer &renderer();
 
 sf::TcpSocket &socket();
 
-Player &player();
-
 DialogManager &dialogManager();
 
 Translator &translator();

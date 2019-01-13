@@ -55,6 +55,7 @@ Lobby::Lobby() :
     listeningThread(&Lobby::listenSockets, this),
     m_nextPowerup(sf::seconds(3))
 {
+    game.setGameMode(GAME_MODE::STANDARD_MULTIPLAYER);
     game.hitPaddleSignal.add([this](std::size_t pNumber, b2Vec2 pos){
         if (pNumber == 1)
             game.getPlayer1().gainPoint();

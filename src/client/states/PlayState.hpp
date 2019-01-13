@@ -86,6 +86,12 @@ public:
      */
     virtual void onAfterLeaving() override;
 
+    /**
+     * @brief playerNum getting the number of the player
+     * @return
+     */
+    virtual int playerNum() = 0;
+
     virtual ~PlayState() override;
 
 private:
@@ -119,6 +125,7 @@ private:
      * @brief gameFinisehd wether the game ended
      */
     bool gameFinisehd = false;
+
 };
 
 

@@ -74,11 +74,6 @@ sf::TcpSocket &pr::socket()
     return ClientApp::getInstance().getSocket();
 }
 
-Player &pr::player()
-{
-    return ClientApp::getInstance().getPlayer();
-}
-
 DialogManager &pr::dialogManager()
 {
     return ClientApp::getInstance().getDialogManager();

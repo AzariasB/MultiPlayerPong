@@ -84,11 +84,11 @@ MenuState::MenuState() :
     });
 
     soloButton.clickedSignal.add([](){
-        ClientApp::getInstance().setPNumber(1);
+        pr::game().setGameMode(GAME_MODE::SOLO_AI);
         pr::stateMachine().slideTo<PlaySoloState>(cc::SLIDE_DIRECTION::SLIDE_UP);
     });
     solo1v1.clickedSignal.add([](){
-        ClientApp::getInstance().setPNumber(3);
+        pr::game().setGameMode(GAME_MODE::SOLO_1V1);
         pr::stateMachine().slideTo<PlaySoloState>(cc::SLIDE_DIRECTION::SLIDE_UP);
     });
     optionButton.clickedSignal.add([](){
