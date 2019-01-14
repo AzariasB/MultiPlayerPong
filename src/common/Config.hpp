@@ -39,8 +39,8 @@ constexpr float ARENA_WIDTH = 18.75f;
 constexpr float ARENA_HEIGHT = 14.0625f;
 
 //Paddle
-constexpr float PADDLE_WIDTH = 0.15f;
-constexpr float PADDLE_HEIGHT = 1.5f;
+constexpr float PADDLE_WIDTH = 0.4f;
+constexpr float PADDLE_HEIGHT = 1.8f;
 constexpr float PADDLE_SPEED = 3.5f;
 
 //Ball
