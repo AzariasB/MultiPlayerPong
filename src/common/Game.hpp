@@ -169,6 +169,10 @@ public:
      */
     int getNumWinner() const;
 
+    /**
+     * @brief getWinner reference to the player who won
+     * @return
+     */
     const Player &getWinner() const;
 
     /**

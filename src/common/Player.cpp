@@ -44,7 +44,6 @@ Player::Player(Game& game, std::size_t num) :
 void Player::reset()
 {
     m_paddle.reset();
-    m_num = -1;
     m_score = 0;
     m_isWinner = false;
 }

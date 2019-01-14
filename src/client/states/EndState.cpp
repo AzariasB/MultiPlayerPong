@@ -121,7 +121,8 @@ void EndState::onEnter(int playerNum)
         m_content.setString({res, "won", score});
         updateVerticesColor(true);
     } else {
-        bool winner = pr::game().getNumWinner() == playerNum;
+        int numWinner = pr::game().getNumWinner();
+        bool winner = numWinner == playerNum;
         const Player& p = playerNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
         std::string yourScore =  " \n Score : " + std::to_string(p.getScore());
         pr::soundEngine().playSound(winner ? Assets::Sounds::Win : Assets::Sounds::Loose);
