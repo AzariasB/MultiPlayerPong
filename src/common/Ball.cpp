@@ -41,8 +41,7 @@ namespace mp {
 Ball::Ball(const Game& game) :
     PhysicObject(game, this, declareBody(game))
 {
-    // TODO : randomize direction
-    mBody->ApplyLinearImpulse(b2Vec2(BALL_DIR_X * BALL_SPEED, BALL_DIR_Y * BALL_SPEED), mBody->GetWorldCenter(), false);
+    reset();
 }
 
 b2Body *Ball::declareBody(const Game &game)
@@ -65,7 +64,12 @@ void Ball::update(const sf::Time &elapsed)
 void Ball::reset()
 {
     mBody->SetTransform(b2Vec2(BALL_START_X, BALL_START_Y),0);
-    mBody->SetLinearVelocity(b2Vec2(BALL_DIR_X * BALL_SPEED, BALL_DIR_Y * BALL_SPEED));
+    int xR = math::rrand(0, 100);
+    int xDir = xR < 50 ? 1 : -1;
+    int yR = math::rrand(0, 100);
+    int yDir = yR < 50 ? 1 : -1;
+
+    mBody->SetLinearVelocity(b2Vec2(BALL_DIR_X * BALL_SPEED * xDir, BALL_DIR_Y * BALL_SPEED * yDir));
 }
 
 void Ball::extend()
