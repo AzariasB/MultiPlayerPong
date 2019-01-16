@@ -49,12 +49,10 @@
 namespace mp {
 
 PlayState::PlayState():
-    m_p1ScoreText("0", pr::resourceManager().get<const sf::Font&>()),
-    m_p2ScoreText("0", pr::resourceManager().get<const sf::Font&>()),
+    m_p1Score(m_particleGenerator, {SF_ARENA_WIDTH /4.f, 70}),
+    m_p2Score(m_particleGenerator, { (SF_ARENA_WIDTH / 4.f) * 3.f, 70}),
     m_nextParticle(cc::Times::trailCountdownTime, true)
 {
-    m_p1ScoreText.setPosition(SF_ARENA_WIDTH / 4 - m_p1ScoreText.getGlobalBounds().width, 0);
-    m_p2ScoreText.setPosition((SF_ARENA_WIDTH / 4)*3 - m_p2ScoreText.getGlobalBounds().width , 0);
 
     m_nextParticle.setCallback([this](){
         m_particleGenerator.ballTrail(b2VecToSfVect(pr::game().getBall().getPosition()));
@@ -64,17 +62,14 @@ PlayState::PlayState():
 void PlayState::onBeforeEnter()
 {
     pr::game().hitPaddleSignal.add([this](std::size_t pNum, b2Vec2 position){
-        Q_UNUSED(pNum);
         pr::soundEngine().playSound(Assets::Sounds::Bounce);
 
-        sf::Vector2f gainPointPos = m_p1ScoreText.getPosition();
-        if(pNum == 2){
-            gainPointPos = m_p2ScoreText.getPosition();
+        if(pNum == 1){
+            m_p1Score.gainPoint();
+        } else if(pNum == 2){
+            m_p2Score.gainPoint();
         }
-        gainPointPos.x -= 30.f;
-        gainPointPos.y += 30.f;
 
-        m_particleGenerator.gainPoint(gainPointPos );
         m_particleGenerator.explode(b2VecToSfVect(position));
         pr::renderer().shake();
     });
@@ -96,8 +91,10 @@ void PlayState::update(const sf::Time &elapsed)
     pr::game().update(elapsed);
 
     m_nextParticle.update(elapsed);
-    m_p1ScoreText.setString(std::to_string(pr::game().getPlayer1().getScore()));
-    m_p2ScoreText.setString(std::to_string(pr::game().getPlayer2().getScore()));
+    m_p1Score.setScore(pr::game().getPlayer1().getScore());
+    m_p2Score.setScore(pr::game().getPlayer2().getScore());
+    m_p1Score.update(elapsed);
+    m_p2Score.update(elapsed);
 
     if(pr::game().isCountingDown()){
         int secs = static_cast<int>(pr::game().getCountdownTime().asSeconds());
@@ -132,8 +129,8 @@ void PlayState::render(Renderer &renderer) const
             .renderWall(pr::game().upperWall())
             .renderWall(pr::game().lowerWall())
             .pop()
-            .draw(m_p1ScoreText)
-            .draw(m_p2ScoreText);
+            .render(m_p1Score)
+            .render(m_p2Score);
 
 }
 

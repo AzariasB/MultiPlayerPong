@@ -1,13 +1,13 @@
 # MultiPlayer Pong
 
-The pong game, in multiplayer, using sfml
+The pong game, in multiplayer, using C++17
 
 Dependencies
 ---
-- SFML (2.5.0)
+- SFML (2.5.1)
 - Qmake (3.1)
-- QtCore (5.10.1)
-- Box2D (2.3.1)
+- QtCore (5.12.0)
+- Box2D (2.3.2)
 
 Compiling
 ---------

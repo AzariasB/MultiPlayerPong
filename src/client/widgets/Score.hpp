@@ -70,7 +70,7 @@ private:
 
     sf::Text m_text;
 
-    twin::Twin<unsigned int, std::function<void()>> m_fontSize;
+    twin::Twin<int, std::function<void()>> m_fontSize;
 
 };
 

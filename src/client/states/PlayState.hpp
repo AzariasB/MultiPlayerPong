@@ -36,6 +36,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/particles/ParticleGenerator.hpp"
+#include "src/client/widgets/Score.hpp"
 #include "src/common/Timer.hpp"
 #include "src/lib/twin.hpp"
 
@@ -98,11 +99,11 @@ private:
     /**
      * @brief m_p1ScoreText score of the player1
      */
-    sf::Text m_p1ScoreText;
+    Score m_p1Score;
     /**
      * @brief m_p2ScoreText score of the player2
      */
-    sf::Text m_p2ScoreText;
+    Score m_p2Score;
 
     /**
      * @brief lastCountdownValue last countdown displayed value

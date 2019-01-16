@@ -46,12 +46,13 @@ Score::Score(ParticleGenerator &particleGen, const sf::Vector2f &position):
 {
     m_text.setPosition(position);
     math::centerOrigin(m_text);
+    m_fontSize = twin::Twin<int>(30);
 }
 
 bool Score::update(const sf::Time &time)
 {
     m_fontSize.step(time);
-    m_text.setCharacterSize(m_fontSize.get());
+    m_text.setCharacterSize(static_cast<unsigned int>(m_fontSize.get()));
 
     return true;
 }
@@ -68,17 +69,24 @@ int Score::getScore() const
 
 void Score::setScore(int nwScore)
 {
+    if(nwScore > m_score){
+        gainPoint();
+    }
+
     m_score = nwScore;
+    m_text.setString(std::to_string(m_score));
 }
 
 void Score::gainPoint()
 {
     std::function<void()> callback = [this](){
         m_particleGenerator.gainPoint(m_text.getPosition());
-        m_fontSize = twin::makeTwin(50u, 30u, sf::milliseconds(100), twin::easing::expoInOut);
+        m_fontSize.setEasing(twin::easing::quintIn);
     };
 
-    m_fontSize = twin::makeTwin(30u, 50u, sf::milliseconds(100), twin::easing::expoInOut, std::move(callback));
+    m_fontSize = twin::makeTwin(30, 80, sf::milliseconds(200), twin::easing::quintOut);
+    m_fontSize.setYoyo(true)
+            .setYoyoCallBack(callback);
 }
 
 

@@ -532,16 +532,35 @@ enum easing{
         {
         }
 
-        Twin():
-            from(0),
-            to(0),
-            totalTime(),
-            advance(),
+        Twin(const BOUND& value):
+            from(value),
+            to(value),
             totalProgress(1.f),
+            advance(),
             finishCallback(noop),
             easingF(getEasing(linear))
         {
 
+        }
+
+        Twin() = default;
+
+        Twin &setEasing(easing ease)
+        {
+            easingF = getEasing((ease));
+            return *this;
+        }
+
+        Twin &setYoyo(bool isYoyo)
+        {
+            yoyo = isYoyo;
+            return *this;
+        }
+
+        Twin &setYoyoCallBack(const std::function<void()> callback)
+        {
+            yoyoCallBack = std::move(callback);
+            return *this;
         }
 
         /**
@@ -555,10 +574,21 @@ enum easing{
             advance += progress;
             totalProgress = advance/totalTime;
             if(advance >= totalTime){
+                sf::Time diff = advance - totalTime;
                 advance = totalTime;
                 totalProgress = advance/totalTime;
 
-                if(finishCallback) finishCallback();
+                if(yoyo){
+                    yoyo = false;
+                    if(yoyoCallBack) yoyoCallBack();
+                    advance = diff;
+                    totalProgress = advance / totalTime;
+                    BOUND tmp = from;
+                    from = to;
+                    to = tmp;
+                } else if(finishCallback){
+                    finishCallback();
+                }
             }
         }
 
@@ -645,24 +675,29 @@ enum easing{
         std::function<void()> noop = [](){};
 
         //the value from where the tweening starts
-        BOUND from;
+        BOUND from = 0;
 
         //The value the tweening must reach
-        BOUND to;
+        BOUND to = 0;
 
         //The time it must take to reach the value
-        sf::Time totalTime;
+        sf::Time totalTime = sf::Time::Zero;
 
         //The current time value
-        sf::Time advance;
+        sf::Time advance = sf::Time::Zero;
 
-        float totalProgress;//total progress  0 = begin, 1 = finished
+        //total progress  0 = begin, 1 = finished
+        float totalProgress = 0.f;
 
         //the function to call whenever the tweening is over
-        F finishCallback;
+        F finishCallback = noop;
 
         //The easing function to get the value
-        std::function<BOUND(float,BOUND,BOUND)> easingF;
+        std::function<BOUND(float,BOUND,BOUND)> easingF = linearImpl<BOUND>;
+
+        bool yoyo = false;
+
+        std::function<void()> yoyoCallBack;
     };
 
     /**
