@@ -35,6 +35,7 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <unordered_map>
+#include <typeindex>
 
 #include "ClientConf.hpp"
 #include "SoundEngine.hpp"
@@ -134,7 +135,7 @@ public:
      * @brief getCurrentStateIndex the index of the current state (-1 if no states was set)
      * @return the index of the current state (-1 if no states was set)
      */
-    std::size_t getCurrentStateIndex()
+    std::type_index getCurrentStateIndex()
     {
         return m_currentState;
     }
@@ -145,19 +146,21 @@ private:
      * @brief states keep in memory all the newly created states
      * using smart pointers in order to delete them when getting out of scope
      */
-    std::unordered_map<std::size_t, std::unique_ptr<State>> m_states;
+    std::unordered_map<std::type_index, std::unique_ptr<State>> m_states;
 
     /**
      * @brief currentStateIndex index of the current state
      */
-    std::size_t m_currentState = 0;
+    std::type_index m_currentState = NULL_INDEX;
 
     /**
      * @brief m_blackboard the blackboard background
      */
     BackgroundParallax m_background;
 
-    State &getStateFromId(std::size_t state) const;
+    State &getStateFromId(std::type_index state) const;
+
+    static const std::type_index NULL_INDEX;
 
     friend class Transition;
 };
@@ -244,13 +247,13 @@ private:
      * @brief mExitingStateLabel label of the state
      * that is going to leave the scene
      */
-    std::size_t m_exitingStateLabel = 0;
+    std::type_index m_exitingStateLabel = StateMachine::NULL_INDEX;
 
     /**
      * @brief mEnteringStateLabel label of the state
      * that is going to enter on the scene
      */
-    std::size_t m_enteringStateLabel = 0;
+    std::type_index m_enteringStateLabel = StateMachine::NULL_INDEX;
 
     /**
      * @brief m_switchState function called when the transition
@@ -480,21 +483,17 @@ void Transition::setup(TransitionData<STATE, Args...> &data)
 template<typename STATE, typename ...Args>
 void StateMachine::fadeTo(Args&& ...args)
 {
-    std::size_t stateLabel = typeid(STATE).hash_code();
+    std::type_index stateLabel(typeid(STATE));
     get<STATE>().onBeforeEnter();
-    TransitionData<STATE, Args...> td(std::forward<Args>(args)...);
-    td.enteringStateLabel = stateLabel;
-    td.exitingStateLabel = m_currentState;
+    TransitionData<STATE, Args...> td(m_currentState, stateLabel, std::forward<Args>(args)...);
     setCurrentState<FadeTransition>(td);
 }
 
 template<typename STATE, typename ...Args>
 void StateMachine::slideTo(cc::SLIDE_DIRECTION dir, Args&& ...data)
 {
-    SlideData<STATE, Args...> td(std::forward<Args>(data)...);
+    SlideData<STATE, Args...> td(m_currentState, std::type_index(typeid(STATE)), std::forward<Args>(data)...);
     get<STATE>().onBeforeEnter();
-    td.enteringStateLabel = typeid (STATE).hash_code();
-    td.exitingStateLabel = m_currentState;
     td.direction = dir;
     setCurrentState<SlideTransition>(td);
     pr::soundEngine().playSound(Assets::Sounds::Rollover1);
@@ -504,32 +503,32 @@ template<typename T>
 typename std::enable_if<std::is_base_of<State,T>::value, State&>::type
 StateMachine::addState()
 {
-    return *(m_states[typeid(T).hash_code()] = std::make_unique<T>());
+    return *(m_states[std::type_index(typeid(T))] = std::make_unique<T>());
 }
 
 template<typename STATE>
 bool StateMachine::currentIs()
 {
-    return m_currentState == typeid(STATE).hash_code();
+    return m_currentState == std::type_index(typeid(STATE));
 }
 
 template<typename STATE, typename ...Args>
 void StateMachine::setCurrentState(Args&&...data)
 {
     m_background.setOffset();
-    if(m_currentState != 0)
+    if(m_currentState != NULL_INDEX)
         static_cast<STATE*>(m_states[m_currentState].get())->onBeforeLeaving();
-    std::size_t  oldState = m_currentState;
-    m_currentState = typeid (STATE).hash_code();
+    std::type_index  oldState = m_currentState;
+    m_currentState =  std::type_index(typeid (STATE));
     static_cast<STATE*>(m_states[m_currentState].get())->onEnter(std::forward<Args>(data)...);
-    if(oldState != 0)
+    if(oldState != NULL_INDEX)
         m_states[oldState]->onAfterLeaving();
 }
 
 template<typename STATE>
 STATE &StateMachine::get() const
 {
-    std::size_t index = typeid(STATE).hash_code();
+    std::type_index index(typeid(STATE));
     if(m_states.find(index) == m_states.end())
         throw std::out_of_range("Index not found");
 

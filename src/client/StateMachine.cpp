@@ -35,6 +35,8 @@
 
 namespace mp {
 
+const std::type_index StateMachine::NULL_INDEX = std::type_index(typeid(StateMachine));
+
 StateMachine::StateMachine()
 {
 }
@@ -54,7 +56,7 @@ void StateMachine::initiliaze()
 
 const State &StateMachine::getCurrentState() const
 {
-    if (m_currentState == 0)throw std::out_of_range("The current state index is not set");
+    if (m_currentState == NULL_INDEX)throw std::out_of_range("The current state index is not set");
     auto found = m_states.find(m_currentState);
     if(found == m_states.end()) throw std::out_of_range("The given state index does not exist");
     return *found->second;
@@ -67,7 +69,7 @@ void StateMachine::translate(float nwX, float nwY)
 
 State &StateMachine::getCurrentState()
 {
-    if (m_currentState == 0)throw std::out_of_range("The current state index is not set");
+    if (m_currentState == NULL_INDEX)throw std::out_of_range("The current state index is not set");
     auto found = m_states.find(m_currentState);
     if(found == m_states.end()) throw std::out_of_range("The given state index does not exist");
     return *found->second;
@@ -80,7 +82,7 @@ void StateMachine::render(Renderer &renderer) const
            .render(getCurrentState());
 }
 
-State &StateMachine::getStateFromId(std::size_t index) const
+State &StateMachine::getStateFromId(std::type_index index) const
 {
     if(m_states.find(index) == m_states.end())
         throw std::out_of_range("Index not found");

@@ -34,6 +34,7 @@
 
 #include <SFML/System/NonCopyable.hpp>
 #include <memory>
+#include <typeindex>
 #include <qglobal.h>
 #include "Renderable.hpp"
 #include "ClientConf.hpp"
@@ -51,12 +52,14 @@ class Renderer;
 template<typename STATE, typename ...Args>
 struct TransitionData {
 
-    TransitionData(Args&&... data):
+    TransitionData(std::type_index from, std::type_index to, Args&&... data):
+        enteringStateLabel(to),
+        exitingStateLabel(from),
         enteringData(std::forward<Args>(data)...)
     {
     }
 
-    std::size_t enteringStateLabel, exitingStateLabel;
+    std::type_index enteringStateLabel, exitingStateLabel;
     bool updateEnteringState = false,
     updateExistingState = false;
 
@@ -66,8 +69,8 @@ struct TransitionData {
 template<typename STATE, typename ...Args>
 struct SlideData : public TransitionData<STATE, Args...> {
 
-    SlideData(Args&& ...data):
-        TransitionData<STATE, Args...> (std::forward<Args>(data)...)
+    SlideData(std::type_index from, std::type_index to, Args&& ...data):
+        TransitionData<STATE, Args...> (from, to, std::forward<Args>(data)...)
     {
     }
 

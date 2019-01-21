@@ -176,7 +176,7 @@ void OptionState::update(const sf::Time &elapsed)
 
 void OptionState::handleEvent(const sf::Event &ev)
 {
-    if(pr::stateMachine().getCurrentStateIndex() != typeid(OptionState).hash_code()) return;
+    if(!pr::stateMachine().currentIs<OptionState>()) return;
 
     if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
         pr::stateMachine().slideTo<MenuState>(cc::SLIDE_DIRECTION::SLIDE_LEFT);
