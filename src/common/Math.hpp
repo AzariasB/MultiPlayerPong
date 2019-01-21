@@ -45,21 +45,6 @@ std::string uuid();
  */
 int rrand(int min, int max);
 
-/**
- * @brief clampf floating clamp, returns value if value is between min and max, min if the value is less than min
- * max if value is more than max
- * @param min the min value
- * @param max the max value
- * @param val the value to evaluate
- * @return
- */
-template<typename T>
-T clampf(T min, T max, T val)
-{
-    return val < min ? min : val > max ? max : val;
-}
-
-
 template<typename T>
 T &centerOrigin(T& ref)
 {
