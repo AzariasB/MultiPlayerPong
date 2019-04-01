@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 
+#include <SFML/Window/Event.hpp>
+#include <limits>
+
 #include "src/client/StateMachine.hpp"
 
 #include "src/common/Config.hpp"
@@ -50,9 +53,11 @@ void Transition::onBeforeLeaving()
     m_switchState = {};
 }
 
-void Transition::handleEvent(const sf::Event &)
+void Transition::handleEvent(const sf::Event &ev)
 {
-    // Ignore to preven all bugs
+    if(ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Escape){
+        progress(sf::seconds(700.f));
+    }
 }
 
 State &Transition::enteringState() const

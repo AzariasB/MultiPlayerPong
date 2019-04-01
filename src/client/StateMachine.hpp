@@ -205,7 +205,7 @@ public:
      * @brief handleEvent handles the event : the entering state is the one handling the event
      * @param ev
      */
-    virtual void handleEvent(const sf::Event &) override;
+    virtual void handleEvent(const sf::Event &ev) override;
 
     /**
      * @brief onEnter inherited function
