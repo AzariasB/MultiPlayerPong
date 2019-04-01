@@ -29,7 +29,7 @@ namespace math{
 /**
  * @brief CHARS used to generate the UUID
  */
-const std::string CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const std::string CHARS = "0123456789abcdef";
 
 /**
  * @brief uuid universal unique identifier implementation

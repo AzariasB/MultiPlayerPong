@@ -13,18 +13,10 @@ DEFINES += "SERVER"
 
 
 #Change config depending on the build configuration
-CONFIG(debug, debug|release) {
-        TARGET = server
-        DESTDIR = build/server
-        OBJECTS_DIR = build/server/.obj
-        MOC_DIR = build/server/.moc
-        RCC_DIR = build/server/.rcc
-} else {
-        TARGET = server
-        DESTDIR = build/server
-        OBJECTS_DIR = build/server/.obj
-        MOC_DIR = build/server/.moc
-        RCC_DIR = build/server/.rcc
-}
+TARGET = server
+DESTDIR = build/server
+OBJECTS_DIR = build/server/.obj
+MOC_DIR = build/server/.moc
+RCC_DIR = build/server/.rcc
 
 include(src/server/server.pro)

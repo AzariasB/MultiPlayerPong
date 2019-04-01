@@ -12,19 +12,12 @@ unix:LIBS +=  -L/usr/local/lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml
 DEFINES += "CLIENT"
 
 #Change config depending on the build configuration
-CONFIG(debug, debug|release) {
-        TARGET = pong
-        DESTDIR = build/client
-        OBJECTS_DIR = build/client/.obj
-        MOC_DIR = build/client/.moc
-        RCC_DIR = build/client/.rcc
-} else {
-        TARGET = pong
-        DESTDIR = build/client
-        OBJECTS_DIR = build/client/.obj
-        MOC_DIR = build/client/.moc
-        RCC_DIR = build/client/.rcc
-}
+TARGET = pong
+DESTDIR = client
+OBJECTS_DIR = client/.obj
+MOC_DIR = client/.moc
+RCC_DIR = client/.rcc
+
 
 include(src/client/client.pro)
 
