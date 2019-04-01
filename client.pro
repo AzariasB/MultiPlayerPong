@@ -18,7 +18,6 @@ OBJECTS_DIR = client/.obj
 MOC_DIR = client/.moc
 RCC_DIR = client/.rcc
 
-
 include(src/client/client.pro)
 
 RESOURCES += resources.qrc

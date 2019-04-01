@@ -16,6 +16,10 @@ unix:INCLUDEPATH += /usr/local/include
 unix:LIBS +=  -L/usr/local/lib
 unix:LIBS += ../../lib/libBox2D.a
 
+CONFIG(debug){
+    DEFINES += MP_DEBUG
+}
+
 SOURCES +=\
     src/main.cpp \
     src/common/Application.cpp \

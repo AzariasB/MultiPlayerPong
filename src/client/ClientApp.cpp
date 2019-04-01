@@ -189,7 +189,11 @@ void ClientApp::run(int argc, char** argv)
 
     this->setLocale();
     static_cast<OptionState&>(stateMachine.get<OptionState>()).updateLangButtonsIcon();
+#ifdef MP_DEBUG
     stateMachine.setCurrentState<MenuState>();
+#else
+    stateMachine.setCurrentState<SplashScreenState>();
+#endif
     sf::Clock clock;
 
     //temp rect
@@ -198,7 +202,9 @@ void ClientApp::run(int argc, char** argv)
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(2);
     rect.setPosition(2, 2);
-    //m_sEngine.startMusic();
+#ifndef MP_DEBUG
+    m_sEngine.startMusic();
+#endif
 
     while (window->isOpen()) {
         sf::Event ev;
@@ -210,14 +216,18 @@ void ClientApp::run(int argc, char** argv)
         m_counter.update(elapsed);
         m_renderer.update(elapsed);
         m_dialogManager.update(elapsed);
-        // m_sEngine.update(elapsed);
+#ifndef MP_DEBUG
+        m_sEngine.update(elapsed);
+#endif
 
         stateMachine.getCurrentState().update(elapsed);
 
         m_renderer
                 .render(stateMachine)
                 .render(m_dialogManager)
-                //.render(m_counter)
+        #ifdef MP_DEBUG
+                .render(m_counter)
+        #endif
                 .draw(rect);
 
         window->display();
