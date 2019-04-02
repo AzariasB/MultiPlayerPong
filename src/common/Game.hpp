@@ -165,15 +165,15 @@ public:
 
     /**
      * @brief getNumWinner
-     * @return the number of the winner (-1) if no one won
+     * @return the number of the winner (optional::null if none)
      */
-    int getNumWinner() const;
+    std::optional<int> getNumWinner() const;
 
     /**
      * @brief getWinner reference to the player who won
      * @return
      */
-    const Player &getWinner() const;
+    std::optional<std::reference_wrapper<const Player> > getWinner() const;
 
     /**
      * @brief isCountingDown

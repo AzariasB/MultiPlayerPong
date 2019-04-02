@@ -529,9 +529,6 @@ template<typename STATE>
 STATE &StateMachine::get() const
 {
     std::type_index index(typeid(STATE));
-    if(m_states.find(index) == m_states.end())
-        throw std::out_of_range("Index not found");
-
     auto found = m_states.find(index);
     if(found == m_states.end()) throw "State index not found";
     return static_cast<STATE&>(*found->second);

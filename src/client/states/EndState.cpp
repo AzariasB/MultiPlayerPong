@@ -116,12 +116,17 @@ void EndState::onEnter(int playerNum)
     GAME_MODE gm = pr::game().gameMode();
     if(gm == GAME_MODE::SOLO_1V1){
         pr::soundEngine().playSound(Assets::Sounds::Win);
-        sf::String res = "Player " + std::to_string(pr::game().getNumWinner()) + " ";
-        sf::String score = "\n Score : " + std::to_string(pr::game().getWinner().getScore());
+        int numWinner = pr::game().getNumWinner().value_or(0);
+        sf::String res = "Player " + std::to_string(numWinner) + " ";
+        auto winnerPlayer = pr::game().getWinner();
+        sf::String score = "";
+        if(winnerPlayer.has_value()){
+            score = "\n Score : " + std::to_string(winnerPlayer->get().getScore());
+        }
         m_content.setString({res, "won", score});
         updateVerticesColor(true);
     } else {
-        int numWinner = pr::game().getNumWinner();
+        int numWinner = pr::game().getNumWinner().value_or(0);
         bool winner = numWinner == playerNum;
         const Player& p = playerNum == 1 ? pr::game().getPlayer1() : pr::game().getPlayer2();
         std::string yourScore =  " \n Score : " + std::to_string(p.getScore());

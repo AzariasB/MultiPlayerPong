@@ -152,14 +152,26 @@ void Game::setGameState(GAMESTATE gameState)
     m_state = gameState;
 }
 
-const Player &Game::getWinner() const
+std::optional<std::reference_wrapper<const Player>> Game::getWinner() const
 {
-    return m_p1.isWinner() ? m_p1 : m_p2;
+    if(m_p1.isWinner()){
+        return std::optional<std::reference_wrapper<const Player>>{m_p1};
+    }
+    if(m_p2.isWinner()){
+        return std::optional<std::reference_wrapper<const Player>>{m_p2};
+    }
+    return std::nullopt;
 }
 
-int Game::getNumWinner() const
+std::optional<int> Game::getNumWinner() const
 {
-    return m_p1.isWinner() ? m_p1.getNum() : m_p2.isWinner() ? m_p2.getNum() : -1;
+    if(m_p1.isWinner()){
+        return std::make_optional(m_p1.getNum());
+    }
+    if(m_p2.isWinner()){
+        return std::make_optional(m_p2.getNum());
+    }
+    return std::nullopt;
 }
 
 bool Game::playerWon() const
