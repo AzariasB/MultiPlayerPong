@@ -107,12 +107,6 @@ public:
     }
 
     /**
-     * @brief tryAddPowerup if there is a chance, adds a power up
-     * @return wether a powerup was added to the game
-     */
-    bool tryAddPowerup(const sf::Time &elapsed);
-
-    /**
      * @brief isFinished
      * @return wether the lobby's game finished (thus it can be destroyed)
      */
