@@ -176,7 +176,7 @@ def build_cpp(files)
     enum_val = v.map{|x| File.basename(x, ".*").camel_case + " = #{counter+=1}"}
     hpp_content += %{
     enum #{c_case} {#{enum_val*", "}};
-    static const std::unordered_map<sf::Uint64, std::string> #{k};
+    static const std::unordered_map<#{c_case}, std::string> #{k};
 }
     init = v.map{|x|
       name = File.basename(x, ".*").camel_case
@@ -184,7 +184,7 @@ def build_cpp(files)
     }
 
     cpp_content += %{
-const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"}\n};
+const std::unordered_map<Assets::#{c_case}, std::string> Assets::#{k} = {\n#{init*",\n"}\n};
 }
   end
   atlas_enum = []
@@ -240,7 +240,7 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
 
   hpp_content += %{
     enum Atlases {#{atlas_enum*", "}};
-    static const std::unordered_map<sf::Uint64, std::string> atlases;
+    static const std::unordered_map<Assets::Atlases, std::string> atlases;
 }
 
 
@@ -248,7 +248,7 @@ const std::unordered_map<sf::Uint64, std::string> Assets::#{k} = {\n#{init*",\n"
     "{ Assets::Atlases::#{k} , \"#{v}\" }"
   }*",\n"
   cpp_content += %{
-const std::unordered_map<sf::Uint64, std::string> Assets::atlases = {
+const std::unordered_map<Assets::Atlases, std::string> Assets::atlases = {
 #{atlas_content}
 };
 }
