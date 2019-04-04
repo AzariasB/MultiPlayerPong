@@ -37,8 +37,11 @@
 #include <vector>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include "src/client/Assets.hpp"
+
 
 namespace mp {
+
 
 /**
  * @brief The SplashScreenState class state used
@@ -78,7 +81,7 @@ private:
      * @param xCenter center of the sprite
      * @return
      */
-    sf::Sprite &insertSprite(const sf::Uint64 &id, float xCenter);
+    sf::Sprite &insertSprite(const Assets::Icons &id, float xCenter);
 
     /**
      * @brief m_timer timer to do different action within the splashscreen state

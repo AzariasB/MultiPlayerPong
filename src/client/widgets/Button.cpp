@@ -87,7 +87,7 @@ Button::Button(const sf::String &text, float xPos, float yPos, const Assets::Ico
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
-    setIcon(sf::Sprite(pr::resourceManager().get<const sf::Texture&>(icon.textureId), icon.bounds));
+    setIcon(sf::Sprite(pr::resourceManager().get(icon), icon.bounds));
 }
 
 Button::Button(const std::vector<sf::String> &text, float xPos, float yPos, const Assets::IconAtlas::Holder &icon):
@@ -103,7 +103,7 @@ Button::Button(const std::vector<sf::String> &text, float xPos, float yPos, cons
 {
     init();
     setPosition(sf::Vector2f(xPos, yPos));
-    setIcon(sf::Sprite(pr::resourceManager().get<const sf::Texture&>(icon.textureId), icon.bounds));
+    setIcon(sf::Sprite(pr::resourceManager().get(icon), icon.bounds));
 }
 
 
@@ -274,7 +274,7 @@ const sf::Sprite &Button::getIcon() const
 
 void Button::setIcon(const Assets::IconAtlas::Holder &icon)
 {
-    setIcon(sf::Sprite(pr::resourceManager().get<const sf::Texture&>(icon.textureId), icon.bounds));
+    setIcon(sf::Sprite(pr::resourceManager().get(icon), icon.bounds));
 }
 
 void Button::setIcon(const sf::Sprite &sprite)

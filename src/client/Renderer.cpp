@@ -196,7 +196,7 @@ RandomAnimation &Renderer::assertObjectExist(const PhysicObject *obj, Assets::An
     auto found = m_objectsAnimations.find(obj);
     if(found == m_objectsAnimations.end()){
         RandomAnimation &ra = m_objectsAnimations.insert(std::make_pair(obj, RandomAnimation(
-                                                  pr::resourceManager().get<const sf::Texture&>(animation),
+                                                  pr::resourceManager().get(animation),
                                                   sprites,
                                                   sf::milliseconds(50)
         ))).first->second;

@@ -57,11 +57,74 @@ ResourcesManager::ResourcesManager():
     }
 }
 
+//--------------
+// GETTER
+//--------------
+
+sf::Sound &ResourcesManager::get(const Assets::Sounds &soundId)
+{
+    auto found = m_sounds.find(soundId);
+    if (found != m_sounds.end()) {
+        return found->second.second;
+    } else {
+        std::cerr << "Could not find the sound '" << soundId << "' you asked for\n";
+        return m_emptySound;
+    }
+}
+
+sf::MemoryInputStream &ResourcesManager::get(const Assets::Musics &musicId)
+{
+    int rand = static_cast<int>(std::rand()) % m_musics.size();
+    auto item = m_musics.begin();
+    std::advance(item, rand);
+    return item->second;
+}
+
+sf::Shader* ResourcesManager::get(const Assets::Shaders &shaderId) const
+{
+    auto found = m_shadersContent.find(shaderId);
+    auto shader = new sf::Shader;
+    if(found == m_shadersContent.end()) return shader;
+    sf::MemoryInputStream data = found->second;// needs to be copied to call 'load from stream'
+    shader->loadFromStream(data, sf::Shader::Fragment);
+    return shader;
+}
+
+const sf::Texture &ResourcesManager::get(const Assets::Animations &animadionId) const
+{
+    return getTexture(animadionId);
+}
+
+const sf::Texture &ResourcesManager::get(const Assets::Icons &iconId) const
+{
+    return getTexture(iconId);
+}
+
+const sf::Texture &ResourcesManager::get(const Assets::IconAtlas::Holder &holder) const
+{
+    return getTexture(holder.textureId);
+}
+
+const sf::Font &ResourcesManager::get(const Assets::Fonts &) const
+{
+    return m_quicksandfont;
+}
+
+const sf::Texture &ResourcesManager::getTexture(const sf::Uint64 &textureId) const
+{
+    auto found = m_textures.find(textureId);
+    if(found != m_textures.end()){
+        return found->second;
+    }else{
+        std::cerr << "Could not find the texture '" << textureId << "' you asked for\n";
+        return m_emptyTexture;
+    }
+}
 
 //--------------
 // REGISTER
 //--------------
-void ResourcesManager::registerMusic(const std::string &filename, const sf::Uint64 &musicId)
+void ResourcesManager::registerMusic(const std::string &filename, const Assets::Musics &musicId)
 {
     QResource sRes(filename.c_str());
 
@@ -70,7 +133,7 @@ void ResourcesManager::registerMusic(const std::string &filename, const sf::Uint
     m_musics[musicId] = mis;
 }
 
-void ResourcesManager::registerShader(const std::string &filename, const sf::Uint64 &shaderId)
+void ResourcesManager::registerShader(const std::string &filename, const Assets::Shaders &shaderId)
 {
     QResource sRes(filename.c_str());
 
@@ -81,7 +144,7 @@ void ResourcesManager::registerShader(const std::string &filename, const sf::Uin
 
 
 
-void ResourcesManager::registerSound(const std::string& filename, const sf::Uint64& soundId)
+void ResourcesManager::registerSound(const std::string& filename, const Assets::Sounds& soundId)
 {
     QResource res(filename.c_str());
     m_sounds[soundId].first.loadFromMemory(res.data(), res.size());

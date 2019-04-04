@@ -34,17 +34,20 @@
 
 #include <iostream>
 #include <type_traits>
+#include <unordered_map>
+#include <memory>
+
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/System/MemoryInputStream.hpp>
-#include <unordered_map>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/Music.hpp>
-#include <memory>
+
 #include <QResource>
 
+#include "Assets.hpp"
 
 namespace sf {
     class Shader;
@@ -64,12 +67,19 @@ public:
 
     virtual ~ResourcesManager();
 
-    template<typename RESOURCE>
-    RESOURCE get(const sf::Uint64 & = 0);
+    sf::Sound &get(const Assets::Sounds &soundId);
 
-    template<typename RESOURCE>
-    RESOURCE get(const sf::Uint64 & = 0) const;
+    sf::Shader *get(const Assets::Shaders &shaderId) const;
 
+    sf::MemoryInputStream &get(const Assets::Musics &musicId);
+
+    const sf::Texture &get(const Assets::Animations &animationId) const;
+
+    const sf::Texture &get(const Assets::Icons &iconId) const;
+
+    const sf::Texture &get(const Assets::IconAtlas::Holder &holder) const;
+
+    const sf::Font &get(const Assets::Fonts &) const;
 
 private:
 
@@ -79,7 +89,7 @@ private:
      * @param filename name of the file to read from
      * @param soundName the name of the sound to register, so it can be retrieved later
      */
-    void registerSound(const std::string &filename, const sf::Uint64 &soundId);
+    void registerSound(const std::string &filename, const Assets::Sounds &soundId);
 
     /**
      * @brief regsiterTexture saves a texture to the memroy
@@ -94,14 +104,20 @@ private:
      * @param shaderName the name of the shader to use in the program
      * @return the created shader
      */
-    void registerShader(const std::string &filename, const sf::Uint64 &shaderId);
+    void registerShader(const std::string &filename, const Assets::Shaders &shaderId);
 
     /**
      * @brief registerMusic saves a music
      * @param filename name of the file where the music is located
      */
-    void registerMusic(const std::string &filename, const sf::Uint64 &musicId);
+    void registerMusic(const std::string &filename, const Assets::Musics &musicId);
 
+    /**
+     * @brief getTexture retrives the texture from the given id, emtpy texture if not found
+     * @param textureId id of the texture to find
+     * @return
+     */
+    const sf::Texture &getTexture(const sf::Uint64 &textureId) const;
     /**
      * @brief mQuicksandFont font used
      * for 'small' texts
@@ -126,7 +142,7 @@ private:
     /**
      * @brief m_sounds keep all the soundbuffer and their sound in memory
      */
-    std::unordered_map<sf::Uint64, std::pair<sf::SoundBuffer, sf::Sound> >m_sounds;
+    std::unordered_map<Assets::Sounds, std::pair<sf::SoundBuffer, sf::Sound> >m_sounds;
 
     /**
      * @brief m_textures keep all the texture in memory
@@ -136,65 +152,13 @@ private:
     /**
      * @brief m_shaders keep all the shaders in memory
      */
-    std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_shadersContent;
+    std::unordered_map<Assets::Shaders, sf::MemoryInputStream> m_shadersContent;
 
     /**
      * @brief m_musics all the available musics for the game
      */
-    std::unordered_map<sf::Uint64, sf::MemoryInputStream> m_musics;
+    std::unordered_map<Assets::Musics, sf::MemoryInputStream> m_musics;
 };
 
-//--------------
-// GETTER
-//--------------
-
-template<>
-inline sf::MemoryInputStream &ResourcesManager::get<sf::MemoryInputStream&>(const sf::Uint64&)
-{
-    int rand = static_cast<int>(std::rand()) % m_musics.size();
-    auto item = m_musics.begin();
-    std::advance(item, rand);
-    return item->second;
-}
-
-template<>
-inline sf::Sound& ResourcesManager::get<sf::Sound&>(const sf::Uint64& soundID) {
-    if (m_sounds.find(soundID) != m_sounds.end()) {
-        return m_sounds[soundID].second;
-    } else {
-        std::cerr << "Could not find the sound '" << soundID << "' you asked for\n";
-        return m_emptySound;
-    }
-}
-
-template<>
-inline sf::Shader * ResourcesManager::get<sf::Shader*>(const sf::Uint64 &shaderId) const
-{
-    if(m_shadersContent.find(shaderId) != m_shadersContent.end()){
-        sf::Shader *shader = new sf::Shader;
-        sf::MemoryInputStream mis = m_shadersContent.find(shaderId)->second;
-        shader->loadFromStream(mis, sf::Shader::Fragment);
-        return shader;
-    }
-    return nullptr;
-}
-
-template<>
-inline const sf::Texture &ResourcesManager::get<const sf::Texture&>(const sf::Uint64 &textureID) const
-{
-    auto found = m_textures.find(textureID);
-    if(found != m_textures.end()){
-        return m_textures.find(textureID)->second;
-    }else{
-        std::cerr << "Could not find the texture '" << textureID << "' you asked for\n";
-        return m_emptyTexture;
-    }
-}
-
-template<>
-inline const sf::Font &ResourcesManager::get<const sf::Font&>(const sf::Uint64 &) const
-{
-    return m_quicksandfont;
-}
 
 }

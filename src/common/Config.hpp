@@ -29,6 +29,7 @@
  * Created on 24/10/2017
  */
 #pragma once
+#include <iterator>
 
 namespace mp {
 
@@ -67,6 +68,15 @@ enum GAME_MODE {
     SOLO_1V1,
     SOLO_AI,
     STANDARD_MULTIPLAYER
+};
+
+struct EnumClassHash
+{
+    template <typename T>
+    std::size_t operator()(T t) const
+    {
+        return static_cast<std::size_t>(t);
+    }
 };
 
 }

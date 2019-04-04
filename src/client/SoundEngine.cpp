@@ -52,7 +52,7 @@ void SoundEngine::update(const sf::Time&)
 void SoundEngine::playSound(Assets::Sounds s, const sf::Vector3f &position)
 {
     if(m_isSoundMuted)return;
-    sf::Sound &sound = m_manager.get<sf::Sound&>(s);
+    sf::Sound &sound = m_manager.get(s);
 
 
     sound.setRelativeToListener(math::length(position) != 0.f);
@@ -65,7 +65,7 @@ void SoundEngine::startMusic()
 {
     m_isMusicMuted = false;
     m_music.stop();
-    m_music.openFromStream(m_manager.get<sf::MemoryInputStream&>());
+    m_music.openFromStream(m_manager.get(Assets::Music1));
     m_music.play();
 }
 

@@ -42,7 +42,7 @@ namespace mp {
 Dialog::Dialog(const sf::Uint64 id, const sf::String &title, const Assets::IconAtlas::Holder &icon):
     m_menu(),
     m_title(pr::translator(), title, 50),
-    m_icon(pr::resourceManager().get<const sf::Texture&>(icon.textureId), icon.bounds),
+    m_icon(pr::resourceManager().get(icon), icon.bounds),
     m_background(sf::Vector2f(SF_DIALOG_WIDTH, SF_DIALOG_HEIGHT)),
     m_id(id),
     closeSignal()

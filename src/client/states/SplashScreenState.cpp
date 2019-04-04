@@ -41,8 +41,8 @@ namespace mp {
 
 SplashScreenState::SplashScreenState():
     m_timer(sf::seconds(2)),
-    m_games("GAMES", pr::resourceManager().get<const sf::Font&>(), 100),
-    m_ema("AME", pr::resourceManager().get<const sf::Font&>(), 100),
+    m_games("GAMES", pr::resourceManager().get(Assets::Fonts::Quicksand), 100),
+    m_ema("AME", pr::resourceManager().get(Assets::Fonts::Quicksand), 100),
     m_emaPos(twin::makeTwin(SF_ARENA_HEIGHT / 2.f, SF_ARENA_HEIGHT / 2.f, sf::seconds(0), twin::quadInOut )),
     m_emaScale(twin::makeTwin(1.f,1.f, sf::milliseconds(1), twin::linear))
 {
@@ -74,9 +74,9 @@ SplashScreenState::SplashScreenState():
     insertSprite(Assets::Icons::Box2d, SF_ARENA_WIDTH /  2.f + 150);
 }
 
-sf::Sprite &SplashScreenState::insertSprite(const sf::Uint64 &id, float xCenter)
+sf::Sprite &SplashScreenState::insertSprite(const Assets::Icons &id, float xCenter)
 {
-    m_sprites.emplace_back(pr::resourceManager().get<const sf::Texture&>(id));
+    m_sprites.emplace_back(pr::resourceManager().get(id));
     sf::Sprite &inserted = m_sprites.back();
     sf::Vector2f bounds(inserted.getGlobalBounds().width, inserted.getGlobalBounds().height);
     float scale = std::min(MAX_ICON_HEIGHT / bounds.y, MAX_ICON_WIDTH / bounds.x);

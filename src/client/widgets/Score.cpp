@@ -42,7 +42,7 @@ namespace mp
 
 Score::Score(ParticleGenerator &particleGen, const sf::Vector2f &position):
     m_particleGenerator(particleGen),
-    m_text("0", pr::resourceManager().get<const sf::Font&>())
+    m_text("0", pr::resourceManager().get(Assets::Quicksand))
 {
     m_text.setPosition(position);
     math::centerOrigin(m_text);

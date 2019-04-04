@@ -36,7 +36,7 @@
 namespace mp {
 
 I18NText::I18NText(Translator &translator, const std::vector<sf::String> &translations, unsigned int fontSize):
-    sf::Text("", pr::resourceManager().get<const sf::Font&>(), fontSize),
+    sf::Text("", pr::resourceManager().get(Assets::Fonts::Quicksand), fontSize),
     m_translator(translator),
     m_translations(translations),
     m_listenerId(m_translator.translationChangedSignal.add(m_erase))
@@ -45,7 +45,7 @@ I18NText::I18NText(Translator &translator, const std::vector<sf::String> &transl
 }
 
 I18NText::I18NText(Translator &translator, const sf::String &translationName, unsigned int fontSize):
-    sf::Text("", pr::resourceManager().get<const sf::Font&>(), fontSize),
+    sf::Text("", pr::resourceManager().get(Assets::Fonts::Quicksand), fontSize),
     m_translator(translator),
     m_listenerId(m_translator.translationChangedSignal.add(m_erase))
 {

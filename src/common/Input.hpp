@@ -32,21 +32,13 @@
 
 #include <unordered_map>
 #include <SFML/Window/Keyboard.hpp>
+#include "Config.hpp"
 
 namespace sf {
     class Event;
 }
 
 namespace mp {
-
-struct EnumClassHash
-{
-    template <typename T>
-    std::size_t operator()(T t) const
-    {
-        return static_cast<std::size_t>(t);
-    }
-};
 
 /**
  * @brief The Input class used to
