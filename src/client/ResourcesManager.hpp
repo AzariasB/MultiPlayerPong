@@ -67,19 +67,53 @@ public:
 
     virtual ~ResourcesManager();
 
+    /**
+     * @brief get Sound getter
+     * @param soundId id of the sound to find
+     * @return the sound if found, empty sound otherwise
+     */
     sf::Sound &get(const Assets::Sounds &soundId);
 
+    /**
+     * @brief get Shader getter
+     * @param shaderId if of the shader
+     * @return the shader filled if found, empty shader otherwise
+     */
     sf::Shader *get(const Assets::Shaders &shaderId) const;
 
+    /**
+     * @brief get music getter
+     * @param musicId id of the music to find
+     * @return the mis if found, empty if not
+     */
     sf::MemoryInputStream &get(const Assets::Musics &musicId);
 
+    /**
+     * @brief get animation
+     * @param animationId id of the animation
+     * @return the texture for the given animation
+     */
     const sf::Texture &get(const Assets::Animations &animationId) const;
 
+    /**
+     * @brief get icon getter
+     * @param iconId id of the icon
+     * @return the texture of the icon, empty texture otherwise
+     */
     const sf::Texture &get(const Assets::Icons &iconId) const;
 
+    /**
+     * @brief get icon atlas getter
+     * @param holder id of the texture of the atlas
+     * @return texture of the atlas
+     */
     const sf::Texture &get(const Assets::IconAtlas::Holder &holder) const;
 
-    const sf::Font &get(const Assets::Fonts &) const;
+    /**
+     * @brief get font getter
+     * @return the default app font
+     */
+    const sf::Font &get(const Assets::Fonts & = Assets::Fonts::Quicksand) const;
 
 private:
 
