@@ -51,7 +51,7 @@ public:
      * @brief Translator
      * empty constructor
      */
-    Translator();
+    Translator(const std::string &currentTranslation);
 
     /**
      * @brief translate tries to translate the given string using its internal
@@ -100,7 +100,7 @@ private:
     /**
      * @brief m_currentTranslation short name of the current translation
      */
-    std::string m_currentTranslation = "fr";
+    std::string m_currentTranslation = "en";
 
 public:
     /**

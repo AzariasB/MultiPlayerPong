@@ -34,9 +34,12 @@
 
 namespace mp {
 
-Translator::Translator()
+Translator::Translator(const std::string &currentTranslation):
+    m_currentTranslation(currentTranslation)
 {
-
+    if(Assets::I18N::translations.find(currentTranslation) == Assets::I18N::translations.end()){
+        m_currentTranslation = "en";
+    }
 }
 
 sf::String Translator::translate(const sf::String &translationName) const

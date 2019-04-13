@@ -57,6 +57,8 @@ namespace mp
 
     constexpr int MAX_INPUT_CHARS = 65;
 
+    std::string computerLocale();
+
 
     namespace cc//namespace client conf
     {

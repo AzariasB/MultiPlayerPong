@@ -28,10 +28,16 @@
  *
  * Created on 19/5/2018
  */
-
+#include <QLocale>
 #include "ClientConf.hpp"
 
 namespace mp {
+
+std::string computerLocale()
+{
+    auto lang = QLocale::system().name();
+    return lang.mid(0, lang.indexOf('_')).toStdString();
+}
 
 //Colors
 const sf::Color cc::Colors::backgroundColor = sf::Color(0,10, 30);

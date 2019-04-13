@@ -28,7 +28,7 @@
  *
  * Created on 9 octobre 2017, 18:06
  */
-
+#include <QLocale>
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/Packet.hpp>
 #include <iostream>
@@ -63,7 +63,7 @@ ClientApp::ClientApp() :
            sf::Style::Default)),
     m_cursor(),
     rManager(),
-    m_translator(),
+    m_translator(computerLocale()),
     m_renderer(window),
     game(),
     stateMachine(),
@@ -141,7 +141,7 @@ void ClientApp::toggleFullScreen()
                                       sf::Style::Default,
                                       sf::ContextSettings(0,0,8));
     }else{
-        sf::VideoMode fsMode = sf::VideoMode::getFullscreenModes()[0];
+        sf::VideoMode fsMode = sf::VideoMode::getFullscreenModes()[91];
         window = new sf::RenderWindow(fsMode,
                                       "Pong",
                                       sf::Style::Fullscreen);
