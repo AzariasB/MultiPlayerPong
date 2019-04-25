@@ -179,18 +179,22 @@ bool Button::handleEvent(const sf::Event& ev)
     if (ev.type == sf::Event::MouseMoved) {
         sf::Vector2f realMovePos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseMove.x, ev.mouseMove.y ));
 
-        bool wasHilighted = m_hilighted;
-        bool isSelected = m_border.getGlobalBounds().contains(realMovePos);
+        bool wasHilighted = isHilighted();
+        bool containsMouse = m_border.getGlobalBounds().contains(realMovePos);
 
-        if(isSelected)
-            setSelected(true);
+        if(containsMouse) hilight();
 
-        if(wasHilighted != m_hilighted)
+        if(wasHilighted != isHilighted())
             selectedSignal.trigger();
 
     } else if (ev.type == sf::Event::MouseButtonPressed) {
         sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
-        isClicked = ev.mouseButton.button == sf::Mouse::Left && m_border.getGlobalBounds().contains(realClickPos);
+        bool containsButtonPress = ev.mouseButton.button == sf::Mouse::Left && m_border.getGlobalBounds().contains(realClickPos);
+        setState(containsButtonPress ? PRESSED : NEUTRAL);
+    } else if (ev.type == sf::Event::MouseButtonReleased){
+        sf::Vector2f realClickPos = pr::mapPixelToCoords(sf::Vector2i(ev.mouseButton.x, ev.mouseButton.y));
+        bool containsReleased = ev.mouseButton.button == sf::Mouse::Left && m_border.getGlobalBounds().contains(realClickPos);
+        isClicked = isPressed() && containsReleased;
     } else if(isSelectionEvent(ev)){
         isClicked = true;
     }
@@ -210,14 +214,13 @@ bool Button::handleEvent(const sf::Event& ev)
 
 bool Button::isSelectionEvent(const sf::Event &ev) const
 {
-    return ( (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Return) ||
-            (ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0)) && m_hilighted;
+    return  ( (ev.type == sf::Event::KeyReleased && ev.key.code == sf::Keyboard::Return) ||
+            (ev.type == sf::Event::JoystickButtonPressed && ev.joystickButton.button == 0)) && isHilighted();
 }
 
 void Button::render(Renderer &renderer) const
 {
     if(!isVisible())return;
-
 
     renderer.draw(m_border);
     renderer.draw(m_background);
@@ -252,18 +255,31 @@ void Button::setText(const std::vector<sf::String> &str)
     m_text.setString(str);
 }
 
-void Button::setSelected(bool selected)
+void Button::hilight()
 {
-    if(m_hilighted == selected)return;
+    setState(HILIGHTED);
+}
 
-    if(selected){
+void Button::deselect()
+{
+    setState(NEUTRAL);
+}
+
+void Button::setState(Button::ButtonState nwState)
+{
+    if(nwState == m_state)return;
+    bool wasHilighted = isHilighted();
+    if(nwState == HILIGHTED && m_state == PRESSED) return;//keep pressed state
+    m_state = nwState;
+    if(isHilighted() == wasHilighted) return;
+
+    if(isHilighted()){
         m_color = ColorTweening(m_color.get(), cc::Colors::higlithColor, sf::milliseconds(100), twin::easing::linear);
         m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }else{
         m_color = ColorTweening(m_color.get(), cc::Colors::fontColor, sf::milliseconds(100), twin::easing::linear);
         m_rectWidth = twin::makeTwin(m_width, 0.f, sf::milliseconds(500), twin::easing::quintOut);
     }
-    m_hilighted = selected;
     updateText();
 }
 
@@ -298,7 +314,7 @@ void Button::setWidth(float width)
 
 void Button::updateSize()
 {
-    if(m_hilighted){
+    if(isHilighted()){
         m_rectWidth = twin::makeTwin(0.f, m_width, sf::milliseconds(500), twin::easing::quintOut);
     }
 

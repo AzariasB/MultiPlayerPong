@@ -100,7 +100,7 @@ Button &Menu::configureButton(Button &inserted)
 {
     std::size_t idx = m_buttons.size() -1;
     inserted.selectedSignal.add([this, idx](){ setSeletedIndex(idx);});
-    if(m_buttons.size() == 1) inserted.setSelected(true);
+    if(m_buttons.size() == 1) inserted.hilight();
     return inserted;
 }
 
@@ -144,9 +144,9 @@ bool Menu::handleEvent(const sf::Event &ev)
 bool Menu::setSeletedIndex(std::size_t nwIndex)
 {
     if(nwIndex != m_selectedButton){
-        m_buttons[m_selectedButton]->setSelected(false);
+        m_buttons[m_selectedButton]->deselect();
         m_selectedButton = nwIndex;
-        m_buttons[m_selectedButton]->setSelected(true);
+        m_buttons[m_selectedButton]->hilight();
         pr::soundEngine().playSound(Assets::Sounds::Click1);
         return true;
     }

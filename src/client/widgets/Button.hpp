@@ -57,6 +57,13 @@ class Renderer;
  */
 class Button : public Widget {
 public:
+    enum ButtonState {
+        NEUTRAL,
+        HILIGHTED,
+        PRESSED,
+        RELEASED//unused for now
+    };
+
     /**
      * @brief Button
      * @param app reference to the Client application
@@ -206,10 +213,19 @@ public:
     float getHeight() const;
 
 
-    bool isSelected() const
+    bool isHilighted() const
     {
-        return m_hilighted;
+        return m_state == HILIGHTED || m_state == PRESSED;
     }
+
+    bool isPressed() const
+    {
+        return m_state == PRESSED;
+    }
+
+    void hilight();
+
+    void deselect();
 
     /**
      * @brief changes the text of the button, the dimensions will also change
@@ -223,15 +239,15 @@ public:
      */
     void setText(const std::vector<sf::String> &str);
 
+    virtual ~Button() override;
+
+private:
+
     /**
      * @brief setSelected changes the selected state of the button
      * @param selected
      */
-    void setSelected(bool selected);
-
-    virtual ~Button() override;
-
-private:
+    void setState(ButtonState nwState);
 
     void init();
 
@@ -266,7 +282,7 @@ private:
     /**
      * @brief m_hilighted wether the button is currently higlighted
      */
-    bool m_hilighted = false;
+     ButtonState m_state = NEUTRAL;
 
     /**
      * @brief m_text the text for the button
@@ -331,6 +347,10 @@ private:
      */
     Alignment m_alignment = Center;
 
+    /**
+     * @brief m_listenerId keep id of the translator listener
+     * to be able to remove it when the button is destroyed
+     */
     std::string m_listenerId;
 
 public:
