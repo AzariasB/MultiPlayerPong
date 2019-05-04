@@ -30,6 +30,7 @@
  */
 #include "CreditsState.hpp"
 #include "MenuState.hpp"
+#include <Box2D/Common/b2Settings.h>
 
 #include "src/client/Provider.hpp"
 #include "src/client/StateMachine.hpp"

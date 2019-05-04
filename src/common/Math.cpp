@@ -29,6 +29,8 @@
  * Created on 15/3/2018
  */
 
+#include <cstdlib>
+#include <cmath>
 #include "Math.hpp"
 
 namespace mp {
