@@ -30,6 +30,7 @@
  */
 #include "EndState.hpp"
 #include "src/client/ClientApp.hpp"
+#include "src/common/Math.hpp"
 #include "src/client/Provider.hpp"
 #include "src/client/widgets/Dialog.hpp"
 #include "src/client/ClientConf.hpp"
@@ -95,6 +96,10 @@ void EndState::render(Renderer& renderer) const
             .rotateAround(centerPoint, m_angle)
             .draw(m_buffer)
             .pop()
+            .push()
+            .scale(M_TO_P)
+            .render(m_particleGenerator)
+            .pop()
             .render(m_menu);
 }
 
@@ -112,6 +117,7 @@ void EndState::handleEvent(const sf::Event& ev)
 void EndState::onBeforeEnter()
 {
     m_scale = twin::makeTwin(0.f, 1.f, sf::milliseconds(1000), twin::easing::circOut);
+    m_particleGenerator.clear();
 }
 
 void EndState::onEnter(int playerNum)
@@ -148,6 +154,15 @@ void EndState::update(const sf::Time &elapsed)
     m_menu.update(elapsed);
     m_angle += elapsed.asSeconds();
     m_scale.step(elapsed);
+    m_particleGenerator.update(elapsed);
+
+    int explode = math::rrand(0,100);
+    if(explode == 0){
+        int xPos = math::rrand(0, static_cast<int>(ARENA_WIDTH));
+        int yPos = math::rrand(0, static_cast<int>(ARENA_HEIGHT));
+        m_particleGenerator.explode(sf::Vector2f(xPos, yPos));
+        pr::soundEngine().playSound(Assets::Sounds::Firework3);
+    }
 }
 
 }

@@ -34,6 +34,7 @@
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
 #include "src/lib/twin.hpp"
+#include "src/client/particles/ParticleGenerator.hpp"
 
 #include <SFML/Graphics/VertexBuffer.hpp>
 
@@ -128,6 +129,11 @@ private:
      * @brief m_scale scale of the background spinner
      */
     twin::Twin<float> m_scale;
+
+    /**
+     * @brief m_particleGenerator used to generate all sorts of particles
+     */
+    ParticleGenerator m_particleGenerator;
 };
 
 

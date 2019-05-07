@@ -16,6 +16,7 @@
     <file alias="click2.wav">res/sounds/click2.wav</file>
     <file alias="ping_pong_8bit_beeep.ogg">res/sounds/ping_pong_8bit_beeep.ogg</file>
     <file alias="click5.wav">res/sounds/click5.wav</file>
+    <file alias="firework3.ogg">res/sounds/firework3.ogg</file>
   </qresource>
   <qresource prefix="/shaders">
     <file alias="alpha.frag">res/shaders/alpha.frag</file>
