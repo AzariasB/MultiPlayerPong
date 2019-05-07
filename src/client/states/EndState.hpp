@@ -33,6 +33,7 @@
 
 #include "src/client/State.hpp"
 #include "src/client/widgets/Menu.hpp"
+#include "src/lib/twin.hpp"
 
 #include <SFML/Graphics/VertexBuffer.hpp>
 
@@ -118,7 +119,15 @@ private:
      */
     sf::VertexArray m_buffer;
 
+    /**
+     * @brief m_angle the current rotation angle
+     */
     float m_angle;
+
+    /**
+     * @brief m_scale scale of the background spinner
+     */
+    twin::Twin<float> m_scale;
 };
 
 

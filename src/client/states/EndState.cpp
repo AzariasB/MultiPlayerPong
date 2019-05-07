@@ -35,6 +35,8 @@
 #include "src/client/ClientConf.hpp"
 #include "MenuState.hpp"
 
+#include <iostream>
+
 namespace mp {
 
 EndState::EndState():
@@ -89,8 +91,10 @@ void EndState::goToMenu()
 
 void EndState::render(Renderer& renderer) const
 {
+    static const sf::Vector2f centerPoint(SF_CENTER_X, SF_CENTER_Y);
     renderer.push()
-            .rotateAround(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), m_angle)
+            .scale(m_scale.get(), centerPoint)
+            .rotateAround(centerPoint, m_angle)
             .draw(m_buffer)
             .pop()
             .render(m_menu);
@@ -109,6 +113,7 @@ void EndState::handleEvent(const sf::Event& ev)
 
 void EndState::onBeforeEnter()
 {
+    m_scale = twin::makeTwin(0.f, 1.f, sf::milliseconds(1000), twin::easing::circOut);
 }
 
 void EndState::onEnter(int playerNum)
@@ -140,9 +145,12 @@ void EndState::onEnter(int playerNum)
 }
 
 void EndState::update(const sf::Time &elapsed)
-{    
+{
+    if(!pr::stateMachine().currentIs<EndState>()) return;
     m_menu.update(elapsed);
     m_angle += elapsed.asSeconds();
+    m_scale.step(elapsed);
+    //std::cout << m_scale.get() << "\n";
 }
 
 }

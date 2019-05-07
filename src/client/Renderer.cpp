@@ -132,6 +132,12 @@ Renderer &Renderer::scale(float xScale, float yScale)
     return *this;
 }
 
+Renderer &Renderer::scale(float nwScale, const sf::Vector2f &center)
+{
+    top().transform.scale(nwScale, nwScale, center.x, center.y);
+    return *this;
+}
+
 Renderer &Renderer::setTexture(const sf::Texture *texture)
 {
     top().texture = texture;

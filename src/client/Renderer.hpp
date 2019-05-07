@@ -128,6 +128,14 @@ public:
     Renderer &scale(float xScale, float yScale);
 
     /**
+     * @brief scale scales for x and y axis, around the given center
+     * @param nwScale the new scale for the x and y axis
+     * @param center center of transformation
+     * @return itslef
+     */
+    Renderer &scale(float nwScale, const sf::Vector2f &center);
+
+    /**
      * @brief translateY translates the current render states by the given y
      * @param yTranslation the y to translate
      * @return this renderer
