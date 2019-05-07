@@ -35,8 +35,6 @@
 #include "src/client/ClientConf.hpp"
 #include "MenuState.hpp"
 
-#include <iostream>
-
 namespace mp {
 
 EndState::EndState():
@@ -150,7 +148,6 @@ void EndState::update(const sf::Time &elapsed)
     m_menu.update(elapsed);
     m_angle += elapsed.asSeconds();
     m_scale.step(elapsed);
-    //std::cout << m_scale.get() << "\n";
 }
 
 }
