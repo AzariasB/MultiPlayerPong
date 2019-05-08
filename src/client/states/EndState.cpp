@@ -98,6 +98,7 @@ void EndState::render(Renderer& renderer) const
             .pop()
             .push()
             .scale(M_TO_P)
+            .blend(sf::BlendAdd)
             .render(m_particleGenerator)
             .pop()
             .render(m_menu);
@@ -154,14 +155,16 @@ void EndState::update(const sf::Time &elapsed)
     m_menu.update(elapsed);
     m_angle += elapsed.asSeconds();
     m_scale.step(elapsed);
-    m_particleGenerator.update(elapsed);
+    if(m_particleGenerator.update(elapsed)){
+        pr::soundEngine().playSound(Assets::Sounds::Firework3);
+    }
 
     int explode = math::rrand(0,100);
     if(explode == 0){
-        int xPos = math::rrand(0, static_cast<int>(ARENA_WIDTH));
-        int yPos = math::rrand(0, static_cast<int>(ARENA_HEIGHT));
-        m_particleGenerator.explode(sf::Vector2f(xPos, yPos));
-        pr::soundEngine().playSound(Assets::Sounds::Firework3);
+        float xPos = math::rrand(0, static_cast<int>(ARENA_WIDTH));
+        float yPos = math::rrand(0, static_cast<int>(ARENA_HEIGHT));
+        m_particleGenerator.firework(sf::Vector2f(xPos, yPos));
+        pr::soundEngine().playSound(Assets::Sounds::Firework2);
     }
 }
 

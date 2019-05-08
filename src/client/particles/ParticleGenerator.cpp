@@ -36,6 +36,7 @@
 #include "BallTrailParticle.hpp"
 #include "GainPointParticle.hpp"
 #include "CountdownParticle.hpp"
+#include "FireworkParticle.hpp"
 
 #include "src/client/ClientConf.hpp"
 
@@ -43,10 +44,16 @@ namespace mp {
 
 ParticleGenerator::ParticleGenerator()
 {
-    fillParticles<ExplosionParticle, 2>();
+    fillParticles<ExplosionParticle, 10>();
     fillParticles<BallTrailParticle, 200>();
     fillParticles<GainPointParticle, 2>();
     fillParticles<CountdownParticle, 2>();
+    fillParticles<FireworkParticle, 10>();
+}
+
+void ParticleGenerator::firework(const sf::Vector2f &target)
+{
+    instanciateParticle<FireworkParticle>(target, cc::Times::fireworkClimbTime);
 }
 
 void ParticleGenerator::explode(const sf::Vector2f &explosionPosition)
@@ -83,14 +90,23 @@ void ParticleGenerator::clear()
     for(const auto &part : m_particles) part->isUsed = false;
 }
 
-void ParticleGenerator::update(const sf::Time &elapsed)
+bool ParticleGenerator::update(const sf::Time &elapsed)
 {
+    bool didExplode = false;
+    const auto &fireworkType = typeid (FireworkParticle);
     for(auto &p : m_particles){
         if(p->isUsed){
             p->update(elapsed);
-            if(p->isFinished()) p->isUsed = false;
+            if(p->isFinished()) {
+                if(p->type == fireworkType){
+                    explode(static_cast<FireworkParticle*>(p.get())->getExplosionPosition());
+                    didExplode = true;
+                }
+                p->isUsed = false;
+            }
         }
     }
+    return didExplode;
 }
 
 

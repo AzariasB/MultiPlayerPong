@@ -62,5 +62,6 @@ const sf::Time cc::Times::gainPointLifeTime = sf::seconds(2);
 const sf::Time cc::Times::explosionLifeTime = sf::milliseconds(500);
 const sf::Time cc::Times::trailLifeTime = sf::milliseconds(1000);
 const sf::Time cc::Times::trailCountdownTime = sf::milliseconds(10);
+const sf::Time cc::Times::fireworkClimbTime = sf::milliseconds(500);
 
 }

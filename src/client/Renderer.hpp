@@ -161,6 +161,13 @@ public:
     Renderer &rotate(float angle);
 
     /**
+     * @brief blend changes the current blend mode
+     * @param nwBlendMode the blend mode to use
+     * @return itself
+     */
+    Renderer &blend(const sf::BlendMode &nwBlendMode);
+
+    /**
      * @brief push pushes the current renderstate
      * on the stack, all the data of the last renderstate
      * is kept and can be modified without changing

@@ -121,6 +121,13 @@ sf::RenderStates &Renderer::top()
     return m_stack.top();
 }
 
+
+Renderer &Renderer::blend(const sf::BlendMode &nwBlendMode)
+{
+    top().blendMode = nwBlendMode;
+    return *this;
+}
+
 Renderer &Renderer::scale(float nwScale)
 {
     return scale(nwScale, nwScale);

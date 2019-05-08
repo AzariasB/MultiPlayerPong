@@ -60,6 +60,13 @@ public:
      */
     ParticleGenerator();
 
+
+    /**
+     * @brief firework creates a 'firework trail' followed by an explosion
+     * @param target where the firework must explode
+     */
+    void firework(const sf::Vector2f &target);
+
     /**
      * @brief explode create an 'explosion' partcile
      * @param explosionPosition starting point of the explosion
@@ -95,7 +102,7 @@ public:
      * @brief update updates all the sub-particles of this generator
      * @param elapsed time elapsed since the last frame
      */
-    void update(const sf::Time &elapsed);
+    bool update(const sf::Time &elapsed);
 
     /**
      * @brief clear removes all the particles of this generator

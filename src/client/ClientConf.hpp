@@ -92,6 +92,7 @@ namespace mp
             static const sf::Time explosionLifeTime;
             static const sf::Time trailLifeTime;
             static const sf::Time trailCountdownTime;
+            static const sf::Time fireworkClimbTime;
         };
 
     }
