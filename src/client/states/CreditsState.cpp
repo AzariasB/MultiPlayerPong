@@ -41,7 +41,7 @@ namespace mp {
 CreditsState::CreditsState():
     mMenu()
 {
-    mMenu.addCenteredLabel("credits", SF_ARENA_WIDTH  / 2.f, 100, 70);
+    mMenu.addCenteredLabel("credits", SF_CENTER_X, 100, 70);
 
     const float leftPos = 20;
     float he = 180;

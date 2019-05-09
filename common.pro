@@ -16,8 +16,10 @@ unix:INCLUDEPATH += /usr/local/include
 unix:LIBS +=  -L/usr/local/lib
 unix:LIBS += ../../lib/libBox2D.a
 
-CONFIG(debug){
+CONFIG(debug, debug|release){
     DEFINES += MP_DEBUG
+} else {
+    DEFINES += MP_RELEASE
 }
 
 SOURCES +=\

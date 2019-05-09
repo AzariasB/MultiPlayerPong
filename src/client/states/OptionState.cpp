@@ -79,7 +79,7 @@ OptionState::OptionState():
         });
         idx++;
         if(idx%3 == 0){
-            xPos += SF_ARENA_WIDTH / 2.f;
+            xPos += SF_CENTER_X;
             currentY = startY;
         }
     }

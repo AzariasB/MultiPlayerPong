@@ -100,12 +100,12 @@ void PlayState::update(const sf::Time &elapsed)
         int secs = static_cast<int>(pr::game().getCountdownTime().asSeconds());
         if( m_lastCountdownValue != secs){
             m_lastCountdownValue = secs;
-            m_particleGenerator.countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+            m_particleGenerator.countdown(std::to_string( m_lastCountdownValue + 1), sf::Vector2f(SF_CENTER_X, SF_ARENA_HEIGHT / 3.f));
             pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBeeep);
         }
     }else if(m_lastCountdownValue == 0){
         m_lastCountdownValue = -1;
-        m_particleGenerator.countdown("Go !", sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 3.f));
+        m_particleGenerator.countdown("Go !", sf::Vector2f(SF_CENTER_X, SF_ARENA_HEIGHT / 3.f));
         pr::soundEngine().playSound(Assets::Sounds::PingPong8bitBiiip);
     }
     m_particleGenerator.update(elapsed);

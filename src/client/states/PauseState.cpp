@@ -48,20 +48,20 @@ namespace mp {
 PauseState::PauseState():
     m_menu()
 {
-    m_menu.addCenteredLabel("Pause", SF_ARENA_WIDTH / 2.f, 50, 100);
+    m_menu.addCenteredLabel("Pause", SF_CENTER_X, 50, 100);
 
     float startY = 250.f;
 
-    Button &resume = m_menu.addButton("resume", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::rightIcon);
+    Button &resume = m_menu.addButton("resume", SF_CENTER_X, startY, Assets::IconAtlas::rightIcon);
     startY += resume.getHeight() + 10.f;
 
-    Button &restart = m_menu.addButton("restart", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::returnIcon);
+    Button &restart = m_menu.addButton("restart", SF_CENTER_X, startY, Assets::IconAtlas::returnIcon);
     startY += restart.getHeight() + 10.f;
 
-    Button &options = m_menu.addButton("options", SF_ARENA_WIDTH / 2.f , startY, Assets::IconAtlas::gearIcon);
+    Button &options = m_menu.addButton("options", SF_CENTER_X , startY, Assets::IconAtlas::gearIcon);
     startY += options.getHeight() + 10.f;
 
-    Button &menuBtn = m_menu.addButton("menu", SF_ARENA_WIDTH / 2.f, startY, Assets::IconAtlas::exitLeftIcon);
+    Button &menuBtn = m_menu.addButton("menu", SF_CENTER_X, startY, Assets::IconAtlas::exitLeftIcon);
     startY += menuBtn.getHeight() + 10.f;
 
     m_menu.normalizeButtons(10);

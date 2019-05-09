@@ -46,6 +46,9 @@
 int main(int argc, char** argv)
 {
     srand(time(NULL));
+#ifdef MP_DEBUG
+    std::cout << "Starting in debug" << std::endl;
+#endif
 #ifdef CLIENT
     mp::ClientApp &app = mp::ClientApp::getInstance();
     app.initStates();
@@ -56,5 +59,6 @@ int main(int argc, char** argv)
 #endif
 	app.run(argc, argv);
 	return 0;
+
 }
 

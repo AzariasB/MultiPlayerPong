@@ -149,7 +149,7 @@ void ClientApp::toggleFullScreen()
         float top = ((fsMode.height - SF_ARENA_HEIGHT) / 2.f) / fsMode.height;
         float width = (static_cast<float>(SF_ARENA_WIDTH) / fsMode.width);
         float height = (static_cast<float>(SF_ARENA_HEIGHT) / fsMode.height);
-        sf::View v(sf::Vector2f(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
+        sf::View v(sf::Vector2f(SF_CENTER_X, SF_CENTER_Y), sf::Vector2f(SF_ARENA_WIDTH, SF_ARENA_HEIGHT));
         v.setViewport(sf::FloatRect(left, top, width, height));
         window->setView(v);
     }

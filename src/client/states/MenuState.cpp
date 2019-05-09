@@ -55,28 +55,27 @@ MenuState::MenuState() :
     m_menu()
 {
 
-    m_menu.addCenteredLabel("MultiPlayerPong", SF_ARENA_WIDTH/2.f, 100, 70);
+    m_menu.addCenteredLabel("MultiPlayerPong", SF_CENTER_X, 100, 70);
 
     const float margin = 10;
-    const float halfWay = SF_ARENA_WIDTH/2.f;
     float currentHeight = SF_ARENA_WIDTH/4.f;
 
-    Button &soloButton = m_menu.addButton("solo",halfWay ,currentHeight, Assets::IconAtlas::singleplayerIcon);
+    Button &soloButton = m_menu.addButton("solo",SF_CENTER_X ,currentHeight, Assets::IconAtlas::singleplayerIcon);
     currentHeight += soloButton.getHeight() + margin;
 
-    Button &solo1v1 = m_menu.addButton({"solo", " 1v1"}, halfWay, currentHeight, Assets::IconAtlas::multiplayerIcon );
+    Button &solo1v1 = m_menu.addButton({"solo", " 1v1"}, SF_CENTER_X, currentHeight, Assets::IconAtlas::multiplayerIcon );
     currentHeight += solo1v1.getHeight() + margin;
 
-    Button &multiPlayerButton = m_menu.addButton("multi", halfWay, currentHeight, Assets::IconAtlas::massiveMultiplayerIcon);
+    Button &multiPlayerButton = m_menu.addButton("multi", SF_CENTER_X, currentHeight, Assets::IconAtlas::massiveMultiplayerIcon);
     currentHeight += multiPlayerButton.getHeight() + margin;
 
-    Button &optionButton = m_menu.addButton("options", halfWay,currentHeight, Assets::IconAtlas::gearIcon);
+    Button &optionButton = m_menu.addButton("options", SF_CENTER_X,currentHeight, Assets::IconAtlas::gearIcon);
     currentHeight += optionButton.getHeight() + margin;
 
-    Button &creditsButton = m_menu.addButton("credits", halfWay, currentHeight, Assets::IconAtlas::informationIcon);
+    Button &creditsButton = m_menu.addButton("credits", SF_CENTER_X, currentHeight, Assets::IconAtlas::informationIcon);
     currentHeight += creditsButton.getHeight() + margin;
 
-    Button &quitButton = m_menu.addButton("quit", halfWay, currentHeight, Assets::IconAtlas::powerIcon);
+    Button &quitButton = m_menu.addButton("quit", SF_CENTER_X, currentHeight, Assets::IconAtlas::powerIcon);
 
     m_menu.normalizeButtons(margin);
     pr::translator().translationChangedSignal.add([this, margin](){

@@ -43,12 +43,12 @@ SplashScreenState::SplashScreenState():
     m_timer(sf::seconds(2)),
     m_games("GAMES", pr::resourceManager().get(Assets::Fonts::Quicksand), 100),
     m_ema("AME", pr::resourceManager().get(Assets::Fonts::Quicksand), 100),
-    m_emaPos(twin::makeTwin(SF_ARENA_HEIGHT / 2.f, SF_ARENA_HEIGHT / 2.f, sf::seconds(0), twin::quadInOut )),
+    m_emaPos(twin::makeTwin(SF_CENTER_Y, SF_CENTER_Y, sf::seconds(0), twin::quadInOut )),
     m_emaScale(twin::makeTwin(1.f,1.f, sf::milliseconds(1), twin::linear))
 {
 
     m_timer.setCallback([this](){
-        m_emaPos = twin::makeTwin(SF_ARENA_HEIGHT / 2.f, SF_ARENA_HEIGHT / 2.f - 100, sf::seconds(1), twin::quadInOut);
+        m_emaPos = twin::makeTwin(SF_CENTER_Y, SF_CENTER_Y - 100, sf::seconds(1), twin::quadInOut);
         m_emaPos.setCallback([this](){
             m_emaScale = twin::makeTwin(1.f, -1.f, sf::seconds(1), twin::quadInOut);
         });
@@ -62,16 +62,16 @@ SplashScreenState::SplashScreenState():
 
     sf::FloatRect rect = m_ema.getLocalBounds();
     m_ema.setOrigin(rect.width / 2.f, rect.height / 2.f);
-    m_ema.setPosition(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f);
+    m_ema.setPosition(SF_CENTER_X, SF_CENTER_Y);
 
     rect = m_games.getLocalBounds();
     m_games.setOrigin(rect.width / 2.f, rect.height / 2.f);
-    m_games.setPosition(SF_ARENA_WIDTH / 2.f, SF_ARENA_HEIGHT / 2.f);
+    m_games.setPosition(SF_CENTER_X, SF_CENTER_Y);
 
     //SFML icon
-    insertSprite(Assets::Icons::Sfml, SF_ARENA_WIDTH / 2.f - 150);
-    insertSprite(Assets::Icons::Qt, SF_ARENA_WIDTH  / 2.f);
-    insertSprite(Assets::Icons::Box2d, SF_ARENA_WIDTH /  2.f + 150);
+    insertSprite(Assets::Icons::Sfml, SF_CENTER_X - 150);
+    insertSprite(Assets::Icons::Qt, SF_CENTER_X);
+    insertSprite(Assets::Icons::Box2d, SF_CENTER_X + 150);
 }
 
 sf::Sprite &SplashScreenState::insertSprite(const Assets::Icons &id, float xCenter)
